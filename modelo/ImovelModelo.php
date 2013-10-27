@@ -6,16 +6,17 @@ class ImovelModelo {
     private $valor;
     private $finalidade;
     private $quarto;
- /*   private $suite;
-    private $area;
-    private $garagem;
-    private $banheiro;
-    private $topicoImovel;
-    private $descricaoImovel;
-    private $endereco;
-    private $buscaAvancada;
-    private $imagem;*/
-    
+
+    /*   private $suite;
+      private $area;
+      private $garagem;
+      private $banheiro;
+      private $topicoImovel;
+      private $descricaoImovel;
+      private $endereco;
+      private $buscaAvancada;
+      private $imagem; */
+
     public function getId() {
         return $this->id;
     }
@@ -30,44 +31,47 @@ class ImovelModelo {
 
     public function getQuarto() {
         return $this->quarto;
-    }/*
-
-    public function getSuite() {
-        return $this->suite;
     }
 
-    public function getArea() {
-        return $this->area;
-    }
+/*
 
-    public function getGaragem() {
-        return $this->garagem;
-    }
+      public function getSuite() {
+      return $this->suite;
+      }
 
-    public function getBanheiro() {
-        return $this->banheiro;
-    }
+      public function getArea() {
+      return $this->area;
+      }
 
-    public function getTopicoImovel() {
-        return $this->topicoImovel;
-    }
+      public function getGaragem() {
+      return $this->garagem;
+      }
 
-    public function getDescricaoImovel() {
-        return $this->descricaoImovel;
-    }
+      public function getBanheiro() {
+      return $this->banheiro;
+      }
 
-    public function getEndereco() {
-        return $this->endereco;
-    }
+      public function getTopicoImovel() {
+      return $this->topicoImovel;
+      }
 
-    public function getBuscaAvancada() {
-        return $this->buscaAvancada;
-    }
+      public function getDescricaoImovel() {
+      return $this->descricaoImovel;
+      }
 
-    public function getImagem() {
-        return $this->imagem;
-    }
-*/
+      public function getEndereco() {
+      return $this->endereco;
+      }
+
+      public function getBuscaAvancada() {
+      return $this->buscaAvancada;
+      }
+
+      public function getImagem() {
+      return $this->imagem;
+      }
+     */
+
     public function setId($id) {
         $this->id = $id;
     }
@@ -83,53 +87,53 @@ class ImovelModelo {
     public function setQuarto($quarto) {
         $this->quarto = $quarto;
     }
-/*
-    public function setSuite($suite) {
-        $this->suite = $suite;
-    }
 
-    public function setArea($area) {
-        $this->area = $area;
-    }
+    /*
+      public function setSuite($suite) {
+      $this->suite = $suite;
+      }
 
-    public function setGaragem($garagem) {
-        $this->garagem = $garagem;
-    }
+      public function setArea($area) {
+      $this->area = $area;
+      }
 
-    public function setBanheiro($banheiro) {
-        $this->banheiro = $banheiro;
-    }
+      public function setGaragem($garagem) {
+      $this->garagem = $garagem;
+      }
 
-    public function setTopicoImovel($topicoImovel) {
-        $this->topicoImovel = $topicoImovel;
-    }
+      public function setBanheiro($banheiro) {
+      $this->banheiro = $banheiro;
+      }
 
-    public function setDescricaoImovel($descricaoImovel) {
-        $this->descricaoImovel = $descricaoImovel;
-    }
+      public function setTopicoImovel($topicoImovel) {
+      $this->topicoImovel = $topicoImovel;
+      }
 
-    public function setEndereco($endereco) {
-        $this->endereco = $endereco;
-    }
+      public function setDescricaoImovel($descricaoImovel) {
+      $this->descricaoImovel = $descricaoImovel;
+      }
 
-    public function setBuscaAvancada($buscaAvancada) {
-        $this->buscaAvancada = $buscaAvancada;
-    }
+      public function setEndereco($endereco) {
+      $this->endereco = $endereco;
+      }
 
-    public function setImagem($imagem) {
-        $this->imagem = $imagem;
-    }*/
+      public function setBuscaAvancada($buscaAvancada) {
+      $this->buscaAvancada = $buscaAvancada;
+      }
 
-    function cadastrar($parametros){
-        
+      public function setImagem($imagem) {
+      $this->imagem = $imagem;
+      } */
+
+    function cadastrar($parametros) {
+
         $imovelModelo = new ImovelModelo();
-        
-        $imovelModelo->setValor($parametros['valor']);
-        $imovelModelo->setFinalidade($parametros['finalidade']);
-        $imovelModelo->setQuarto($parametros['quarto']);
-        
+
+        $imovelModelo->setValor($parametros['txtValor']);
+        $imovelModelo->setFinalidade($parametros['sltFinalidade']);
+        $imovelModelo->setQuarto($parametros['sltQuarto']);
+
         return $imovelModelo;
-        
     }
-    
+
 }

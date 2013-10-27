@@ -1,0 +1,163 @@
+<!DOCTYPE HTML>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8"> 
+        <title>PIP - Procure Im&oacute;veis Pai D'Egua</title> 
+        <!-- TWITTER BOOTSTRAP CSS --> 
+        <link href="assets/css/bootstrap.css" rel="stylesheet" type="text/css" /> 
+        <!-- Bootstrap theme -->
+        <link href="assets/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css" /> 
+        <!-- Template PIP -->
+        <link href="assets/css/template-pip.css" rel="stylesheet" type="text/css" /> 		
+        <!-- Carrossel -->
+        <link href="assets/css/carousel.css" rel="stylesheet" type="text/css" />		
+        <!-- JQUERY --> 
+        <script src="assets/js/jquery-2.0.2.min.js"></script> 
+        <!-- TWITTER BOOTSTRAP JS --> 
+        <script src="assets/js/bootstrap.min.js"></script> 
+        <!-- JQUERY VALIDATE JS --> 
+        <script src="assets/js/jquery.validate.min.js"></script> 
+
+        <script>
+            $(document).ready(function() {
+                /*			
+                 $('form').validate({
+                 rules: {
+                 firstname: {
+                 minlength: 3,
+                 maxlength: 15,
+                 required: true
+                 },
+                 lastname: {
+                 minlength: 3,
+                 maxlength: 15,
+                 required: true
+                 }
+                 },
+                 highlight: function(element) {
+                 $(element).closest('.form-group').addClass('has-error');
+                 },
+                 unhighlight: function(element) {
+                 $(element).closest('.form-group').removeClass('has-error');
+                 },
+                 errorElement: 'span',
+                 errorClass: 'help-block',
+                 errorPlacement: function(error, element) {
+                 if(element.parent('.input-group').length) {
+                 error.insertAfter(element.parent());
+                 } else {
+                 error.insertAfter(element);
+                 }
+                 }
+                 })
+                 });
+                 */
+
+
+
+                $('#form').validate({
+                    rules: {
+                        txtValor: {
+                            minlength: 1,
+                            maxlength: 15,
+                            required: true
+                        },
+                        sltFinalidade: {
+                            required: true
+                        },
+                        sltQuarto: {
+                            required: true
+                        }
+                    },
+                    highlight: function(element) {
+                        $(element).closest('.form-group').addClass('has-error');
+                    },
+                    unhighlight: function(element) {
+                        $(element).closest('.form-group').removeClass('has-error');
+                    },
+                    errorElement: 'span',
+                    errorClass: 'help-block',
+                    errorPlacement: function(error, element) {
+                        if (element.parent('.input-group').length) {
+                            error.insertAfter(element.parent());
+                        } else {
+                            error.insertAfter(element);
+                        }
+                    },
+                    submitHandler: function() {
+                        $.ajax({
+                            url: "index.php",
+                            dataType: "json",
+                            type: "POST",
+                            data: {
+                                hdnEntidade: $('#hdnEntidade').val(),
+                                hdnAcao: $('#hdnAcao').val(),
+                                txtValor: $('#txtValor').val(),
+                                sltFinalidade: $('#sltFinalidade').val(),
+                                sltQuarto: $('#sltQuarto').val()
+                            },
+                            beforeSend: function() {
+                                $('.alert').html("...processando...").attr('class','alert alert-warning');
+                                $('button[type=submit]').attr('disabled','disabled');
+                                //<div class="alert alert-warning">...</div>
+                            },
+                            success: function(resposta) {
+                                $('button[type=submit]').removeAttr('disabled');
+                                if (resposta.resultado == 1) {
+                                    $('.alert').html("Imovel Cadastrado Com Sucesso").attr('class','alert alert-success');
+                                } else {
+                                    $('.alert').html("Erro ao cadastrar").attr('class','alert alert-danger');
+                                }
+                            }
+                        })
+                        return false;
+                    }
+                });
+            })
+
+        </script>
+    </head> 
+    <body>
+        <!-- Fixed navbar -->
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="index.php">Procure Im&oacute;veis Pai d'egua</a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="#">In&iacute;cio</a></li>
+                        <li><a href="#compare">Compare</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Im&oacute;veis <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="index.php?entidade=imovel&acao=form">Cadastro</a></li>
+                                <li><a href="index.php?entidade=imovel&acao=listar">Listagem</a></li>
+                                <!--<li><a href="#">Another action</a></li>
+                                <li><a href="#">Something else here</a></li>
+                                <li class="divider"></li>
+                                <li class="dropdown-header">Nav header</li>
+                                <li><a href="#">Separated link</a></li>
+                                <li><a href="#">One more separated link</a></li>-->
+                            </ul>
+                        </li>
+                        <li><a href="#about">Sobre a Empresa</a></li>
+                    </ul>
+                    <form class="navbar-form navbar-right">
+                        <div class="form-group">
+                            <input type="text" placeholder="login" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" placeholder="senha" class="form-control">
+                        </div>
+                        <button type="submit" class="btn btn-success">Acessar</button>
+                    </form>
+                </div><!--/.nav-collapse -->
+            </div>
+        </div>	    
+        <hr />

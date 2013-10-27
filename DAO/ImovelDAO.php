@@ -1,6 +1,6 @@
 <?php
 
-include_once '../configuracao/Conexao.php';
+include_once 'configuracao/Conexao.php';
 
 class ImovelDAO {
 
@@ -9,29 +9,28 @@ class ImovelDAO {
         $conexao = Conexao::getInstance();
 
         $statement = $conexao->prepare('INSERT INTO imovel (valor, finalidade, quarto) VALUES (:valor, :finalidade, :quarto)');
-
-        $statement->bindParam(':valor', $entidadeImovel->getValor());
-        $statement->bindParam(':finalidade', $entidadeImovel->getFinalidade());
-        $statement->bindParam(':quarto', $entidadeImovel->getQuarto());
+        
+        $valor = $entidadeImovel->getValor();
+        $finalidade = $entidadeImovel->getFinalidade();
+        $quarto = $entidadeImovel->getQuarto();
+        
+        $statement->bindParam(':valor', $valor);
+        $statement->bindParam(':finalidade', $finalidade);
+        $statement->bindParam(':quarto', $quarto);
 
         if ($statement->execute()) {
-
             return true;
         } else {
-
             return false;
         }
     }
 
     function listar() {
-
         $conexao = Conexao::getInstance();
-
-        $statement = $conexao->prepare('SELECT * from imovel');
-
+        $statement = $conexao->prepare('SELECT * FROM imovel');
         $statement->execute();
-        
-        return $this->populaImovel($linha);
+        $resultado = $statement->fetchAll(PDO::FETCH_CLASS, "ImovelModelo");
+        return $resultado;
     }
 
     private function populaImovel($linha) {
