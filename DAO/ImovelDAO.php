@@ -31,6 +31,7 @@ class ImovelDAO {
         $statement->execute();
         $resultado = $statement->fetchAll(PDO::FETCH_CLASS, "ImovelModelo");
         return $resultado;
+        //
     }
 
     private function populaImovel($linha) {
