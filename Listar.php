@@ -10,16 +10,17 @@ and open the template in the editor.
         <title>Listar Imóveis Cadastrados</title>
     </head>
     <body>
-        <?php
         
-        include_once './controle/ImovelControle.php';
         
-        $imovelControle = new ImovelControle();
+        <form method="post" action="controle/Controle.php">
         
-        $imovelControle->listar();
+        <input type="hidden" name="hdnEntidade" value="Imovel" />
+        <input type="hidden" name="hdnAcao" value="listar" />
+            
+        <input type="submit" value="Listar Imóveis"> <br />
+            
+        </form>
         
-        var_dump($imovelControle);
-        
-        ?>
+
     </body>
 </html>

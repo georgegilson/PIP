@@ -31,7 +31,7 @@ class ImovelDAO {
 
         $statement->execute();
         
-        return $this->populaImovel($linha);
+        return $this->populaImovel($statement->fetch(PDO::FETCH_ASSOC));
     }
 
     private function populaImovel($linha) {

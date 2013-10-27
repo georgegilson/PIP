@@ -132,4 +132,10 @@ class ImovelModelo {
         
     }
     
+    function listar(){
+        
+       
+        
+    }
+    
 }

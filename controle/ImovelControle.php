@@ -29,9 +29,17 @@ class ImovelControle {
         
         $imovelDAO = new ImovelDAO();
         
+        print "Passou 1 <br />";
+        
         $resultado = $imovelDAO->listar();
         
+        print "Passou 2 <br />";
+        
+        var_dump($resultado);/*
+        
         return $resultado;
+        
+        print "Teste: ".$resultado;*/
         
     }
     
