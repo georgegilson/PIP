@@ -135,5 +135,4 @@ class ImovelModelo {
 
         return $imovelModelo;
     }
-
 }
