@@ -135,4 +135,15 @@ class ImovelModelo {
 
         return $imovelModelo;
     }
+    
+        function editar($parametros) {
+
+        $imovelModelo = new ImovelModelo();
+
+        $imovelModelo->setValor($parametros['txtValor']);
+        $imovelModelo->setFinalidade($parametros['sltFinalidade']);
+        $imovelModelo->setQuarto($parametros['sltQuarto']);
+
+        return $imovelModelo;
+    }
 }

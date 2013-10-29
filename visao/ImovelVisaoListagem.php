@@ -2,7 +2,7 @@
     <h1>Listagem de Im&oacute;veis</h1>
     <!-- Example row of columns -->
     <div class="alert">Todos</div>
-   
+    <form>   
 <table class="table table-hover">
         <thead>
           <tr>
@@ -24,9 +24,11 @@
             <td><?php echo $imovel->getValor(); ?></td>
             <td><?php echo $imovel->getFinalidade(); ?></td>
             <td><?php echo $imovel->getQuarto(); ?></td>
+            <td><a href="index.php?entidade=Imovel&acao=selecionar&id=<?php echo $imovel->getId();?>">Editar</a> <br /></td>
           </tr>
         <?php } } else { ?>
           <tr> <td colspan="4">N&atilde;o h&aacute; registros</td> </tr>
         <?php } ?>
         </tbody>
       </table>
+    </form>

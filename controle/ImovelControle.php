@@ -38,5 +38,30 @@ class ImovelControle {
         $visao->setItem($listarImovel);
         $visao->exibir('ImovelVisaoListagem.php');
     }
+    
+        function selecionar($parametro) {
+    
+        $imovelDAO = new ImovelDAO();
+        
+        $selecionarImovel = $imovelDAO->selecionar($parametro['id']);
 
+        $visao = new Template('');
+        $visao->setItem($selecionarImovel);
+        $visao->exibir('ImovelVisaoSelecionar.php');
+    }
+        
+        function editar($parametros) {
+            
+        $imovelModelo = new ImovelModelo();
+        $entidadeImovel = $imovelModelo->cadastrar($parametros);    
+            
+        $imovelDAO = new ImovelDAO();
+        
+        $editarImovel = $imovelDAO->editar($parametros);
+
+        $visao = new Template('');
+        $visao->setItem($editarImovel);
+        $visao->exibir('ImovelVisaoSelecionar.php');
+    }
+    
 }

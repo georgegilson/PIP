@@ -42,5 +42,38 @@ class ImovelDAO {
         $pojo->setQuarto($linha['quarto']);
         return $pojo;
     }
+    
+    function selecionar($entidadeImovel) {
+        $conexao = Conexao::getInstance();
+        $statement = $conexao->prepare('SELECT * FROM imovel WHERE id=:id');
+        $id = $entidadeImovel;
+        $statement->bindParam(':id', $id);
+        $statement->execute();
+        $resultado = $statement->fetchAll(PDO::FETCH_CLASS, "ImovelModelo");
+        return $resultado;
+        //
+    }
+    
+        function editar($entidadeImovel) {
+        $conexao = Conexao::getInstance();
+        $statement = $conexao->prepare('UPDATE imovel SET valor=:$valor, finalidade=:$finalidade, quarto=:$quarto WHERE id=:$id');
+        
+        $id = $entidadeImovel->getId();
+        $valor = $entidadeImovel->getValor();
+        $finalidade = $entidadeImovel->getFinalidade();
+        $quarto = $entidadeImovel->getQuarto();
+        
+        $statement->bindParam(':id', $id);
+        $statement->bindParam(':valor', $valor);
+        $statement->bindParam(':finalidade', $finalidade);
+        $statement->bindParam(':quarto', $quarto);
+        
+        if($statement->execute()){
 
+        return true;
+        
+        } else return false;
+        //
+    }
+    
 }
