@@ -9,11 +9,11 @@ class ImovelDAO {
         $conexao = Conexao::getInstance();
 
         $statement = $conexao->prepare('INSERT INTO imovel (valor, finalidade, quarto) VALUES (:valor, :finalidade, :quarto)');
-        
+
         $valor = $entidadeImovel->getValor();
         $finalidade = $entidadeImovel->getFinalidade();
         $quarto = $entidadeImovel->getQuarto();
-        
+
         $statement->bindParam(':valor', $valor);
         $statement->bindParam(':finalidade', $finalidade);
         $statement->bindParam(':quarto', $quarto);
@@ -34,15 +34,6 @@ class ImovelDAO {
         //
     }
 
-    private function populaImovel($linha) {
-        $pojo = new ImovelModelo;
-        $pojo->setId($linha['id']);
-        $pojo->setValor($linha['valor']);
-        $pojo->setFinalidade($linha['finalidade']);
-        $pojo->setQuarto($linha['quarto']);
-        return $pojo;
-    }
-    
     function selecionar($entidadeImovel) {
         $conexao = Conexao::getInstance();
         $statement = $conexao->prepare('SELECT * FROM imovel WHERE id=:id');
@@ -51,29 +42,26 @@ class ImovelDAO {
         $statement->execute();
         $resultado = $statement->fetchAll(PDO::FETCH_CLASS, "ImovelModelo");
         return $resultado;
-        //
     }
-    
-        function editar($entidadeImovel) {
+
+    function editar($entidadeImovel) {
         $conexao = Conexao::getInstance();
-        $statement = $conexao->prepare('UPDATE imovel SET valor=:$valor, finalidade=:$finalidade, quarto=:$quarto WHERE id=:$id');
-        
+        $statement = $conexao->prepare('UPDATE imovel SET valor = :valor, finalidade = :finalidade, quarto = :quarto WHERE id = :id');
         $id = $entidadeImovel->getId();
         $valor = $entidadeImovel->getValor();
         $finalidade = $entidadeImovel->getFinalidade();
         $quarto = $entidadeImovel->getQuarto();
-        
+
         $statement->bindParam(':id', $id);
         $statement->bindParam(':valor', $valor);
         $statement->bindParam(':finalidade', $finalidade);
         $statement->bindParam(':quarto', $quarto);
-        
-        if($statement->execute()){
 
-        return true;
-        
-        } else return false;
-        //
+        if ($statement->execute()) {
+            return true;
+        }
+        else
+            return false;
     }
-    
+
 }

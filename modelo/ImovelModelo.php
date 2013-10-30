@@ -140,6 +140,7 @@ class ImovelModelo {
 
         $imovelModelo = new ImovelModelo();
 
+        $imovelModelo->setId($parametros['hdnId']);
         $imovelModelo->setValor($parametros['txtValor']);
         $imovelModelo->setFinalidade($parametros['sltFinalidade']);
         $imovelModelo->setQuarto($parametros['sltQuarto']);

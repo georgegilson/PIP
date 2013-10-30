@@ -14,10 +14,10 @@
         </thead>
         <tbody>
        <?php
-        
-        if ($this->item){
-            foreach ($this->item as $imovel) {
-       ?>
+       $item = $this->getItem();
+        if ($item){
+            foreach ($item as $imovel) {
+        ?>
        
           <tr>
             <td><?php echo $imovel->getId(); ?></td>

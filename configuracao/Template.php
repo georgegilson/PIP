@@ -12,15 +12,15 @@ class Template {
         $this->item = $item;
     }
 
-    public function __construct($scripts) {
-        $this->cabecalho($scripts);
+    public function __construct() {
+        $this->cabecalho();
     }
 
     public function exibir($visao, $paginaInicial = 0) {
         $this->corpo($visao, $paginaInicial);
     }
 
-    public function cabecalho($scripts) {
+    public function cabecalho() {
         #tratar a inclusao automatica de scripts
         #verificar a variavel active do menu
         include_once 'cabecalho.html';

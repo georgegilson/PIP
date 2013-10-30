@@ -31,7 +31,7 @@ class Controle {
         //modelo
         
         //visao
-        $visao = new Template('');
+        $visao = new Template();
         $visao ->exibir('index', 1);
     }
 
