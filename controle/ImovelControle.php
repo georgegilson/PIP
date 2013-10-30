@@ -1,6 +1,6 @@
 <?php
 
-include_once 'modelo/ImovelModelo.php';
+include_once 'modelo/Imovel.php';
 include_once 'DAO/ImovelDAO.php';
 
 class ImovelControle {
@@ -15,8 +15,8 @@ class ImovelControle {
 
     function cadastrar($parametros) {
         //modelo
-        $imovelModelo = new ImovelModelo();
-        $entidadeImovel = $imovelModelo->cadastrar($parametros);
+        $imovel = new Imovel();
+        $entidadeImovel = $imovel->cadastrar($parametros);
         $imovelDAO = new ImovelDAO();
         $resultado = $imovelDAO->cadastrar($entidadeImovel);
 
@@ -51,8 +51,8 @@ class ImovelControle {
 
     function editar($parametros) {
         //modelo
-        $imovelModelo = new ImovelModelo();
-        $entidadeImovel = $imovelModelo->editar($parametros);
+        $imovel = new Imovel();
+        $entidadeImovel = $imovel->editar($parametros);
         $imovelDAO = new ImovelDAO();
         $resultado = $imovelDAO->editar($entidadeImovel);
         //visao
