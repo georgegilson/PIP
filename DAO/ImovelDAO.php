@@ -29,7 +29,7 @@ class ImovelDAO {
         $conexao = Conexao::getInstance();
         $statement = $conexao->prepare('SELECT * FROM imovel');
         $statement->execute();
-        $resultado = $statement->fetchAll(PDO::FETCH_CLASS, "ImovelModelo");
+        $resultado = $statement->fetchAll(PDO::FETCH_CLASS, "Imovel");
         return $resultado;
         //
     }
@@ -40,7 +40,7 @@ class ImovelDAO {
         $id = $entidadeImovel;
         $statement->bindParam(':id', $id);
         $statement->execute();
-        $resultado = $statement->fetchAll(PDO::FETCH_CLASS, "ImovelModelo");
+        $resultado = $statement->fetchAll(PDO::FETCH_CLASS, "Imovel");
         return $resultado;
     }
 
