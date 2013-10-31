@@ -1,7 +1,7 @@
 <?php
 
 include_once 'modelo/Imovel.php';
-include_once 'DAO/ImovelDAO.php';
+include_once 'DAO/GenericoDAO.php';
 
 class ImovelControle {
 
@@ -17,8 +17,8 @@ class ImovelControle {
         //modelo
         $imovel = new Imovel();
         $entidadeImovel = $imovel->cadastrar($parametros);
-        $imovelDAO = new ImovelDAO();
-        $resultado = $imovelDAO->cadastrar($entidadeImovel);
+        $genericoDAO = new GenericoDAO();
+        $resultado = $genericoDAO->cadastrar($entidadeImovel);
 
         //visao
         if ($resultado)
@@ -30,9 +30,10 @@ class ImovelControle {
     function listar() {
         //modelo
         //$imovelModelo = new ImovelModelo();
-        //$entidadeImovel = $imovelModelo->listar();    
-        $imovelDAO = new ImovelDAO();
-        $listarImovel = $imovelDAO->listar();
+        //$entidadeImovel = $imovelModelo->listar();  
+        $imovel = new Imovel();
+        $genericoDAO = new GenericoDAO();
+        $listarImovel = $genericoDAO->listar($imovel);
         //visao
         $visao = new Template();
         $visao->setItem($listarImovel);
@@ -41,8 +42,9 @@ class ImovelControle {
 
     function selecionar($parametro) {
         //modelo
-        $imovelDAO = new ImovelDAO();
-        $selecionarImovel = $imovelDAO->selecionar($parametro['id']);
+        $imovel = new Imovel();
+        $genericoDAO = new GenericoDAO();
+        $selecionarImovel = $genericoDAO->selecionar(imovel, $parametro['id']);
         //visao
         $visao = new Template();
         $visao->setItem($selecionarImovel);
@@ -53,8 +55,8 @@ class ImovelControle {
         //modelo
         $imovel = new Imovel();
         $entidadeImovel = $imovel->editar($parametros);
-        $imovelDAO = new ImovelDAO();
-        $resultado = $imovelDAO->editar($entidadeImovel);
+        $genericoDAO = new GenericoDAO();
+        $resultado = $genericoDAO->editar($entidadeImovel);
         //visao
         if ($resultado)
             echo json_encode(array("resultado" => 1));
