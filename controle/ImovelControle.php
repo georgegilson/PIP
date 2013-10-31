@@ -44,7 +44,7 @@ class ImovelControle {
         //modelo
         $imovel = new Imovel();
         $genericoDAO = new GenericoDAO();
-        $selecionarImovel = $genericoDAO->selecionar(imovel, $parametro['id']);
+        $selecionarImovel = $genericoDAO->selecionar($imovel, $parametro['id']);
         //visao
         $visao = new Template();
         $visao->setItem($selecionarImovel);

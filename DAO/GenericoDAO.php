@@ -64,9 +64,31 @@ class GenericoDAO {
         return $resultado;
     }
 
-    function editar($entidadeImovel) {
+    function editar($entidade) {
         $conexao = Conexao::getInstance();
-        $statement = $conexao->prepare('UPDATE imovel SET valor = :valor, finalidade = :finalidade, quarto = :quarto WHERE id = :id');
+        
+        $reflect = new ReflectionClass($entidade);
+	$classe = $reflect->getName();
+	$atributos  = $reflect->getProperties(ReflectionProperty::IS_PRIVATE | ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PUBLIC);
+       
+	$sql = "UPDATE " . strtolower($classe) . " SET ";
+        foreach( $atributos as $chave => $valor )
+        {
+	    $sql = $sql . strtolower($valor->getName()) . " = :" . strtolower($valor->getName());
+            if($chave != (count($atributos)-1)) $sql = $sql . ", ";	
+        }
+        $sql = $sql . " WHERE id = :id";
+        
+        $statement = $conexao->prepare($sql);
+	foreach( $atributos as $valor )
+        {
+            $acao = "get" . ucfirst($valor->getName());
+            $resultado = $entidade->$acao();
+            $parametro = ":" . strtolower($valor->getName());	
+            $statement->bindValue($parametro, $resultado);
+        }
+        
+       /* $statement = $conexao->prepare('UPDATE imovel SET valor = :valor, finalidade = :finalidade, quarto = :quarto WHERE id = :id');
         $id = $entidadeImovel->getId();
         $valor = $entidadeImovel->getValor();
         $finalidade = $entidadeImovel->getFinalidade();
@@ -74,8 +96,8 @@ class GenericoDAO {
 
         $statement->bindParam(':id', $id);
         $statement->bindParam(':valor', $valor);
-        $statement->bindParam(':finalidade', $finalidade);
-        $statement->bindParam(':quarto', $quarto);
+        $statement->bindParam(':finalidade', $sql);
+        $statement->bindParam(':quarto', $quarto);*/
 
         if ($statement->execute()) {
             return true;
