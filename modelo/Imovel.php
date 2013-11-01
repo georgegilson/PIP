@@ -3,19 +3,29 @@
 class Imovel {
 
     private $id;
-    private $valor;
     private $finalidade;
     private $quarto;
+    private $tipo;
+    private $datahoracadastro;
+    private $datahoraalteracao;
+    private $idusuario;
+    private $idendereco;
 
-    /*   private $suite;
+ /*   private $suite;
       private $area;
       private $garagem;
       private $banheiro;
-      private $topicoImovel;
-      private $descricaoImovel;
       private $endereco;
-      private $buscaAvancada;
-      private $imagem; */
+      private $piscina;
+      private $academia;
+      private $quadra;
+      private $condominio; 
+      private $areaServico;
+      private $dependenciaEmpregada;
+      private $elevador;
+      private $andar;
+      private $cobertura;
+      private $sacada;        */
 
     public function getId() {
         return $this->id;
