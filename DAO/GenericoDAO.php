@@ -87,17 +87,6 @@ class GenericoDAO {
             $parametro = ":" . strtolower($valor->getName());	
             $statement->bindValue($parametro, $resultado);
         }
-        
-       /* $statement = $conexao->prepare('UPDATE imovel SET valor = :valor, finalidade = :finalidade, quarto = :quarto WHERE id = :id');
-        $id = $entidadeImovel->getId();
-        $valor = $entidadeImovel->getValor();
-        $finalidade = $entidadeImovel->getFinalidade();
-        $quarto = $entidadeImovel->getQuarto();
-
-        $statement->bindParam(':id', $id);
-        $statement->bindParam(':valor', $valor);
-        $statement->bindParam(':finalidade', $sql);
-        $statement->bindParam(':quarto', $quarto);*/
 
         if ($statement->execute()) {
             return true;
