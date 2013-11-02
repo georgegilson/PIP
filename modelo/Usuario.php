@@ -13,7 +13,8 @@ class Usuario {
     private $ativo;
     private $datahoracadastro;
     private $datahoraalteracao;
-    
+    private $email;
+ 
     public function getId() {
         return $this->id;
     }
@@ -56,6 +57,10 @@ class Usuario {
 
     public function getDatahoraalteracao() {
         return $this->datahoraalteracao;
+    }
+    
+    public function getEmail() {
+        return $this->email;
     }
 
     public function setId($id) {
@@ -100,6 +105,10 @@ class Usuario {
 
     public function setDatahoraalteracao($datahoraalteracao) {
         $this->datahoraalteracao = $datahoraalteracao;
+    }
+    
+    public function setEmail($email) {
+        $this->email = $email;
     }
 
 
