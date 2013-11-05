@@ -33,9 +33,9 @@ class GenericoDAO {
             $parametro = ":" . strtolower($valor->getName());	
             $statement->bindValue($parametro, $resultado);
         }
-
         if ($statement->execute()) {
-            return true;
+            if($conexao->lastInsertId()) return $conexao->lastInsertId();
+            else return true;
         } else {
             return false;
         }
@@ -89,6 +89,20 @@ class GenericoDAO {
         }
 
         if ($statement->execute()) {
+            return true;
+        }
+        else
+            return false;
+    }
+    
+    function excluir($entidade, $parametro) {
+        $conexao = Conexao::getInstance();
+        $reflect = new ReflectionClass($entidade);
+	$classe = $reflect->getName();
+        $sql = "DELETE FROM " . strtolower($classe) . " WHERE id=:id";
+        $statement = $conexao->prepare($sql);
+        $statement->bindParam(':id', $parametro);
+         if ($statement->execute()) {
             return true;
         }
         else
