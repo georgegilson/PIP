@@ -13,7 +13,16 @@
                 },
                 sltQuarto: {
                     required: true
-                }
+                },
+                sltTipo: {
+                    required: true
+                },
+                sltGaragem: {
+                    required: true
+                },
+                sltBanheiro: {
+                    required: true
+                }                 
             },
             highlight: function(element) {
                 $(element).closest('.form-group').addClass('has-error');
@@ -38,9 +47,22 @@
                     data: {
                         hdnEntidade: $('#hdnEntidade').val(),
                         hdnAcao: $('#hdnAcao').val(),
-                        txtValor: $('#txtValor').val(),
                         sltFinalidade: $('#sltFinalidade').val(),
-                        sltQuarto: $('#sltQuarto').val()
+                        sltQuarto: $('#sltQuarto').val(),
+                        hdnDataCadastro: $('#hdnDataCadastro').val(),
+                        hdnDataAtualizacao: $('#hdnDataAtualizacao').val(),
+                        sltTipo: $('#sltTipo').val(),
+                        sltGaragem: $('#sltGaragem').val(),
+                        sltBanheiro: $('#sltBanheiro').val(),
+                        chkPiscina: $('#chkPiscina:checked').val(),
+                        chkQuadra: $('#chkQuadra:checked').val(),
+                        chkAcademia: $('#chkAcademia:checked').val(),
+                        chkAreaServico: $('#chkAreaServico:checked').val(),
+                        chkDependenciaEmpregada: $('#chkDependenciaEmpregada:checked').val(),
+                        chkElevador: $('#chkElevador:checked').val(),
+                        txtArea: $('#txtArea').val(),
+                        sltSuite: $('#sltSuite').val(),
+                        chkSacada: $('#chkSacada:checked').val()
                     },
                     beforeSend: function() {
                         $('.alert').html("...processando...").attr('class', 'alert alert-warning');
@@ -57,6 +79,7 @@
                     }
                 })
                 return false;
+                
             }
         });
     })
@@ -70,14 +93,10 @@
 
     <form id="form" class="form-horizontal">
         <input type="hidden" id="hdnId" name="hdnId" />
+        <input type="hidden" id="hdnDataCadastro" name="hdnDataCadastro" value="<?php print date("d/m/Y h:i:s")?>"/>
+        <input type="hidden" id="hdnDataAtualizacao" name="hdnDataAtualizacao" value=""/>
         <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Imovel"  />
         <input type="hidden" id="hdnAcao" name="hdnAcao" value="cadastrar" />
-        <div class="form-group">
-            <label class="col-lg-2 control-label" for="txtValor">Valor</label>
-            <div class="col-lg-3">
-                <input type="text" id="txtValor" name="txtValor" class="form-control" placeholder="Informe o valor">
-            </div>
-        </div>
 
         <div class="form-group">
             <label class="col-lg-2 control-label" for="sltFinalidade">Finalidade</label>
@@ -101,7 +120,97 @@
                     <option value="06">+ de 05</option>
                 </select></div>
         </div>
+        
+        <div class="form-group">
+            <label  class="col-lg-2 control-label" for="sltTipo">Tipo de Imóvel</label>
+            <div class="col-lg-3">
+                <select class="form-control" id="sltTipo" name="sltTipo">
+                    <option value="">Informe o Tipo</option>
+                    <option value="apartamento">Apartamento</option>
+                    <option value="casa">Casa</option>
+                    <option value="terreno">Terreno</option>
+                </select></div>
+        </div>
 
+        <div class="form-group">
+            <label  class="col-lg-2 control-label" for="sltGaragem">Garagem(ns)</label>
+            <div class="col-lg-3">
+                <select class="form-control" id="sltGaragem" name="sltGaragem">
+                    <option value="">Informe a Quantidade de Garagens</option>
+                    <option value="nenhuma">Nenhuma</option>
+                    <option value="01">01</option>
+                    <option value="02">02</option>
+                    <option value="03">03</option>
+                    <option value="04">04</option>
+                    <option value="05">05</option>
+                    <option value="06">+ de 05</option>
+                </select></div>
+        </div>
+
+        <div class="form-group">
+            <label  class="col-lg-2 control-label" for="sltBanheiro">Banheiro(s)</label>
+            <div class="col-lg-3">
+                <select class="form-control" id="sltBanheiro" name="sltBanheiro">
+                    <option value="">Informe a Quantidade de Banheiro(s)</option>
+                    <option value="01">01</option>
+                    <option value="02">02</option>
+                    <option value="03">03</option>
+                    <option value="04">04</option>
+                    <option value="05">05</option>
+                    <option value="06">+ de 05</option>
+                </select></div>
+        </div>
+        
+        <label class="checkbox-inline">
+        <input type="checkbox" id="chkPiscina" value="SIM" name="chkPiscina"> Piscina
+        </label>
+
+        <label class="checkbox-inline">
+        <input type="checkbox" id="chkQuadra" value="SIM" name="chkQuadra"> Quadra
+        </label>
+               
+        <label class="checkbox-inline">
+        <input type="checkbox" id="chkAcademia" value="SIM" name="chkAcademia"> Academia
+        </label>
+        
+        <label class="checkbox-inline">
+        <input type="checkbox" id="chkAreaServico" value="SIM" name="chkAreaServico"> Área de Serviço
+        </label>
+        
+        <label class="checkbox-inline">
+        <input type="checkbox" id="chkDependenciaEmpregada" value="SIM" name="chkDependenciaEmpregada"> Dependência de Empregada
+        </label>
+        
+        <label class="checkbox-inline">
+        <input type="checkbox" id="chkElevador" value="SIM" name="chkElevador"> Elevador
+        </label>
+        
+        <label class="checkbox-inline">
+        <input type="checkbox" id="chkSacada" value="SIM" name="chkSacada"> Sacada
+        </label><p>
+        
+        <div class="form-group">
+            <label class="col-lg-2 control-label" for="txtArea">Informa a Área em M2</label>
+            <div class="col-lg-3">
+                <input type="text" id="txtArea" name="txtArea" class="form-control" placeholder="Área em M2">
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label  class="col-lg-2 control-label" for="sltSuite">Suite(s)</label>
+            <div class="col-lg-3">
+                <select class="form-control" id="sltSuite" name="sltSuite">
+                    <option value="">Informe Nº de Suite(s)</option>
+                    <option value="nenhuma">Nenhuma</option>
+                    <option value="01">01</option>
+                    <option value="02">02</option>
+                    <option value="03">03</option>
+                    <option value="04">04</option>
+                    <option value="05">05</option>
+                    <option value="06">+ de 05</option>
+                </select></div>
+        </div>        
+        
         <!--        <div class="form-group">
                     <label  class="col-lg-2 control-label" for="sltSuite">Suites</label>
                     <div class="col-lg-3">
@@ -184,6 +293,7 @@
                     </div>
                 </div>
         -->
+        <p>
         <div class="form-group">
             <div class="col-lg-offset-2 col-lg-10">
                 <button type="submit" class="btn btn-primary">Cadastrar</button>

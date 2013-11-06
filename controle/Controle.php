@@ -5,8 +5,8 @@ class Controle {
     public function __construct($parametros) {
         //vem do menu
         if ($_SERVER['REQUEST_METHOD'] === "GET") {
-            @$entidade = $parametros['entidade'];
-            @$acao = $parametros['acao'];
+            $entidade = $parametros['entidade'];
+            $acao = $parametros['acao'];
             if ($entidade == "" && $acao == "") {
                 $this->index();
             } else {

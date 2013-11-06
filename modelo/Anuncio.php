@@ -3,42 +3,42 @@
 class Anuncio {
      
     private $valor;
-    private $topicoImovel; 
-    private $descricaoImovel; 
-    private $imagem; 
-    private $idImovel;
+    private $topicoanuncio; 
+    private $descricaoanuncio; 
+//    private $imagem; 
+    private $idimovel;
     private $status;
-    private $destaque;
-    private $campos;
-    private $vigencia;
+ //   private $destaque;
+ //   private $campos;
+ //   private $vigencia;
     private $datahoracadastro;
     private $datahoraalteracao;
-    private $idusuario;
+ //   private $idusuario;
     
     public function getValor() {
         return $this->valor;
     }
 
-    public function getTopicoImovel() {
-        return $this->topicoImovel;
+    public function getTopicoAnuncio() {
+        return $this->topicoanuncio;
     }
 
-    public function getDescricaoImovel() {
-        return $this->descricaoImovel;
+    public function getDescricaoAnuncio() {
+        return $this->descricaoanuncio;
     }
 
-    public function getImagem() {
+  /*  public function getImagem() {
         return $this->imagem;
-    }
+    }*/
 
     public function getIdImovel() {
-        return $this->idImovel;
+        return $this->idimovel;
     }
 
     public function getStatus() {
         return $this->status;
     }
-
+/* 
     public function getDestaque() {
         return $this->destaque;
     }
@@ -47,9 +47,9 @@ class Anuncio {
         return $this->campos;
     }
 
-    public function getVigencia() {
+   public function getVigencia() {
         return $this->vigencia;
-    }
+    }*/
 
     public function getDatahoracadastro() {
         return $this->datahoracadastro;
@@ -59,45 +59,45 @@ class Anuncio {
         return $this->datahoraalteracao;
     }
 
-    public function getIdusuario() {
+ /*   public function getIdusuario() {
         return $this->idusuario;
-    }
+    }*/
 
     public function setValor($valor) {
         $this->valor = $valor;
     }
 
-    public function setTopicoImovel($topicoImovel) {
-        $this->topicoImovel = $topicoImovel;
+    public function setTopicoAnuncio($topicoanuncio) {
+        $this->topicoanuncio = $topicoanuncio;
     }
 
-    public function setDescricaoImovel($descricaoImovel) {
-        $this->descricaoImovel = $descricaoImovel;
+    public function setDescricaoAnuncio($descricaoanuncio) {
+        $this->descricaoanuncio = $descricaoanuncio;
     }
-
+/*
     public function setImagem($imagem) {
         $this->imagem = $imagem;
-    }
+    }*/
 
-    public function setIdImovel($idImovel) {
-        $this->idImovel = $idImovel;
+    public function setIdImovel($idimovel) {
+        $this->idimovel = $idimovel;
     }
 
     public function setStatus($status) {
         $this->status = $status;
     }
 
-    public function setDestaque($destaque) {
+ /*   public function setDestaque($destaque) {
         $this->destaque = $destaque;
-    }
+    }*/
 
-    public function setCampos($campos) {
+/*    public function setCampos($campos) {
         $this->campos = $campos;
     }
 
     public function setVigencia($vigencia) {
         $this->vigencia = $vigencia;
-    }
+    }*/
 
     public function setDatahoracadastro($datahoracadastro) {
         $this->datahoracadastro = $datahoracadastro;
@@ -107,10 +107,24 @@ class Anuncio {
         $this->datahoraalteracao = $datahoraalteracao;
     }
 
-    public function setIdusuario($idusuario) {
+ /*   public function setIdusuario($idusuario) {
         $this->idusuario = $idusuario;
-    }
+    }*/
 
+    function cadastrar($parametros) {
+
+        $anuncio = new Anuncio();
+        
+        $anuncio->setValor($parametros['txtValor']);
+        $anuncio->setTopicoAnuncio($parametros['txtTopico']);
+        $anuncio->setDescricaoAnuncio($parametros['txtDescricao']);
+        $anuncio->setDatahoracadastro($parametros['hdnDataCadastro']);
+        $anuncio->setDatahoraalteracao($parametros['hdnDataAtualizacao']);
+        $anuncio->setStatus('cadastrado');
+        $anuncio->setIdImovel($parametros['hdnId']);
+            
+        return $anuncio;
+    }
 
    
 }

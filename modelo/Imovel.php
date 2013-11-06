@@ -8,31 +8,25 @@ class Imovel {
     private $tipo;
     private $datahoracadastro;
     private $datahoraalteracao;
-    private $idusuario;
-    private $idendereco;
-
- /*   private $suite;
-      private $area;
-      private $garagem;
-      private $banheiro;
-      private $endereco;
-      private $piscina;
-      private $academia;
-      private $quadra;
-      private $condominio; 
-      private $areaServico;
-      private $dependenciaEmpregada;
-      private $elevador;
-      private $andar;
-      private $cobertura;
-      private $sacada;        */
+    private $garagem;
+    private $banheiro;
+    private $piscina;
+    private $quadra;
+    private $academia;
+/*  private $idusuario;*/
+    private $suite;
+    private $area;/*
+    private $endereco;
+    private $condominio; */
+    private $areaservico;
+    private $dependenciaempregada;
+    private $elevador; /*
+    private $andar;
+    private $cobertura;*/
+    private $sacada;       
 
     public function getId() {
         return $this->id;
-    }
-
-    public function getValor() {
-        return $this->valor;
     }
 
     public function getFinalidade() {
@@ -42,9 +36,38 @@ class Imovel {
     public function getQuarto() {
         return $this->quarto;
     }
+    
+    public function getTipo() {
+        return $this->tipo;
+    }
+    
+    public  function getDatahoracadastro() {
+      return $this->datahoracadastro;
+    }
 
-/*
+    public  function getDatahoraalteracao() {
+      return $this->datahoraalteracao;
+    }
+    
+    public function getGaragem() {
+        return $this->garagem;
+    }
 
+    public function getBanheiro() {
+        return $this->banheiro;
+    }
+
+    public function getPiscina() {
+        return $this->piscina;
+    }
+    
+    public function getQuadra() {
+        return $this->quadra;
+    }
+    public function getAcademia() {
+        return $this->academia;
+    }
+    
       public function getSuite() {
       return $this->suite;
       }
@@ -52,14 +75,25 @@ class Imovel {
       public function getArea() {
       return $this->area;
       }
-
-      public function getGaragem() {
-      return $this->garagem;
+      
+      public function getAreaServico() {
+          return $this->areaservico;
       }
 
-      public function getBanheiro() {
-      return $this->banheiro;
+      public function getDependenciaEmpregada() {
+          return $this->dependenciaempregada;
       }
+
+      public function getElevador() {
+          return $this->elevador;
+      }
+
+      public function getSacada() {
+          return $this->sacada;
+      }
+
+      
+      /*
 
       public function getTopicoImovel() {
       return $this->topicoImovel;
@@ -86,10 +120,6 @@ class Imovel {
         $this->id = $id;
     }
 
-    public function setValor($valor) {
-        $this->valor = $valor;
-    }
-
     public function setFinalidade($finalidade) {
         $this->finalidade = $finalidade;
     }
@@ -97,24 +127,63 @@ class Imovel {
     public function setQuarto($quarto) {
         $this->quarto = $quarto;
     }
+    
+    public function setTipo($tipo) {
+        $this->tipo = $tipo;
+    }
+    public function setDatahoracadastro($datahoracadastro) {
+        $this->datahoracadastro = $datahoracadastro;
+    }
 
+    public function setDatahoraalteracao($datahoraalteracao) {
+        $this->datahoraalteracao = $datahoraalteracao;
+    }
+
+    public function setGaragem($garagem) {
+        $this->garagem = $garagem;
+    }
+
+    public function setBanheiro($banheiro) {
+        $this->banheiro = $banheiro;
+    }
+
+    public function setPiscina($piscina) {
+        $this->piscina = $piscina;
+    }
+
+    public function setQuadra($quadra) {
+        $this->quadra = $quadra;
+    }
+    public function setAcademia($academia) {
+        $this->academia = $academia;
+    }
+            
+    public function setSuite($suite) {
+        $this->suite = $suite;
+    }
+
+    public function setArea($area) {
+        $this->area = $area;
+    }
+
+    public function setAreaServico($areaservico) {
+        $this->areaservico = $areaservico;
+    }
+
+    public function setDependenciaEmpregada($dependenciaempregada) {
+        $this->dependenciaempregada = $dependenciaempregada;
+    }
+
+    public function setElevador($elevador) {
+        $this->elevador = $elevador;
+    }
+
+    public function setSacada($sacada) {
+        $this->sacada = $sacada;
+    }
+
+    
     /*
-      public function setSuite($suite) {
-      $this->suite = $suite;
-      }
-
-      public function setArea($area) {
-      $this->area = $area;
-      }
-
-      public function setGaragem($garagem) {
-      $this->garagem = $garagem;
-      }
-
-      public function setBanheiro($banheiro) {
-      $this->banheiro = $banheiro;
-      }
-
       public function setTopicoImovel($topicoImovel) {
       $this->topicoImovel = $topicoImovel;
       }
@@ -139,10 +208,46 @@ class Imovel {
 
         $imovel = new Imovel();
 
-        $imovel->setValor($parametros['txtValor']);
         $imovel->setFinalidade($parametros['sltFinalidade']);
         $imovel->setQuarto($parametros['sltQuarto']);
+        $imovel->setTipo($parametros['sltTipo']);
+        $imovel->setDatahoracadastro($parametros['hdnDataCadastro']);
+        $imovel->setDatahoraalteracao($parametros['hdnDataAtualizacao']);
+        $imovel->setGaragem($parametros['sltGaragem']);
+        $imovel->setBanheiro($parametros['sltBanheiro']);
+        
+        if(isset($parametros['chkPiscina'])){
+        $imovel->setPiscina($parametros['chkPiscina']);}
+            else $imovel->setPiscina($parametros['chkPiscina'] = "NAO");
+        
+        
+        if(isset($parametros['chkQuadra'])){
+        $imovel->setQuadra($parametros['chkQuadra']);}
+            else $imovel->setQuadra($parametros['chkQuadra'] = "NAO");
 
+        if(isset($parametros['chkAcademia'])){
+        $imovel->setAcademia($parametros['chkAcademia']);}
+            else $imovel->setAcademia($parametros['chkAcademia'] = "NAO");   
+        
+        if(isset($parametros['chkAreaServico'])){
+        $imovel->setAreaServico($parametros['chkAreaServico']);}
+            else $imovel->setAreaServico($parametros['chkAreaServico'] = "NAO");   
+        
+        if(isset($parametros['chkDependenciaEmpregada'])){
+        $imovel->setDependenciaEmpregada($parametros['chkDependenciaEmpregada']);}
+            else $imovel->setDependenciaEmpregada($parametros['chkDependenciaEmpregada'] = "NAO");              
+        
+        if(isset($parametros['chkElevador'])){
+        $imovel->setElevador($parametros['chkElevador']);}
+            else $imovel->setElevador($parametros['chkElevador'] = "NAO");   
+            
+        if(isset($parametros['chkSacada'])){
+        $imovel->setSacada($parametros['chkSacada']);}
+            else $imovel->setSacada($parametros['chkSacada'] = "NAO"); 
+            
+        $imovel->setArea($parametros['txtArea']);
+        $imovel->setSuite($parametros['sltSuite']);
+            
         return $imovel;
     }
     
@@ -151,10 +256,48 @@ class Imovel {
         $imovel = new Imovel();
 
         $imovel->setId($parametros['hdnId']);
-        $imovel->setValor($parametros['txtValor']);
         $imovel->setFinalidade($parametros['sltFinalidade']);
         $imovel->setQuarto($parametros['sltQuarto']);
+        $imovel->setTipo($parametros['sltTipo']);
+        $imovel->setDatahoracadastro($parametros['hdnDataCadastro']);
+        $imovel->setDatahoraalteracao($parametros['hdnDataAtualizacao']);
+        $imovel->setGaragem($parametros['sltGaragem']);
+        $imovel->setBanheiro($parametros['sltBanheiro']);
+        
+        if(isset($parametros['chkPiscina'])){
+        $imovel->setPiscina($parametros['chkPiscina']);}
+            else $imovel->setPiscina($parametros['chkPiscina'] = "NAO");
+        
+        
+        if(isset($parametros['chkQuadra'])){
+        $imovel->setQuadra($parametros['chkQuadra']);}
+            else $imovel->setQuadra($parametros['chkQuadra'] = "NAO");
 
+        if(isset($parametros['chkAcademia'])){
+        $imovel->setAcademia($parametros['chkAcademia']);}
+            else $imovel->setAcademia($parametros['chkAcademia'] = "NAO");   
+        
+        if(isset($parametros['chkAreaServico'])){
+        $imovel->setAreaServico($parametros['chkAreaServico']);}
+            else $imovel->setAreaServico($parametros['chkAreaServico'] = "NAO");   
+        
+        if(isset($parametros['chkDependenciaEmpregada'])){
+        $imovel->setDependenciaEmpregada($parametros['chkDependenciaEmpregada']);}
+            else $imovel->setDependenciaEmpregada($parametros['chkDependenciaEmpregada'] = "NAO");              
+        
+        if(isset($parametros['chkElevador'])){
+        $imovel->setElevador($parametros['chkElevador']);}
+            else $imovel->setElevador($parametros['chkElevador'] = "NAO");   
+            
+        if(isset($parametros['chkSacada'])){
+        $imovel->setSacada($parametros['chkSacada']);}
+            else $imovel->setSacada($parametros['chkSacada'] = "NAO"); 
+            
+        $imovel->setArea($parametros['txtArea']);
+        $imovel->setSuite($parametros['sltSuite']);
+            
+        return $imovel;
+        
         return $imovel;
     }
 }

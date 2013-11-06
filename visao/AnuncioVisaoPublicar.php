@@ -8,13 +8,10 @@
                     maxlength: 15,
                     required: true
                 },
-                sltFinalidade: {
+                txtTopico: {
                     required: true
                 },
-                sltQuarto: {
-                    required: true
-                },
-                sltTipo: {
+                txtDescricao: {
                     required: true
                 }
             },
@@ -40,24 +37,13 @@
                     type: "POST",
                     data: {
                         hdnId: $('#hdnId').val(),
-                        hdnEntidade: $('#hdnEntidade').val(),
-                        hdnAcao: $('#hdnAcao').val(),
-                        sltFinalidade: $('#sltFinalidade').val(),
-                        sltQuarto: $('#sltQuarto').val(),
                         hdnDataCadastro: $('#hdnDataCadastro').val(),
                         hdnDataAtualizacao: $('#hdnDataAtualizacao').val(),
-                        sltTipo: $('#sltTipo').val(),
-                        sltGaragem: $('#sltGaragem').val(),
-                        sltBanheiro: $('#sltBanheiro').val(),
-                        chkPiscina: $('#chkPiscina:checked').val(),
-                        chkQuadra: $('#chkQuadra:checked').val(),
-                        chkAcademia: $('#chkAcademia:checked').val(),
-                        chkAreaServico: $('#chkAreaServico:checked').val(),
-                        chkDependenciaEmpregada: $('#chkDependenciaEmpregada:checked').val(),
-                        chkElevador: $('#chkElevador:checked').val(),
-                        txtArea: $('#txtArea').val(),
-                        sltSuite: $('#sltSuite').val(),
-                        chkSacada: $('#chkSacada:checked').val()
+                        hdnEntidade: $('#hdnEntidade').val(),
+                        hdnAcao: $('#hdnAcao').val(),
+                        txtValor: $('#txtValor').val(),
+                        txtTopico: $('#txtTopico').val(),
+                        txtDescricao: $('#txtDescricao').val()
                     },
                     beforeSend: function() {
                         $('.alert').html("...processando...").attr('class', 'alert alert-warning');
@@ -67,7 +53,7 @@
                     success: function(resposta) {
                         $('button[type=submit]').removeAttr('disabled');
                         if (resposta.resultado == 1) {
-                            $('.alert').html("Imovel Atualizado Com Sucesso").attr('class', 'alert alert-success');
+                            $('.alert').html("Anuncio Cadastrado Com Sucesso").attr('class', 'alert alert-success');
                         } else {
                             $('.alert').html("Erro ao atualizar").attr('class', 'alert alert-danger');
                         }
@@ -81,7 +67,7 @@
 </script>
 
 <div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
-    <h1>Cadastrar Im&oacute;veis</h1>
+    <h1>Cadastrar Anuncio</h1>
     
     <?php
         $item = $this->getItem();
@@ -96,17 +82,38 @@
         <input type="hidden" id="hdnId" name="hdnId" value="<?php echo $imovel->getId()?>"/>
         <input type="hidden" id="hdnDataCadastro" name="hdnDataCadastro" value="<?php echo $imovel->getDatahoracadastro()?>"/>
         <input type="hidden" id="hdnDataAtualizacao" name="hdnDataAtualizacao" value=""/>
-        <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Imovel"  />
-        <input type="hidden" id="hdnAcao" name="hdnAcao" value="editar" />
-
+        <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Anuncio"  />
+        <input type="hidden" id="hdnAcao" name="hdnAcao" value="cadastrar" />
+        
+        <div class="form-group">
+            <label class="col-lg-2 control-label" for="txtValor">Informe o Valor</label>
+            <div class="col-lg-3">
+                <input type="text" id="txtValor" name="txtValor" class="form-control" placeholder="informe o valor do imóvel" value="">
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label class="col-lg-2 control-label" for="txtTopico">Tópico do Anuncio</label>
+            <div class="col-lg-3">
+                <input type="text" id="txtTopico" name="txtTopico" class="form-control" placeholder="digite um tópico para o anuncio" value="">
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label class="col-lg-2 control-label" for="txtDescricao">Descrição do Anuncio</label>
+            <div class="col-lg-3">
+                <input type="text" id="txtDescricao" name="txtDescricao" class="form-control" placeholder="digite uma descrição do anuncio" value="">
+            </div>
+        </div>
+        
         <div class="form-group">
             <label class="col-lg-2 control-label" for="sltFinalidade">Finalidade</label>
             <div class="col-lg-3">
                 <select class="form-control" id="sltFinalidade" name="sltFinalidade">
                     
-                    <option value="">Informe a Finalidade</option>
-                    <option <?php if($imovel->getFinalidade()=="venda"){print "selected='true'";}?>value="venda">Venda</option>
-                    <option <?php if($imovel->getFinalidade()=="aluguel"){print "selected='true'";}?>value="aluguel">Aluguel</option>
+                    <option value="" disabled="true">Informe a Finalidade</option>
+                    <option <?php if($imovel->getFinalidade()=="venda"){print "selected='true'";}?>value="venda" disabled="true">Venda</option>
+                    <option <?php if($imovel->getFinalidade()=="aluguel"){print "selected='true'";}?>value="aluguel" disabled="true">Aluguel</option>
                     
                     <?php //} ?>
                     
@@ -116,13 +123,13 @@
             <label  class="col-lg-2 control-label" for="sltQuarto">Quartos</label>
             <div class="col-lg-3">
                 <select class="form-control" id="sltQuarto" name="sltQuarto">
-                    <option value="">Informe a quantidade de quartos</option>
-                    <option <?php if($imovel->getQuarto()=="01"){print "selected='true'";}?> value="01">01</option>
-                    <option <?php if($imovel->getQuarto()=="02"){print "selected='true'";}?>value="02">02</option>
-                    <option <?php if($imovel->getQuarto()=="03"){print "selected='true'";}?>value="03">03</option>
-                    <option <?php if($imovel->getQuarto()=="04"){print "selected='true'";}?>value="04">04</option>
-                    <option <?php if($imovel->getQuarto()=="05"){print "selected='true'";}?>value="05">05</option>
-                    <option <?php if($imovel->getQuarto()=="06"){print "selected='true'";}?>value="06">+ de 05</option>
+                    <option value="" disabled="true">Informe a quantidade de quartos</option>
+                    <option <?php if($imovel->getQuarto()=="01"){print "selected='true'";}?> value="01" disabled="true">01</option>
+                    <option <?php if($imovel->getQuarto()=="02"){print "selected='true'";}?>value="02" disabled="true">02</option>
+                    <option <?php if($imovel->getQuarto()=="03"){print "selected='true'";}?>value="03" disabled="true">03</option>
+                    <option <?php if($imovel->getQuarto()=="04"){print "selected='true'";}?>value="04" disabled="true">04</option>
+                    <option <?php if($imovel->getQuarto()=="05"){print "selected='true'";}?>value="05" disabled="true">05</option>
+                    <option <?php if($imovel->getQuarto()=="06"){print "selected='true'";}?>value="06" disabled="true">+ de 05</option>
                 </select></div>
         </div>
         
@@ -130,10 +137,10 @@
             <label  class="col-lg-2 control-label" for="sltTipo">Tipo de Imóvel</label>
             <div class="col-lg-3">
                 <select class="form-control" id="sltTipo" name="sltTipo">
-                    <option value="">Informe o Tipo</option>
-                    <option <?php if($imovel->getTipo()=="apartamento"){print "selected='true'";}?>value="apartamento">Apartamento</option>
-                    <option <?php if($imovel->getTipo()=="casa"){print "selected='true'";}?>value="casa">Casa</option>
-                    <option <?php if($imovel->getTipo()=="terreno"){print "selected='true'";}?>value="terreno">Terreno</option>
+                    <option value="" disabled="true">Informe o Tipo</option>
+                    <option <?php if($imovel->getTipo()=="apartamento"){print "selected='true'";}?>value="apartamento" disabled="true">Apartamento</option>
+                    <option <?php if($imovel->getTipo()=="casa"){print "selected='true'";}?>value="casa" disabled="true">Casa</option>
+                    <option <?php if($imovel->getTipo()=="terreno"){print "selected='true'";}?>value="terreno" disabled="true">Terreno</option>
                 </select></div>
         </div>
         
@@ -141,14 +148,14 @@
             <label  class="col-lg-2 control-label" for="sltGaragem">Garagem(ns)</label>
             <div class="col-lg-3">
                 <select class="form-control" id="sltGaragem" name="sltGaragem">
-                    <option value="">Informe a Quantidade de Garagens</option>
-                    <option <?php if($imovel->getGaragem()=="nenhuma"){print "selected='true'";}?>value="nenhuma">Nenhuma</option>
-                    <option <?php if($imovel->getGaragem()=="01"){print "selected='true'";}?>value="01">01</option>
-                    <option <?php if($imovel->getGaragem()=="02"){print "selected='true'";}?>value="02">02</option>
-                    <option <?php if($imovel->getGaragem()=="03"){print "selected='true'";}?>value="03">03</option>
-                    <option <?php if($imovel->getGaragem()=="04"){print "selected='true'";}?>value="04">04</option>
-                    <option <?php if($imovel->getGaragem()=="05"){print "selected='true'";}?>value="05">05</option>
-                    <option <?php if($imovel->getGaragem()=="06"){print "selected='true'";}?>value="06">+ de 05</option>
+                    <option value="" disabled="true">Informe a Quantidade de Garagens</option>
+                    <option <?php if($imovel->getGaragem()=="nenhuma"){print "selected='true'";}?>value="nenhuma" disabled="true">Nenhuma</option>
+                    <option <?php if($imovel->getGaragem()=="01"){print "selected='true'";}?>value="01" disabled="true">01</option>
+                    <option <?php if($imovel->getGaragem()=="02"){print "selected='true'";}?>value="02" disabled="true">02</option>
+                    <option <?php if($imovel->getGaragem()=="03"){print "selected='true'";}?>value="03" disabled="true">03</option>
+                    <option <?php if($imovel->getGaragem()=="04"){print "selected='true'";}?>value="04" disabled="true">04</option>
+                    <option <?php if($imovel->getGaragem()=="05"){print "selected='true'";}?>value="05" disabled="true">05</option>
+                    <option <?php if($imovel->getGaragem()=="06"){print "selected='true'";}?>value="06" disabled="true">+ de 05</option>
                 </select></div>
         </div>
 
@@ -156,48 +163,48 @@
             <label  class="col-lg-2 control-label" for="sltBanheiro">Banheiro(s)</label>
             <div class="col-lg-3">
                 <select class="form-control" id="sltBanheiro" name="sltBanheiro">
-                    <option value="">Informe a Quantidade de Banheiro(s)</option>
-                    <option <?php if($imovel->getBanheiro()=="01"){print "selected='true'";}?>value="01">01</option>
-                    <option <?php if($imovel->getBanheiro()=="02"){print "selected='true'";}?>value="02">02</option>
-                    <option <?php if($imovel->getBanheiro()=="03"){print "selected='true'";}?>value="03">03</option>
-                    <option <?php if($imovel->getBanheiro()=="04"){print "selected='true'";}?>value="04">04</option>
-                    <option <?php if($imovel->getBanheiro()=="05"){print "selected='true'";}?>value="05">05</option>
-                    <option <?php if($imovel->getBanheiro()=="06"){print "selected='true'";}?>value="06">+ de 05</option>
+                    <option value="" disabled="true">Informe a Quantidade de Banheiro(s)</option>
+                    <option <?php if($imovel->getBanheiro()=="01"){print "selected='true'";}?>value="01" disabled="true">01</option>
+                    <option <?php if($imovel->getBanheiro()=="02"){print "selected='true'";}?>value="02" disabled="true">02</option>
+                    <option <?php if($imovel->getBanheiro()=="03"){print "selected='true'";}?>value="03" disabled="true">03</option>
+                    <option <?php if($imovel->getBanheiro()=="04"){print "selected='true'";}?>value="04" disabled="true">04</option>
+                    <option <?php if($imovel->getBanheiro()=="05"){print "selected='true'";}?>value="05" disabled="true">05</option>
+                    <option <?php if($imovel->getBanheiro()=="06"){print "selected='true'";}?>value="06" disabled="true">+ de 05</option>
                 </select></div>
         </div>
         
         <label class="checkbox-inline">
-        <input <?php if($imovel->getPiscina()=="SIM"){print "checked='true'";}?>type="checkbox" id="chkPiscina" value="SIM" name="chkPiscina"> Piscina
+        <input <?php if($imovel->getPiscina()=="SIM"){print "checked='true'";}?>type="checkbox" id="chkPiscina" value="SIM" name="chkPiscina" disabled="true"> Piscina
         </label>
 
         <label class="checkbox-inline">
-        <input <?php if($imovel->getQuadra()=="SIM"){print "checked='true'";}?>type="checkbox" id="chkQuadra" value="SIM" name="chkQuadra"> Quadra
+        <input <?php if($imovel->getQuadra()=="SIM"){print "checked='true'";}?>type="checkbox" id="chkQuadra" value="SIM" name="chkQuadra" disabled="true"> Quadra
         </label>
                
         <label class="checkbox-inline">
-        <input <?php if($imovel->getAcademia()=="SIM"){print "checked='true'";}?>type="checkbox" id="chkAcademia" value="SIM" name="chkAcademia"> Academia
+        <input <?php if($imovel->getAcademia()=="SIM"){print "checked='true'";}?>type="checkbox" id="chkAcademia" value="SIM" name="chkAcademia" disabled="true"> Academia
         </label>
         
         <label class="checkbox-inline">
-        <input <?php if($imovel->getAreaServico()=="SIM"){print "checked='true'";}?>type="checkbox" id="chkAreaServico" value="SIM" name="chkAreaServico"> Área de Serviço
+        <input <?php if($imovel->getAreaServico()=="SIM"){print "checked='true'";}?>type="checkbox" id="chkAreaServico" value="SIM" name="chkAreaServico" disabled="true"> Área de Serviço
         </label>
         
         <label class="checkbox-inline">
-        <input <?php if($imovel->getDependenciaEmpregada()=="SIM"){print "checked='true'";}?>type="checkbox" id="chkDependenciaEmpregada" value="SIM" name="chkDependenciaEmpregada"> Dependência de Empregada
+        <input <?php if($imovel->getDependenciaEmpregada()=="SIM"){print "checked='true'";}?>type="checkbox" id="chkDependenciaEmpregada" value="SIM" name="chkDependenciaEmpregada" disabled="true"> Dependência de Empregada
         </label>
         
         <label class="checkbox-inline">
-        <input <?php if($imovel->getElevador()=="SIM"){print "checked='true'";}?>type="checkbox" id="chkElevador" value="SIM" name="chkElevador"> Elevador
+        <input <?php if($imovel->getElevador()=="SIM"){print "checked='true'";}?>type="checkbox" id="chkElevador" value="SIM" name="chkElevador" disabled="true"> Elevador
         </label>
         
         <label class="checkbox-inline">
-        <input <?php if($imovel->getSacada()=="SIM"){print "checked='true'";}?>type="checkbox" id="chkSacada" value="SIM" name="chkSacada"> Sacada
+        <input <?php if($imovel->getSacada()=="SIM"){print "checked='true'";}?>type="checkbox" id="chkSacada" value="SIM" name="chkSacada" disabled="true"> Sacada
         </label><p>
         
         <div class="form-group">
             <label class="col-lg-2 control-label" for="txtArea">Informa a Área em M2</label>
             <div class="col-lg-3">
-                <input type="text" id="txtArea" name="txtArea" class="form-control" placeholder="Área em M2" value="<?php print $imovel->getArea()?>">
+                <input type="text" id="txtArea" name="txtArea" class="form-control" placeholder="Área em M2" disabled="true" value="<?php print $imovel->getArea()?>">
             </div>
         </div>
         
@@ -205,14 +212,14 @@
             <label  class="col-lg-2 control-label" for="sltSuite">Suite(s)</label>
             <div class="col-lg-3">
                 <select class="form-control" id="sltSuite" name="sltSuite">
-                    <option value="">Informe Nº de Suite(s)</option>
-                    <option <?php if($imovel->getSuite()=="nenhuma"){print "selected='true'";}?>value="nenhuma">Nenhuma</option>
-                    <option <?php if($imovel->getSuite()=="01"){print "selected='true'";}?>value="01">01</option>
-                    <option <?php if($imovel->getSuite()=="02"){print "selected='true'";}?>value="02">02</option>
-                    <option <?php if($imovel->getSuite()=="03"){print "selected='true'";}?>value="03">03</option>
-                    <option <?php if($imovel->getSuite()=="04"){print "selected='true'";}?>value="04">04</option>
-                    <option <?php if($imovel->getSuite()=="05"){print "selected='true'";}?>value="05">05</option>
-                    <option <?php if($imovel->getSuite()=="06"){print "selected='true'";}?>value="06">+ de 05</option>
+                    <option value="" disabled="true">Informe Nº de Suite(s)</option>
+                    <option <?php if($imovel->getSuite()=="nenhuma"){print "selected='true'";}?>value="nenhuma" disabled="true">Nenhuma</option>
+                    <option <?php if($imovel->getSuite()=="01"){print "selected='true'";}?>value="01" disabled="true">01</option>
+                    <option <?php if($imovel->getSuite()=="02"){print "selected='true'";}?>value="02" disabled="true">02</option>
+                    <option <?php if($imovel->getSuite()=="03"){print "selected='true'";}?>value="03" disabled="true">03</option>
+                    <option <?php if($imovel->getSuite()=="04"){print "selected='true'";}?>value="04" disabled="true">04</option>
+                    <option <?php if($imovel->getSuite()=="05"){print "selected='true'";}?>value="05" disabled="true">05</option>
+                    <option <?php if($imovel->getSuite()=="06"){print "selected='true'";}?>value="06" disabled="true">+ de 05</option>
                 </select></div>
         </div>
         
