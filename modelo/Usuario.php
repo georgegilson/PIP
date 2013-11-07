@@ -10,11 +10,20 @@ class Usuario {
     private $senha;
     private $idtelefone;
     private $idendereco;
-    private $ativo;
+    private $status;
     private $datahoracadastro;
-    private $datahoraalteracao;
+    private $datahoraalteracao; 
+    private $email;
     
-    public function getId() {
+    public function getEmail() {
+        return $this->email;
+    }
+
+    public function setEmail($email) {
+        $this->email = $email;
+    }
+
+        public function getId() {
         return $this->id;
     }
 
@@ -46,8 +55,8 @@ class Usuario {
         return $this->idendereco;
     }
 
-    public function getAtivo() {
-        return $this->ativo;
+    public function getStatus() {
+        return $this->status;
     }
 
     public function getDatahoracadastro() {
@@ -90,8 +99,8 @@ class Usuario {
         $this->idendereco = $idendereco;
     }
 
-    public function setAtivo($ativo) {
-        $this->ativo = $ativo;
+    public function setStatus($status) {
+        $this->status = $status;
     }
 
     public function setDatahoracadastro($datahoracadastro) {

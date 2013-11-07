@@ -8,7 +8,6 @@ class Endereco {
     private $cidade;
     private $bairro;
     private $logradouro;
-    private $tipologradouro;
     private $numero;
     private $complemento;
     
@@ -34,10 +33,6 @@ class Endereco {
 
     public function getLogradouro() {
         return $this->logradouro;
-    }
-
-    public function getTipologradouro() {
-        return $this->tipologradouro;
     }
 
     public function getNumero() {
@@ -70,10 +65,6 @@ class Endereco {
 
     public function setLogradouro($logradouro) {
         $this->logradouro = $logradouro;
-    }
-
-    public function setTipologradouro($tipologradouro) {
-        $this->tipologradouro = $tipologradouro;
     }
 
     public function setNumero($numero) {

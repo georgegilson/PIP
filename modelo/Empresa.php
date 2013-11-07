@@ -5,8 +5,11 @@ class Empresa {
     private $id;
     private $responsavel;
     private $razaosocial;
-    private $datahoracadastro;
-    private $datahoraalteracao;
+    private $idusuario;
+    
+    public function getIdusuario() {
+        return $this->idusuario;
+    }
     
     public function getId() {
         return $this->id;
@@ -20,14 +23,6 @@ class Empresa {
         return $this->razaosocial;
     }
 
-    public function getDatahoracadastro() {
-        return $this->datahoracadastro;
-    }
-
-    public function getDatahoraalteracao() {
-        return $this->datahoraalteracao;
-    }
-
     public function setId($id) {
         $this->id = $id;
     }
@@ -39,13 +34,9 @@ class Empresa {
     public function setRazaosocial($razaosocial) {
         $this->razaosocial = $razaosocial;
     }
-
-    public function setDatahoracadastro($datahoracadastro) {
-        $this->datahoracadastro = $datahoracadastro;
-    }
-
-    public function setDatahoraalteracao($datahoraalteracao) {
-        $this->datahoraalteracao = $datahoraalteracao;
-    }
     
+    public function setIdusuario($idusuario) {
+        $this->idusuario = $idusuario;
+    }
+
 }

@@ -13,19 +13,56 @@ class Imovel {
     private $piscina;
     private $quadra;
     private $academia;
-/*  private $idusuario;*/
+    private $idusuario;
     private $suite;
-    private $area;/*
-    private $endereco;
-    private $condominio; */
+    private $area;
+ //   private $endereco;
+    private $condominio; 
     private $areaservico;
     private $dependenciaempregada;
-    private $elevador; /*
+    private $elevador; 
     private $andar;
-    private $cobertura;*/
-    private $sacada;       
+    private $cobertura;
+    private $sacada;
+    private $descricao;
+    
+    public function getDescricao() {
+        return $this->descricao;
+    }
 
-    public function getId() {
+        public function getIdusuario() {
+        return $this->idusuario;
+    }
+
+    public function getCondominio() {
+        return $this->condominio;
+    }
+
+    public function getAndar() {
+        return $this->andar;
+    }
+
+    public function getCobertura() {
+        return $this->cobertura;
+    }
+
+    public function setIdusuario($idusuario) {
+        $this->idusuario = $idusuario;
+    }
+
+    public function setCondominio($condominio) {
+        $this->condominio = $condominio;
+    }
+
+    public function setAndar($andar) {
+        $this->andar = $andar;
+    }
+
+    public function setCobertura($cobertura) {
+        $this->cobertura = $cobertura;
+    }
+
+        public function getId() {
         return $this->id;
     }
 
@@ -92,30 +129,6 @@ class Imovel {
           return $this->sacada;
       }
 
-      
-      /*
-
-      public function getTopicoImovel() {
-      return $this->topicoImovel;
-      }
-
-      public function getDescricaoImovel() {
-      return $this->descricaoImovel;
-      }
-
-      public function getEndereco() {
-      return $this->endereco;
-      }
-
-      public function getBuscaAvancada() {
-      return $this->buscaAvancada;
-      }
-
-      public function getImagem() {
-      return $this->imagem;
-      }
-     */
-
     public function setId($id) {
         $this->id = $id;
     }
@@ -181,29 +194,11 @@ class Imovel {
     public function setSacada($sacada) {
         $this->sacada = $sacada;
     }
-
     
-    /*
-      public function setTopicoImovel($topicoImovel) {
-      $this->topicoImovel = $topicoImovel;
-      }
-
-      public function setDescricaoImovel($descricaoImovel) {
-      $this->descricaoImovel = $descricaoImovel;
-      }
-
-      public function setEndereco($endereco) {
-      $this->endereco = $endereco;
-      }
-
-      public function setBuscaAvancada($buscaAvancada) {
-      $this->buscaAvancada = $buscaAvancada;
-      }
-
-      public function setImagem($imagem) {
-      $this->imagem = $imagem;
-      } */
-
+    public function setDescricao($descricao) {
+        $this->descricao = $descricao;
+    }
+    
     function cadastrar($parametros) {
 
         $imovel = new Imovel();

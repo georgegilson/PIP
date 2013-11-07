@@ -3,75 +3,49 @@
 class Telefone {
 
     private $id;
-    private $telefonefixo;
-    private $telefonecomercial;
-    private $ramal;
-    private $claro;
-    private $oi;
-    private $tim;
-    private $vivo;
+    private $tipotelefone;
+    private $operadora;
+    private $numero;
+    private $idusuario;
     
     public function getId() {
         return $this->id;
     }
 
-    public function getTelefonefixo() {
-        return $this->telefonefixo;
+    public function getTipotelefone() {
+        return $this->tipotelefone;
     }
 
-    public function getTelefonecomercial() {
-        return $this->telefonecomercial;
+    public function getOperadora() {
+        return $this->operadora;
     }
 
-    public function getRamal() {
-        return $this->ramal;
+    public function getNumero() {
+        return $this->numero;
     }
 
-    public function getClaro() {
-        return $this->claro;
-    }
-
-    public function getOi() {
-        return $this->oi;
-    }
-
-    public function getTim() {
-        return $this->tim;
-    }
-
-    public function getVivo() {
-        return $this->vivo;
+    public function getIdusuario() {
+        return $this->idusuario;
     }
 
     public function setId($id) {
         $this->id = $id;
     }
 
-    public function setTelefonefixo($telefonefixo) {
-        $this->telefonefixo = $telefonefixo;
+    public function setTipotelefone($tipotelefone) {
+        $this->tipotelefone = $tipotelefone;
     }
 
-    public function setTelefonecomercial($telefonecomercial) {
-        $this->telefonecomercial = $telefonecomercial;
+    public function setOperadora($operadora) {
+        $this->operadora = $operadora;
     }
 
-    public function setRamal($ramal) {
-        $this->ramal = $ramal;
+    public function setNumero($numero) {
+        $this->numero = $numero;
     }
 
-    public function setClaro($claro) {
-        $this->claro = $claro;
+    public function setIdusuario($idusuario) {
+        $this->idusuario = $idusuario;
     }
-
-    public function setOi($oi) {
-        $this->oi = $oi;
-    }
-
-    public function setTim($tim) {
-        $this->tim = $tim;
-    }
-
-    public function setVivo($vivo) {
-        $this->vivo = $vivo;
-    }
+    
 }
