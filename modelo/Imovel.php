@@ -242,6 +242,13 @@ class Imovel {
             
         $imovel->setArea($parametros['txtArea']);
         $imovel->setSuite($parametros['sltSuite']);
+        $imovel->setDescricao($parametros['txtDescricao']);
+        $imovel->setIdusuario("usuariosimon");
+        $imovel->setElevador("SIM");
+        $imovel->setAndar("9");
+        $imovel->setCobertura("SIM");
+        $imovel->setSacada("SIM");
+        $imovel->setCondominio("300");
             
         return $imovel;
     }
@@ -290,6 +297,13 @@ class Imovel {
             
         $imovel->setArea($parametros['txtArea']);
         $imovel->setSuite($parametros['sltSuite']);
+        $imovel->setDescricao($parametros['txtDescricao']);
+        $imovel->setIdusuario("usuariosimon");
+        $imovel->setElevador("SIM");
+        $imovel->setAndar("9");
+        $imovel->setCobertura("SIM");
+        $imovel->setSacada("SIM");
+        $imovel->setCondominio("300");
             
         return $imovel;
         

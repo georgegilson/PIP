@@ -62,7 +62,8 @@
                         chkElevador: $('#chkElevador:checked').val(),
                         txtArea: $('#txtArea').val(),
                         sltSuite: $('#sltSuite').val(),
-                        chkSacada: $('#chkSacada:checked').val()
+                        chkSacada: $('#chkSacada:checked').val(),
+                        txtDescricao: $('#txtDescricao').val()
                     },
                     beforeSend: function() {
                         $('.alert').html("...processando...").attr('class', 'alert alert-warning');
@@ -209,7 +210,14 @@
                     <option value="05">05</option>
                     <option value="06">+ de 05</option>
                 </select></div>
-        </div>        
+        </div>      
+        
+        <div class="form-group">
+            <label class="col-lg-2 control-label" for="txtDescricao">Informe uma Descrição do Imóvel</label>
+            <div class="col-lg-3">
+                <input type="text" id="txtDescricao" name="txtDescricao" class="form-control" placeholder="Descrição do Imóvel">
+            </div>
+        </div>
         
         <!--        <div class="form-group">
                     <label  class="col-lg-2 control-label" for="sltSuite">Suites</label>

@@ -57,7 +57,8 @@
                         chkElevador: $('#chkElevador:checked').val(),
                         txtArea: $('#txtArea').val(),
                         sltSuite: $('#sltSuite').val(),
-                        chkSacada: $('#chkSacada:checked').val()
+                        chkSacada: $('#chkSacada:checked').val(),
+                        txtDescricao: $('#txtDescricao').val()
                     },
                     beforeSend: function() {
                         $('.alert').html("...processando...").attr('class', 'alert alert-warning');

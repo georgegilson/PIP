@@ -1,3 +1,5 @@
+ 
+
 <div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
     <h1>Listagem de Im&oacute;veis</h1>
     <!-- Example row of columns -->
@@ -6,23 +8,11 @@
 <table class="table table-hover">
         <thead>
           <tr>
-            <th>id</th>
-            <th>Finalidade</th>
-            <th>Quarto(s)</th> 
-            <th>Tipo</th>
-            <th>Garagem(ns)</th>
-            <th>Banheiro(s)</th>
-            <th>Psicina</th>
-            <th>Quadra</th>
-            <th>Academia</th>
-            <th>Dependencia Empregada</th>
-            <th>Área Serviço</th>
-            <th>Elevador</th>
-            <th>Sacada</th>
-            <th>Área</th>
-            <th>Suíte(s)</th>
-            <th>Data do Cadastro</th>
-            <th>Data da Última Alteração</th>
+            <th>Referência</th>
+            <th>Descrição</th>
+            <th>Logradouro</th> 
+            <th>Bairro</th>
+            <th>Data Cadastro</th>
           </tr>
         </thead>
         <tbody>
@@ -33,29 +23,54 @@
         ?>
        
           <tr>
-            <td><?php echo $imovel->getId(); ?></td>
-            <td><?php echo $imovel->getFinalidade(); ?></td>
-            <td><?php echo $imovel->getQuarto(); ?></td>
-            <td><?php echo $imovel->getTipo(); ?></td>
-            <td><?php echo $imovel->getGaragem(); ?></td>
-            <td><?php echo $imovel->getBanheiro(); ?></td>
-            <td><?php echo $imovel->getPiscina(); ?></td>
-            <td><?php echo $imovel->getQuadra(); ?></td>
-            <td><?php echo $imovel->getAcademia(); ?></td>
-            <td><?php echo $imovel->getDependenciaEmpregada(); ?></td>
-            <td><?php echo $imovel->getAreaServico(); ?></td>
-            <td><?php echo $imovel->getElevador(); ?></td>
-            <td><?php echo $imovel->getSacada(); ?></td>
-            <td><?php echo $imovel->getArea(); ?></td>
-            <td><?php echo $imovel->getSuite(); ?></td>
+              <td><?php echo substr($imovel->getDatahoracadastro(), 6, -9).substr($imovel->getDatahoracadastro(), 3, -14).str_pad($imovel->getId(), 5, "0", STR_PAD_LEFT); ?></td>
+            <td><?php echo $imovel->getDescricao(); ?></td>
+            <td>LOGRADOURO</td>
+            <td>BAIRRO</td>
             <td><?php echo $imovel->getDatahoracadastro(); ?></td>
-            <td><?php echo $imovel->getDatahoraalteracao(); ?></td>
+            <td><a href="#" id="a-popover<?php echo $imovel->getId();?>" class="btn btn-success">Detalhes do Imóvel</a></td>
             <td><a href="index.php?entidade=Imovel&acao=selecionar&id=<?php echo $imovel->getId();?>">Editar</a> <br /></td>
             <td><a href="index.php?entidade=Imovel&acao=publicar&id=<?php echo $imovel->getId();?>">Publicar Anuncio</a> <br /></td>
           </tr>
+         
+<!-- Div oculta que será exibida dentro do popover. -->
+<div id="div-popover<?php echo $imovel->getId();?>" class="hide">
+   <?php echo "Tipo: ".$imovel->getTipo()."<br />";?>
+   <?php echo "Quartos: ".$imovel->getQuarto()."<br />";?>
+   <?php echo "Garagen(s): ".$imovel->getQuarto()."<br />";?>
+   <?php echo "Banheiro(s): ".$imovel->getBanheiro()."<br />";?>
+   <?php echo "Área: ".$imovel->getArea()." m2<br />";?>
+   <?php if($imovel->getSuite()!="nenhuma"){echo "Suite(s): ".$imovel->getSuite()."<br />";} else echo "Suite(s): <font color='red'>NÃO</font><br />";?>
+   <?php if($imovel->getPiscina()=="SIM"){echo "Piscina: <font color='blue'>SIM</font><br />";}else echo "Piscina: <font color='red'>NÃO</font><br />";?>
+   <?php if($imovel->getQuadra()=="SIM"){echo "Quadra: <font color='blue'>SIM</font><br />";}else echo "Quadra: <font color='red'>NÃO</font><br />";?>
+   <?php if($imovel->getAcademia()=="SIM"){echo "Academia: <font color='blue'>SIM</font><br />";}else echo "Academia: <font color='red'>NÃO</font><br />";?>
+   <?php if($imovel->getAreaServico()=="SIM"){echo "Área Serviço:  <font color='blue'>SIM</font><br />";}else echo "Área Serviço: <font color='red'>NÃO</font><br />";?>
+   <?php if($imovel->getDependenciaEmpregada()=="SIM"){echo "Dependencia: <font color='blue'>SIM</font><br />";}else echo "Dependencia: <font color='red'>NÃO</font><br />";?>
+
+</div>
+ 
+ <script type="text/javascript">
+   $(document).ready(function () {
+      // Associa o evento do popover ao clicar no link.
+      $('#a-popover<?php echo $imovel->getId();?>').popover({
+         trigger: 'hover',
+         html: true,
+         title: 'Detalhes do Imóvel',
+         content: $('#div-popover<?php echo $imovel->getId();?>').html() // Adiciona o conteúdo da div oculta para dentro do popover.
+      }).click(function (e) {
+         e.preventDefault();
+         // Exibe o popover.
+         $(this).popover('show');
+      });
+
+   });
+ </script>
+          
         <?php } } else { ?>
-          <tr> <td colspan="4">N&atilde;o h&aacute; registros</td> </tr>
+        
         <?php } ?>
         </tbody>
       </table>
+       
+ 
     </form>
