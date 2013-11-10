@@ -1,6 +1,110 @@
-
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+<script src="assets/js/gmaps.js"></script>
+<script src="assets/js/jquery.maskedinput.min.js"></script>
+<script src="assets/js/bootstrap-multiselect.js"></script>
+<script src="assets/js/bootstrap-maxlength.js"></script>
 <script>
     $(document).ready(function() {
+
+        //######### INICIO DO CEP ########
+        map = new GMaps({
+            div: '#map',
+            lat: 0,
+            lng: 0
+        });
+
+        $("#txtCEP").mask("99.999-999"); //mascara
+        $("#divCEP").hide(); //oculta campos do DIVCEP
+        $("#map").hide(); //oculta campos do mapa
+
+        $("#btnCEP").click(function() {
+
+            var validator = $("#form").validate();
+            if (validator.element("#txtCEP")) {
+                $.ajax({
+                    url: "index.php",
+                    dataType: "json",
+                    type: "POST",
+                    data: {
+                        cep: $('#txtCEP').val(),
+                        hdnEntidade: "Endereco",
+                        hdnAcao: "buscarCEP"
+                    },
+                    beforeSend: function() {
+                        $("#msgCEP").remove();
+                        var msgCEP = $("<div>", {id: "msgCEP", class: "alert alert-warning"}).html("...aguarde buscando CEP...");
+                        $("#divCEP").fadeOut('slow'); //oculta campos do DIVCEP
+                        $("#map").fadeOut('slow'); //oculta campos do mapa
+                        $("#alertCEP").append(msgCEP);
+                        $('#txtCEP').attr('disabled', 'disabled');
+                        $('#btnCEP').attr('disabled', 'disabled');
+                        $('#txtEstado').val('');
+                        $('#txtCidade').val('');
+                        $('#txtBairro').val('');
+                        $('#txtLogradouro').val('');
+                        $('#hdnCEP').val('');
+                    },
+                    success: function(resposta) {
+                        $("#msgCEP").remove();
+                        var msgCEP = $("<div>", {id: "msgCEP"});
+                        if (resposta.resultado == 0) {
+                            msgCEP.attr('class', 'alert alert-danger').html("N&atilde;o localizamos o CEP informado").append('<button data-dismiss="alert" class="close" type="button">×</button>');
+                        } else {
+                            msgCEP.attr('class', 'alert alert-success').html("CEP Localizado, o mapa ser&aacute carregado").append('<button data-dismiss="alert" class="close" type="button">×</button>');
+                            $("#divCEP").fadeIn('slow'); //mostra campos do DIVCEP
+                            $("#map").fadeIn('slow'); //mostra campos do mapa
+                            $('#txtEstado').val(resposta.uf);
+                            $('#txtCidade').val(resposta.cidade);
+                            $('#txtBairro').val(resposta.bairro);
+                            $('#txtLogradouro').val(resposta.logradouro);
+                            $('#hdnCEP').val($('#txtCEP').val());
+
+                            //var endereco = $('#txtCEP').val() + resposta.logradouro + ', ' + $('#num').val() + ', ' + resposta.bairro + ', ' + resposta.cidade + ', ' + ', ' + resposta.uf;
+                            var endereco = 'Brazil, ' + resposta.uf + ', ' + resposta.cidade + ', ' + resposta.logradouro;
+                            GMaps.geocode({
+                                address: endereco.trim(),
+                                callback: function(results, status) {
+                                    if (status == 'OK') {
+                                        var latlng = results[0].geometry.location;
+                                        map.setCenter(latlng.lat(), latlng.lng());
+                                        map.addMarker({
+                                            lat: latlng.lat(),
+                                            lng: latlng.lng()
+                                        });
+                                    }
+                                }
+                            });
+                        }
+                        $("#alertCEP").append(msgCEP); //mostra resultado de busca cep
+                        $('#txtCEP').removeAttr('disabled');
+                        $('#btnCEP').removeAttr('disabled');
+                    }
+                })
+            }
+        })
+
+        //######### FIM DO CEP ########
+        
+        //######### CAMPOS DO FORMULARIO ########
+
+        $('#sltDiferencial').multiselect({
+            buttonClass: 'btn btn-default btn-sm',
+            includeSelectAllOption: true
+        });
+
+        $('#txtDescricao').maxlength({
+            alwaysShow: true,
+            threshold: 100,
+            warningClass: "label label-success",
+            limitReachedClass: "label label-danger",
+            separator: ' de ',
+            preText: 'Voc&ecirc; digitou ',
+            postText: ' caracteres permitidos.',
+            validate: true
+        });
+
+        //######### VALIDACAO DO FORMULARIO ########
+    
         $('#form').validate({
             rules: {
                 txtValor: {
@@ -22,7 +126,10 @@
                 },
                 sltBanheiro: {
                     required: true
-                }                 
+                },
+                txtCEP: {
+                    required: true
+                }
             },
             highlight: function(element) {
                 $(element).closest('.form-group').addClass('has-error');
@@ -62,8 +169,7 @@
                         chkElevador: $('#chkElevador:checked').val(),
                         txtArea: $('#txtArea').val(),
                         sltSuite: $('#sltSuite').val(),
-                        chkSacada: $('#chkSacada:checked').val(),
-                        txtDescricao: $('#txtDescricao').val()
+                        chkSacada: $('#chkSacada:checked').val()
                     },
                     beforeSend: function() {
                         $('.alert').html("...processando...").attr('class', 'alert alert-warning');
@@ -80,233 +186,269 @@
                     }
                 })
                 return false;
-                
+
             }
         });
     })
 
 </script>
 
-<div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
-    <h1>Cadastrar Im&oacute;veis</h1>
-    <!-- Example row of columns -->
-    <div class="alert">Preencha os campos abaixo</div>
 
+<div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
+
+    <div class="page-header">
+        <h1>Cadastrar Im&oacute;veis</h1>
+    </div>
+    <!-- Alertas -->
+    <div class="alert">Preencha os campos abaixo</div>
+    <!-- form -->
     <form id="form" class="form-horizontal">
         <input type="hidden" id="hdnId" name="hdnId" />
-        <input type="hidden" id="hdnDataCadastro" name="hdnDataCadastro" value="<?php print date("d/m/Y h:i:s")?>"/>
-        <input type="hidden" id="hdnDataAtualizacao" name="hdnDataAtualizacao" value=""/>
         <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Imovel"  />
         <input type="hidden" id="hdnAcao" name="hdnAcao" value="cadastrar" />
+        <!-- Primeira Linha -->        
+        <div class="row">
+            <div class="col-lg-6">
+                <div id="forms" class="panel panel-default">
+                    <div class="panel-heading">Informações Básicas </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label" for="sltFinalidade">Finalidade</label>
+                        <div class="col-lg-9">
+                            <select class="form-control" id="sltFinalidade" name="sltFinalidade">
+                                <option value="">Informe a Finalidade</option>
+                                <option value="venda">Venda</option>
+                                <option value="aluguel">Aluguel</option>
+                            </select></div>
+                    </div>
 
-        <div class="form-group">
-            <label class="col-lg-2 control-label" for="sltFinalidade">Finalidade</label>
-            <div class="col-lg-3">
-                <select class="form-control" id="sltFinalidade" name="sltFinalidade">
-                    <option value="">Informe a Finalidade</option>
-                    <option value="venda">Venda</option>
-                    <option value="aluguel">Aluguel</option>
-                </select></div>
-        </div>
-        <div class="form-group">
-            <label  class="col-lg-2 control-label" for="sltQuarto">Quartos</label>
-            <div class="col-lg-3">
-                <select class="form-control" id="sltQuarto" name="sltQuarto">
-                    <option value="">Informe a quantidade de quartos</option>
-                    <option value="01">01</option>
-                    <option value="02">02</option>
-                    <option value="03">03</option>
-                    <option value="04">04</option>
-                    <option value="05">05</option>
-                    <option value="06">+ de 05</option>
-                </select></div>
-        </div>
-        
-        <div class="form-group">
-            <label  class="col-lg-2 control-label" for="sltTipo">Tipo de Imóvel</label>
-            <div class="col-lg-3">
-                <select class="form-control" id="sltTipo" name="sltTipo">
-                    <option value="">Informe o Tipo</option>
-                    <option value="apartamento">Apartamento</option>
-                    <option value="casa">Casa</option>
-                    <option value="terreno">Terreno</option>
-                </select></div>
-        </div>
+                    <div class="form-group">
+                        <label  class="col-lg-3 control-label" for="sltTipo">Tipo de Imóvel</label>
+                        <div class="col-lg-9">
+                            <select class="form-control" id="sltTipo" name="sltTipo">
+                                <option value="">Informe o Tipo</option>
+                                <option value="apartamento">Apartamento</option>
+                                <option value="casa">Casa</option>
+                                <option value="terreno">Terreno</option>
+                            </select></div>
+                    </div>
 
-        <div class="form-group">
-            <label  class="col-lg-2 control-label" for="sltGaragem">Garagem(ns)</label>
-            <div class="col-lg-3">
-                <select class="form-control" id="sltGaragem" name="sltGaragem">
-                    <option value="">Informe a Quantidade de Garagens</option>
-                    <option value="nenhuma">Nenhuma</option>
-                    <option value="01">01</option>
-                    <option value="02">02</option>
-                    <option value="03">03</option>
-                    <option value="04">04</option>
-                    <option value="05">05</option>
-                    <option value="06">+ de 05</option>
-                </select></div>
-        </div>
 
-        <div class="form-group">
-            <label  class="col-lg-2 control-label" for="sltBanheiro">Banheiro(s)</label>
-            <div class="col-lg-3">
-                <select class="form-control" id="sltBanheiro" name="sltBanheiro">
-                    <option value="">Informe a Quantidade de Banheiro(s)</option>
-                    <option value="01">01</option>
-                    <option value="02">02</option>
-                    <option value="03">03</option>
-                    <option value="04">04</option>
-                    <option value="05">05</option>
-                    <option value="06">+ de 05</option>
-                </select></div>
-        </div>
-        
-        <label class="checkbox-inline">
-        <input type="checkbox" id="chkPiscina" value="SIM" name="chkPiscina"> Piscina
-        </label>
+                    <div class="form-group">
+                        <label  class="col-lg-3 control-label" for="sltQuarto">Quarto</label>
+                        <div class="col-lg-9">
+                            <select class="form-control" id="sltQuarto" name="sltQuarto">
+                                <option value="">Informe a Quantidade de Quarto</option>
+                                <option value="01">01</option>
+                                <option value="02">02</option>
+                                <option value="03">03</option>
+                                <option value="04">04</option>
+                                <option value="05">05</option>
+                                <option value="06">+ de 05</option>
+                            </select></div>
+                    </div>
 
-        <label class="checkbox-inline">
-        <input type="checkbox" id="chkQuadra" value="SIM" name="chkQuadra"> Quadra
-        </label>
-               
-        <label class="checkbox-inline">
-        <input type="checkbox" id="chkAcademia" value="SIM" name="chkAcademia"> Academia
-        </label>
-        
-        <label class="checkbox-inline">
-        <input type="checkbox" id="chkAreaServico" value="SIM" name="chkAreaServico"> Área de Serviço
-        </label>
-        
-        <label class="checkbox-inline">
-        <input type="checkbox" id="chkDependenciaEmpregada" value="SIM" name="chkDependenciaEmpregada"> Dependência de Empregada
-        </label>
-        
-        <label class="checkbox-inline">
-        <input type="checkbox" id="chkElevador" value="SIM" name="chkElevador"> Elevador
-        </label>
-        
-        <label class="checkbox-inline">
-        <input type="checkbox" id="chkSacada" value="SIM" name="chkSacada"> Sacada
-        </label><p>
-        
-        <div class="form-group">
-            <label class="col-lg-2 control-label" for="txtArea">Informa a Área em M2</label>
-            <div class="col-lg-3">
-                <input type="text" id="txtArea" name="txtArea" class="form-control" placeholder="Área em M2">
+                    <div class="form-group">
+                        <label  class="col-lg-3 control-label" for="sltGaragem">Garagem</label>
+                        <div class="col-lg-9">
+                            <select class="form-control" id="sltGaragem" name="sltGaragem">
+                                <option value="">Informe a Quantidade de Garagem</option>
+                                <option value="nenhuma">Nenhuma</option>
+                                <option value="01">01</option>
+                                <option value="02">02</option>
+                                <option value="03">03</option>
+                                <option value="04">04</option>
+                                <option value="05">05</option>
+                                <option value="06">+ de 05</option>
+                            </select></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label  class="col-lg-3 control-label" for="sltBanheiro">Banheiro</label>
+                        <div class="col-lg-9">
+                            <select class="form-control" id="sltBanheiro" name="sltBanheiro">
+                                <option value="">Informe a Quantidade de Banheiro</option>
+                                <option value="01">01</option>
+                                <option value="02">02</option>
+                                <option value="03">03</option>
+                                <option value="04">04</option>
+                                <option value="05">05</option>
+                                <option value="06">+ de 05</option>
+                            </select></div>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div id="forms" class="panel panel-default">
+                    <div class="panel-heading">Informações Adicionais </div>
+                    <!--
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" id="chkPiscina" value="SIM" name="chkPiscina"> Piscina
+                                        </label>
+                    
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" id="chkQuadra" value="SIM" name="chkQuadra"> Quadra
+                                        </label>
+                    
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" id="chkAcademia" value="SIM" name="chkAcademia"> Academia
+                                        </label>
+                    
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" id="chkAreaServico" value="SIM" name="chkAreaServico"> Área de Serviço
+                                        </label>
+                    
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" id="chkDependenciaEmpregada" value="SIM" name="chkDependenciaEmpregada"> Dependência de Empregada
+                                        </label>
+                    
+                                        <label class="checkbox">
+                                            <input type="checkbox" id="chkElevador" value="SIM" name="chkElevador"> Elevador
+                                        </label>
+                    
+                                        <label class="checkbox">
+                                            <input type="checkbox" id="chkSacada" value="SIM" name="chkSacada"> Sacada
+                                        </label>
+                    -->
+                    <div class="form-group">
+                        <label  class="col-lg-3 control-label" for="sltDiferencial">Diferencial</label>
+                        <div class="col-lg-9">
+                            <select id="sltDiferencial" multiple="multiple" name="sltDiferencial">
+                                <option value="Academia">Academia</option>
+                                <option value="Serviço">Área de Serviço</option>
+                                <option value="Empregada">Dependência de Empregada</option>
+                                <option value="Elevador">Elevador</option>
+                                <option value="Piscina">Piscina</option>
+                                <option value="Quadra">Quadra</option>
+                                <option value="Sacada">Sacada</option>
+                            </select>
+                        </div>
+                    </div>                      
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label" for="txtArea">Área (M<sup>2</sup>)</label>
+                        <div class="col-lg-9">
+                            <input type="text" id="txtArea" name="txtArea" class="form-control" placeholder="Informe a Área">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label  class="col-lg-3 control-label" for="sltSuite">Suite</label>
+                        <div class="col-lg-9">
+                            <select class="form-control" id="sltSuite" name="sltSuite">
+                                <option value="">Informe Nº de Suite</option>
+                                <option value="nenhuma">Nenhuma</option>
+                                <option value="01">01</option>
+                                <option value="02">02</option>
+                                <option value="03">03</option>
+                                <option value="04">04</option>
+                                <option value="05">05</option>
+                                <option value="06">+ de 05</option>
+                            </select></div>
+                    </div>                      
+
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label" for="txtDescricao"> Descrição </label>
+                        <div class="col-lg-9">
+                            <textarea maxlength="100" id="txtDescricao" name="txtDescricao" class="form-control" placeholder="Informe uma Descrição do Imóvel"> </textarea>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </div>
-        
-        <div class="form-group">
-            <label  class="col-lg-2 control-label" for="sltSuite">Suite(s)</label>
-            <div class="col-lg-3">
-                <select class="form-control" id="sltSuite" name="sltSuite">
-                    <option value="">Informe Nº de Suite(s)</option>
-                    <option value="nenhuma">Nenhuma</option>
-                    <option value="01">01</option>
-                    <option value="02">02</option>
-                    <option value="03">03</option>
-                    <option value="04">04</option>
-                    <option value="05">05</option>
-                    <option value="06">+ de 05</option>
-                </select></div>
-        </div>      
-        
-        <div class="form-group">
-            <label class="col-lg-2 control-label" for="txtDescricao">Informe uma Descrição do Imóvel</label>
-            <div class="col-lg-3">
-                <input type="text" id="txtDescricao" name="txtDescricao" class="form-control" placeholder="Descrição do Imóvel">
+        <!-- Segunda Linha -->        
+        <div class="row">
+            <div class="col-lg-12">
+                <div id="forms" class="panel panel-default">
+                    <div class="panel-heading"> Endereço </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="col-lg-3 control-label" for="txtCEP">CEP</label>
+                                <div class="col-lg-9">
+                                    <input type="text" class="form-control" id="txtCEP" name="txtCEP" placeholder="Informe o CEP do Imóvel">
+                                </div>
+                            </div>
+
+                            <div id="divCEP">
+                                <div class="form-group">
+                                    <label class="col-lg-3 control-label" for="txtCidade">Cidade</label>
+                                    <div class="col-lg-9">
+                                        <input type="text" class="form-control" id="txtCidade" name="txtCidade" disabled="disabled"> 
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-lg-3 control-label" for="txtEstado">Estado</label>
+                                    <div class="col-lg-9">
+                                        <input type="text" class="form-control" id="txtEstado" name="txtEstado" disabled="disabled" > 
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-lg-3 control-label" for="txtBairro">Bairro</label>
+                                    <div class="col-lg-9">
+                                        <input type="text" class="form-control" id="txtBairro" name="txtBairro" disabled="disabled"> 
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-lg-3 control-label" for="txtLogradouro">Logradouro</label>
+                                    <div class="col-lg-9">
+                                        <input type="text" class="form-control" id="txtLogradouro" name="txtLogradouro" disabled="disabled"> 
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-lg-3 control-label" for="txtNumero">N&uacute;mero</label>
+                                    <div class="col-lg-9">
+                                        <input type="text" class="form-control" id="txtNumero" name="txtNumero" placeholder="Informe o n&ordm;"> 
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-lg-3 control-label" for="txtComplemento">Complemento</label>
+                                    <div class="col-lg-9">
+                                        <input type="text" class="form-control" id="txtComplemento" name="txtComplemento" placeholder="Informe o Complemento"> 
+                                    </div>
+                                </div>                                
+                            </div>
+
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <div class="col-lg-2">
+                                    <button id="btnCEP" type="button" class="btn btn-info">Buscar CEP</button>
+                                </div>
+                            </div>
+                            <div id="alertCEP"></div>
+                            <div class="popin">
+                                <div id="map"></div>
+                            </div>
+                        </div>
+                    </div>    
+                </div>
             </div>
         </div>
-        
-        <!--        <div class="form-group">
-                    <label  class="col-lg-2 control-label" for="sltSuite">Suites</label>
-                    <div class="col-lg-3">
-                        <select class="form-control">
-                            <option>Informe a quantidade de Suite</option>
-                            <option>00</option>
-                            <option>01</option>
-                            <option>02</option>
-                            <option>03</option>
-                            <option>04</option>
-                            <option>05</option>
-                            <option>+ de 05</option>
-                        </select></div>
-                </div>
-                <div class="form-group">
-                    <label class="col-lg-2 control-label" for="txtArea">&Aacute;rea (m<sup>2</sup>)</label>
-                    <div class="col-lg-3">
-                        <input type="text" class="form-control" id="txtArea" placeholder="Informe a &Aacute;rea"> 
+        <!-- Terceira Linha -->        
+        <div class="row">
+            <div class="col-lg-12">
+                <div id="forms" class="panel panel-default">
+                    <div class="panel-heading"> Fotos do Imóvel </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <span class="label label-danger"> aguarde... em construção... </span>
+                        </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label  class="col-lg-2 control-label" for="sltSuite">Suites</label>
-                    <div class="col-lg-3">
-                        <select class="form-control">
-                            <option>Informe a quantidade de Suite</option>
-                            <option>00</option>
-                            <option>01</option>
-                            <option>02</option>
-                            <option>03</option>
-                            <option>04</option>
-                            <option>05</option>
-                            <option>+ de 05</option>
-                        </select></div>
-                </div>
-        
-        
-                <div class="form-group">
-                    <label  class="col-lg-2 control-label" for="sltGaragem">Garagem</label>
-                    <div class="col-lg-3">
-                        <select class="form-control">
-                            <option>Informe a quantidade de Garagem</option>
-                            <option>00</option>
-                            <option>01</option>
-                            <option>02</option>
-                            <option>03</option>
-                            <option>04</option>
-                            <option>05</option>
-                            <option>+ de 05</option>
-                        </select></div>
-                </div>
-        
-                <div class="form-group">
-                    <label class="col-lg-2 control-label" for="txtTopicoImovel">T&oacute;pico do Im&oacute;vel</label>
-                    <div class="col-lg-3">
-                        <input type="text" class="form-control" id="txtTopicoImovel" placeholder="Informe o T&oacut&oacute;pico do Im&oacute;vel">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-lg-2 control-label" for="txtDescricaoImovel">Descri&ccedil;&atilde;o do Im&oacute;vel</label>
-                    <div class="col-lg-3">
-                        <textarea class="form-control" id="txtDescricaoImovel" placeholder="Informe a Desc"> </textarea>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-lg-2 control-label" for="txtCEP">CEP</label>
-                    <div class="col-lg-3">
-                        <input type="text" class="form-control" id="txtCEP" placeholder="Informe CEP">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-lg-2 control-label" for="txtBuscaAvancada">Busca Avan&ccedil;ada</label>
-                    <div class="col-lg-3">
-                        <input type="text" class="form-control" id="txtBuscaAvancada" placeholder="Informe os termos para Busca Avan&ccedil;ada">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-lg-2 control-label" for="txtCEP">CEP</label>
-                    <div class="col-lg-3">
-                        <input type="text" class="form-control" id="txtCEP" placeholder="Informe CEP">
-                    </div>
-                </div>
-        -->
-        <p>
-        <div class="form-group">
-            <div class="col-lg-offset-2 col-lg-10">
-                <button type="submit" class="btn btn-primary">Cadastrar</button>
-                <button type="button" class="btn btn-warning">Cancelar</button>
             </div>
         </div>
 
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <div class="col-lg-offset-2 col-lg-10">
+                        <button type="submit" class="btn btn-primary">Cadastrar</button>
+                        <button type="button" class="btn btn-warning">Cancelar</button>
+                    </div>
+                </div>                
+            </div>
+        </div>
     </form>
+</div>
