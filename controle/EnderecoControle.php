@@ -15,7 +15,7 @@ class EnderecoControle {
             echo json_encode($resultado);
         }
         else
-            echo json_encode(array('resultado' => '0'));
+            echo json_encode(array('resultado' => '0', 'error' => $cep->getErro()));
     }
 
 }
