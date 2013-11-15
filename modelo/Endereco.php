@@ -10,6 +10,7 @@ class Endereco {
     private $logradouro;
     private $numero;
     private $complemento;
+    private $idimovel;
     
     public function getId() {
         return $this->id;
@@ -42,13 +43,17 @@ class Endereco {
     public function getComplemento() {
         return $this->complemento;
     }
+    
+    public function getIdimovel() {
+        return $this->idimovel;
+    }
 
     public function setId($id) {
         $this->id = $id;
     }
 
     public function setCep($cep) {
-        $this->cep = $cep;
+        $this->cep = str_replace("-", "", str_replace(".", "", $cep));
     }
 
     public function setEstado($estado) {
@@ -74,6 +79,25 @@ class Endereco {
     public function setComplemento($complemento) {
         $this->complemento = $complemento;
     }
+    
+    public function setIdimovel($idimovel) {
+        $this->idimovel = $idimovel;
+    }
 
+    function cadastrar($parametros, $idImovel){
+        
+        $endereco = new Endereco();
+        $endereco->setIdimovel($idImovel);
+        $endereco->setCep($parametros['txtCEP']);
+        $endereco->setEstado($parametros['txtEstado']);
+        $endereco->setCidade($parametros['txtCidade']);
+        $endereco->setBairro($parametros['txtBairro']);
+        $endereco->setLogradouro($parametros['txtLogradouro']);
+        $endereco->setNumero($parametros['txtNumero']);
+        $endereco->setComplemento($parametros['txtComplemento']);
+        
+        return $endereco;
+        
+    }
 
 }

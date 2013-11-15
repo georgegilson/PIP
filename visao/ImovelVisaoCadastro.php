@@ -1,5 +1,7 @@
+<!-- INICIO DO MAPA --> 
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
 <script src="assets/js/gmaps.js"></script>
+<!-- FIM DO MAPA --> 
 <script src="assets/js/jquery.maskedinput.min.js"></script>
 <script src="assets/js/bootstrap-multiselect.js"></script>
 <script src="assets/js/bootstrap-maxlength.js"></script>
@@ -9,16 +11,20 @@
         //######### INICIO DO CEP ########
         map = new GMaps({
             div: '#map',
-            lat: 0,
-            lng: 0
+            lat: -12.043333,
+            lng: -77.028333
         });
-
+        $("#map").hide(); //oculta campos do mapa
         $("#txtCEP").mask("99.999-999"); //mascara
         $("#divCEP").hide(); //oculta campos do DIVCEP
-        $("#map").hide(); //oculta campos do mapa
-
         $("#btnCEP").click(function() {
+            buscarCep()
+        });
+        $("#txtCEP").blur(function() {
+            buscarCep()
+        });
 
+        function buscarCep() {
             var validator = $("#form").validate();
             if (validator.element("#txtCEP")) {
                 $.ajax({
@@ -60,7 +66,7 @@
                             $('#hdnCEP').val($('#txtCEP').val());
 
                             //var endereco = $('#txtCEP').val() + resposta.logradouro + ', ' + $('#num').val() + ', ' + resposta.bairro + ', ' + resposta.cidade + ', ' + ', ' + resposta.uf;
-                            var endereco = 'Brazil, ' + resposta.uf + ', ' + resposta.cidade + ', ' + resposta.logradouro;
+                            var endereco = 'Brazil, ' + resposta.uf + ', ' + resposta.cidade + ', ' + resposta.bairro + ', ' + resposta.logradouro;
                             GMaps.geocode({
                                 address: endereco.trim(),
                                 callback: function(results, status) {
@@ -81,12 +87,11 @@
                     }
                 })
             }
-        })
+        }
 
         //######### FIM DO CEP ########
-        
-        //######### CAMPOS DO FORMULARIO ########
 
+        //######### CAMPOS DO FORMULARIO ########
         $('#sltDiferencial').multiselect({
             buttonClass: 'btn btn-default btn-sm',
             includeSelectAllOption: true
@@ -104,7 +109,6 @@
         });
 
         //######### VALIDACAO DO FORMULARIO ########
-    
         $('#form').validate({
             rules: {
                 txtValor: {
@@ -129,7 +133,14 @@
                 },
                 txtCEP: {
                     required: true
+                },
+                txtNumero: {
+                    required: true
+                },
+                txtComplemento: {
+                    required: true
                 }
+                
             },
             highlight: function(element) {
                 $(element).closest('.form-group').addClass('has-error');
@@ -151,30 +162,10 @@
                     url: "index.php",
                     dataType: "json",
                     type: "POST",
-                    data: {
-                        hdnEntidade: $('#hdnEntidade').val(),
-                        hdnAcao: $('#hdnAcao').val(),
-                        sltFinalidade: $('#sltFinalidade').val(),
-                        sltQuarto: $('#sltQuarto').val(),
-                        hdnDataCadastro: $('#hdnDataCadastro').val(),
-                        hdnDataAtualizacao: $('#hdnDataAtualizacao').val(),
-                        sltTipo: $('#sltTipo').val(),
-                        sltGaragem: $('#sltGaragem').val(),
-                        sltBanheiro: $('#sltBanheiro').val(),
-                        chkPiscina: $('#chkPiscina:checked').val(),
-                        chkQuadra: $('#chkQuadra:checked').val(),
-                        chkAcademia: $('#chkAcademia:checked').val(),
-                        chkAreaServico: $('#chkAreaServico:checked').val(),
-                        chkDependenciaEmpregada: $('#chkDependenciaEmpregada:checked').val(),
-                        chkElevador: $('#chkElevador:checked').val(),
-                        txtArea: $('#txtArea').val(),
-                        sltSuite: $('#sltSuite').val(),
-                        chkSacada: $('#chkSacada:checked').val()
-                    },
+                    data: $('#form').serialize(),
                     beforeSend: function() {
                         $('.alert').html("...processando...").attr('class', 'alert alert-warning');
                         $('button[type=submit]').attr('disabled', 'disabled');
-                        //<div class="alert alert-warning">...</div>
                     },
                     success: function(resposta) {
                         $('button[type=submit]').removeAttr('disabled');
@@ -195,7 +186,6 @@
 
 
 <div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
-
     <div class="page-header">
         <h1>Cadastrar Im&oacute;veis</h1>
     </div>
@@ -282,42 +272,13 @@
             <div class="col-lg-6">
                 <div id="forms" class="panel panel-default">
                     <div class="panel-heading">Informações Adicionais </div>
-                    <!--
-                                        <label class="checkbox-inline">
-                                            <input type="checkbox" id="chkPiscina" value="SIM" name="chkPiscina"> Piscina
-                                        </label>
-                    
-                                        <label class="checkbox-inline">
-                                            <input type="checkbox" id="chkQuadra" value="SIM" name="chkQuadra"> Quadra
-                                        </label>
-                    
-                                        <label class="checkbox-inline">
-                                            <input type="checkbox" id="chkAcademia" value="SIM" name="chkAcademia"> Academia
-                                        </label>
-                    
-                                        <label class="checkbox-inline">
-                                            <input type="checkbox" id="chkAreaServico" value="SIM" name="chkAreaServico"> Área de Serviço
-                                        </label>
-                    
-                                        <label class="checkbox-inline">
-                                            <input type="checkbox" id="chkDependenciaEmpregada" value="SIM" name="chkDependenciaEmpregada"> Dependência de Empregada
-                                        </label>
-                    
-                                        <label class="checkbox">
-                                            <input type="checkbox" id="chkElevador" value="SIM" name="chkElevador"> Elevador
-                                        </label>
-                    
-                                        <label class="checkbox">
-                                            <input type="checkbox" id="chkSacada" value="SIM" name="chkSacada"> Sacada
-                                        </label>
-                    -->
                     <div class="form-group">
                         <label  class="col-lg-3 control-label" for="sltDiferencial">Diferencial</label>
                         <div class="col-lg-9">
-                            <select id="sltDiferencial" multiple="multiple" name="sltDiferencial">
+                            <select id="sltDiferencial" multiple="multiple" name="sltDiferencial[]">
                                 <option value="Academia">Academia</option>
-                                <option value="Serviço">Área de Serviço</option>
-                                <option value="Empregada">Dependência de Empregada</option>
+                                <option value="AreaServico">Área de Serviço</option>
+                                <option value="DependenciaEmpregada">Dependência de Empregada</option>
                                 <option value="Elevador">Elevador</option>
                                 <option value="Piscina">Piscina</option>
                                 <option value="Quadra">Quadra</option>
@@ -375,25 +336,25 @@
                                 <div class="form-group">
                                     <label class="col-lg-3 control-label" for="txtCidade">Cidade</label>
                                     <div class="col-lg-9">
-                                        <input type="text" class="form-control" id="txtCidade" name="txtCidade" disabled="disabled"> 
+                                        <input type="text" class="form-control" id="txtCidade" name="txtCidade" readonly="true"> 
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-lg-3 control-label" for="txtEstado">Estado</label>
                                     <div class="col-lg-9">
-                                        <input type="text" class="form-control" id="txtEstado" name="txtEstado" disabled="disabled" > 
+                                        <input type="text" class="form-control" id="txtEstado" name="txtEstado" readonly="true" > 
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-lg-3 control-label" for="txtBairro">Bairro</label>
                                     <div class="col-lg-9">
-                                        <input type="text" class="form-control" id="txtBairro" name="txtBairro" disabled="disabled"> 
+                                        <input type="text" class="form-control" id="txtBairro" name="txtBairro" readonly="true"> 
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-lg-3 control-label" for="txtLogradouro">Logradouro</label>
                                     <div class="col-lg-9">
-                                        <input type="text" class="form-control" id="txtLogradouro" name="txtLogradouro" disabled="disabled"> 
+                                        <input type="text" class="form-control" id="txtLogradouro" name="txtLogradouro" readonly="true"> 
                                     </div>
                                 </div>
                                 <div class="form-group">

@@ -1,6 +1,7 @@
 <?php
 
 include_once 'modelo/Imovel.php';
+include_once 'modelo/Endereco.php';
 include_once 'DAO/GenericoDAO.php';
 
 class ImovelControle {
@@ -17,10 +18,14 @@ class ImovelControle {
         //modelo
         $imovel = new Imovel();
         $entidadeImovel = $imovel->cadastrar($parametros);
+        
         $genericoDAO = new GenericoDAO();
-        $resultado = $genericoDAO->cadastrar($entidadeImovel);
+        $idImovel = $genericoDAO->cadastrar($entidadeImovel);
+
+        $endereco = new Endereco();
+        $entidadeEndereco = $endereco->cadastrar($parametros, $idImovel);        
         
-        
+        $resultado = $genericoDAO->cadastrar($entidadeEndereco);
 
         //visao
         if ($resultado)

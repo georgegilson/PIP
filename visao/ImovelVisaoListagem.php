@@ -1,5 +1,3 @@
- 
-
 <div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
     <h1>Listagem de Im&oacute;veis</h1>
     <!-- Example row of columns -->
@@ -21,12 +19,11 @@
         if ($item){
             foreach ($item as $imovel) {
         ?>
-       
           <tr>
               <td><?php echo substr($imovel->getDatahoracadastro(), 6, -9).substr($imovel->getDatahoracadastro(), 3, -14).str_pad($imovel->getId(), 5, "0", STR_PAD_LEFT); ?></td>
             <td><?php echo $imovel->getDescricao(); ?></td>
-            <td>LOGRADOURO</td>
-            <td>BAIRRO</td>
+            <td><?php echo $imovel->getEndereco()->getLogradouro();?></td>
+            <td><?php echo $imovel->getEndereco()->getBairro(); ?></td>
             <td><?php echo $imovel->getDatahoracadastro(); ?></td>
             <td><a href="#" id="a-popover<?php echo $imovel->getId();?>" class="btn btn-success">Detalhes do Imóvel</a></td>
             <td><a href="index.php?entidade=Imovel&acao=selecionar&id=<?php echo $imovel->getId();?>">Editar</a> <br /></td>
@@ -73,4 +70,3 @@
       </table>
        
  
-    </form>
