@@ -1,20 +1,19 @@
 <?php
 
 class Usuario {
-    
+
     private $id;
     private $tipousuario;
     private $nome;
     private $cpfcnpj;
     private $login;
     private $senha;
-    private $idtelefone;
-    private $idendereco;
     private $status;
     private $datahoracadastro;
-    private $datahoraalteracao; 
+    private $datahoraalteracao;
     private $email;
-    
+    private $idendereco;
+
     public function getEmail() {
         return $this->email;
     }
@@ -23,7 +22,7 @@ class Usuario {
         $this->email = $email;
     }
 
-        public function getId() {
+    public function getId() {
         return $this->id;
     }
 
@@ -47,14 +46,6 @@ class Usuario {
         return $this->senha;
     }
 
-    public function getIdtelefone() {
-        return $this->idtelefone;
-    }
-
-    public function getIdendereco() {
-        return $this->idendereco;
-    }
-
     public function getStatus() {
         return $this->status;
     }
@@ -65,6 +56,10 @@ class Usuario {
 
     public function getDatahoraalteracao() {
         return $this->datahoraalteracao;
+    }
+    
+    public function getIdendereco() {
+        return $this->idendereco;
     }
 
     public function setId($id) {
@@ -91,14 +86,6 @@ class Usuario {
         $this->senha = $senha;
     }
 
-    public function setIdtelefone($idtelefone) {
-        $this->idtelefone = $idtelefone;
-    }
-
-    public function setIdendereco($idendereco) {
-        $this->idendereco = $idendereco;
-    }
-
     public function setStatus($status) {
         $this->status = $status;
     }
@@ -110,6 +97,24 @@ class Usuario {
     public function setDatahoraalteracao($datahoraalteracao) {
         $this->datahoraalteracao = $datahoraalteracao;
     }
+    
+    public function setIdendereco($idendereco) {
+        $this->idendereco = $idendereco;
+    }
 
+    function cadastrar($parametros, $idendereco) {
+        $usuario = new Usuario();
+        $usuario->setTipousuario($parametros['sltTipoUsuario']);
+        $usuario->setNome($parametros['txtNome']);
+        $usuario->setLogin($parametros['txtLogin']);
+        $usuario->setSenha($parametros['txtSenha']);
+        $usuario->setCpfcnpj($parametros['txtCpfCnpj']);
+        $usuario->setEmail($parametros['txtEmail']);
+        $usuario->setStatus("A");
+        $usuario->setDatahoracadastro(date('d/m/Y H:i:s'));
+        $usuario->setDatahoraalteracao("");
+        $usuario->setIdendereco($idendereco);
+        return $usuario;
+    }
 
 }

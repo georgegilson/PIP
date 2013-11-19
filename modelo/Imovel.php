@@ -16,7 +16,7 @@ class Imovel {
     private $idusuario;
     private $suite;
     private $area;
-    //   private $endereco;
+    private $idendereco;
     private $condominio;
     private $areaservico;
     private $dependenciaempregada;
@@ -26,8 +26,16 @@ class Imovel {
     private $sacada;
     private $descricao;
     protected $endereco;
+    
+    public function getIdendereco() {
+        return $this->idendereco;
+    }
 
-    public function getDescricao() {
+    public function setIdendereco($idendereco) {
+        $this->idendereco = $idendereco;
+    }
+
+        public function getDescricao() {
         return $this->descricao;
     }
 
@@ -211,10 +219,11 @@ class Imovel {
         $this->endereco = $endereco;
     }
 
-    function cadastrar($parametros) {
+    function cadastrar($parametros, $idendereco) {
 
         $imovel = new Imovel();
-
+        
+        $imovel->setIdendereco($idendereco);
         $imovel->setFinalidade($parametros['sltFinalidade']);
         $imovel->setTipo($parametros['sltTipo']);
         $imovel->setQuarto($parametros['sltQuarto']);

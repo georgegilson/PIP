@@ -52,12 +52,32 @@ class GenericoDAO {
         $resultado = $statement->fetchAll(PDO::FETCH_CLASS, $classe);
         $blindado = $reflect->getProperties(ReflectionProperty::IS_PROTECTED);
         if ($blindado) {
+            $privados = $reflect->getProperties(ReflectionProperty::IS_PRIVATE);
+            foreach ($privados as $listaPrivados) {
+                $atributos[] = $listaPrivados->name;
+            }
             foreach ($resultado as $objeto) {
                 foreach ($blindado as $atributoBlindado) {
+//                    echo "<pre>";
+//                    print_r($atributos);
+//                    die();
+                    if (in_array("id" . $atributoBlindado->getName(), $atributos)) {
+                        $entidadeBlindada = $atributoBlindado->getName();
+                        $chaveEstrangeira = "id";
+                        $acao = "getId" . $atributoBlindado->getName();
+                        $idChaveEstrangeira = $objeto->$acao();
+                    } else {
+                        $entidadeBlindada = $atributoBlindado->getName();
+                        $chaveEstrangeira = "id" . $classe;
+                        $idChaveEstrangeira = $objeto->getId();
+                    }
                     $acao = "set" . ucfirst($atributoBlindado->getName());
-                    $objeto->$acao($this->selecionarBlindado($objeto->getId(), $classe, ucfirst($atributoBlindado->getName())));
+                    $objeto->$acao($this->selecionarBlindado($entidadeBlindada, $chaveEstrangeira, $idChaveEstrangeira));
                 }
                 $resultadoBlindado[] = $objeto;
+//                echo "<pre>";
+//                print_r($resultadoBlindado);
+//                die();
             }
             return $resultadoBlindado;
         } else {
@@ -65,19 +85,23 @@ class GenericoDAO {
         }
     }
 
-    function selecionarBlindado($idChaveEstrangeira, $entidadeEstrangeira, $entidadeBlindada) {
+    function selecionarBlindado($entidadeBlindada, $chaveEstrangeira, $idChaveEstrangeira) {
+//        var_dump($idChaveEstrangeira);
         $conexao = Conexao::getInstance();
-        $sql = "SELECT * FROM " . strtolower($entidadeBlindada) . " WHERE id" . ucfirst($entidadeEstrangeira) . " =:idChaveEstrangeira";
+        $sql = "SELECT * FROM " . strtolower($entidadeBlindada) . " WHERE " . $chaveEstrangeira . " =:idChaveEstrangeira";
         $statement = $conexao->prepare($sql);
+//        echo "<pre>";
+//        print_r($sql);
+//        die();
         $statement->bindParam(':idChaveEstrangeira', $idChaveEstrangeira);
         $statement->execute();
         $statement->rowCount();
-        
+
         $resultado = $statement->fetchAll(PDO::FETCH_CLASS, $entidadeBlindada);
-        
-        if($statement->rowCount() == 1){
+
+        if ($statement->rowCount() == 1) {
             $resultado = $resultado[0];
-        } 
+        }
         return $resultado;
     }
 

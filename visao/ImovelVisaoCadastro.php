@@ -8,12 +8,6 @@
 <script>
     $(document).ready(function() {
 
-        //######### INICIO DO CEP ########
-        map = new GMaps({
-            div: '#map',
-            lat: -12.043333,
-            lng: -77.028333
-        });
         $("#map").hide(); //oculta campos do mapa
         $("#txtCEP").mask("99.999-999"); //mascara
         $("#divCEP").hide(); //oculta campos do DIVCEP
@@ -67,6 +61,12 @@
 
                             //var endereco = $('#txtCEP').val() + resposta.logradouro + ', ' + $('#num').val() + ', ' + resposta.bairro + ', ' + resposta.cidade + ', ' + ', ' + resposta.uf;
                             var endereco = 'Brazil, ' + resposta.uf + ', ' + resposta.cidade + ', ' + resposta.bairro + ', ' + resposta.logradouro;
+                            //######### INICIO DO CEP ########
+                            map = new GMaps({
+                                div: '#map',
+                                lat: 0,
+                                lng: 0
+                            });
                             GMaps.geocode({
                                 address: endereco.trim(),
                                 callback: function(results, status) {
@@ -140,7 +140,7 @@
                 txtComplemento: {
                     required: true
                 }
-                
+
             },
             highlight: function(element) {
                 $(element).closest('.form-group').addClass('has-error');

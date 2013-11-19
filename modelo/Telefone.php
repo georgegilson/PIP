@@ -47,5 +47,13 @@ class Telefone {
     public function setIdusuario($idusuario) {
         $this->idusuario = $idusuario;
     }
-    
+    function cadastrar($parametros, $idusuario, $indiceTelefone){
+        $telefone = new Telefone();
+        $telefone->setIdusuario($idusuario);
+        $telefone->setTipotelefone($parametros['hdnTipoTelefone'][$indiceTelefone]);
+        $telefone->setNumero($parametros['hdnTelefone'][$indiceTelefone]);
+        $telefone->setOperadora($parametros['hdnOperadora'][$indiceTelefone]);
+        return $telefone;
+    }
+   
 }

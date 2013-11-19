@@ -16,17 +16,15 @@ class ImovelControle {
 
     function cadastrar($parametros) {
         //modelo
-        $imovel = new Imovel();
-        $entidadeImovel = $imovel->cadastrar($parametros);
-        
         $genericoDAO = new GenericoDAO();
-        $idImovel = $genericoDAO->cadastrar($entidadeImovel);
-
         $endereco = new Endereco();
-        $entidadeEndereco = $endereco->cadastrar($parametros, $idImovel);        
+        $entidadeEndereco = $endereco->cadastrar($parametros); 
+        $idEndereco = $genericoDAO->cadastrar($entidadeEndereco);
         
-        $resultado = $genericoDAO->cadastrar($entidadeEndereco);
-
+        $imovel = new Imovel();
+        $entidadeImovel = $imovel->cadastrar($parametros, $idEndereco);
+        $resultado = $genericoDAO->cadastrar($entidadeImovel);
+        
         //visao
         if ($resultado)
             echo json_encode(array("resultado" => 1));

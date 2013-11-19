@@ -4,8 +4,13 @@ class Empresa {
 
     private $id;
     private $responsavel;
+    private $cpfresponsavel;
     private $razaosocial;
     private $idusuario;
+
+    public function getCpfresponsavel() {
+        return $this->cpfresponsavel;
+    }
 
     public function getIdusuario() {
         return $this->idusuario;
@@ -39,11 +44,16 @@ class Empresa {
         $this->idusuario = $idusuario;
     }
 
+    public function setCpfresponsavel($cpfresponsavel) {
+        $this->cpfresponsavel = $cpfresponsavel;
+    }
+
     function cadastrar($parametros, $idUsuario) {
         $empresa = new Empresa();
         $empresa->setIdusuario($idUsuario);
         $empresa->setRazaosocial($parametros['txtRazaoSocial']);
         $empresa->setResponsavel($parametros['txtResponsavel']);
+        $empresa->setCpfresponsavel($parametros['txtCPFResponsavel']);
         return $empresa;
     }
 
