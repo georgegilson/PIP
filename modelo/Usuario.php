@@ -57,7 +57,7 @@ class Usuario {
     public function getDatahoraalteracao() {
         return $this->datahoraalteracao;
     }
-    
+
     public function getIdendereco() {
         return $this->idendereco;
     }
@@ -97,7 +97,7 @@ class Usuario {
     public function setDatahoraalteracao($datahoraalteracao) {
         $this->datahoraalteracao = $datahoraalteracao;
     }
-    
+
     public function setIdendereco($idendereco) {
         $this->idendereco = $idendereco;
     }
@@ -108,7 +108,11 @@ class Usuario {
         $usuario->setNome($parametros['txtNome']);
         $usuario->setLogin($parametros['txtLogin']);
         $usuario->setSenha($parametros['txtSenha']);
-        $usuario->setCpfcnpj($parametros['txtCpfCnpj']);
+        if ($usuario->getTipousuario() == "fisica") {
+            $usuario->setCpfcnpj($parametros['txtCpf']);
+        } else {
+            $usuario->setCpfcnpj($parametros['txtCnpj']);
+        }
         $usuario->setEmail($parametros['txtEmail']);
         $usuario->setStatus("A");
         $usuario->setDatahoracadastro(date('d/m/Y H:i:s'));
