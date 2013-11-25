@@ -1,38 +1,10 @@
-<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
 <script src="assets/js/gmaps.js"></script>
 <script src="assets/js/jquery.maskedinput.min.js"></script>
+<script src="assets/js/util.validate.js"></script>
+<script src="assets/js/pwstrength.js"></script>
 <script>
     $(document).ready(function() {
-        //######### CAMPOS DO FORMULARIO ########
-        $("#divEmpresa").hide(); //oculta campos do DIVEMPRESA 
-
-        $("#sltTipoUsuario").change(function() {
-            if ($(this).val() == "fisica") {
-                $("#divEmpresa").fadeOut('slow'); //oculta campos do DIVEMPRESA 
-                $("#lblCpfCnpj").html("CPF")
-                $("#txtCpfCnpj").attr("placeholder", "Informe o CPF");
-            } else {
-                $("#divEmpresa").fadeIn('slow'); //mostra campos do DIVEMPRESA
-                $("#lblCpfCnpj").html("CNPJ");
-                $("#txtCpfCnpj").attr("placeholder", "Informe o CNPJ");
-            }
-        })
-       
-        $("#btnTelefone").click(function(){
-        $("#dadosTelefone").append(
-               "<tr><td> <input type=hidden id=hdnTipoTelefone[] name=hdnTipoTelefone[] value=" + $("#sltTipotelefone").val() + ">" + $("#sltTipotelefone").val() + "</td>" +
-               "<td> <input type=hidden id=hdnOperadora[] name=hdnOperadora[] value=" + $("#sltOperadora").val() + ">" + $("#sltOperadora").val() + "</td>" +
-               "<td> <input type=hidden id=hdnTelefone[] name=hdnTelefone[] value=" + $("#txtTel").val() + ">" + $("#txtTel").val() + "</td>" +
-               "<td> <button type=button class=btn btn-info onclick=$(this).parent().parent().remove()>Excluir</button> </td></tr>");     
-        })
-
-        //######### INICIO DO CEP ########
-//        map = new GMaps({
-//            div: '#map',
-//            lat: -12.043333,
-//            lng: -77.028333
-//        });
-//        $("#map").hide(); //oculta campos do mapa
+        
         $("#txtCEP").mask("99.999-999"); //mascara
         $("#divCEP").hide(); //oculta campos do DIVCEP
         $("#btnCEP").click(function() {
@@ -58,8 +30,7 @@
                         $("#msgCEP").remove();
                         var msgCEP = $("<div>", {id: "msgCEP", class: "alert alert-warning"}).html("...aguarde buscando CEP...");
                         $("#divCEP").fadeOut('slow'); //oculta campos do DIVCEP
-//                        $("#map").fadeOut('slow'); //oculta campos do mapa
-//                        $("#alertCEP").append(msgCEP);
+                        $("#alertCEP").append(msgCEP);
                         $('#txtCEP').attr('disabled', 'disabled');
                         $('#btnCEP').attr('disabled', 'disabled');
                         $('#txtEstado').val('');
@@ -74,30 +45,15 @@
                         if (resposta.resultado == 0) {
                             msgCEP.attr('class', 'alert alert-danger').html("N&atilde;o localizamos o CEP informado").append('<button data-dismiss="alert" class="close" type="button">×</button>');
                         } else {
-                            msgCEP.attr('class', 'alert alert-success').html("CEP Localizado, o mapa ser&aacute carregado").append('<button data-dismiss="alert" class="close" type="button">×</button>');
                             $("#divCEP").fadeIn('slow'); //mostra campos do DIVCEP
-//                            $("#map").fadeIn('slow'); //mostra campos do mapa
                             $('#txtEstado').val(resposta.uf);
                             $('#txtCidade').val(resposta.cidade);
                             $('#txtBairro').val(resposta.bairro);
                             $('#txtLogradouro').val(resposta.logradouro);
                             $('#hdnCEP').val($('#txtCEP').val());
 
-                            //var endereco = $('#txtCEP').val() + resposta.logradouro + ', ' + $('#num').val() + ', ' + resposta.bairro + ', ' + resposta.cidade + ', ' + ', ' + resposta.uf;
                             var endereco = 'Brazil, ' + resposta.uf + ', ' + resposta.cidade + ', ' + resposta.bairro + ', ' + resposta.logradouro;
-//                            GMaps.geocode({
-//                                address: endereco.trim(),
-//                                callback: function(results, status) {
-//                                    if (status == 'OK') {
-//                                        var latlng = results[0].geometry.location;
-//                                        map.setCenter(latlng.lat(), latlng.lng());
-//                                        map.addMarker({
-//                                            lat: latlng.lat(),
-//                                            lng: latlng.lng()
-//                                        });
-//                                    }
-//                                }
-//                            });
+                           
                         }
                         $("#alertCEP").append(msgCEP); //mostra resultado de busca cep
                         $('#txtCEP').removeAttr('disabled');
@@ -109,6 +65,88 @@
 
         //######### FIM DO CEP ########
         
+        //######### CAMPOS DO FORMULARIO ########
+
+        $("#divEmpresa").hide(); //oculta campos do DIVEMPRESA 
+        $("#divCpf").hide();
+        $("#divCnpj").hide();
+        $("#txtCpf").mask("999.999.999-99");
+        $("#txtCnpj").mask("99.999.999/9999-99");
+        $("#txtCpfResponsavel").mask("999.999.999-99");
+        $("#sltTipoUsuario").change(function() {
+            if ($(this).val() == "fisica") {
+                $("#divEmpresa").fadeOut('slow'); //oculta campos do DIVEMPRESA 
+                $("#divCnpj").hide();
+                $("#divCpf").show();
+            } else if ($(this).val() == "juridica") {
+                $("#divEmpresa").fadeIn('slow'); //mostra campos do DIVEMPRESA
+                $("#divCnpj").show();
+                $("#divCpf").hide();
+            } else {
+                $("#divEmpresa").fadeOut('slow'); //mostra campos do DIVEMPRESA
+                $("#divCnpj").fadeOut('slow');
+                $("#divCpf").fadeOut('slow');
+            }
+        });
+
+        "use strict";
+        var options = {
+            bootstrap3: true,
+            minChar: 8,
+            errorMessages: {
+                password_too_short: "<font color='red'>A senha é muito pequena</font>",
+                same_as_username: "<font color='red'>Sua senha não pode ser igual ao seu login</font>"
+            },
+            verdicts: ["Fraca", "Normal", "Média", "Forte", "Muito Forte"],
+            usernameField: "#txtLogin",
+            onLoad: function() {
+                $('#messages').text('Start typing password');
+            },
+            onKeyUp: function(evt) {
+                $(evt.target).pwstrength("outputErrorList");
+            }
+        };
+        $('#txtSenha').pwstrength(options);
+        $("#btnTelefone").click(function() {
+            $("#txtTel").rules("add", {
+                required: true,
+                messages: {
+                    required: "Campo obrigatório",
+                }
+            });
+            $("#sltOperadora").rules("add", {
+                required: true,
+                messages: {
+                    required: "Campo obrigatório",
+                }
+            });
+            $("#sltTipotelefone").rules("add", {
+                required: true,
+                messages: {
+                    required: "Campo obrigatório",
+                }
+            });
+            var telefone = $("#txtTel");
+            var tipoTelefone = $("#sltOperadora");
+            var tipoOperadora = $("#sltTipotelefone");
+            if (telefone.valid() && tipoTelefone.valid() && tipoOperadora.valid()) {
+                $("#dadosTelefone").append(
+                        "<tr><td> <input type=hidden id=hdnTipoTelefone[] name=hdnTipoTelefone[] value=" + $("#sltTipotelefone").val() + ">" + $("#sltTipotelefone").val() + "</td>" +
+                        "<td> <input type=hidden id=hdnOperadora[] name=hdnOperadora[] value=" + $("#sltOperadora").val() + ">" + $("#sltOperadora").val() + "</td>" +
+                        "<td> <input type=hidden id=hdnTelefone[] name=hdnTelefone[] value=" + $("#txtTel").val() + ">" + $("#txtTel").val() + "</td>" +
+                        "<td> <button type=button class=btn btn-default btn-lg onclick=$(this).parent().parent().remove()> <span class=glyphicon glyphicon-trash></span> Excluir</button> </td></tr>");
+            }
+            $("#txtTel").rules("remove");
+            $("#sltOperadora").rules("remove");
+            $("#sltTipotelefone").rules("remove");
+            $("#txtTel").val("");
+            $("#sltOperadora").val("");
+            $("#sltTipotelefone").val("");
+        });
+
+        $("#txtTel").mask("(99)9999-9999");
+       
+
         //######### VALIDACAO DO FORMULARIO ########
         $('#form').validate({
             rules: {
@@ -118,28 +156,80 @@
                 txtNome: {
                     required: true
                 },
-                txtCpfCnpj: {
-                    required: true
+                txtCpf: {
+                    required: true,
+                    cpf: 'both'
+                },
+                txtCnpj: {
+                    required: true,
+                    cnpj: 'both'
+                },
+                txtCpfResponsavel: {
+                    required: true,
+                    cpf: 'both'
                 },
                 txtLogin: {
-                    required: true
+                    required: true,
+                    minlength: 2
                 },
                 txtResponsavel: {
                     required: true
                 },
                 txtEmail: {
-                    required: true
+                    email: true,
                 },
                 txtRazaoSocial: {
                     required: true
                 },
                 txtSenha: {
-                    required: true
-                },   
+                    required: true,
+                    minlength: 4
+                },
+                txtConfirmSenha: {
+                    required: true,
+                    equalTo: "#txtSenha"
+                },
                 txtCEP: {
                     required: true
                 }
-                
+            },
+            messages: {
+                txtCpf: {
+                    required: "Campo obrigatório"
+                },
+                txtCnpj: {
+                    required: "Campo obrigatório"
+                },
+                sltTipoUsuario: {
+                    required: "Campo obrigatório"
+                },
+                txtNome: {
+                    required: "Campo obrigatório"
+                },
+                txtLogin: {
+                    required: "Campo obrigatório",
+                    minlength: "Login deve possuir no mínimo 2 caracteres" 
+                },
+                txtSenha: {
+                    required: "Campo obrigatório",
+                    minlength: "Senha deve possuir no mínimo 4 caracteres" 
+                },
+                txtConfirmSenha: {
+                    required: "Campo obrigatório",
+                    equalTo: "Por Favor digite o mesmo valor novamente"
+                },
+                txtRazaoSocial: {
+                    required: "Campo obrigatório"
+                },
+                txtResponsavel: {
+                    required: "Campo obrigatório"
+                },
+                txtCEP: {
+                    required: "Campo obrigatório"
+                },
+                txtCpfResponsavel: {
+                    required: "Campo obrigatório"
+                }
             },
             highlight: function(element) {
                 $(element).closest('.form-group').addClass('has-error');
@@ -170,13 +260,16 @@
                         $('button[type=submit]').removeAttr('disabled');
                         if (resposta.resultado == 1) {
                             $('.alert').html("Usuário Cadastrado Com Sucesso").attr('class', 'alert alert-success');
+                            $("#form :input").each(function() {
+                                $(this).val('');
+                            });
+                            $("#dadosTelefone").empty();
                         } else {
                             $('.alert').html("Erro ao cadastrar").attr('class', 'alert alert-danger');
                         }
                     }
                 })
                 return false;
-
             }
         });
     })
@@ -200,55 +293,75 @@
             <div class="col-lg-6">
                 <div id="forms" class="panel panel-default">
                     <div class="panel-heading">Informações Básicas </div>
+                    <br>
                     <div class="form-group">
                         <label class="col-lg-3 control-label" for="sltTipoUsuario">Tipo de Pessoa</label>
-                        <div class="col-lg-9">
+                        <div class="col-lg-8">
                             <select class="form-control" id="sltTipoUsuario" name="sltTipoUsuario">
+                                <option value="">Informe o Tipo de Pessoa</option>
                                 <option value="fisica">Física</option>
                                 <option value="juridica">Jurídica</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-lg-3 control-label" for="txtNome">Nome</label>
-                        <div class="col-lg-9">
+                        <label class="col-lg-3 control-label" for="txtNome">Nome Completo</label>
+                        <div class="col-lg-8">
                             <input type="text" id="txtNome" name="txtNome" class="form-control" placeholder="Informe o seu nome">
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-lg-3 control-label" for="txtCpfCnpj" id="lblCpfCnpj">CPF</label>
-                        <div class="col-lg-9">
-                            <input type="text" id="txtCpfCnpj" name="txtCpfCnpj" class="form-control" placeholder="Informe o seu CPF">
+                    <div class="form-group" id="divCpf">
+                        <label class="col-lg-3 control-label" for="txtCpf" id="lblCpf">CPF*</label>
+                        <div class="col-lg-8">
+                            <input type="text" id="txtCpf" name="txtCpf" class="form-control" placeholder="Informe o seu CPF">
+                        </div>
+                    </div>
+                    <div class="form-group" id="divCnpj">
+                        <label class="col-lg-3 control-label" for="txtCnpj" id="lblCpfCnpj">CNPJ*</label>
+                        <div class="col-lg-8">
+                            <input type="text" id="txtCnpj" name="txtCnpj" class="form-control" placeholder="Informe o seu CNPJ">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-lg-3 control-label" for="txtLogin">Login</label>
-                        <div class="col-lg-9">
+                        <div class="col-lg-8">
                             <input type="text" id="txtLogin" name="txtLogin" class="form-control" placeholder="Informe um login">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-lg-3 control-label" for="txtSenha">Senha</label>
-                        <div class="col-lg-9">
-                            <input type="text" id="txtSenha" name="txtSenha" class="form-control" placeholder="Informe uma senha">
+                        <div class="col-lg-8">
+                            <input type="password" id="txtSenha" name="txtSenha" class="form-control" placeholder="Informe uma senha">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label" for="txtConfirmSenha">Confirma Senha</label>
+                        <div class="col-lg-8">
+                            <input type="password" id="txtSenha" name="txtConfirmSenha" class="form-control" placeholder="Informe a senha novamente">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-lg-3 control-label" for="txtEmail">Email</label>
-                        <div class="col-lg-9">
+                        <div class="col-lg-8">
                             <input type="text" id="txtEmail" name="txtEmail" class="form-control" placeholder="Informe o seu email">
                         </div>
                     </div>
                     <div id="divEmpresa">
                         <div class="form-group" id="divresp">
                             <label class="col-lg-3 control-label" for="txtResponsavel">Responsável</label>
-                            <div class="col-lg-9">
+                            <div class="col-lg-8">
                                 <input type="text" id="txtResponsavel" name="txtResponsavel" class="form-control" placeholder="Informe o nome do responsável da empresa">
+                            </div>
+                        </div>
+                        <div class="form-group" id="divCpfResp">
+                            <label class="col-lg-3 control-label" for="txtCpfResponsavel">CPF do Responsável*</label>
+                            <div class="col-lg-8">
+                                <input type="text" id="txtCpfResponsavel" name="txtCpfResponsavel" class="form-control" placeholder="Informe o CPF do responsável da empresa">
                             </div>
                         </div>
                         <div class="form-group" id="divsocial">
                             <label class="col-lg-3 control-label" for="txtRazaoSocial">Razão Social</label>
-                            <div class="col-lg-9">
+                            <div class="col-lg-8">
                                 <input type="text" id="txtRazaoSocial" name="txtRazaoSocial" class="form-control" placeholder="Informe a razão social da empresa">
                             </div>
                         </div>
@@ -258,6 +371,7 @@
             <div class="col-lg-6">
                 <div id="forms" class="panel panel-default">
                     <div class="panel-heading"> Endereço </div>
+                    <br>
                     <div class="form-group">
                         <label class="col-lg-3 control-label" for="txtCEP">CEP</label>
                         <div class="col-lg-6">
@@ -265,42 +379,45 @@
                         </div>
                         <div class="col-lg-2">
                             <button id="btnCEP" type="button" class="btn btn-info">Buscar CEP</button>
-                        </div>
+                        </div> 
+                    </div>
+                    <div class="form-group">
+                    <div id="alertCEP" class="col-lg-12"></div>
                     </div>
                     <div id="divCEP">
                         <div class="form-group">
                             <label class="col-lg-3 control-label" for="txtCidade">Cidade</label>
-                            <div class="col-lg-9">
+                            <div class="col-lg-8">
                                 <input type="text" class="form-control" id="txtCidade" name="txtCidade" readonly="true"> 
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-lg-3 control-label" for="txtEstado">Estado</label>
-                            <div class="col-lg-9">
+                            <div class="col-lg-8">
                                 <input type="text" class="form-control" id="txtEstado" name="txtEstado" readonly="true" > 
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-lg-3 control-label" for="txtBairro">Bairro</label>
-                            <div class="col-lg-9">
+                            <div class="col-lg-8">
                                 <input type="text" class="form-control" id="txtBairro" name="txtBairro" readonly="true"> 
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-lg-3 control-label" for="txtLogradouro">Logradouro</label>
-                            <div class="col-lg-9">
+                            <div class="col-lg-8">
                                 <input type="text" class="form-control" id="txtLogradouro" name="txtLogradouro" readonly="true"> 
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-lg-3 control-label" for="txtNumero">N&uacute;mero</label>
-                            <div class="col-lg-9">
+                            <div class="col-lg-8">
                                 <input type="text" class="form-control" id="txtNumero" name="txtNumero" placeholder="Informe o n&ordm;"> 
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-lg-3 control-label" for="txtComplemento">Complemento</label>
-                            <div class="col-lg-9">
+                            <div class="col-lg-8">
                                 <input type="text" class="form-control" id="txtComplemento" name="txtComplemento" placeholder="Informe o Complemento"> 
                             </div>
                         </div>
@@ -314,17 +431,20 @@
             <div class="col-lg-12">
                 <div id="forms" class="panel panel-default">
                     <div class="panel-heading"> Telefones </div>
+                    <br>
                     <div class="form-group">
                         <label class="col-lg-1 control-label" for="sltTipotelefone">Tipo</label>
                         <div class="col-lg-2">
-                            <select class="form-control" id="sltTipotelefone" name="sltTipotelefone">                                    
+                            <select class="form-control" id="sltTipotelefone" name="sltTipotelefone">     
+                                <option value="">Tipo do Telefone</option>
                                 <option value="Fixo">Fixo</option>
                                 <option value="Celular">Celular</option>
                             </select>
                         </div>
                         <label class="col-lg-1 control-label" for="sltOperadora">Operadora</label>
                         <div class="col-lg-2">
-                            <select class="form-control" id="sltOperadora" name="sltOperadora">                                    
+                            <select class="form-control" id="sltOperadora" name="sltOperadora">  
+                                <option value="">Operadora</option>
                                 <option value="Oi">Oi</option>
                                 <option value="Tim">Tim</option>
                                 <option value="Vivo">Vivo</option>
@@ -340,23 +460,27 @@
                             <button id="btnTelefone" type="button" class="btn btn-info">Adcionar</button>
                         </div>
                     </div>
+                    <!--                </div>-->
+                    <!--          </div>-->
+                    <div class="form-group">
+                        <div class="col-lg-12">
+
+                            <table class="table table-hover table-condensed">
+            <!--                    <thead>
+                                    <tr>
+                                        <th>Tipo de Telefone</th>
+                                        <th>Operadora</th>
+                                        <th>Numero</th>
+                                    </tr>
+                                </thead>-->
+                                <tbody id="dadosTelefone">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="col-lg-12">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>Tipo de Telefone</th>
-                            <th>Operadora</th>
-                            <th>Numero</th>
-                        </tr>
-                    </thead>
-                    <tbody id="dadosTelefone">
-                    </tbody>
-                </table>
-            </div>
         </div>
-
         <!-- Terceira Linha -->    
         <div class="row">
             <div class="col-lg-12">
