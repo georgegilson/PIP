@@ -239,7 +239,6 @@ class Imovel {
             $imovel->setElevador((in_array("Elevador", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
             $imovel->setPiscina((in_array("Piscina", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
             $imovel->setQuadra((in_array("Quadra", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
-            $imovel->setSacada((in_array("Sacada", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
         }
 
         $imovel->setArea($parametros['txtArea']);
@@ -248,10 +247,25 @@ class Imovel {
         
         $imovel->setIdusuario("usuariosimon");
         
-        $imovel->setAndar("9");
-        $imovel->setCobertura("SIM");
-        $imovel->setSacada("SIM");
-        $imovel->setCondominio("300");
+        if (isset($parametros["sltAndar"])){
+            $imovel->setAndar($parametros['sltAndar']);
+        } elseif ($parametros['sltTipo'] == 'apartamento' && ($parametros['sltAndar'] == "")){ $imovel->setAndar("NAO"); /*usuário não informou o andar do prédio*/}
+        else {$imovel->setAndar("NSA");} //não se aplica, pois é uma casa ou terreno
+        
+        if (isset($parametros["chkCobertura"])){
+            $imovel->setCobertura($parametros['chkCobertura'] = 'SIM');
+        } elseif ($parametros['sltTipo'] == 'apartamento' && !isset($parametros['chkCobertura'])){ $imovel->setCobertura("NAO"); /*usuário não informou se é na cobertura*/}
+        else {$imovel->setCobertura("NSA");} //não se aplica, pois é uma casa ou terreno
+        
+        if (isset($parametros["chkSacada"])){
+            $imovel->setSacada($parametros['chkSacada'] = 'SIM');
+        } elseif ($parametros['sltTipo'] == 'apartamento' && !isset($parametros['chkSacada'])){ $imovel->setSacada("NAO"); /*usuário não informou se possui sacada*/}
+        else {$imovel->setSacada("NSA");} //não se aplica, pois é uma casa ou terreno
+        
+       if (isset($parametros["txtCondominio"])){
+            $imovel->setCondominio($parametros['txtCondominio']);
+        } elseif ($parametros['sltTipo'] == 'apartamento' && ($parametros['txtCondominio'] == "")){ $imovel->setCondominio("NAO"); /*usuário não informou o valor do condominio*/}
+        else {$imovel->setCondominio("NSA");} //não se aplica, pois é uma casa ou terreno
 
         return $imovel;
     }

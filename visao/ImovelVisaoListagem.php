@@ -1,4 +1,5 @@
-<div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
+  
+   <div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
     <h1>Listagem de Im&oacute;veis</h1>
     <!-- Example row of columns -->
     <div class="alert">Todos</div>
@@ -14,6 +15,7 @@
           </tr>
         </thead>
         <tbody>
+            
        <?php
        $item = $this->getItem();
         if ($item){
@@ -43,7 +45,18 @@
    <?php if($imovel->getAcademia()=="SIM"){echo "Academia: <font color='blue'>SIM</font><br />";}else echo "Academia: <font color='red'>NÃO</font><br />";?>
    <?php if($imovel->getAreaServico()=="SIM"){echo "Área Serviço:  <font color='blue'>SIM</font><br />";}else echo "Área Serviço: <font color='red'>NÃO</font><br />";?>
    <?php if($imovel->getDependenciaEmpregada()=="SIM"){echo "Dependencia: <font color='blue'>SIM</font><br />";}else echo "Dependencia: <font color='red'>NÃO</font><br />";?>
-
+   <?php if($imovel->getTipo()=="apartamento"){
+            if($imovel->getSacada()=="SIM"){echo "Sacada: <font color='blue'>SIM</font><br />";}else echo "Sacada: <font color='red'>NÃO</font><br />";         
+            }?>
+   <?php if($imovel->getTipo()=="apartamento"){
+            if($imovel->getCobertura()=="SIM"){echo "Cobertura: <font color='blue'>SIM</font><br />";}else echo "Cobertura: <font color='red'>NÃO</font><br />";         
+            }?>
+   <?php if($imovel->getTipo()=="apartamento"){
+            if($imovel->getCondominio()!= ""){echo "Condomínio: <font color='blue'>".$imovel->getCondominio()."</font><br />";}else echo "Condomínio: <font color='red'>Não Informado</font><br />";         
+            }?>    
+   <?php if($imovel->getTipo()=="apartamento"){
+            if($imovel->getAndar()!= ""){echo "Andar: <font color='blue'>".$imovel->getAndar()."º</font><br />";}else echo "Andar: <font color='red'>Não Informado</font><br />";         
+            }?> 
 </div>
  
  <script type="text/javascript">
@@ -68,5 +81,4 @@
         <?php } ?>
         </tbody>
       </table>
-       
- 
+  </div>
