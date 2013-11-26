@@ -3,8 +3,10 @@
 <script src="assets/js/util.validate.js"></script>
 <script src="assets/js/pwstrength.js"></script>
 <script>
+    
+    $("#txtTel").val($("#dadosTelefone").length);
     $(document).ready(function() {
-        
+
         $("#txtCEP").mask("99.999-999"); //mascara
         $("#divCEP").hide(); //oculta campos do DIVCEP
         $("#btnCEP").click(function() {
@@ -53,7 +55,7 @@
                             $('#hdnCEP').val($('#txtCEP').val());
 
                             var endereco = 'Brazil, ' + resposta.uf + ', ' + resposta.cidade + ', ' + resposta.bairro + ', ' + resposta.logradouro;
-                           
+
                         }
                         $("#alertCEP").append(msgCEP); //mostra resultado de busca cep
                         $('#txtCEP').removeAttr('disabled');
@@ -64,7 +66,7 @@
         }
 
         //######### FIM DO CEP ########
-        
+
         //######### CAMPOS DO FORMULARIO ########
 
         $("#divEmpresa").hide(); //oculta campos do DIVEMPRESA 
@@ -82,6 +84,8 @@
                 $("#divEmpresa").fadeIn('slow'); //mostra campos do DIVEMPRESA
                 $("#divCnpj").show();
                 $("#divCpf").hide();
+                $("#lblNome").html("Nome da Empresa");
+                $("#txtNome").attr("placeholder", "Informe o nome da empresa");
             } else {
                 $("#divEmpresa").fadeOut('slow'); //mostra campos do DIVEMPRESA
                 $("#divCnpj").fadeOut('slow');
@@ -141,11 +145,11 @@
             $("#sltTipotelefone").rules("remove");
             $("#txtTel").val("");
             $("#sltOperadora").val("");
-            $("#sltTipotelefone").val("");
+            $("#sltTipotelefone").val("");           
         });
 
         $("#txtTel").mask("(99)9999-9999");
-       
+        
 
         //######### VALIDACAO DO FORMULARIO ########
         $('#form').validate({
@@ -208,11 +212,11 @@
                 },
                 txtLogin: {
                     required: "Campo obrigatório",
-                    minlength: "Login deve possuir no mínimo 2 caracteres" 
+                    minlength: "Login deve possuir no mínimo 2 caracteres"
                 },
                 txtSenha: {
                     required: "Campo obrigatório",
-                    minlength: "Senha deve possuir no mínimo 4 caracteres" 
+                    minlength: "Senha deve possuir no mínimo 4 caracteres"
                 },
                 txtConfirmSenha: {
                     required: "Campo obrigatório",
@@ -263,6 +267,8 @@
                             $("#form :input").each(function() {
                                 $(this).val('');
                             });
+                            $('#txtSenha').pwstrength("destroy");
+                            $('#txtSenha').pwstrength("init");
                             $("#dadosTelefone").empty();
                         } else {
                             $('.alert').html("Erro ao cadastrar").attr('class', 'alert alert-danger');
@@ -305,7 +311,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-lg-3 control-label" for="txtNome">Nome Completo</label>
+                        <label class="col-lg-3 control-label" for="txtNome" id="lblNome">Nome Completo</label>
                         <div class="col-lg-8">
                             <input type="text" id="txtNome" name="txtNome" class="form-control" placeholder="Informe o seu nome">
                         </div>
@@ -382,7 +388,7 @@
                         </div> 
                     </div>
                     <div class="form-group">
-                    <div id="alertCEP" class="col-lg-12"></div>
+                        <div id="alertCEP" class="col-lg-12"></div>
                     </div>
                     <div id="divCEP">
                         <div class="form-group">
