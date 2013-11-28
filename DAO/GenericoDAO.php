@@ -4,10 +4,30 @@ include_once 'configuracao/Conexao.php';
 
 class GenericoDAO {
 
+    public $conexao = null;
+
+    public function __construct() {
+        $this->conexao = Conexao::getInstance();
+    }
+
+    function iniciarTransação() {
+        $this->conexao->beginTransaction();
+    }
+
+    function commit() {
+        $this->conexao->commit();
+    }
+
+    function rollback() {
+        $this->conexao->rollBack();
+    }
+
+    function fecharConexão() {
+        if ($this->conexao != null)
+            $this->conexao = null;
+    }
+
     function cadastrar($entidade) {
-
-        $conexao = Conexao::getInstance();
-
         $reflect = new ReflectionClass($entidade);
         $classe = $reflect->getName();
         $atributos = $reflect->getProperties(ReflectionProperty::IS_PRIVATE | ReflectionProperty::IS_PUBLIC);
@@ -25,7 +45,7 @@ class GenericoDAO {
                 $sql = $sql . ", ";
         }
         $sql = $sql . ")";
-        $statement = $conexao->prepare($sql);
+        $statement = $this->conexao->prepare($sql);
         foreach ($atributos as $valor) {
             $acao = "get" . ucfirst($valor->getName());
             $resultado = $entidade->$acao();
@@ -33,8 +53,8 @@ class GenericoDAO {
             $statement->bindValue($parametro, $resultado);
         }
         if ($statement->execute()) {
-            if ($conexao->lastInsertId())
-                return $conexao->lastInsertId();
+            if ($this->conexao->lastInsertId())
+                return $this->conexao->lastInsertId();
             else
                 return true;
         } else {
@@ -43,11 +63,10 @@ class GenericoDAO {
     }
 
     function listar($entidade) {
-        $conexao = Conexao::getInstance();
         $reflect = new ReflectionClass($entidade);
         $classe = $reflect->getName();
         $sql = "SELECT * FROM " . strtolower($classe);
-        $statement = $conexao->prepare($sql);
+        $statement = $this->conexao->prepare($sql);
         $statement->execute();
         $resultado = $statement->fetchAll(PDO::FETCH_CLASS, $classe);
         $blindado = $reflect->getProperties(ReflectionProperty::IS_PROTECTED);
@@ -87,9 +106,9 @@ class GenericoDAO {
 
     function selecionarBlindado($entidadeBlindada, $chaveEstrangeira, $idChaveEstrangeira) {
 //        var_dump($idChaveEstrangeira);
-        $conexao = Conexao::getInstance();
+
         $sql = "SELECT * FROM " . strtolower($entidadeBlindada) . " WHERE " . $chaveEstrangeira . " =:idChaveEstrangeira";
-        $statement = $conexao->prepare($sql);
+        $statement = $this->conexao->prepare($sql);
 //        echo "<pre>";
 //        print_r($sql);
 //        die();
@@ -106,11 +125,10 @@ class GenericoDAO {
     }
 
     function selecionar($entidade, $parametro) {
-        $conexao = Conexao::getInstance();
         $reflect = new ReflectionClass($entidade);
         $classe = $reflect->getName();
         $sql = "SELECT * FROM " . strtolower($classe) . " WHERE id=:id";
-        $statement = $conexao->prepare($sql);
+        $statement = $this->conexao->prepare($sql);
         $statement->bindParam(':id', $parametro);
         $statement->execute();
         $resultado = $statement->fetchAll(PDO::FETCH_CLASS, $classe);
@@ -118,8 +136,6 @@ class GenericoDAO {
     }
 
     function editar($entidade) {
-        $conexao = Conexao::getInstance();
-
         $reflect = new ReflectionClass($entidade);
         $classe = $reflect->getName();
         $atributos = $reflect->getProperties(ReflectionProperty::IS_PRIVATE | ReflectionProperty::IS_PUBLIC);
@@ -132,7 +148,7 @@ class GenericoDAO {
         }
         $sql = $sql . " WHERE id = :id";
 
-        $statement = $conexao->prepare($sql);
+        $statement = $this->conexao->prepare($sql);
         foreach ($atributos as $valor) {
             $acao = "get" . ucfirst($valor->getName());
             $resultado = $entidade->$acao();
@@ -147,11 +163,10 @@ class GenericoDAO {
     }
 
     function excluir($entidade, $parametro) {
-        $conexao = Conexao::getInstance();
         $reflect = new ReflectionClass($entidade);
         $classe = $reflect->getName();
         $sql = "DELETE FROM " . strtolower($classe) . " WHERE id=:id";
-        $statement = $conexao->prepare($sql);
+        $statement = $this->conexao->prepare($sql);
         $statement->bindParam(':id', $parametro);
         if ($statement->execute()) {
             return true;
