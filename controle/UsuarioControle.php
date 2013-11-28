@@ -18,37 +18,46 @@ class UsuarioControle {
 
     function cadastrar($parametros) {
         //Endereço
+        $genericoDAO = new GenericoDAO();
+        $genericoDAO->iniciarTransação();
         $endereco = new Endereco();
         $entidadeEndereco = $endereco->cadastrar($parametros);
-        $genericoDAO = new GenericoDAO();
         $idEndereco = $genericoDAO->cadastrar($entidadeEndereco);
         //Usuário
         $usuario = new Usuario();
         $entidadeUsuario = $usuario->cadastrar($parametros, $idEndereco);
-        $genericoDAO = new GenericoDAO();
         $idUsuario = $genericoDAO->cadastrar($entidadeUsuario);
         //Empresa
+        $idEmpresa = false;
         if ($entidadeUsuario->getTipousuario() == "juridica") {
             $empresa = new Empresa();
             $entidadeEmpresa = $empresa->cadastrar($parametros, $idUsuario);
-            $genericoDAO = new GenericoDAO();
-            $resutadoEmpresa = $genericoDAO->cadastrar($entidadeEmpresa);
+            $idEmpresa = $genericoDAO->cadastrar($entidadeEmpresa);
+        } else {
+            $idEmpresa = true;
         }
         //Telefone
         $quantidadeTelefone = count($parametros['hdnTipoTelefone']);
-        if ($quantidadeTelefone > 0) {
-            for ($indiceTelefone = 0; $indiceTelefone < $quantidadeTelefone; $indiceTelefone++) {
-                $telefone = new Telefone();
-                $entidadeTelefone = $telefone->cadastrar($parametros, $idUsuario, $indiceTelefone);
-                $genericoDAO = new GenericoDAO();
-                $idTelefone = $genericoDAO->cadastrar($entidadeTelefone);
+        $resultadoTelefone = true;
+        for ($indiceTelefone = 0; $indiceTelefone < $quantidadeTelefone; $indiceTelefone++) {
+            $telefone = new Telefone();
+            $entidadeTelefone = $telefone->cadastrar($parametros, $idUsuario, $indiceTelefone);
+            $idTelefone = $genericoDAO->cadastrar($entidadeTelefone);
+            if (!($idTelefone)) {
+                $resultadoTelefone = false;
+                break;
             }
         }
-        //visao
-        if ($idUsuario)
+
+        if ($idEndereco && $idUsuario && $idEmpresa && $idTelefone) {
+            $genericoDAO->commit();
+            $genericoDAO->fecharConexão();
             echo json_encode(array("resultado" => 1));
-        else
+        } else {
+            $genericoDAO->rollback();
+            $genericoDAO->fecharConexão();
             echo json_encode(array("resultado" => 0));
+        }
     }
 
 }
