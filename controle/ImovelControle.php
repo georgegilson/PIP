@@ -18,6 +18,7 @@ class ImovelControle {
     function cadastrar($parametros) {
         //modelo
         $genericoDAO = new GenericoDAO();
+        $genericoDAO->iniciarTransação();
         $endereco = new Endereco();
         $entidadeEndereco = $endereco->cadastrar($parametros); 
         $idEndereco = $genericoDAO->cadastrar($entidadeEndereco);
@@ -27,10 +28,16 @@ class ImovelControle {
         $resultado = $genericoDAO->cadastrar($entidadeImovel);
         
         //visao
-        if ($resultado)
+        if ($resultado && $idEndereco){
+            $genericoDAO->commit();
+            $genericoDAO->fecharConexão();
             echo json_encode(array("resultado" => 1));
-        else
+        }
+        else{
+            $genericoDAO->rollback();
+            $genericoDAO->fecharConexão();
             echo json_encode(array("resultado" => 0));
+        }
     }
 
     function listar() {
