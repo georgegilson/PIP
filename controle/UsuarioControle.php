@@ -49,7 +49,7 @@ class UsuarioControle {
             }
         }
 
-        if ($idEndereco && $idUsuario && $idEmpresa && $idTelefone) {
+        if ($idEndereco && $idUsuario && $idEmpresa && $resultadoTelefone) {
             $genericoDAO->commit();
             $genericoDAO->fecharConexão();
             echo json_encode(array("resultado" => 1));
