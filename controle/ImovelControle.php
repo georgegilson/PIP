@@ -2,6 +2,7 @@
 
 include_once 'modelo/Imovel.php';
 include_once 'modelo/Endereco.php';
+include_once 'modelo/Anuncio.php';
 include_once 'DAO/GenericoDAO.php';
 
 class ImovelControle {

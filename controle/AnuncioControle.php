@@ -1,18 +1,24 @@
 <?php
 
 include_once 'modelo/Anuncio.php';
+include_once 'modelo/Endereco.php';
+include_once 'modelo/Imovel.php';
 include_once 'DAO/GenericoDAO.php';
 
 class AnuncioControle {
 
-    function form() {
+    function form($parametro) {
         //modelo
-        # definir regras de negocio tal como permissao de acesso
+        $imovel = new Imovel();
+        $genericoDAO = new GenericoDAO();
+        $selecionarImovel = $genericoDAO->selecionar($imovel, $parametro['idImovel']);
+        $selecionarImovel[0]->setEndereco($genericoDAO->selecionarBlindado("endereco", "id", $selecionarImovel[0]->getIdendereco()));
+
         //visao
         $visao = new Template();
-        $visao->exibir('AnuncioVisaoCadastro.php');
+        $visao->setItem($selecionarImovel);
+        $visao->exibir('AnuncioVisaoPublicar.php');
     }
-
     function cadastrar($parametros) {
         //modelo
         $anuncio = new Anuncio();

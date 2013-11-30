@@ -26,6 +26,7 @@ class Imovel {
     private $sacada;
     private $descricao;
     protected $endereco;
+    protected $anuncio;
     
     public function getIdendereco() {
         return $this->idendereco;
@@ -142,6 +143,10 @@ class Imovel {
     public function getEndereco() {
         return $this->endereco;
     }
+  
+    public function getAnuncio() {
+        return $this->anuncio;
+    }
 
     public function setId($id) {
         $this->id = $id;
@@ -217,6 +222,14 @@ class Imovel {
 
     public function setEndereco($endereco) {
         $this->endereco = $endereco;
+    }
+    
+    public function setAnuncio($anuncio) {
+        $this->anuncio = $anuncio;
+    }
+    
+    public function Referencia() {
+        return substr($this->getDatahoracadastro(), 6, -9) . substr($this->getDatahoracadastro(), 3, -14) . str_pad($this->getId(), 5, "0", STR_PAD_LEFT);
     }
 
     function cadastrar($parametros, $idendereco) {

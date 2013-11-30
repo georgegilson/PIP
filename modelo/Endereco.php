@@ -88,4 +88,7 @@ class Endereco {
         return $endereco;
     }
     
+    public function enderecoMapa(){
+        return 'Brazil, ' . $this->getEstado() . ', ' . $this->getCidade() . ', ' . $this->getBairro() . ', ' . $this->getLogradouro();        
+    }
 }

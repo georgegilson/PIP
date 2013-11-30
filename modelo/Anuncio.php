@@ -3,11 +3,11 @@
 class Anuncio {
      
     private $valor;
-    private $topicoanuncio; 
+    private $tituloanuncio; 
     private $descricaoanuncio; 
     private $idimovel;
     private $status;
-    private $destaque;
+    //private $destaque;
     private $valorvisivel;
     private $vigencia;
     private $datahoracadastro;
@@ -19,7 +19,7 @@ class Anuncio {
         return $this->publicarmapa;
     }
 
-        public function getDestaque() {
+    public function getDestaque() {
         return $this->destaque;
     }
 
@@ -55,8 +55,8 @@ class Anuncio {
         return $this->valor;
     }
 
-    public function getTopicoAnuncio() {
-        return $this->topicoanuncio;
+    public function getTituloAnuncio() {
+        return $this->tituloanuncio;
     }
 
     public function getDescricaoAnuncio() {
@@ -83,8 +83,8 @@ class Anuncio {
         $this->valor = $valor;
     }
 
-    public function setTopicoAnuncio($topicoanuncio) {
-        $this->topicoanuncio = $topicoanuncio;
+    public function setTituloAnuncio($tituloanuncio) {
+        $this->tituloanuncio = $tituloanuncio;
     }
 
     public function setDescricaoAnuncio($descricaoanuncio) {
@@ -115,13 +115,17 @@ class Anuncio {
 
         $anuncio = new Anuncio();
         
-        $anuncio->setValor($parametros['txtValor']);
-        $anuncio->setTopicoAnuncio($parametros['txtTopico']);
+        $anuncio->setTituloAnuncio($parametros['txtTitulo']);
         $anuncio->setDescricaoAnuncio($parametros['txtDescricao']);
-        $anuncio->setDatahoracadastro($parametros['hdnDataCadastro']);
-        $anuncio->setDatahoraalteracao($parametros['hdnDataAtualizacao']);
+        $anuncio->setValor($parametros['txtValor']);
+        $anuncio->setVigencia(date('d/m/Y H:i:s'));
+        $anuncio->setValorVisivel((isset($parametros['sltCamposVisiveis'])?json_encode($parametros['sltCamposVisiveis']):""));
+        $anuncio->setDatahoracadastro(date('d/m/Y H:i:s'));
+        $anuncio->setDatahoraalteracao("");
         $anuncio->setStatus('cadastrado');
-        $anuncio->setIdImovel($parametros['hdnId']);
+        $anuncio->setPublicarmapa($parametros['rdbMapa']);
+        $anuncio->setIdImovel($parametros['hdnIdImovel']);
+        $anuncio->setIdusuario(0);
             
         return $anuncio;
     }
