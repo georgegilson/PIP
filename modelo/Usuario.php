@@ -13,6 +13,15 @@ class Usuario {
     private $datahoraalteracao;
     private $email;
     private $idendereco;
+    protected $endereco;
+    
+    public function setEndereco($endereco) {
+        $this->endereco = $endereco;
+    }
+    
+    public function getEndereco() {
+        return $this->endereco;
+    }
 
     public function getEmail() {
         return $this->email;
