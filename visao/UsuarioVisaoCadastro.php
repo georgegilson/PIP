@@ -3,9 +3,61 @@
 <script src="assets/js/util.validate.js"></script>
 <script src="assets/js/pwstrength.js"></script>
 <script>
-    
+
     $("#txtTel").val($("#dadosTelefone").length);
     $(document).ready(function() {
+
+        function buscarLogin() {
+            $.ajax({
+                url: "index.php",
+                dataType: "json",
+                type: "POST",
+                data: {
+                    login: $('#txtLogin').val(),
+                    hdnEntidade: "Usuario",
+                    hdnAcao: "buscarLogin"
+                },
+                beforeSend: function() {
+                    $('#txtLogin').attr('disabled', 'disabled');
+                },
+                success: function(resposta) {
+
+                    if (resposta.resultado == 0) {
+                        $('#hdnLogin').val('0');
+
+                    } else {
+                        $('#hdnLogin').val('1');
+                    }
+                    $('#txtLogin').removeAttr('disabled');
+                }
+            })
+        }
+
+//        (function($) {
+//            $.validator.addMethod("locate", function(value, element, param) {
+//                if (value == "")
+//                    return true;
+//                else {
+//                    buscarLogin();
+//                    return ($('#hdnLogin').val() == "0") ? 'Ok' : 'Login já utilizado!';
+//
+//                }
+//            });
+//        })(jQuery);
+        jQuery.validator.addMethod("locate", function(value, element, param) {
+            $("#txtLogin").blur(function() {
+            
+        
+            if (value == "") {
+                return true;
+            }
+            else {
+                buscarLogin();
+                return ($('#hdnLogin').val() == "0") ? true : false;
+
+            }
+            });
+        }, jQuery.validator.format("Login já utilizado!"));
 
         $("#txtCEP").mask("99.999-999"); //mascara
         $("#divCEP").hide(); //oculta campos do DIVCEP
@@ -145,11 +197,11 @@
             $("#sltTipotelefone").rules("remove");
             $("#txtTel").val("");
             $("#sltOperadora").val("");
-            $("#sltTipotelefone").val("");           
+            $("#sltTipotelefone").val("");
         });
 
         $("#txtTel").mask("(99)9999-9999");
-        
+
 
         //######### VALIDACAO DO FORMULARIO ########
         $('#form').validate({
@@ -174,7 +226,8 @@
                 },
                 txtLogin: {
                     required: true,
-                    minlength: 2
+                    minlength: 2,
+                    locate: true
                 },
                 txtResponsavel: {
                     required: true
@@ -195,7 +248,11 @@
                 },
                 txtCEP: {
                     required: true
+                },
+                txtNumero: {
+                    required: true
                 }
+
             },
             messages: {
                 txtCpf: {
@@ -293,6 +350,7 @@
     <form id="form" class="form-horizontal">
         <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Usuario"  />
         <input type="hidden" id="hdnAcao" name="hdnAcao" value="cadastrar" />
+        <input type="hidden" id="hdnLogin" name="hdnLogin" value=""  />
 <!--        <input type="hidden" id="hdnTipoTelefone[]" name="hdnTipoTelefone[]" value=""  />-->
         <!-- Primeira Linha -->    
         <div class="row">
