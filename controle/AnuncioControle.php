@@ -19,29 +19,37 @@ class AnuncioControle {
         $visao->setItem($selecionarImovel);
         $visao->exibir('AnuncioVisaoPublicar.php');
     }
+
     function cadastrar($parametros) {
         //modelo
-        $anuncio = new Anuncio();
-        $entidadeAnuncio = $anuncio->cadastrar($parametros);
-        $genericoDAO = new GenericoDAO();
-        $resultado = $genericoDAO->cadastrar($entidadeAnuncio);        
-        //visao
-        if ($resultado)
-            echo json_encode(array("resultado" => 1));
-        else
-            echo json_encode(array("resultado" => 0));
+        if (isset($parametros['upload']) && $parametros['upload']=== "1") {
+            include_once 'controle/ImagemControle.php';
+            $imagem = new ImagemControle();
+            $imagem->upload($parametros);
+        } else {
+            $anuncio = new Anuncio();
+            $entidadeAnuncio = $anuncio->cadastrar($parametros);
+            $genericoDAO = new GenericoDAO();
+            $resultado = $genericoDAO->cadastrar($entidadeAnuncio);
+            //visao
+            if ($resultado)
+                echo json_encode(array("resultado" => 1));
+            else
+                echo json_encode(array("resultado" => 0));
+        }
     }
-/*
-    function listar() {
-        //modelo
-        $imovel = new Imovel();
-        $genericoDAO = new GenericoDAO();
-        $listarImovel = $genericoDAO->listar($imovel);
-        //visao
-        $visao = new Template();
-        $visao->setItem($listarImovel);
-        $visao->exibir('ImovelVisaoListagem.php');
-    }*/
+
+    /*
+      function listar() {
+      //modelo
+      $imovel = new Imovel();
+      $genericoDAO = new GenericoDAO();
+      $listarImovel = $genericoDAO->listar($imovel);
+      //visao
+      $visao = new Template();
+      $visao->setItem($listarImovel);
+      $visao->exibir('ImovelVisaoListagem.php');
+      } */
 
     function selecionar($parametro) {
         //modelo
@@ -53,21 +61,21 @@ class AnuncioControle {
         $visao->setItem($selecionarImovel);
         $visao->exibir('AnuncioVisaoPublicar.php');
     }
-    
-/*
 
-    function editar($parametros) {
-        //modelo
-        $imovel = new Imovel();
-        $entidadeImovel = $imovel->editar($parametros);
-        $genericoDAO = new GenericoDAO();
-        $resultado = $genericoDAO->editar($entidadeImovel);
-        //visao
-        if ($resultado)
-            echo json_encode(array("resultado" => 1));
-        else
-            echo json_encode(array("resultado" => 0));
-    }
-    
-*/
+    /*
+
+      function editar($parametros) {
+      //modelo
+      $imovel = new Imovel();
+      $entidadeImovel = $imovel->editar($parametros);
+      $genericoDAO = new GenericoDAO();
+      $resultado = $genericoDAO->editar($entidadeImovel);
+      //visao
+      if ($resultado)
+      echo json_encode(array("resultado" => 1));
+      else
+      echo json_encode(array("resultado" => 0));
+      }
+
+     */
 }

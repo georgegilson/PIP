@@ -98,7 +98,7 @@ Wizard.prototype = {
             containerWidth = this.$element.width();
         }
         if (totalWidth > containerWidth) {
-
+/*
             // set the position so that the last step is on the right
             var newMargin = totalWidth - containerWidth;
             this.$element.find('.steps').first().attr('style', 'margin-left: -' + newMargin + 'px');
@@ -113,7 +113,7 @@ Wizard.prototype = {
                     this.$element.find('.steps').first().attr('style', 'margin-left: -' + newMargin + 'px');
                 }
             }
-        }
+  */      }
 
         this.$element.trigger('changed');
     },
