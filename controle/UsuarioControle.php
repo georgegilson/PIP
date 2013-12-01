@@ -59,5 +59,27 @@ class UsuarioControle {
             echo json_encode(array("resultado" => 0));
         }
     }
+    
+    function selecionar($parametro) {
+    //modelo
+        $usuario = new Usuario();
+        $genericoDAO = new GenericoDAO();
+        $selecionarUsuario = $genericoDAO->selecionar2($usuario, $parametro['id']);
+        //visao
+        $visao = new Template();
+        $visao->setItem($selecionarUsuario);
+        $visao->exibir('UsuarioVisaoEdicao.php');
+    }
+    
+    function buscarLogin($parametros){
+        $usuario = new Usuario();
+        $genericoDAO = new GenericoDAO();
+        $selecionarUsuario = $genericoDAO->selecionar3($usuario, $parametros['login']);
+                        
+        if (count($selecionarUsuario) > 0)
+            echo json_encode(array("resultado" => 1));
+        else
+            echo json_encode(array("resultado" => 0));
+    }
 
 }
