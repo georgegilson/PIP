@@ -123,6 +123,49 @@ class GenericoDAO {
         }
         return $resultado;
     }
+    
+    function selecionar2($entidade, $parametro){
+        $reflect = new ReflectionClass($entidade);
+        $classe = $reflect->getName();
+         $sql = "SELECT * FROM " . strtolower($classe) . " WHERE id=:id";
+        $statement = $this->conexao->prepare($sql);
+        $statement->bindParam(':id', $parametro);
+        $statement->execute();
+        $resultado = $statement->fetchAll(PDO::FETCH_CLASS, $classe);
+        $blindado = $reflect->getProperties(ReflectionProperty::IS_PROTECTED);
+        if ($blindado) {
+            $privados = $reflect->getProperties(ReflectionProperty::IS_PRIVATE);
+            foreach ($privados as $listaPrivados) {
+                $atributos[] = $listaPrivados->name;
+            }
+            foreach ($resultado as $objeto) {
+                foreach ($blindado as $atributoBlindado) {
+//                    echo "<pre>";
+//                    print_r($atributos);
+//                    die();
+                    if (in_array("id" . $atributoBlindado->getName(), $atributos)) {
+                        $entidadeBlindada = $atributoBlindado->getName();
+                        $chaveEstrangeira = "id";
+                        $acao = "getId" . $atributoBlindado->getName();
+                        $idChaveEstrangeira = $objeto->$acao();
+                    } else {
+                        $entidadeBlindada = $atributoBlindado->getName();
+                        $chaveEstrangeira = "id" . $classe;
+                        $idChaveEstrangeira = $objeto->getId();
+                    }
+                    $acao = "set" . ucfirst($atributoBlindado->getName());
+                    $objeto->$acao($this->selecionarBlindado($entidadeBlindada, $chaveEstrangeira, $idChaveEstrangeira));
+                }
+                $resultadoBlindado[] = $objeto;
+//                echo "<pre>";
+//                print_r($resultadoBlindado);
+//                die();
+            }
+            return $resultadoBlindado;
+        } else {
+            return $resultado;
+        }
+    }
 
     function selecionar($entidade, $parametro) {
         $reflect = new ReflectionClass($entidade);
@@ -130,6 +173,17 @@ class GenericoDAO {
         $sql = "SELECT * FROM " . strtolower($classe) . " WHERE id=:id";
         $statement = $this->conexao->prepare($sql);
         $statement->bindParam(':id', $parametro);
+        $statement->execute();
+        $resultado = $statement->fetchAll(PDO::FETCH_CLASS, $classe);
+        return $resultado;
+    }
+    
+    function selecionar3($entidade, $parametro) {
+        $reflect = new ReflectionClass($entidade);
+        $classe = $reflect->getName();
+        $sql = "SELECT * FROM " . strtolower($classe) . " WHERE login=:login";
+        $statement = $this->conexao->prepare($sql);
+        $statement->bindParam(':login', $parametro);
         $statement->execute();
         $resultado = $statement->fetchAll(PDO::FETCH_CLASS, $classe);
         return $resultado;
