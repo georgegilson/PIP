@@ -25,6 +25,7 @@ class Imovel {
     private $cobertura;
     private $sacada;
     private $descricao;
+    private $condicao;
     protected $endereco;
     protected $anuncio;
     
@@ -147,7 +148,11 @@ class Imovel {
     public function getAnuncio() {
         return $this->anuncio;
     }
-
+    
+    public function getCondicao() {
+        return $this->condicao;
+    }
+    
     public function setId($id) {
         $this->id = $id;
     }
@@ -226,6 +231,10 @@ class Imovel {
     
     public function setAnuncio($anuncio) {
         $this->anuncio = $anuncio;
+    }
+    
+    public function setCondicao($condicao) {
+        $this->condicao = $condicao;
     }
     
     public function Referencia() {
