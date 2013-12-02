@@ -10,7 +10,7 @@ class GenericoDAO {
         $this->conexao = Conexao::getInstance();
     }
 
-    function iniciarTransação() {
+    function iniciarTransacao() {
         $this->conexao->beginTransaction();
     }
 
@@ -22,7 +22,7 @@ class GenericoDAO {
         $this->conexao->rollBack();
     }
 
-    function fecharConexão() {
+    function fecharConexao() {
         if ($this->conexao != null)
             $this->conexao = null;
     }

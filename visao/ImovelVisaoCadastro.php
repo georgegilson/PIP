@@ -7,21 +7,21 @@
 <script src="assets/js/bootstrap-maxlength.js"></script>
 <script>
     $(document).ready(function() {
-        
+
         $("#divApartamento").hide(); //oculta campos exclusivos do apartamento 
 
         $("#sltTipo").change(function() {
-            if ($(this).val() == "casa" || $(this).val() == "terreno"){
+            if ($(this).val() == "casa" || $(this).val() == "terreno") {
                 $("#divApartamento").fadeOut('slow'); //oculta campos exclusivos do apartamento 
-   //             $("#lblCpfCnpj").html("CPF")
-   //             $("#txtCpfCnpj").attr("placeholder", "Informe o CPF");
+                //             $("#lblCpfCnpj").html("CPF")
+                //             $("#txtCpfCnpj").attr("placeholder", "Informe o CPF");
             } else {
                 $("#divApartamento").fadeIn('slow'); //mostra campos exclusivos do apartamento
-   //             $("#lblCpfCnpj").html("CNPJ");
-   //             $("#txtCpfCnpj").attr("placeholder", "Informe o CNPJ");
+                //             $("#lblCpfCnpj").html("CNPJ");
+                //             $("#txtCpfCnpj").attr("placeholder", "Informe o CNPJ");
             }
         })
-        
+
         $("#map").hide(); //oculta campos do mapa
         $("#txtCEP").mask("99.999-999"); //mascara
         $("#divCEP").hide(); //oculta campos do DIVCEP
@@ -150,11 +150,7 @@
                 },
                 txtNumero: {
                     required: true
-                },
-                txtComplemento: {
-                    required: true
                 }
-
             },
             highlight: function(element) {
                 $(element).closest('.form-group').addClass('has-error');
@@ -172,26 +168,32 @@
                 }
             },
             submitHandler: function() {
-                $.ajax({
-                    url: "index.php",
-                    dataType: "json",
-                    type: "POST",
-                    data: $('#form').serialize(),
-                    beforeSend: function() {
-                        $('.alert').html("...processando...").attr('class', 'alert alert-warning');
-                        $('button[type=submit]').attr('disabled', 'disabled');
-                    },
-                    success: function(resposta) {
-                        $('button[type=submit]').removeAttr('disabled');
-                        if (resposta.resultado == 1) {
-                            $('.alert').html("Imovel Cadastrado Com Sucesso").attr('class', 'alert alert-success');
-                        } else {
-                            $('.alert').html("Erro ao cadastrar").attr('class', 'alert alert-danger');
+                if ($("#hdnCEP").val() != "") {
+                    $.ajax({
+                        url: "index.php",
+                        dataType: "json",
+                        type: "POST",
+                        data: $('#form').serialize(),
+                        beforeSend: function() {
+                            $('.alert').html("...processando...").attr('class', 'alert alert-warning');
+                            $('button[type=submit]').attr('disabled', 'disabled');
+                        },
+                        success: function(resposta) {
+                            $('button[type=submit]').removeAttr('disabled');
+                            if (resposta.resultado == 1) {
+                                $('.alert').html("Imovel Cadastrado Com Sucesso").attr('class', 'alert alert-success');
+                            } else {
+                                $('.alert').html("Erro ao cadastrar").attr('class', 'alert alert-danger');
+                            }
                         }
-                    }
-                })
-                return false;
-
+                    })
+                    return false;
+                } else {
+                    $("#msgCEP").remove();
+                    var msgCEP = $("<div>", {id: "msgCEP"});
+                    msgCEP.attr('class', 'alert alert-danger').html("Primeiro faça a busca do CEP").append('<button data-dismiss="alert" class="close" type="button">×</button>');
+                    $("#alertCEP").append(msgCEP);
+                }
             }
         });
     })
@@ -210,6 +212,7 @@
         <input type="hidden" id="hdnId" name="hdnId" />
         <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Imovel"  />
         <input type="hidden" id="hdnAcao" name="hdnAcao" value="cadastrar" />
+        <input type="hidden" id="hdnCEP" name="hdnCEP" />
         <!-- Primeira Linha -->        
         <div class="row">
             <div class="col-lg-6">
@@ -217,7 +220,7 @@
                     <div class="panel-heading">Informações Básicas </div>
                     <div class="form-group">
                         <label class="col-lg-3 control-label" for="sltFinalidade">Finalidade</label>
-                        <div class="col-lg-9">
+                        <div class="col-lg-8">
                             <select class="form-control" id="sltFinalidade" name="sltFinalidade">
                                 <option value="">Informe a Finalidade</option>
                                 <option value="venda">Venda</option>
@@ -227,7 +230,7 @@
 
                     <div class="form-group">
                         <label  class="col-lg-3 control-label" for="sltTipo">Tipo de Imóvel</label>
-                        <div class="col-lg-9">
+                        <div class="col-lg-8">
                             <select class="form-control" id="sltTipo" name="sltTipo">
                                 <option value="">Informe o Tipo</option>
                                 <option value="apartamento">Apartamento</option>
@@ -239,7 +242,7 @@
 
                     <div class="form-group">
                         <label  class="col-lg-3 control-label" for="sltQuarto">Quarto</label>
-                        <div class="col-lg-9">
+                        <div class="col-lg-8">
                             <select class="form-control" id="sltQuarto" name="sltQuarto">
                                 <option value="">Informe a Quantidade de Quarto</option>
                                 <option value="01">01</option>
@@ -253,7 +256,7 @@
 
                     <div class="form-group">
                         <label  class="col-lg-3 control-label" for="sltGaragem">Garagem</label>
-                        <div class="col-lg-9">
+                        <div class="col-lg-8">
                             <select class="form-control" id="sltGaragem" name="sltGaragem">
                                 <option value="">Informe a Quantidade de Garagem</option>
                                 <option value="nenhuma">Nenhuma</option>
@@ -326,72 +329,72 @@
                         <div class="col-lg-9">
                             <textarea maxlength="100" id="txtDescricao" name="txtDescricao" class="form-control" placeholder="Informe uma Descrição do Imóvel"> </textarea><br />
                         </div>
-                        
+
                         <div id="divApartamento">
-                        
-                         <label class="col-lg-3 control-label" for="sltAndar">Andar</label>
+
+                            <label class="col-lg-3 control-label" for="sltAndar">Andar</label>
                             <div class="col-lg-9">
                                 <select class="form-control" id="sltAndar" name="sltAndar">
-                                <option value="">Informe o Andar</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="7">7</option>
-                                <option value="8">8</option>
-                                <option value="9">9</option>
-                                <option value="10">10</option>
-                                <option value="11">11</option>
-                                <option value="12">12</option>
-                                <option value="13">13</option>
-                                <option value="14">14</option>
-                                <option value="15">15</option>
-                                <option value="16">16</option>
-                                <option value="17">17</option>
-                                <option value="18">18</option>
-                                <option value="19">19</option>
-                                <option value="20">20</option>
-                                <option value="21">21</option>
-                                <option value="22">22</option>
-                                <option value="23">23</option>
-                                <option value="24">24</option>
-                                <option value="25">25</option>
-                                <option value="26">26</option>
-                                <option value="27">27</option>
-                                <option value="28">28</option>
-                                <option value="29">29</option>
-                                <option value="30">30</option>
-                                <option value="31">31</option>
-                                <option value="32">32</option>
-                                <option value="33">33</option>
-                                <option value="34">34</option>
-                                <option value="35">35</option>                   
-                            </select><br />
-                         </div>    
-                            
-                         <div class="checkbox">
-                            <label class="col-lg-3 control-label" for="chkCobertura"></label>
-                                <input type="checkbox" id="chkCobertura" name="chkCobertura"> Está na Cobertura                            
-                          </div> 
-                         
-                         <div class="checkbox">
-                            <label class="col-lg-3 control-label" for="chkSacada"></label>
-                                <input type="checkbox" id="chkSacada" name="chkSacada"> Possui Sacada                            
-                          </div>
-                         
-                         <br />  
+                                    <option value="">Informe o Andar</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                    <option value="18">18</option>
+                                    <option value="19">19</option>
+                                    <option value="20">20</option>
+                                    <option value="21">21</option>
+                                    <option value="22">22</option>
+                                    <option value="23">23</option>
+                                    <option value="24">24</option>
+                                    <option value="25">25</option>
+                                    <option value="26">26</option>
+                                    <option value="27">27</option>
+                                    <option value="28">28</option>
+                                    <option value="29">29</option>
+                                    <option value="30">30</option>
+                                    <option value="31">31</option>
+                                    <option value="32">32</option>
+                                    <option value="33">33</option>
+                                    <option value="34">34</option>
+                                    <option value="35">35</option>                   
+                                </select><br />
+                            </div>    
 
-                         <label class="col-lg-3 control-label" for="txtArea">Valor do Condomínio</label>
+                            <div class="checkbox">
+                                <label class="col-lg-3 control-label" for="chkCobertura"></label>
+                                <input type="checkbox" id="chkCobertura" name="chkCobertura"> Está na Cobertura                            
+                            </div> 
+
+                            <div class="checkbox">
+                                <label class="col-lg-3 control-label" for="chkSacada"></label>
+                                <input type="checkbox" id="chkSacada" name="chkSacada"> Possui Sacada                            
+                            </div>
+
+                            <br />  
+
+                            <label class="col-lg-3 control-label" for="txtArea">Valor do Condomínio</label>
                             <div class="col-lg-9">
                                 <input type="text" id="txtCondominio" name="txtCondominio" class="form-control" placeholder="Informe o Valor do Condominio">
-                         </div> 
+                            </div> 
 
                         </div>    
-                        
+
                     </div>
-           
+
                 </div>
             </div>
         </div>
@@ -464,20 +467,6 @@
                 </div>
             </div>
         </div>
-        <!-- Terceira Linha -->        
-        <div class="row">
-            <div class="col-lg-12">
-                <div id="forms" class="panel panel-default">
-                    <div class="panel-heading"> Fotos do Imóvel </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <span class="label label-danger"> aguarde... em construção... </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div class="row">
             <div class="col-lg-12">
                 <div class="form-group">

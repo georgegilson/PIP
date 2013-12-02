@@ -1,7 +1,8 @@
 <?php
 
 class Anuncio {
-     
+    
+    private $id;
     private $valor;
     private $tituloanuncio; 
     private $descricaoanuncio; 
@@ -9,11 +10,16 @@ class Anuncio {
     private $status;
     //private $destaque;
     private $valorvisivel;
-    private $vigencia;
+//  private $vigencia;
     private $datahoracadastro;
     private $datahoraalteracao;
-    private $idusuario;
+//  private $idusuario;
     private $publicarmapa;
+    private $idusuarioplano;
+    
+    public function getId() {
+        return $this->id;
+    }
     
     public function getPublicarmapa() {
         return $this->publicarmapa;
@@ -27,14 +33,22 @@ class Anuncio {
         return $this->valorvisivel;
     }
 
-    public function getVigencia() {
+  /*  public function getVigencia() {
         return $this->vigencia;
     }
 
     public function getIdusuario() {
         return $this->idusuario;
+    }*/
+    
+    public function getIdusuarioplano() {
+        return $this->idusuarioplano;
     }
-
+    
+    public function setId($id) {
+        $this->id = $id;
+    }
+    
     public function setDestaque($destaque) {
         $this->destaque = $destaque;
     }
@@ -43,13 +57,13 @@ class Anuncio {
         $this->valorvisivel = $valorvisivel;
     }
 
-    public function setVigencia($vigencia) {
+   /* public function setVigencia($vigencia) {
         $this->vigencia = $vigencia;
     }
 
     public function setIdusuario($idusuario) {
         $this->idusuario = $idusuario;
-    }
+    }*/
 
         public function getValor() {
         return $this->valor;
@@ -110,7 +124,11 @@ class Anuncio {
     public function setPublicarmapa($publicarmapa) {
         $this->publicarmapa = $publicarmapa;
     }
-
+    
+    public function setIdusuarioplano($idusuarioplano) {
+        $this->idusuarioplano = $idusuarioplano;
+    }
+    
     function cadastrar($parametros) {
 
         $anuncio = new Anuncio();

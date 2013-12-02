@@ -46,16 +46,16 @@
 //        })(jQuery);
         jQuery.validator.addMethod("locate", function(value, element, param) {
             $("#txtLogin").blur(function() {
-            
-        
-            if (value == "") {
-                return true;
-            }
-            else {
-                buscarLogin();
-                return ($('#hdnLogin').val() == "0") ? true : false;
 
-            }
+
+                if (value == "") {
+                    return true;
+                }
+                else {
+                    buscarLogin();
+                    return ($('#hdnLogin').val() == "0") ? true : false;
+
+                }
             });
         }, jQuery.validator.format("Login já utilizado!"));
 
@@ -226,8 +226,8 @@
                 },
                 txtLogin: {
                     required: true,
-                    minlength: 2,
-                    locate: true
+                    minlength: 2
+                            //locate: true
                 },
                 txtResponsavel: {
                     required: true
@@ -308,31 +308,38 @@
                 }
             },
             submitHandler: function() {
-                $.ajax({
-                    url: "index.php",
-                    dataType: "json",
-                    type: "POST",
-                    data: $('#form').serialize(),
-                    beforeSend: function() {
-                        $('.alert').html("...processando...").attr('class', 'alert alert-warning');
-                        $('button[type=submit]').attr('disabled', 'disabled');
-                    },
-                    success: function(resposta) {
-                        $('button[type=submit]').removeAttr('disabled');
-                        if (resposta.resultado == 1) {
-                            $('.alert').html("Usuário Cadastrado Com Sucesso").attr('class', 'alert alert-success');
-                            $("#form :input").each(function() {
-                                $(this).val('');
-                            });
-                            $('#txtSenha').pwstrength("destroy");
-                            $('#txtSenha').pwstrength("init");
-                            $("#dadosTelefone").empty();
-                        } else {
-                            $('.alert').html("Erro ao cadastrar").attr('class', 'alert alert-danger');
+                if ($("#hdnCEP").val() != "") {
+                    $.ajax({
+                        url: "index.php",
+                        dataType: "json",
+                        type: "POST",
+                        data: $('#form').serialize(),
+                        beforeSend: function() {
+                            $('.alert').html("...processando...").attr('class', 'alert alert-warning');
+                            $('button[type=submit]').attr('disabled', 'disabled');
+                        },
+                        success: function(resposta) {
+                            $('button[type=submit]').removeAttr('disabled');
+                            if (resposta.resultado == 1) {
+                                $('.alert').html("Usuário Cadastrado Com Sucesso").attr('class', 'alert alert-success');
+                                $("#form :input").each(function() {
+                                    $(this).val('');
+                                });
+                                $('#txtSenha').pwstrength("destroy");
+                                $('#txtSenha').pwstrength("init");
+                                $("#dadosTelefone").empty();
+                            } else {
+                                $('.alert').html("Erro ao cadastrar").attr('class', 'alert alert-danger');
+                            }
                         }
-                    }
-                })
-                return false;
+                    })
+                    return false;
+                } else {
+                    $("#msgCEP").remove();
+                    var msgCEP = $("<div>", {id: "msgCEP"});
+                    msgCEP.attr('class', 'alert alert-danger').html("Primeiro faça a busca do CEP").append('<button data-dismiss="alert" class="close" type="button">×</button>');
+                    $("#alertCEP").append(msgCEP);
+                }
             }
         });
     })
@@ -351,6 +358,7 @@
         <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Usuario"  />
         <input type="hidden" id="hdnAcao" name="hdnAcao" value="cadastrar" />
         <input type="hidden" id="hdnLogin" name="hdnLogin" value=""  />
+        <input type="hidden" id="hdnCEP" name="hdnCEP" />
 <!--        <input type="hidden" id="hdnTipoTelefone[]" name="hdnTipoTelefone[]" value=""  />-->
         <!-- Primeira Linha -->    
         <div class="row">
@@ -518,10 +526,10 @@
                         </div>
                         <label class="col-lg-1 control-label" for="txtTel">Numero</label>
                         <div class="col-lg-2">
-                            <input type="text" class="form-control" id="txtTel" name="txtTel" placeholder="Informe o Numero do Telefone">
+                            <input type="text" class="form-control" id="txtTel" name="txtTel" placeholder="Informe o Telefone">
                         </div>
                         <div class="col-lg-2">
-                            <button id="btnTelefone" type="button" class="btn btn-info">Adcionar</button>
+                            <button id="btnTelefone" type="button" class="btn btn-info">Adicionar</button>
                         </div>
                     </div>
                     <!--                </div>-->

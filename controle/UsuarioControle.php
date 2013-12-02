@@ -19,7 +19,7 @@ class UsuarioControle {
     function cadastrar($parametros) {
         //Endereço
         $genericoDAO = new GenericoDAO();
-        $genericoDAO->iniciarTransação();
+        $genericoDAO->iniciarTransacao();
         $endereco = new Endereco();
         $entidadeEndereco = $endereco->cadastrar($parametros);
         $idEndereco = $genericoDAO->cadastrar($entidadeEndereco);
@@ -51,11 +51,11 @@ class UsuarioControle {
 
         if ($idEndereco && $idUsuario && $idEmpresa && $resultadoTelefone) {
             $genericoDAO->commit();
-            $genericoDAO->fecharConexão();
+            $genericoDAO->fecharConexao();
             echo json_encode(array("resultado" => 1));
         } else {
             $genericoDAO->rollback();
-            $genericoDAO->fecharConexão();
+            $genericoDAO->fecharConexao();
             echo json_encode(array("resultado" => 0));
         }
     }
