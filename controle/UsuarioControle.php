@@ -64,7 +64,7 @@ class UsuarioControle {
     //modelo
         $usuario = new Usuario();
         $genericoDAO = new GenericoDAO();
-        $selecionarUsuario = $genericoDAO->selecionar2($usuario, $parametro['id']);
+        $selecionarUsuario = $genericoDAO->consultar($usuario, $parametro['id'], 'id', true);
         //visao
         $visao = new Template();
         $visao->setItem($selecionarUsuario);
@@ -74,7 +74,7 @@ class UsuarioControle {
     function buscarLogin($parametros){
         $usuario = new Usuario();
         $genericoDAO = new GenericoDAO();
-        $selecionarUsuario = $genericoDAO->selecionar3($usuario, $parametros['login']);
+        $selecionarUsuario = $genericoDAO->consultar($usuario, false, $parametros['login'], "login");
                         
         if (count($selecionarUsuario) > 0)
             echo json_encode(array("resultado" => 1));
