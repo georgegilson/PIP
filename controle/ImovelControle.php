@@ -44,7 +44,7 @@ class ImovelControle {
         //modelo
         $imovel = new Imovel();
         $genericoDAO = new GenericoDAO();
-        $listarImovel = $genericoDAO->listar($imovel);
+        $listarImovel = $genericoDAO->consultar($imovel, true);
         //visao
         $visao = new Template();
         $visao->setItem($listarImovel);
@@ -55,7 +55,7 @@ class ImovelControle {
         //modelo
         $imovel = new Imovel();
         $genericoDAO = new GenericoDAO();
-        $selecionarImovel = $genericoDAO->selecionar($imovel, $parametro['id']);
+        $selecionarImovel = $genericoDAO->consultar($imovel, true, $parametro['id'], "id");
         //visao
         $visao = new Template();
         $visao->setItem($selecionarImovel);
@@ -66,7 +66,7 @@ class ImovelControle {
         //modelo
         $imovel = new Imovel();
         $genericoDAO = new GenericoDAO();
-        $selecionarImovel = $genericoDAO->selecionar($imovel, $parametro['id']);
+        $selecionarImovel = $genericoDAO->selecionar($imovel, true ,$parametro['id'], "id");
         //visao
         $visao = new Template();
         $visao->setItem($selecionarImovel);
