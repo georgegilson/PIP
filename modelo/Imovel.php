@@ -358,8 +358,6 @@ class Imovel {
         $imovel->setCondominio("300");
 
         return $imovel;
-
-        return $imovel;
     }
 
 }
