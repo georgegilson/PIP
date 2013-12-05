@@ -205,6 +205,7 @@
 
         //######### VALIDACAO DO FORMULARIO ########
         $('#form').validate({
+        onkeyup: false,
             rules: {
                 sltTipoUsuario: {
                     required: true
@@ -226,7 +227,18 @@
                 },
                 txtLogin: {
                     required: true,
-                    minlength: 2
+                    minlength: 2,
+                    remote:
+                    {
+                        url: "index.php",
+                dataType: "json",
+                type: "POST",
+                data: {
+                    login: $('#txtLogin').val(),
+                    hdnEntidade: "Usuario",
+                    hdnAcao: "buscarLogin"
+                }
+                    }
                             //locate: true
                 },
                 txtResponsavel: {
@@ -269,7 +281,8 @@
                 },
                 txtLogin: {
                     required: "Campo obrigatório",
-                    minlength: "Login deve possuir no mínimo 2 caracteres"
+                    minlength: "Login deve possuir no mínimo 2 caracteres",
+                    remote: "Login já utilizado"
                 },
                 txtSenha: {
                     required: "Campo obrigatório",
