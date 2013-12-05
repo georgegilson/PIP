@@ -61,22 +61,25 @@ class GenericoDAO {
             return false;
         }
     }
-    
-    function consultar($entidade, $estrangeiro, $valor = NULL, $parametro = NULL) {
-        if (is_null($parametro)) {
-            $reflect = new ReflectionClass($entidade);
-            $classe = $reflect->getName();
-            $sql = "SELECT * FROM " . strtolower($classe);
+
+    function consultar($entidade, $estrangeiro, $parametros = NULL) {
+        $reflect = new ReflectionClass($entidade);
+        $classe = $reflect->getName();
+        $sql = "SELECT * FROM " . strtolower($classe);
+        if (!(is_null($parametros))) {
+            foreach ($parametros as $chave => $valor) {
+                $criterios[] = $chave . "=:" . $chave;
+            }
+            $sql = $sql . " WHERE " . implode(" and ", $criterios);
             $statement = $this->conexao->prepare($sql);
-            $statement->execute();
-        } else {
-            $reflect = new ReflectionClass($entidade);
-            $classe = $reflect->getName();
-            $sql = "SELECT * FROM " . strtolower($classe) . " WHERE " . $parametro . "=:valor";
+            foreach ($parametros as $chave => $valor) {
+                $parametro = ":" . $chave;
+                $statement->bindValue($parametro, $valor);
+            }          
+        }else{
             $statement = $this->conexao->prepare($sql);
-            $statement->bindParam(':valor', $valor);
-            $statement->execute();
         }
+        $statement->execute();
         $resultado = $statement->fetchAll(PDO::FETCH_CLASS, $classe);
         if ($estrangeiro) {
             $blindado = $reflect->getProperties(ReflectionProperty::IS_PROTECTED);
