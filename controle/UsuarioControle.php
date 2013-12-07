@@ -74,7 +74,8 @@ class UsuarioControle {
     function buscarLogin($parametros){
         $usuario = new Usuario();
         $genericoDAO = new GenericoDAO();
-        $selecionarUsuario = $genericoDAO->consultar($usuario, false, $parametros['txtLogin'], "login");
+        $dados["login"] = $parametros['txtLogin'];  
+        $selecionarUsuario = $genericoDAO->consultar($usuario, false, $dados);
                         
         if (count($selecionarUsuario) > 0)
             echo "false";
