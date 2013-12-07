@@ -6,59 +6,6 @@
 
     $("#txtTel").val($("#dadosTelefone").length);
     $(document).ready(function() {
-
-        function buscarLogin() {
-            $.ajax({
-                url: "index.php",
-                dataType: "json",
-                type: "POST",
-                data: {
-                    login: $('#txtLogin').val(),
-                    hdnEntidade: "Usuario",
-                    hdnAcao: "buscarLogin"
-                },
-                beforeSend: function() {
-                    $('#txtLogin').attr('disabled', 'disabled');
-                },
-                success: function(resposta) {
-
-                    if (resposta.resultado == 0) {
-                        $('#hdnLogin').val('0');
-
-                    } else {
-                        $('#hdnLogin').val('1');
-                    }
-                    $('#txtLogin').removeAttr('disabled');
-                }
-            })
-        }
-
-//        (function($) {
-//            $.validator.addMethod("locate", function(value, element, param) {
-//                if (value == "")
-//                    return true;
-//                else {
-//                    buscarLogin();
-//                    return ($('#hdnLogin').val() == "0") ? 'Ok' : 'Login já utilizado!';
-//
-//                }
-//            });
-//        })(jQuery);
-        jQuery.validator.addMethod("locate", function(value, element, param) {
-            $("#txtLogin").blur(function() {
-
-
-                if (value == "") {
-                    return true;
-                }
-                else {
-                    buscarLogin();
-                    return ($('#hdnLogin').val() == "0") ? true : false;
-
-                }
-            });
-        }, jQuery.validator.format("Login já utilizado!"));
-
         $("#txtCEP").mask("99.999-999"); //mascara
         $("#divCEP").hide(); //oculta campos do DIVCEP
         $("#btnCEP").click(function() {
@@ -132,12 +79,14 @@
                 $("#divEmpresa").fadeOut('slow'); //oculta campos do DIVEMPRESA 
                 $("#divCnpj").hide();
                 $("#divCpf").show();
+                
             } else if ($(this).val() == "juridica") {
                 $("#divEmpresa").fadeIn('slow'); //mostra campos do DIVEMPRESA
                 $("#divCnpj").show();
                 $("#divCpf").hide();
                 $("#lblNome").html("Nome da Empresa");
                 $("#txtNome").attr("placeholder", "Informe o nome da empresa");
+                
             } else {
                 $("#divEmpresa").fadeOut('slow'); //mostra campos do DIVEMPRESA
                 $("#divCnpj").fadeOut('slow');
@@ -205,7 +154,7 @@
 
         //######### VALIDACAO DO FORMULARIO ########
         $('#form').validate({
-        onkeyup: false,
+            onkeyup: false,
             rules: {
                 sltTipoUsuario: {
                     required: true
@@ -229,17 +178,16 @@
                     required: true,
                     minlength: 2,
                     remote:
-                    {
-                        url: "index.php",
-                dataType: "json",
-                type: "POST",
-                data: {
-                    login: $('#txtLogin').val(),
-                    hdnEntidade: "Usuario",
-                    hdnAcao: "buscarLogin"
-                }
-                    }
-                            //locate: true
+                            {
+                                url: "index.php",
+                                dataType: "json",
+                                type: "POST",
+                                data: {
+                                    hdnEntidade: "Usuario",
+                                    hdnAcao: "buscarLogin"
+                                }
+                            }
+                    //locate: true
                 },
                 txtResponsavel: {
                     required: true
@@ -334,13 +282,14 @@
                         success: function(resposta) {
                             $('button[type=submit]').removeAttr('disabled');
                             if (resposta.resultado == 1) {
-                                $('.alert').html("Usuário Cadastrado Com Sucesso").attr('class', 'alert alert-success');
-                                $("#form :input").each(function() {
-                                    $(this).val('');
-                                });
-                                $('#txtSenha').pwstrength("destroy");
-                                $('#txtSenha').pwstrength("init");
-                                $("#dadosTelefone").empty();
+                                $('.alert').html(
+                                        "<p align=center> <h4>A sua conta de usuário foi criada com sucesso!\n\
+                    <br>Confira o seu email, " + $("#txtEmail").val() +", e confirme seu cadastro\n\
+                    <br>Caso não tenha recebido a confirmação de cadastro, verifique também a sua caixa de SPAM\n\
+                    <br>Lembramos que a ativação de sua conta se dá mediante sua confirmação.</center>").attr('class', 'alert alert-success');
+                                $('#divlinha1').fadeOut('slow');
+                                $('#divlinha2').fadeOut('slow');
+                                $('#divlinha3').fadeOut('slow'); 
                             } else {
                                 $('.alert').html("Erro ao cadastrar").attr('class', 'alert alert-danger');
                             }
@@ -370,12 +319,13 @@
     <form id="form" class="form-horizontal">
         <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Usuario"  />
         <input type="hidden" id="hdnAcao" name="hdnAcao" value="cadastrar" />
-        <input type="hidden" id="hdnLogin" name="hdnLogin" value=""  />
         <input type="hidden" id="hdnCEP" name="hdnCEP" />
 <!--        <input type="hidden" id="hdnTipoTelefone[]" name="hdnTipoTelefone[]" value=""  />-->
         <!-- Primeira Linha -->    
-        <div class="row">
-            <div class="col-lg-6">
+        <div class="row" id="divlinha1">
+            
+<!--            <div id="alertsucesso" class="col-lg-12"></div>-->
+            <div class="col-lg-6" id="divinformacoesbasicas">
                 <div id="forms" class="panel panel-default">
                     <div class="panel-heading">Informações Básicas </div>
                     <br>
@@ -453,7 +403,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-6" id=divendereco">
                 <div id="forms" class="panel panel-default">
                     <div class="panel-heading"> Endereço </div>
                     <br>
@@ -512,8 +462,8 @@
 
         </div>
         <!-- Segunda Linha -->    
-        <div class="row">
-            <div class="col-lg-12">
+        <div class="row" id="divlinha2">
+            <div class="col-lg-12" id="divtelefone">
                 <div id="forms" class="panel panel-default">
                     <div class="panel-heading"> Telefones </div>
                     <br>
@@ -567,8 +517,8 @@
             </div>
         </div>
         <!-- Terceira Linha -->    
-        <div class="row">
-            <div class="col-lg-12">
+        <div class="row" id="divlinha3">
+            <div class="col-lg-12" id="divbotoes">
                 <div class="form-group">
                     <div class="col-lg-offset-2 col-lg-10">
                         <button type="submit" class="btn btn-primary">Cadastrar</button>
