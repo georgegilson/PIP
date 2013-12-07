@@ -116,14 +116,14 @@ class Usuario {
         $usuario->setTipousuario($parametros['sltTipoUsuario']);
         $usuario->setNome($parametros['txtNome']);
         $usuario->setLogin($parametros['txtLogin']);
-        $td = mcrypt_module_open('rijndael-256', '', 'ofb', '');       
-        $iv = mcrypt_create_iv(mcrypt_enc_get_iv_size($td), MCRYPT_DEV_RANDOM);
-        $ks = mcrypt_enc_get_key_size($td);       
-        $key = substr(md5('very secret key'), 0, $ks);     
-        mcrypt_generic_init($td, $key, $iv);
-        $encrypted = mcrypt_generic($td, $parametros['txtSenha']);    
-        mcrypt_generic_deinit($td);
-        $usuario->setSenha($encrypted);
+//        $td = mcrypt_module_open('rijndael-256', '', 'ofb', '');       
+//        $iv = mcrypt_create_iv(mcrypt_enc_get_iv_size($td), MCRYPT_DEV_RANDOM);
+//        $ks = mcrypt_enc_get_key_size($td);       
+//        $key = substr(md5('very secret key'), 0, $ks);     
+//        mcrypt_generic_init($td, $key, $iv);
+//        $encrypted = mcrypt_generic($td, $parametros['txtSenha']);    
+//        mcrypt_generic_deinit($td);
+        $usuario->setSenha($parametros['txtSenha']);
         if ($usuario->getTipousuario() == "fisica") {
             $usuario->setCpfcnpj($parametros['txtCpf']);
         } else {
