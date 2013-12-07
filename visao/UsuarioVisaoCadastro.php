@@ -286,7 +286,7 @@
                                         "<p align=center> <h4>A sua conta de usuário foi criada com sucesso!\n\
                     <br>Confira o seu email, " + $("#txtEmail").val() +", e confirme seu cadastro\n\
                     <br>Caso não tenha recebido a confirmação de cadastro, verifique também a sua caixa de SPAM\n\
-                    <br>Lembramos que a ativação de sua conta se dá mediante sua confirmação.</center>").attr('class', 'alert alert-success');
+                    <br>Lembramos que a ativação de sua conta se dá mediante sua confirmação.</h4> </center>").attr('class', 'alert alert-success');
                                 $('#divlinha1').fadeOut('slow');
                                 $('#divlinha2').fadeOut('slow');
                                 $('#divlinha3').fadeOut('slow'); 
