@@ -4,7 +4,7 @@
 <script src="assets/js/pwstrength.js"></script>
 <script>
 
-    $("#txtTel").val($("#dadosTelefone").length);
+//Inicio CEP
     $(document).ready(function() {
         $("#txtCEP").mask("99.999-999"); //mascara
         $("#divCEP").hide(); //oculta campos do DIVCEP
@@ -66,9 +66,10 @@
 
         //######### FIM DO CEP ########
 
-        //######### CAMPOS DO FORMULARIO ########
+//       Inicio Informações Básicas
 
         $("#divEmpresa").hide(); //oculta campos do DIVEMPRESA 
+        $("#divnome").hide();
         $("#divCpf").hide();
         $("#divCnpj").hide();
         $("#txtCpf").mask("999.999.999-99");
@@ -76,11 +77,13 @@
         $("#txtCpfResponsavel").mask("999.999.999-99");
         $("#sltTipoUsuario").change(function() {
             if ($(this).val() == "fisica") {
+                $("#divnome").fadeIn('slow');
                 $("#divEmpresa").fadeOut('slow'); //oculta campos do DIVEMPRESA 
                 $("#divCnpj").hide();
                 $("#divCpf").show();
-                
+                $("#lblNome").html("Nome da Completo");
             } else if ($(this).val() == "juridica") {
+                $("#divnome").fadeIn('slow');
                 $("#divEmpresa").fadeIn('slow'); //mostra campos do DIVEMPRESA
                 $("#divCnpj").show();
                 $("#divCpf").hide();
@@ -88,6 +91,7 @@
                 $("#txtNome").attr("placeholder", "Informe o nome da empresa");
                 
             } else {
+                $("#divnome").fadeOut('slow');
                 $("#divEmpresa").fadeOut('slow'); //mostra campos do DIVEMPRESA
                 $("#divCnpj").fadeOut('slow');
                 $("#divCpf").fadeOut('slow');
@@ -112,6 +116,10 @@
             }
         };
         $('#txtSenha').pwstrength(options);
+        
+//        Fim Informações Básicas
+        
+//        Inicio Telefone
         $("#btnTelefone").click(function() {
             $("#txtTel").rules("add", {
                 required: true,
@@ -150,7 +158,8 @@
         });
 
         $("#txtTel").mask("(99)9999-9999");
-
+        
+//        Fim do Telefone
 
         //######### VALIDACAO DO FORMULARIO ########
         $('#form').validate({
@@ -339,7 +348,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="divnome">
                         <label class="col-lg-3 control-label" for="txtNome" id="lblNome">Nome Completo</label>
                         <div class="col-lg-8">
                             <input type="text" id="txtNome" name="txtNome" class="form-control" placeholder="Informe o seu nome">
