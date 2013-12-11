@@ -64,11 +64,26 @@ class UsuarioControle {
     //modelo
         $usuario = new Usuario();
         $genericoDAO = new GenericoDAO();
-        $selecionarUsuario = $genericoDAO->consultar($usuario, $parametro['id'], 'id', true);
+        $dados["id"] = 27;
+        $selecionarUsuario = $genericoDAO->consultar($usuario, true, $dados);
+//        var_dump($selecionarUsuario);
+//        die();
         //visao
         $visao = new Template();
         $visao->setItem($selecionarUsuario);
-        $visao->exibir('UsuarioVisaoEdicao.php');
+        $visao->exibir('UsuarioVisaoEdicao2.php');
+    }
+    
+    function alterar($parametros) {
+        $usuario = new Usuario();
+        $entidadeUsuario = $usuario->editar($parametros);
+        $genericoDAO = new GenericoDAO();
+        $resultado = $genericoDAO->editar($entidadeUsuario);
+        //visao
+        if ($resultado)
+            echo json_encode(array("resultado" => 1));
+        else
+            echo json_encode(array("resultado" => 0));
     }
     
     function buscarLogin($parametros){
