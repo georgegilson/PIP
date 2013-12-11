@@ -88,6 +88,24 @@ class Endereco {
         return $endereco;
     }
     
+    function editar($parametros){
+        
+        if(!isset($_SESSION)){ 
+        session_start(); 
+        }
+        
+        $endereco = new Endereco();
+        $endereco->setId($_SESSION['idendereco']);
+        $endereco->setCep($parametros['txtCEP']);
+        $endereco->setEstado($parametros['txtEstado']);
+        $endereco->setCidade($parametros['txtCidade']);
+        $endereco->setBairro($parametros['txtBairro']);
+        $endereco->setLogradouro($parametros['txtLogradouro']);
+        $endereco->setNumero($parametros['txtNumero']);
+        $endereco->setComplemento($parametros['txtComplemento']);
+        return $endereco;
+    }
+    
     public function enderecoMapa(){
         return 'Brazil, ' . $this->getEstado() . ', ' . $this->getCidade() . ', ' . $this->getBairro() . ', ' . $this->getLogradouro();        
     }
