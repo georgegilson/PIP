@@ -136,20 +136,34 @@ class GenericoDAO {
 
         $sql = "UPDATE " . strtolower($classe) . " SET ";
         foreach ($atributos as $chave => $valor) {
-            $sql = $sql . strtolower($valor->getName()) . " = :" . strtolower($valor->getName());
-            if ($chave != (count($atributos) - 1))
-                $sql = $sql . ", ";
+            $acao = "get" . ucfirst($valor->getName());
+            $resultado = $entidade->$acao();
+            if(is_null($resultado) || $acao == "getId"){
+                continue;
+            }else{
+                $criterios[] = strtolower($valor->getName()) . " = :" . strtolower($valor->getName());
+//            $sql = $sql . strtolower($valor->getName()) . " = :" . strtolower($valor->getName());
+//            if ($chave != (count($atributos) - 1))
+//                $sql = $sql . ", ";
+//            }
         }
-        $sql = $sql . " WHERE id = :id";
+        }
+        $sql = $sql . implode(", ", $criterios) . " WHERE id = :id";
+        //$sql = $sql . " WHERE id = :id";
 
         $statement = $this->conexao->prepare($sql);
         foreach ($atributos as $valor) {
             $acao = "get" . ucfirst($valor->getName());
             $resultado = $entidade->$acao();
+            if(is_null($resultado)){
+                continue;
+            }else{
             $parametro = ":" . strtolower($valor->getName());
             $statement->bindValue($parametro, $resultado);
+            }
         }
-
+//        print_r($sql);
+//        die();
         if ($statement->execute()) {
             return true;
         } else
