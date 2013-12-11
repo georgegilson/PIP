@@ -54,8 +54,12 @@ class ImovelControle {
     function selecionar($parametro) {
         //modelo
         $imovel = new Imovel();
+        
+        $parametros["id"] = $parametro["id"];
+        
         $genericoDAO = new GenericoDAO();
-        $selecionarImovel = $genericoDAO->consultar($imovel, true, $parametro['id'], "id");
+        $selecionarImovel = $genericoDAO->consultar($imovel, true, $parametros);
+      
         //visao
         $visao = new Template();
         $visao->setItem($selecionarImovel);
@@ -73,18 +77,34 @@ class ImovelControle {
         $visao->exibir('AnuncioVisaoPublicar.php');
     }
 
-    function editar($parametros) {
+    function editar($parametro) {
         //modelo
-        $imovel = new Imovel();
-        $entidadeImovel = $imovel->editar($parametros);
         $genericoDAO = new GenericoDAO();
-        $resultado = $genericoDAO->editar($entidadeImovel);
-        //visao
-        if ($resultado)
+        $genericoDAO->iniciarTransacao();
+        $imovel = new Imovel();
+        
+        session_start();
+        
+        $parametros["id"] = $_SESSION['id'];
+        
+        $entidadeImovel = $imovel->editar($parametro);
+        $editarImovel = $genericoDAO->editar($entidadeImovel);
+        
+        $endereco = new Endereco();
+        $parametros["idendereco"] = $_SESSION['idendereco'];
+        $entidadeEndereco = $endereco->editar($parametro);
+        $editarEndereco = $genericoDAO->editar($entidadeEndereco);
+        
+        if ($editarImovel && $editarEndereco) {
+            $genericoDAO->commit();
+            $genericoDAO->fecharConexao();
+            session_destroy();
             echo json_encode(array("resultado" => 1));
-        else
+        } else {
+            $genericoDAO->rollback();
+            $genericoDAO->fecharConexao();
             echo json_encode(array("resultado" => 0));
+        }
     }
-    
 
 }
