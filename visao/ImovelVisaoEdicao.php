@@ -250,19 +250,11 @@
     <!-- form -->
     <form id="form" class="form-horizontal">
         
-        <?php 
-                
-                session_start(); 
-                
-                $_SESSION['id'] = $imovel->getId();
-                $_SESSION['idendereco'] = $imovel->getIdEndereco();
-                $_SESSION['datahoracadastro'] = $imovel->getDatahoracadastro();
-                
-        ?>
+        
         
         <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Imovel"  />
         <input type="hidden" id="hdnAcao" name="hdnAcao" value="editar" />
-        <input type="hidden" id="hdnCEP" name="hdnCEP" />
+        <input type="hidden" id="hdnCEP" name="hdnCEP" value="<?php echo $imovel->getEndereco()->getCep()?>"/>
         <!-- Primeira Linha -->        
         <div class="row">
             <div class="col-lg-6">

@@ -253,6 +253,7 @@ class Imovel {
         $imovel->setBanheiro($parametros['sltBanheiro']);
         $imovel->setDatahoracadastro(date('d/m/Y H:i:s'));
         $imovel->setDatahoraalteracao("");
+        $imovel->setCondicao("novo");
 
         if (isset($parametros['sltDiferencial'])) {
             $imovel->setAcademia((in_array("Academia", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
@@ -261,6 +262,13 @@ class Imovel {
             $imovel->setElevador((in_array("Elevador", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
             $imovel->setPiscina((in_array("Piscina", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
             $imovel->setQuadra((in_array("Quadra", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
+        }else{
+            $imovel->setAcademia("NAO");
+            $imovel->setAreaServico("NAO");
+            $imovel->setDependenciaEmpregada("NAO");
+            $imovel->setElevador("NAO");
+            $imovel->setPiscina("NAO");
+            $imovel->setQuadra("NAO");
         }
 
         $imovel->setArea($parametros['txtArea']);
@@ -308,16 +316,23 @@ class Imovel {
         $imovel->setGaragem($parametros['sltGaragem']);
         $imovel->setBanheiro($parametros['sltBanheiro']);
         $imovel->setDatahoraalteracao(date('d/m/Y H:i:s'));
-        $imovel->setDatahoracadastro($_SESSION['datahoracadastro']);
+        
         
 
-        if (isset($parametros['sltDiferencial'])) {
+       if (isset($parametros['sltDiferencial'])) {
             $imovel->setAcademia((in_array("Academia", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
             $imovel->setAreaServico((in_array("AreaServico", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
             $imovel->setDependenciaEmpregada((in_array("DependenciaEmpregada", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
             $imovel->setElevador((in_array("Elevador", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
             $imovel->setPiscina((in_array("Piscina", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
             $imovel->setQuadra((in_array("Quadra", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
+        }else{
+            $imovel->setAcademia("NAO");
+            $imovel->setAreaServico("NAO");
+            $imovel->setDependenciaEmpregada("NAO");
+            $imovel->setElevador("NAO");
+            $imovel->setPiscina("NAO");
+            $imovel->setQuadra("NAO");
         }
 
         $imovel->setArea($parametros['txtArea']);
