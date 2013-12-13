@@ -64,14 +64,14 @@ class UsuarioControle {
     //modelo
         $usuario = new Usuario();
         $genericoDAO = new GenericoDAO();
-        $dados["id"] = 27;
+        $dados["id"] = 1;
         $selecionarUsuario = $genericoDAO->consultar($usuario, true, $dados);
 //        var_dump($selecionarUsuario);
 //        die();
         //visao
         $visao = new Template();
         $visao->setItem($selecionarUsuario);
-        $visao->exibir('UsuarioVisaoEdicao2.php');
+        $visao->exibir('UsuarioVisaoEdicao.php');
     }
     
     function alterar($parametros) {

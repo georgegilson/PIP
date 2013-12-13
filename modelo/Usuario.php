@@ -150,20 +150,10 @@ class Usuario {
     function editar($parametros){      
         $usuario = new Usuario();
         $usuario->setId($parametros['hdnId']);
-        $usuario->setTipousuario($parametros['sltTipoUsuario']);
         $usuario->setNome($parametros['txtNome']);
-        $usuario->setLogin(NULL);
-        $usuario->setSenha(NULL);
-        if ($usuario->getTipousuario() == "fisica") {
-            $usuario->setCpfcnpj($parametros['txtCpf']);
-        } else {
-            $usuario->setCpfcnpj($parametros['txtCnpj']);
-        }
         $usuario->setEmail($parametros['txtEmail']);
         $usuario->setStatus("A");
-        $usuario->setDatahoracadastro(NULL);
-        $usuario->setDatahoraalteracao(date('d/m/Y H:i:s'));
-        $usuario->setIdendereco(NULL);
+        $usuario->setDatahoraalteracao(date('d/m/Y H:i:s'));     
         return $usuario;
     }
 

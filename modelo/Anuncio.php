@@ -3,17 +3,15 @@
 class Anuncio {
     
     private $id;
+    private $idimovel;
     private $valor;
     private $tituloanuncio; 
     private $descricaoanuncio; 
-    private $idimovel;
     private $status;
     //private $destaque;
-    private $valorvisivel;
-//  private $vigencia;
     private $datahoracadastro;
     private $datahoraalteracao;
-//  private $idusuario;
+    private $valorvisivel;
     private $publicarmapa;
     private $idusuarioplano;
     
@@ -33,14 +31,6 @@ class Anuncio {
         return $this->valorvisivel;
     }
 
-  /*  public function getVigencia() {
-        return $this->vigencia;
-    }
-
-    public function getIdusuario() {
-        return $this->idusuario;
-    }*/
-    
     public function getIdusuarioplano() {
         return $this->idusuarioplano;
     }
@@ -57,15 +47,7 @@ class Anuncio {
         $this->valorvisivel = $valorvisivel;
     }
 
-   /* public function setVigencia($vigencia) {
-        $this->vigencia = $vigencia;
-    }
-
-    public function setIdusuario($idusuario) {
-        $this->idusuario = $idusuario;
-    }*/
-
-        public function getValor() {
+    public function getValor() {
         return $this->valor;
     }
 
@@ -136,14 +118,13 @@ class Anuncio {
         $anuncio->setTituloAnuncio($parametros['txtTitulo']);
         $anuncio->setDescricaoAnuncio($parametros['txtDescricao']);
         $anuncio->setValor($parametros['txtValor']);
-        $anuncio->setVigencia(date('d/m/Y H:i:s'));
         $anuncio->setValorVisivel((isset($parametros['sltCamposVisiveis'])?json_encode($parametros['sltCamposVisiveis']):""));
         $anuncio->setDatahoracadastro(date('d/m/Y H:i:s'));
         $anuncio->setDatahoraalteracao("");
         $anuncio->setStatus('cadastrado');
         $anuncio->setPublicarmapa($parametros['rdbMapa']);
         $anuncio->setIdImovel($parametros['hdnIdImovel']);
-        $anuncio->setIdusuario(0);
+        $anuncio->setIdusuarioplano($parametros['sltPlano']);
             
         return $anuncio;
     }

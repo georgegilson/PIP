@@ -105,7 +105,7 @@ class GenericoDAO {
                     }
                     $resultadoBlindado[] = $objeto;
                 }
-                return $resultadoBlindado;
+                return isset($resultadoBlindado)?$resultadoBlindado:NULL;
             } else {
                 return $resultado;
             }
@@ -149,6 +149,7 @@ class GenericoDAO {
         }
         }
         $sql = $sql . implode(", ", $criterios) . " WHERE id = :id";
+        //var_dump($sql);        die();
         //$sql = $sql . " WHERE id = :id";
 
         $statement = $this->conexao->prepare($sql);

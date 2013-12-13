@@ -25,6 +25,12 @@ class Controle {
             $controle = new $classe;
             $controle->$acao($parametros);
         }
+        //vem do upload e somente do upload
+        if ($_SERVER['REQUEST_METHOD'] === "DELETE") {
+            include_once ("ImagemControle.php");
+            $upload = new ImagemControle();
+            exit();
+        }
     }
 
     public function index() {

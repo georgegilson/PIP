@@ -23,19 +23,19 @@ class Template {
     public function cabecalho() {
         #tratar a inclusao automatica de scripts
         #verificar a variavel active do menu
-        include_once 'cabecalho.html';
+        include_once 'assets/html/cabecalho.html';
     }
 
     public function corpo($visao, $paginaInicial) {
         if ($paginaInicial === 1) {
-            include_once 'index.html';
+            include_once 'assets/html/index.html';
         } else {
             include_once 'visao/' . $visao;
         }
     }
 
     public function rodape() {
-        include 'rodape.html';
+        include 'assets/html/rodape.html';
     }
 
     public function __destruct() {

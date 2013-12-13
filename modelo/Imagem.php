@@ -12,12 +12,12 @@
  * @author Simon
  */
 class Imagem {
-   
+
     private $id;
     private $idanuncio;
     private $diretorio;
     private $legenda;
-    
+
     public function getId() {
         return $this->id;
     }
@@ -50,5 +50,11 @@ class Imagem {
         $this->legenda = $legenda;
     }
 
-
+    public function cadastrar($parametros, $file) {
+        $imagem = new Imagem();
+        $imagem->setIdanuncio("");
+        $imagem->setDiretorio($file->url);
+        $imagem->setLegenda($file->legenda);
+        return $imagem;
+    }
 }
