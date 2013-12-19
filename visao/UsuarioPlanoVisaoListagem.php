@@ -1,8 +1,21 @@
 <script src="assets/js/bootstrap-touchspin.js"></script>
 <script>
     $(document).ready(function() {
-        $("input[name^='spnPlano']").TouchSpin();
+        $("input[name^='spnPlano']").TouchSpin().change(
+                function() {
+                    $("#txtTotal").val(Total());
+                });
     })
+
+    function Total() {
+        var soma = 0.0;
+        $("input[name='txtPreco[]']").each(function() {
+            var plano = 'spn' + $(this).attr('id');
+            soma += parseFloat($(this).val()) * parseFloat($("input[name='" + plano + "']").val());
+        })
+        return soma;
+    }
+
 </script>
 <div class="container">
     <div class="page-header">
@@ -52,31 +65,51 @@
             <div id="forms" class="panel panel-default">
                 <div class="panel-heading">Comprar</div>
                 <!-- form -->
-                <form id="form" class="form-horizontal">
-                    <?php
-                    if ($item) {
-                        foreach ($item["plano"] as $plano) {
-                            ?>
-                            <div class="form-group">    
-                                <label class="col-lg-6 control-label"> <?php echo $plano->getTitulo(); ?> </label>
-                                <div class="col-lg-3">
-                                    <input id="spnPlano[<?php echo $plano->getId(); ?>]" type="text" value="0" name="spnPlano[<?php echo $plano->getId(); ?>]">
-                                </div>
-                            </div>
-
-                            <?php
+                <table class="table table-bordered table-condensed table-hover table-responsive">
+                    <colgroup>
+                        <col class="col-xs-7">
+                        <col class="col-xs-2">
+                        <col class="col-xs-2">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>Plano</th>
+                            <th>Quantidade</th>
+                            <th>Preço (R$)</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <td colspan="2" class="text-right"><strong>Total:</strong></td>
+                            <td><input readonly class="form-control" id="txtTotal" name="txtTotal" /></td>
+                        </tr>
+                    </tfoot>                    
+                    <tbody>                        
+                    <form id="form" class="form-horizontal">
+                        <?php
+                        if ($item) {
+                            foreach ($item["plano"] as $plano) {
+                                echo "<tr>";
+                                echo "<td>" . $plano->getTitulo() . "</td>";
+                                echo "<td><input id='spnPlano[" . $plano->getId() . "]' type='text' value='0' name='spnPlano[" . $plano->getId() . "]'></td>";
+                                echo "<td><input readonly class='form-control' id='Plano[" . $plano->getId() . "]' type='text' value='" . $plano->getPreco() . "' name='txtPreco[]'></td>";
+                                echo "</tr>";
+                            }
                         }
-                    }
-                    ?>  
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <div class="col-lg-offset-4 col-lg-6">
-                                    <button type="submit" class="btn btn-primary">Comprar!</button>
-                                </div>
-                            </div>                
-                        </div>
+                        ?>  
+
+                        </tbody>
+                </table>                    
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <div class="col-lg-offset-4 col-lg-6">
+                                <button type="submit" class="btn btn-primary">Comprar!</button>
+                            </div>
+                        </div>                
                     </div>
+                </div>
                 </form>
             </div>
         </div>
