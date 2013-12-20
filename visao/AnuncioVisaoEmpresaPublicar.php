@@ -374,23 +374,8 @@
         // Exibe o popover.
         $(this).popover('show');
     });
-
-
-    $('#MyWizard').on('change', function(e, data) {
-        if (data.direction === 'next') {
-            if (data.step === 1) {
-                if (!($("#txtTitulo").valid() & $("#txtDescricao").valid() & $("#txtValor").valid()))
-                    return e.preventDefault();
-            }
-            if (data.step === 3) {
-                if (($("#txtTitulo").valid() & $("#txtDescricao").valid() & $("#txtValor").valid()))
-                    $("#fileupload").submit();
-            }
-        }
-    });
-    $('#MyWizard').on('changed', function(e, data) {
-        var item = $('#MyWizard').wizard('selectedItem');
-        if (item.step === 1) {
+    
+          //  if (item.step === 1) {
             var endereco = "<?php echo $endereco; ?>";
             //######### INICIO DO CEP ########
             map = new GMaps({
@@ -412,7 +397,23 @@
                     }
                 }
             });
+        //}
+
+
+    $('#MyWizard').on('change', function(e, data) {
+        if (data.direction === 'next') {
+            if (data.step === 1) {
+                if (!($("#txtTitulo").valid() & $("#txtDescricao").valid() & $("#txtValor").valid()))
+                    return e.preventDefault();
+            }
+            if (data.step === 3) {
+                if (($("#txtTitulo").valid() & $("#txtDescricao").valid() & $("#txtValor").valid()))
+                    $("#fileupload").submit();
+            }
         }
+    });
+    $('#MyWizard').on('changed', function(e, data) {
+        var item = $('#MyWizard').wizard('selectedItem');
         if (item.step === 2) {
             $("#colReferencia").click(function() {
                 $('#myModal').modal('show');
@@ -509,7 +510,7 @@
                 success: function(resposta) {
                     $(".alert").hide();
                     if (resposta.resultado == 1) {
-                        $("#step5").html('<div class="row text-success">\n\
+                        $("#step4").html('<div class="row text-success">\n\
     <h2 class="text-center">Congratulações!</h2>\n\
     <p class="text-center">O cadastro de seu anúncio foi concluído com sucesso. </p>\n\
     <p class="text-center">Em breve você receberá um e-mail confirmando a publicação do mesmo. </p>\n\
@@ -517,7 +518,7 @@
     <p class="text-center">Divulgue esse anuncio no Facebook </p>\n\
     </div>');
                     } else {
-                        $("#step5").html('<div class="row text-danger">\n\
+                        $("#step4").html('<div class="row text-danger">\n\
     <h2 class="text-center">Tente novamente mais tarde!</h2>\n\
     <p class="text-center">Houve um erro no processamento de cadastro. </p>\n\
     </div>');

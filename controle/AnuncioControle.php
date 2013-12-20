@@ -12,7 +12,7 @@ class AnuncioControle {
 
     function form($parametro) {
         //modelo
-        $empresa = false; #verificar na sessão se é empresa
+        $empresa = true; #verificar na sessão se é empresa
 
         $imovel = new Imovel();
         $genericoDAO = new GenericoDAO();
@@ -50,7 +50,7 @@ class AnuncioControle {
             $genericoDAO = new GenericoDAO();
             $genericoDAO->iniciarTransacao();
 
-            $empresa = false; #verificar na sessão se é empresa
+            $empresa = true; #verificar na sessão se é empresa
             if ($empresa) {
                 $parametros['sltPlano'] = 1; #se for empresa trocar pelo idusuarioplano na sessão
             }
