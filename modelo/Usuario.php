@@ -150,7 +150,7 @@ class Usuario {
     }
     function editar($parametros){      
         $usuario = new Usuario();
-        $usuario->setId($parametros['hdnId']);
+        $usuario->setId($_SESSION["idusuario"]);
         $usuario->setNome($parametros['txtNome']);
         $usuario->setEmail($parametros['txtEmail']);
         $usuario->setStatus("A");
