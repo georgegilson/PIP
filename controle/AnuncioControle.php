@@ -12,6 +12,8 @@ class AnuncioControle {
 
     function form($parametro) {
         //modelo
+        $empresa = false; #verificar na sessão se é empresa
+
         $imovel = new Imovel();
         $genericoDAO = new GenericoDAO();
         $selecionarImovel = $genericoDAO->consultar($imovel, true, array("id" => $parametro['idImovel']));
@@ -31,7 +33,12 @@ class AnuncioControle {
         //visao
         $visao = new Template();
         $visao->setItem($formAnuncio);
-        $visao->exibir('AnuncioVisaoPublicar.php');
+        if ($empresa) {
+            $pagina = 'AnuncioVisaoEmpresaPublicar.php';
+        } else {
+            $pagina = 'AnuncioVisaoPublicar.php';
+        }
+        $visao->exibir($pagina);
     }
 
     function cadastrar($parametros) {
@@ -43,21 +50,28 @@ class AnuncioControle {
             $genericoDAO = new GenericoDAO();
             $genericoDAO->iniciarTransacao();
 
+            $empresa = false; #verificar na sessão se é empresa
+            if ($empresa) {
+                $parametros['sltPlano'] = 1; #se for empresa trocar pelo idusuarioplano na sessão
+            }
+
             $anuncio = new Anuncio();
             $entidadeAnuncio = $anuncio->cadastrar($parametros);
             $idAnuncio = $genericoDAO->cadastrar($entidadeAnuncio);
 
-            $entidadeUsuarioPlano = new UsuarioPlano();
-            $entidadeUsuarioPlano->setId($parametros["sltPlano"]);
-            $entidadeUsuarioPlano->setStatus("publicado");
-            $genericoDAO->editar($entidadeUsuarioPlano);
-
+            if (!$empresa) { #se não for pessoa fisica atualiza o status do usuarioplano
+                $entidadeUsuarioPlano = new UsuarioPlano();
+                $entidadeUsuarioPlano->setId($parametros["sltPlano"]);
+                $entidadeUsuarioPlano->setStatus("publicado");
+                $genericoDAO->editar($entidadeUsuarioPlano);
+            }
+            
             if (isset($parametros["hdnImagem"])) {
                 foreach ($parametros["hdnImagem"] as $idImagem) {
                     $entidadeImagem = new Imagem();
-                    $entidadeImagem->setId($idImagem); 
-                    $entidadeImagem->setIdanuncio($idAnuncio); 
-                    $genericoDAO->editar($entidadeImagem);        
+                    $entidadeImagem->setId($idImagem);
+                    $entidadeImagem->setIdanuncio($idAnuncio);
+                    $genericoDAO->editar($entidadeImagem);
                 }
             }
             //visao
@@ -70,7 +84,7 @@ class AnuncioControle {
             }
         }
     }
-
+ /*
     function selecionar($parametro) {
         //modelo
         $anuncio = new Anuncio();
@@ -82,7 +96,7 @@ class AnuncioControle {
         $visao->exibir('AnuncioVisaoPublicar.php');
     }
 
-    /*
+   
 
       function editar($parametros) {
       //modelo
