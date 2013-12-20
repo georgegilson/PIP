@@ -134,7 +134,8 @@ class Usuario {
         $usuario->setTipousuario($parametros['sltTipoUsuario']);
         $usuario->setNome($parametros['txtNome']);
         $usuario->setLogin($parametros['txtLogin']);
-        $usuario->setSenha($parametros['txtSenha']);
+        $senha = md5($parametros['txtSenha']);
+        $usuario->setSenha($senha);
         if ($usuario->getTipousuario() == "fisica") {
             $usuario->setCpfcnpj($parametros['txtCpf']);
         } else {
