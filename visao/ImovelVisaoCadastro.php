@@ -239,7 +239,17 @@
                             </select></div>
                     </div>
 
-
+                    <div class="form-group">
+                        <label  class="col-lg-3 control-label" for="sltCondicao">Condição do Imóvel</label>
+                        <div class="col-lg-8">
+                            <select class="form-control" id="sltCondicao" name="sltCondicao">
+                                <option value="">Informe a Condição</option>
+                                <option value="construcao">Em Construção</option>
+                                <option value="novo">Novo</option>
+                                <option value="usado">Usado</option>
+                            </select></div>
+                    </div>
+                    
                     <div class="form-group">
                         <label  class="col-lg-3 control-label" for="sltQuarto">Quarto</label>
                         <div class="col-lg-8">

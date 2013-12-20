@@ -46,8 +46,9 @@
                 <div id="popover<?php echo $imovel->getId(); ?>-content" class="hide">
                     <?php
                     echo "Tipo: " . $imovel->getTipo() . "<br />";
+                    echo "Condição: " . $imovel->getCondicao() . "<br />";
                     echo "Quartos: " . $imovel->getQuarto() . "<br />";
-                    echo "Garagen(s): " . $imovel->getQuarto() . "<br />";
+                    echo "Garagen(s): " . $imovel->getGaragem() . "<br />";
                     echo "Banheiro(s): " . $imovel->getBanheiro() . "<br />";
                     echo "Área: " . $imovel->getArea() . " m<sup>2</sup><br />";
                     echo "Suite(s): " . (($imovel->getSuite() != "nenhuma") ? '<span class="text-primary">' . $imovel->getSuite() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';

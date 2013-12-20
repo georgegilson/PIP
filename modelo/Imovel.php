@@ -247,6 +247,7 @@ class Imovel {
         
         $imovel->setIdendereco($idendereco);
         $imovel->setFinalidade($parametros['sltFinalidade']);
+        $imovel->setCondicao($parametros['sltCondicao']);
         $imovel->setTipo($parametros['sltTipo']);
         $imovel->setQuarto($parametros['sltQuarto']);
         $imovel->setGaragem($parametros['sltGaragem']);
@@ -311,6 +312,7 @@ class Imovel {
         $imovel->setIdendereco($_SESSION['idendereco']);
         $imovel->setId($_SESSION['id']);
         $imovel->setFinalidade($parametros['sltFinalidade']);
+        $imovel->setCondicao($parametros['sltCondicao']);
         $imovel->setTipo($parametros['sltTipo']);
         $imovel->setQuarto($parametros['sltQuarto']);
         $imovel->setGaragem($parametros['sltGaragem']);
