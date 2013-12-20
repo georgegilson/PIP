@@ -90,9 +90,9 @@ class Endereco {
     
     function editar($parametros){
         
-        if(!isset($_SESSION)){ 
-        session_start(); 
-        }
+//        if(!isset($_SESSION)){ 
+//        session_start(); 
+//        }
         
         $endereco = new Endereco();
         $endereco->setId($_SESSION['idendereco']);
