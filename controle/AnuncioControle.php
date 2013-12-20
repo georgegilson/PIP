@@ -12,7 +12,7 @@ class AnuncioControle {
 
     function form($parametro) {
         //modelo
-        $empresa = true; #verificar na sessão se é empresa
+        $empresa = false; #verificar na sessão se é empresa
 
         $imovel = new Imovel();
         $genericoDAO = new GenericoDAO();

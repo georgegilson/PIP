@@ -4,6 +4,7 @@ include_once 'modelo/Usuario.php';
 include_once 'modelo/Endereco.php';
 include_once 'modelo/Telefone.php';
 include_once 'modelo/Empresa.php';
+include_once 'controle/UsuarioPlanoControle.php';
 include_once 'DAO/GenericoDAO.php';
 
 class UsuarioControle {
@@ -69,7 +70,7 @@ class UsuarioControle {
         //modelo
         $sessao = new Sessao();
         if ($sessao->verificarSessaoUsuario()) {
-            
+
             $usuario = new Usuario();
             $genericoDAO = new GenericoDAO();
             $selecionarUsuario = $genericoDAO->consultar($usuario, true, array("id" => $_SESSION["idusuario"]));
@@ -107,7 +108,7 @@ class UsuarioControle {
 
     function buscarLogin($parametros) {
         $sessao = new Sessao();
-        if ($sessao->verificarSessaoUsuario()) {
+        if ($sessao->verificarToken($parametros)) {
             $usuario = new Usuario();
             $genericoDAO = new GenericoDAO();
             $dados["login"] = $parametros['txtLogin'];
@@ -124,24 +125,26 @@ class UsuarioControle {
 
     function autenticar($parametros) {
         $sessao = new Sessao();
-        if ($sessao->verificarSessaoUsuario()) {
+        if ($sessao->verificarToken($parametros)) {
             $usuario = new Usuario();
             $genericoDAO = new GenericoDAO();
-            $selecionarUsuario = $genericoDAO->consultar($usuario, false, array("login" => $parametros['login']));
+            $selecionarUsuario = $genericoDAO->consultar($usuario, false, array("login" => $parametros['txtLogin']));
 
             if (!$selecionarUsuario == 0) {
-                if ($selecionarUsuario[0]->getSenha() == md5($parametros['senha'])) {
+                if ($selecionarUsuario[0]->getSenha() == md5($parametros['txtSenha'])) {
                     $_SESSION["idusuario"] = $selecionarUsuario[0]->getId();
                     $_SESSION["idendereco"] = $selecionarUsuario[0]->getIdendereco();
                     $_SESSION["nome"] = $selecionarUsuario[0]->getNome();
-                    //echo json_encode(array("resultado" => 1, "nome" => $selecionarUsuario[0]->getNome()));
-                    $visao = new Template();
-                    $visao->exibir('index', 1);
+//                    echo json_encode(array("resultado" => 1, "nome" => $selecionarUsuario[0]->getNome()));
+                    $redirecionamento = new UsuarioPlanoControle();
+                    $redirecionamento->listar();
                 } else {
                     echo json_encode(array("resultado" => 0, "condicao" => "senha"));
+                    //login ou senha inválido
                 }
             } else {
                 echo json_encode(array("resultado" => 0, "condicao" => "cadastro"));
+                //login ou senha inválido
             }
         } else {
             echo json_encode(array("resultado" => 0, "condicao" => "token"));

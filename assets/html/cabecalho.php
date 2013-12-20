@@ -24,26 +24,26 @@
 <noscript><link rel="stylesheet" href="assets/css/jquery.fileupload-noscript.css"></noscript>
 <noscript><link rel="stylesheet" href="assets/css/jquery.fileupload-ui-noscript.css"></noscript>
 <!--    </head> -->
-
 <script>
     $(document).ready(function() {
 <?php
 //session_start();
 if (isset($_SESSION['idusuario'])) {
     ?>
-            $('#divLogin').hide();
+            /*$('#divLogin').hide();
             $('#divSenha').hide();
             $('#divAcessar').hide();
-            $("#divUsuario").fadeIn('slow');
+            $("#divUsuario").fadeIn('slow');*/
             $("#divUsuario").html("<h4>Seja bem vindo <?php echo $_SESSION['nome']; ?>  <h4>");
+            $("#btnLogout").attr('class','btn btn-danger');
     <?php
 }
 ?>
         $("#btnAcessar").click(function() {
-            autenticarUsuario()
+            autenticarUsuario();
         });
         $("#btnLogout").click(function() {
-            logoutUsuario()
+            logoutUsuario();
         });
         function autenticarUsuario() {
             $.ajax({
@@ -53,6 +53,7 @@ if (isset($_SESSION['idusuario'])) {
                 data: {
                     login: $('#txtlogin').val(),
                     senha: $('#txtsenha').val(),
+                    hdnToken: $('#hdnToken').val(),
                     hdnEntidade: "Usuario",
                     hdnAcao: "autenticar"
                 },
@@ -60,12 +61,12 @@ if (isset($_SESSION['idusuario'])) {
                 },
                 success: function(resposta) {
                     if (resposta.resultado == 1) {
-//                        var nome = resposta.nome;
-//                        $('#divLogin').hide();
-//                        $('#divSenha').hide();
-//                        $('#divAcessar').hide();
-//                        $("#divUsuario").fadeIn('slow');
-//                        $("#divUsuario").html("<h4>Seja bem vindo  " + resposta.nome + "<h4>");
+                        var nome = resposta.nome;
+                        $('#divLogin').hide();
+                        $('#divSenha').hide();
+                        $('#divAcessar').hide();
+                        $("#divUsuario").fadeIn('slow');
+                        $("#divUsuario").html("<h4>Seja bem vindo  " + resposta.nome + "<h4>");
                     } else {
 
                     }
@@ -97,11 +98,16 @@ if (isset($_SESSION['idusuario'])) {
         }
     });
 </script>
+<?php
+    $sessao = new Sessao();
+    $sessao->gerarToken();  
+?>
 <body>
-    <!-- Fixed navbar -->
+    <!-- Fixed navb ar -->
     <input type="hidden" id="hdnEntidade" name="hdnEntidade" value=""  />
     <input type="hidden" id="hdnAcao" name="hdnAcao" value="" />
-
+    <input type="hidden" id="hdnToken" name="hdnToken" value="<?php echo $_SESSION['token']; ?>" />
+    
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -147,7 +153,7 @@ if (isset($_SESSION['idusuario'])) {
                 </ul>
                 <div class="form-group">
                     <form class="navbar-form navbar-right">
-                        <div class="form-group" id="divLogin">
+                       <!-- <div class="form-group" id="divLogin">
                             <input id="txtlogin" type="text" placeholder="login" class="form-control">     
                         </div>
                         <div class="form-group" id="divSenha">
@@ -155,10 +161,10 @@ if (isset($_SESSION['idusuario'])) {
                         </div>
                         <div class="form-group" id="divAcessar">
                             <button id="btnAcessar" type="button" class="btn btn-info">Acessar</button>
-                        </div>
+                        </div>-->
                         <div class = "form-group" id="divUsuario" hidden="true">
                         </div>
-                        <button id="btnLogout" type="button" class="btn btn-danger">Sair</button>         
+                        <button id="btnLogout" type="button" class="hide">Sair</button>         
                     </form>            
                 </div>
 

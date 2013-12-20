@@ -23,7 +23,7 @@ class Template {
     public function cabecalho() {
         #tratar a inclusao automatica de scripts
         #verificar a variavel active do menu
-        include_once 'assets/html/cabecalho2.php';
+        include_once 'assets/html/cabecalho.php';
     }
 
     public function corpo($visao, $paginaInicial) {

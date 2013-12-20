@@ -1,4 +1,3 @@
-<script src="assets/js/gmaps.js"></script>
 <script src="assets/js/jquery.maskedinput.min.js"></script>
 <script src="assets/js/util.validate.js"></script>
 <script src="assets/js/pwstrength.js"></script>
@@ -193,7 +192,8 @@
                                 type: "POST",
                                 data: {
                                     hdnEntidade: "Usuario",
-                                    hdnAcao: "buscarLogin"
+                                    hdnAcao: "buscarLogin",
+                                    hdnToken: $("#hdnToken").val()
                                 }
                             }
                     //locate: true
@@ -278,17 +278,21 @@
                 }
             },
             submitHandler: function() {
+            alert('a');
                 if ($("#hdnCEP").val() != "") {
+                alert('b');
                     $.ajax({
                         url: "index.php",
                         dataType: "json",
                         type: "POST",
                         data: $('#form').serialize(),
                         beforeSend: function() {
+                        alert('c');
                             $('.alert').html("...processando...").attr('class', 'alert alert-warning');
                             $('button[type=submit]').attr('disabled', 'disabled');
                         },
                         success: function(resposta) {
+                        alert('d');
                             $('button[type=submit]').removeAttr('disabled');
                             if (resposta.resultado == 1) {
                                 $('.alert').html(
@@ -317,6 +321,11 @@
 
 </script> 
 
+<?php
+    $sessao = new Sessao();
+    $sessao->gerarToken();  
+?>
+
 <div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
     <div class="page-header">
         <h1>Cadastro de Usuário</h1>
@@ -329,6 +338,7 @@
         <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Usuario"  />
         <input type="hidden" id="hdnAcao" name="hdnAcao" value="cadastrar" />
         <input type="hidden" id="hdnCEP" name="hdnCEP" />
+        <input type="hidden" id="hdnToken" name="hdnToken" value="<?php echo $_SESSION['token']; ?>" />
 <!--        <input type="hidden" id="hdnTipoTelefone[]" name="hdnTipoTelefone[]" value=""  />-->
         <!-- Primeira Linha -->    
         <div class="row" id="divlinha1">
