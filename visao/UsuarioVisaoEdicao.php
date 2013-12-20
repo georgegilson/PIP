@@ -317,6 +317,11 @@
 
 </script> 
 
+<?php
+    $sessao = new Sessao();
+    $sessao->gerarToken();  
+?>
+
 <div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
     <div class="page-header">
         <h1>Cadastro de Usuário</h1>
@@ -331,10 +336,10 @@
 
             <!-- form -->
             <form id="form" class="form-horizontal">
-                    <input type="hidden" id="hdnId" name="hdnId" value="<?php echo $usuario->getId()?>"/>
                 <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Usuario"  />
                 <input type="hidden" id="hdnAcao" name="hdnAcao" value="alterar" />
                 <input type="hidden" id="hdnCEP" name="hdnCEP" value="<?php echo $usuario->getEndereco()->getCep()?>"/>
+                <input type="hidden" id="hdnToken" name="hdnToken" value="<?php echo $_SESSION['token']; ?>" />
                 <!-- Primeira Linha -->    
                 <div class="row" id="divlinha1">
 
