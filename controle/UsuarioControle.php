@@ -69,6 +69,7 @@ class UsuarioControle {
         //modelo
         $sessao = new Sessao();
         if ($sessao->verificarSessaoUsuario()) {
+            
             $usuario = new Usuario();
             $genericoDAO = new GenericoDAO();
             $selecionarUsuario = $genericoDAO->consultar($usuario, true, array("id" => $_SESSION["idusuario"]));
@@ -85,6 +86,11 @@ class UsuarioControle {
     function alterar($parametros) {
         $sessao = new Sessao();
         if ($sessao->verificarToken($parametros)) {
+            $genericoDAO = new GenericoDAO();
+            $genericoDAO->iniciarTransacao();
+            $endereco = new Endereco();
+            $entidadeEndereco = $endereco->editar($parametros);
+            $idEndereco = $genericoDAO->editar($entidadeEndereco);
             $usuario = new Usuario();
             $entidadeUsuario = $usuario->editar($parametros);
             $genericoDAO = new GenericoDAO();
