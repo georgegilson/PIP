@@ -8,8 +8,6 @@ include_once 'configuracao/Template.php';
 include_once 'controle/Controle.php';
 include_once 'configuracao/Sessao.php';
 
-//session_start();
-$sessao = new Sessao();
-$sessao->criarSessaoUsuario();
+Sessao::criarSessaoUsuario();
 $controle = new Controle($parametros);
 ?>
