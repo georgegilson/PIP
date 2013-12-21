@@ -278,21 +278,17 @@
                 }
             },
             submitHandler: function() {
-            alert('a');
-                if ($("#hdnCEP").val() != "") {
-                alert('b');
+                if ($("#hdnCEP").val() != "") {               
                     $.ajax({
                         url: "index.php",
                         dataType: "json",
                         type: "POST",
                         data: $('#form').serialize(),
-                        beforeSend: function() {
-                        alert('c');
+                        beforeSend: function() {                      
                             $('.alert').html("...processando...").attr('class', 'alert alert-warning');
                             $('button[type=submit]').attr('disabled', 'disabled');
                         },
-                        success: function(resposta) {
-                        alert('d');
+                        success: function(resposta) {                       
                             $('button[type=submit]').removeAttr('disabled');
                             if (resposta.resultado == 1) {
                                 $('.alert').html(
@@ -322,8 +318,7 @@
 </script> 
 
 <?php
-    $sessao = new Sessao();
-    $sessao->gerarToken();  
+    Sessao::gerarToken();  
 ?>
 
 <div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
