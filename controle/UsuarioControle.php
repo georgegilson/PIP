@@ -19,8 +19,7 @@ class UsuarioControle {
 
     function cadastrar($parametros) {
         //Endereço
-        $sessao = new Sessao();
-        if ($sessao->verificarToken($parametros)) {
+        if (Sessao::verificarToken($parametros)) {
             $genericoDAO = new GenericoDAO();
             $genericoDAO->iniciarTransacao();
             $endereco = new Endereco();
@@ -68,8 +67,7 @@ class UsuarioControle {
 
     function selecionar($parametro) {
         //modelo
-        $sessao = new Sessao();
-        if ($sessao->verificarSessaoUsuario()) {
+        if (Sessao::verificarSessaoUsuario()) {
 
             $usuario = new Usuario();
             $genericoDAO = new GenericoDAO();
@@ -85,8 +83,8 @@ class UsuarioControle {
     }
 
     function alterar($parametros) {
-        $sessao = new Sessao();
-        if ($sessao->verificarToken($parametros)) {
+        
+        if (Sessao::verificarToken($parametros)) {
             $genericoDAO = new GenericoDAO();
             $genericoDAO->iniciarTransacao();
             $endereco = new Endereco();
@@ -107,8 +105,8 @@ class UsuarioControle {
     }
 
     function buscarLogin($parametros) {
-        $sessao = new Sessao();
-        if ($sessao->verificarToken($parametros)) {
+        
+        if (Sessao::verificarToken($parametros)) {
             $usuario = new Usuario();
             $genericoDAO = new GenericoDAO();
             $dados["login"] = $parametros['txtLogin'];
@@ -124,18 +122,15 @@ class UsuarioControle {
     }
 
     function autenticar($parametros) {
-        $sessao = new Sessao();
-        if ($sessao->verificarToken($parametros)) {
+      
+        if (Sessao::verificarToken($parametros)) {
             $usuario = new Usuario();
             $genericoDAO = new GenericoDAO();
             $selecionarUsuario = $genericoDAO->consultar($usuario, false, array("login" => $parametros['txtLogin']));
 
             if (!$selecionarUsuario == 0) {
                 if ($selecionarUsuario[0]->getSenha() == md5($parametros['txtSenha'])) {
-                    $_SESSION["idusuario"] = $selecionarUsuario[0]->getId();
-                    $_SESSION["idendereco"] = $selecionarUsuario[0]->getIdendereco();
-                    $_SESSION["nome"] = $selecionarUsuario[0]->getNome();
-//                    echo json_encode(array("resultado" => 1, "nome" => $selecionarUsuario[0]->getNome()));
+                    Sessao::configurarSessaoUsuario($selecionarUsuario);
                     $redirecionamento = new UsuarioPlanoControle();
                     $redirecionamento->listar();
                 } else {
@@ -152,8 +147,7 @@ class UsuarioControle {
     }
 
     function logout($parametros) {
-        $sessao = new Sessao();
-        if ($sessao->encerrarSessaoUsuario()) {
+        if (Sessao::encerrarSessaoUsuario()) {
             echo json_encode(array("resultado" => 1));
         } else {
             echo json_encode(array("resultado" => 0));
