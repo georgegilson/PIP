@@ -318,8 +318,7 @@
 </script> 
 
 <?php
-    $sessao = new Sessao();
-    $sessao->gerarToken();  
+    Sessao::gerarToken();  
 ?>
 
 <div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
