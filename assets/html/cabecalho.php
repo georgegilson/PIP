@@ -92,21 +92,18 @@ if (isset($_SESSION['idusuario'])) {
                         $('#divLogin').show();
                         $('#divSenha').show();
                         $('#divAcessar').show(); 
+                        $('#btnLogout').hide(); 
                     }
                 }
             })
         }
     });
 </script>
-<?php
-    $sessao = new Sessao();
-    $sessao->gerarToken();  
-?>
+
 <body>
     <!-- Fixed navb ar -->
     <input type="hidden" id="hdnEntidade" name="hdnEntidade" value=""  />
     <input type="hidden" id="hdnAcao" name="hdnAcao" value="" />
-    <input type="hidden" id="hdnToken" name="hdnToken" value="<?php echo $_SESSION['token']; ?>" />
     
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
