@@ -1,26 +1,12 @@
 <?php
 
 class Sessao {
-    
-//    private $token;
-//    
-//     public function getToken() {
-//        return $this->token;
-//    }
-//
-//    public function setToken($token) {
-//        $this->token = $token;
-//    }
 
-    public function __construct() {
-        
-    }
-
-    public function criarSessaoUsuario() {
+    public static function criarSessaoUsuario() {
         session_start();
     }
 
-    public function encerrarSessaoUsuario() {
+    public static function encerrarSessaoUsuario() {
         if (isset($_SESSION["idusuario"])) {
             $_SESSION = array();
             session_destroy();
@@ -30,24 +16,24 @@ class Sessao {
         }
     }
 
-    public function verificarSessaoUsuario() {
+    public static function verificarSessaoUsuario() {
         if (isset($_SESSION['idusuario']))
             return true;
         else
             return false;
     }
 
-    public function desconfigurarVariavelSessao($variavel){
+    public static function desconfigurarVariavelSessao($variavel){
         
     }
 
-    public function gerarToken() {
+    public static function gerarToken() {
         $token = md5(uniqid(rand(), TRUE));
         $_SESSION['token'] = $token;
         $_SESSION['token_time'] = time();
     }
 
-    public function verificarToken($parametros) {
+    public static function verificarToken($parametros) {
         if (isset($_SESSION['token']) &&
                 $parametros['hdnToken'] == $_SESSION['token']) {
 
@@ -63,10 +49,11 @@ class Sessao {
         }
     }
 
-    public function configurarSessaoUsuario($usuario){
+    public static function configurarSessaoUsuario($usuario){
         $_SESSION["idusuario"] = $usuario[0]->getId();
         $_SESSION["idendereco"] = $usuario[0]->getIdendereco();
         $_SESSION["nome"] = $usuario[0]->getNome();
+        $_SESSION["tipopessoa"] = $usuario[0]->getTipousuario();
     }
 }
 
