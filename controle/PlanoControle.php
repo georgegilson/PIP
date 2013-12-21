@@ -8,8 +8,8 @@ class PlanoControle {
 
     function listar($parametro) {
         //modelo
-        $sessao = new Sessao();
-        $estaLogado = $sessao->verificarSessaoUsuario();
+        
+        $estaLogado = Sessao::verificarSessaoUsuario();
 
         //visao
         if ($estaLogado) {
