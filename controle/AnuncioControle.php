@@ -84,6 +84,27 @@ class AnuncioControle {
             }
         }
     }
+    
+    function listar() {
+        
+        $estaLogado = Sessao::verificarSessaoUsuario();
+        
+        if ($estaLogado) {
+            $anuncio = new Anuncio();
+            $genericoDAO = new GenericoDAO();
+            $listarAnuncio = $genericoDAO->consultar($anuncio, true, array("idusuarioplano" => $_SESSION['idusuario']));
+        //visao
+            $visao = new Template();
+            $visao->setItem($listarAnuncio);
+            $visao->exibir('AnuncioVisaoListagem.php');
+       
+        } else{
+        $visao = new Template();
+        $visao->exibir('PlanoVisaoListagem.php');
+        //modelo
+        }
+    
+    }
  /*
     function selecionar($parametro) {
         //modelo
