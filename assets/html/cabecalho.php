@@ -28,7 +28,7 @@
     $(document).ready(function() {
 <?php
 //session_start();
-if (isset($_SESSION['idusuario'])) {
+if (Sessao::verificarSessaoUsuario()) {
     ?>
             /*$('#divLogin').hide();
             $('#divSenha').hide();
@@ -124,6 +124,7 @@ if (isset($_SESSION['idusuario'])) {
                         <ul class="dropdown-menu">
                             <li><a href="index.php?entidade=Imovel&acao=form">Cadastro</a></li>
                             <li><a href="index.php?entidade=Imovel&acao=listar">Listagem</a></li>
+                            <li><a href="index.php?entidade=Anuncio&acao=listar">Meus Anúncios</a></li>
                             <!--<li><a href="#">Another action</a></li>
                             <li><a href="#">Something else here</a></li>
                             <li class="divider"></li>
@@ -135,9 +136,9 @@ if (isset($_SESSION['idusuario'])) {
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Usuário <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="index.php?entidade=Usuario&acao=form">Cadastro</a></li>
+<!--                            <li><a href="index.php?entidade=Usuario&acao=form">Cadastro</a></li>-->
                             <li><a href="index.php?entidade=Usuario&acao=selecionar">Atualizar Cadastro</a></li>
-                            <li><a href="#">Alterar Login/Senha</a></li>
+<!--                            <li><a href="#">Alterar Login/Senha</a></li>-->
                             <!--<li><a href="#">Another action</a></li>
                             <li><a href="#">Something else here</a></li>
                             <li class="divider"></li>
@@ -146,7 +147,10 @@ if (isset($_SESSION['idusuario'])) {
                             <li><a href="#">One more separated link</a></li>-->
                         </ul>
                     </li>
-                    <li><a href="#about">Sobre a Empresa</a></li>
+<!--                    <li><a href="#about">Sobre a Empresa</a></li>-->
+                    <li><a href="index.php?entidade=Usuario&acao=formlogin">Login</a></li>
+                    <li><a href="index.php?entidade=Usuario&acao=form">Cadastre-se</a></li>
+                    <li><a href="#">Esqueci Login/Senha</a></li>
                 </ul>
                 <div class="form-group">
                     <form class="navbar-form navbar-right">
