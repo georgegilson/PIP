@@ -55,5 +55,17 @@ class Sessao {
         $_SESSION["nome"] = $usuario[0]->getNome();
         $_SESSION["tipopessoa"] = $usuario[0]->getTipousuario();
     }
+
+    public static function configurarSessaoUsuarioPlanoConfirmacao($confirmacao){
+        $_SESSION["usuarioPlano"]["planos"] = $confirmacao["planos"];
+        //$_SESSION["usuarioPlano"]["precos"] = $confirmacao["precos"];
+        $_SESSION["usuarioPlano"]["total"] = $confirmacao["total"];
+        $_SESSION["usuarioPlano"]["tokenPlano"] = $confirmacao["tokenPlano"];
+    }
+    
+    public static function configurarSessaoAnuncio($anuncio){
+        $_SESSION["anuncio"]["idimovel"] = $anuncio["idimovel"];
+        //$_SESSION["anuncio"]["plano"] = $anuncio["plano"];
+    }
 }
 

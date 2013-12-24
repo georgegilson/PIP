@@ -17,6 +17,7 @@
             </thead>
             <tbody>
                 <?php
+                Sessao::gerarToken();
                 $item = $this->getItem();
                 if ($item) {
                     foreach ($item as $imovel) {
@@ -28,8 +29,8 @@
                             <td><?php echo $imovel->getEndereco()->getBairro(); ?></td>
                             <td><?php echo $imovel->getDatahoracadastro(); ?></td>
                             <td><a href="#" id="popover<?php echo $imovel->getId(); ?>" class="btn btn-success">Detalhes do Imóvel</a></td>
-                            <td><a href="index.php?entidade=Imovel&acao=selecionar&id=<?php echo $imovel->getId(); ?>" class="btn btn-warning">Editar</a> <br /></td>
-                            <td><?php echo (count($imovel->getAnuncio())>0) ? '<span class="btn btn-default"> Anuncio Publicado</span>' : '<a href="index.php?entidade=Anuncio&acao=form&idImovel='.$imovel->getId().'" class="btn btn-primary">Publicar Anuncio</a>'; ?></td>
+                            <td><a href="index.php?entidade=Imovel&acao=selecionar&id=<?php echo $imovel->getId(); ?>&token=<?php echo $_SESSION['token']; ?>" class="btn btn-warning">Editar</a> <br /></td>
+                            <td><?php echo (count($imovel->getAnuncio())>0) ? '<span class="btn btn-default"> Anuncio Publicado</span>' : '<a href="index.php?entidade=Anuncio&acao=form&idImovel='.$imovel->getId().'&token='.$_SESSION['token'].'" class="btn btn-primary">Publicar Anuncio</a>'; ?></td>
                         </tr>
                         <?php
                     }

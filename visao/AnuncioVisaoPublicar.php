@@ -19,6 +19,7 @@
 <form id="fileupload" class="form-horizontal" enctype="multipart/form-data">
     <div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) -->
         <?php
+        Sessao::gerarToken();
         $item = $this->getItem();
         if ($item) {
             foreach ($item["imovel"] as $imovel) {
@@ -126,6 +127,7 @@
                         <input type="hidden" id="hdnIdImovel" name="hdnIdImovel" value="<?php echo $idImovel; ?>" />
                         <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Anuncio" />
                         <input type="hidden" id="hdnAcao" name="hdnAcao" value="Cadastrar" />
+                        <input type="hidden" id="hdnToken" name="hdnToken" value="<?php echo $_SESSION['token']; ?>" />
                         <div class="row">
                             <div class="col-lg-6">
                                 <div id="forms" class="panel panel-default">

@@ -10,114 +10,118 @@ include_once 'DAO/GenericoDAO.php';
 
 class AnuncioControle {
 
-    function form($parametro) {
-        //modelo
-        $empresa = false; #verificar na sessão se é empresa
+    function form($parametros) {
+        if (Sessao::verificarSessaoUsuario() & Sessao::verificarToken(array("hdnToken" => $parametros["token"]))) {
+            //modelo
+            $imovel = new Imovel();
+            $genericoDAO = new GenericoDAO();
+            $selecionarImovel = $genericoDAO->consultar($imovel, true, array("id" => $parametros['idImovel']));
 
-        $imovel = new Imovel();
-        $genericoDAO = new GenericoDAO();
-        $selecionarImovel = $genericoDAO->consultar($imovel, true, array("id" => $parametro['idImovel']));
+            $usuarioPlano = new UsuarioPlano();
+            $condicoes["idusuario"] = $_SESSION["idusuario"];
+            $condicoes["status"] = 'ativo';
+            $listarUsuarioPlano = $genericoDAO->consultar($usuarioPlano, true, $condicoes);
 
-        $usuarioPlano = new UsuarioPlano();
-//        var_dump($usuarioPlano);
-//        die();
-        $parametros["idusuario"] = 1;
-        $parametros["status"] = 'ativo';
-        $listarUsuarioPlano = $genericoDAO->consultar($usuarioPlano, true, $parametros);
+            $empresa = ($_SESSION["tipopessoa"] == "juridica");
+            if ($empresa) {
+                $pagina = 'AnuncioVisaoEmpresaPublicar.php';
+            } else {
+                $pagina = 'AnuncioVisaoPublicar.php';
+            }
+            $sessao["idimovel"] = $parametros['idImovel'];
+            Sessao::configurarSessaoAnuncio($sessao);
+            $formAnuncio = array();
+            $formAnuncio["usuarioPlano"] = $listarUsuarioPlano;
+            $formAnuncio["imovel"] = $selecionarImovel;
 
-        $formAnuncio = array();
-        $formAnuncio["usuarioPlano"] = $listarUsuarioPlano;
-        $formAnuncio["imovel"] = $selecionarImovel;
-
-        #verificar se o anuncio ja foi publicado e redirecionar para a tela de consulta
-        //visao
-        $visao = new Template();
-        $visao->setItem($formAnuncio);
-        if ($empresa) {
-            $pagina = 'AnuncioVisaoEmpresaPublicar.php';
-        } else {
-            $pagina = 'AnuncioVisaoPublicar.php';
+            #verificar se o anuncio ja foi publicado e redirecionar para a tela de consulta
+            //visao
+            $visao = new Template();
+            $visao->setItem($formAnuncio);
+            $visao->exibir($pagina);
         }
-        $visao->exibir($pagina);
     }
 
     function cadastrar($parametros) {
         //modelo
-        if (isset($parametros['upload']) && $parametros['upload'] === "1") {
-            include_once 'controle/ImagemControle.php';
-            $imagem = new ImagemControle($parametros);
-        } else {
-            $genericoDAO = new GenericoDAO();
-            $genericoDAO->iniciarTransacao();
-
-            $empresa = true; #verificar na sessão se é empresa
-            if ($empresa) {
-                $parametros['sltPlano'] = 1; #se for empresa trocar pelo idusuarioplano na sessão
-            }
-
-            $anuncio = new Anuncio();
-            $entidadeAnuncio = $anuncio->cadastrar($parametros);
-            $idAnuncio = $genericoDAO->cadastrar($entidadeAnuncio);
-
-            if (!$empresa) { #se não for pessoa fisica atualiza o status do usuarioplano
-                $entidadeUsuarioPlano = new UsuarioPlano();
-                $entidadeUsuarioPlano->setId($parametros["sltPlano"]);
-                $entidadeUsuarioPlano->setStatus("publicado");
-                $genericoDAO->editar($entidadeUsuarioPlano);
-            }
-            
-            if (isset($parametros["hdnImagem"])) {
-                foreach ($parametros["hdnImagem"] as $idImagem) {
-                    $entidadeImagem = new Imagem();
-                    $entidadeImagem->setId($idImagem);
-                    $entidadeImagem->setIdanuncio($idAnuncio);
-                    $genericoDAO->editar($entidadeImagem);
-                }
-            }
-            //visao
-            if ($idAnuncio) {
-                echo json_encode(array("resultado" => 1));
-                $genericoDAO->commit();
+        if (Sessao::verificarSessaoUsuario()) {
+            if (isset($parametros['upload']) && $parametros['upload'] === "1") {
+                include_once 'controle/ImagemControle.php';
+                $imagem = new ImagemControle($parametros);
             } else {
-                echo json_encode(array("resultado" => 0));
-                $genericoDAO->rollback();
+                if (Sessao::verificarToken($parametros)) {
+                    $genericoDAO = new GenericoDAO();
+                    $genericoDAO->iniciarTransacao();
+
+                    $empresa = ($_SESSION["tipopessoa"] == "juridica");
+                    if ($empresa) {
+                        //$parametros['sltPlano'] = 1; #se for empresa trocar pelo idusuarioplano na sessão
+                    }
+
+                    $anuncio = new Anuncio();
+                    $entidadeAnuncio = $anuncio->cadastrar($parametros);
+                    $idAnuncio = $genericoDAO->cadastrar($entidadeAnuncio);
+
+                    if (!$empresa) { #se não for pessoa fisica atualiza o status do usuarioplano
+                        $entidadeUsuarioPlano = new UsuarioPlano();
+                        $entidadeUsuarioPlano->setId($parametros["sltPlano"]);
+                        $entidadeUsuarioPlano->setStatus("publicado");
+                        $genericoDAO->editar($entidadeUsuarioPlano);
+                    }
+
+                    if (isset($parametros["hdnImagem"])) {
+                        foreach ($parametros["hdnImagem"] as $idImagem) {
+                            $entidadeImagem = new Imagem();
+                            $entidadeImagem->setId($idImagem);
+                            $entidadeImagem->setIdanuncio($idAnuncio);
+                            $genericoDAO->editar($entidadeImagem);
+                        }
+                    }
+                    //visao
+                    if ($idAnuncio) {
+                        echo json_encode(array("resultado" => 1));
+                        $genericoDAO->commit();
+                    } else {
+                        echo json_encode(array("resultado" => 0));
+                        $genericoDAO->rollback();
+                    }
+                }
             }
         }
     }
-    
+
     function listar() {
-        
+
         $estaLogado = Sessao::verificarSessaoUsuario();
-        
+
         if ($estaLogado) {
             $anuncio = new Anuncio();
             $genericoDAO = new GenericoDAO();
             $listarAnuncio = $genericoDAO->consultar($anuncio, true, array("idusuarioplano" => $_SESSION['idusuario']));
-        //visao
+            //visao
             $visao = new Template();
             $visao->setItem($listarAnuncio);
             $visao->exibir('AnuncioVisaoListagem.php');
-       
-        } else{
-        $visao = new Template();
-        $visao->exibir('PlanoVisaoListagem.php');
-        //modelo
+        } else {
+            $visao = new Template();
+            $visao->exibir('PlanoVisaoListagem.php');
+            //modelo
         }
-    
-    }
- /*
-    function selecionar($parametro) {
-        //modelo
-        $anuncio = new Anuncio();
-        $genericoDAO = new GenericoDAO();
-        $selecionarImovel = $genericoDAO->selecionar($anuncio, $parametro['id']);
-        //visao
-        $visao = new Template();
-        $visao->setItem($selecionarImovel);
-        $visao->exibir('AnuncioVisaoPublicar.php');
     }
 
-   
+    /*
+      function selecionar($parametro) {
+      //modelo
+      $anuncio = new Anuncio();
+      $genericoDAO = new GenericoDAO();
+      $selecionarImovel = $genericoDAO->selecionar($anuncio, $parametro['id']);
+      //visao
+      $visao = new Template();
+      $visao->setItem($selecionarImovel);
+      $visao->exibir('AnuncioVisaoPublicar.php');
+      }
+
+
 
       function editar($parametros) {
       //modelo

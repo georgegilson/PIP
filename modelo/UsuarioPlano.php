@@ -58,8 +58,18 @@ class UsuarioPlano {
     }
 
     public function DataExpiracao($validadeativacao) {
-        $dateB = date_create_from_format("d/m/Y",$this->getDatacompra()); 
+        $dataCompra = explode(" ", $this->getDatacompra());
+        $dateB = date_create_from_format("d/m/Y", $dataCompra[0]); 
         $dateA = $dateB->add(date_interval_create_from_date_string($validadeativacao . 'days'));
         return date_format($dateA,"d/m/Y");
+    }
+    
+    public function cadastrar($idplano){
+        $usuarioPlano = new UsuarioPlano();
+        $usuarioPlano->setIdplano($idplano);
+        $usuarioPlano->setIdusuario($_SESSION["idusuario"]);
+        $usuarioPlano->setDatacompra(date('d/m/Y H:i:s'));
+        $usuarioPlano->setStatus("ativo");        
+        return $usuarioPlano;                
     }
 }
