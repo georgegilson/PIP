@@ -3,6 +3,7 @@
         <table class="table table-hover">
             <thead>
                 <tr>  
+                    <th>Referência</th>
                     <th>Descrição</th>
                     <th>Logradouro</th> 
                     <th>Bairro</th>
@@ -25,6 +26,7 @@
     foreach($data as $imovel){?>
         <tr>        
         <?php
+        echo "<td>" . $imovel->Referencia() . "</td>";
         echo "<td>" . $imovel->getDescricao() . "</td>";
         echo "<td>" . $imovel->getEndereco()->getLogradouro() . "</td>";
         echo "<td>" . $imovel->getEndereco()->getBairro() . "</td>";
