@@ -3,7 +3,9 @@
 include_once 'modelo/Imovel.php';
 include_once 'modelo/Endereco.php';
 include_once 'modelo/Anuncio.php';
+include_once 'modelo/pager/Pager.php';
 include_once 'DAO/GenericoDAO.php';
+
 
 class ImovelControle {
 
@@ -39,8 +41,8 @@ class ImovelControle {
         }
     }
 
-    function listar() {
-        //modelo
+    function listar() {     
+//modelo
         $imovel = new Imovel();
         $genericoDAO = new GenericoDAO();
         $listarImovel = $genericoDAO->consultar($imovel, true);

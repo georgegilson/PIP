@@ -1,14 +1,8 @@
-<div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
-    <div class="page-header">
-        <h1>Listagem de Im&oacute;veis</h1>
-    </div>
-    <!-- Example row of columns -->
-    <div class="alert">Todos</div>
+    
     <form>   
         <table class="table table-hover">
             <thead>
-                <tr>
-                    <th>Referência</th>
+                <tr>  
                     <th>Descrição</th>
                     <th>Logradouro</th> 
                     <th>Bairro</th>
@@ -16,37 +10,55 @@
                 </tr>
             </thead>
             <tbody>
-                <?php
-                Sessao::gerarToken();
-                $item = $this->getItem();
-                if ($item) {
-                    foreach ($item as $imovel) {
-                        ?>
-                        <tr>
-                            <td><?php echo $imovel->Referencia(); ?></td>
-                            <td><?php echo $imovel->getDescricao(); ?></td>
-                            <td><?php echo $imovel->getEndereco()->getLogradouro(); ?></td>
-                            <td><?php echo $imovel->getEndereco()->getBairro(); ?></td>
-                            <td><?php echo $imovel->getDatahoracadastro(); ?></td>
-                            <td><a href="#" id="popover<?php echo $imovel->getId(); ?>" class="btn btn-success">Detalhes do Imóvel</a></td>
-                            <td><a href="index.php?entidade=Imovel&acao=selecionar&id=<?php echo $imovel->getId(); ?>&token=<?php echo $_SESSION['token']; ?>" class="btn btn-warning">Editar</a> <br /></td>
-                            <td><?php echo (count($imovel->getAnuncio())>0) ? '<span class="btn btn-default"> Anuncio Publicado</span>' : '<a href="index.php?entidade=Anuncio&acao=form&idImovel='.$imovel->getId().'&token='.$_SESSION['token'].'" class="btn btn-primary">Publicar Anuncio</a>'; ?></td>
-                        </tr>
-                        <?php
-                    }
-                }
-                ?>
+
+    <?php
+                
+    $params = array(
+    'mode'       => 'Sliding',
+    'perPage'    => 5,
+    'dela'       => 2,
+    'itemData'   => $this->getItem());
+    
+    $pager = & Pager::factory($params);
+    $data  = $pager->getPageData();
+    
+    foreach($data as $imovel){?>
+        <tr>        
+        <?php
+        echo "<td>" . $imovel->getDescricao() . "</td>";
+        echo "<td>" . $imovel->getEndereco()->getLogradouro() . "</td>";
+        echo "<td>" . $imovel->getEndereco()->getBairro() . "</td>";
+        echo "<td>" . $imovel->getDatahoracadastro() . "</td>";
+        echo "<td><a href='#' id='popover".$imovel->getId()."'class='btn btn-success'>Detalhes do Imóvel</a></td>";
+        echo "<td><a href='index.php?entidade=Imovel&acao=selecionar&id=".$imovel->getId()."'class='btn btn-warning'>Editar</a> <br /></td>";
+        if(count($imovel->getAnuncio())>0){echo"<td><span class='btn btn-default'>Anuncio Publicado</span></td>";}
+         if(count($imovel->getAnuncio())==0){
+             echo"<td><a href='index.php?entidade=Anuncio&acao=form&idImovel=".$imovel->getId()."'class='btn btn-primary'>Publicar Anuncio</a></td>";}   
+    }
+    ?>             
+        </tr>         
             </tbody>
         </table>
+        
+    <?php
+    
+    $links = $pager->getLinks();
+    echo $links['all']; 
+    
+    ?>
+        
         <!-- Divs ocultas que serao exibidas dentro do popover. -->
-        <?php
+       
+    </form>
+
+<?php
         $item = $this->getItem();
         if ($item) {
             foreach ($item as $imovel) {
                 ?>   
                 <div id="popover<?php echo $imovel->getId(); ?>-content" class="hide">
                     <?php
-                    echo "Tipo: " . $imovel->getTipo() . "<br />";
+                    	 
                     echo "Condição: " . $imovel->getCondicao() . "<br />";
                     echo "Quartos: " . $imovel->getQuarto() . "<br />";
                     echo "Garagen(s): " . $imovel->getGaragem() . "<br />";
@@ -67,11 +79,11 @@
                     }
                     ?>
                 </div>
-            <?php }
+<?php }
         }
         ?>
 
-        <script type="text/javascript">
+<script type="text/javascript">
             $(document).ready(function() {
                 // Associa o evento do popover ao clicar no link.
                 $("a[id^='popover']").popover({
@@ -89,5 +101,5 @@
                 });
             });
         </script>
-    </form>
+
 </div>
