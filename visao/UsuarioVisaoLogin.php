@@ -1,70 +1,45 @@
-
-<script>
-    $(document).ready(function() {
-        $("#btnAcessar").click(function() {
-            autenticarUsuario();
-        });
-        function autenticarUsuario() {
-            alert('oi!');
-//            $.ajax({
-//                url: "index.php",
-//                dataType: "json",
-//                type: "POST",
-//                data: {
-//                    login: $('#txtlogin').val(),
-//                    senha: $('#txtsenha').val(),
-//                    hdnEntidade: "Usuario",
-//                    hdnAcao: "autenticar"
-//                },
-//                beforeSend: function() {
-//                },
-//                success: function(resposta) {
-//                    if (resposta.resultado == 1) {
-//
-//                    } else {
-//
-//                    }
-//                }
-//            })
-        }
-    });
-</script>
-
+<?php
+Sessao::gerarToken();
+?>
 <div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
     <div class="page-header">
         <h1>Identificação de Usuário</h1>
     </div>
     <!-- Example row of columns -->
     <!--    <div class="alert">Todos</div> -->
-    <form class="form-horizontal" id="form">
-        <input type="hidden" id="hdnEntidade" name="hdnEntidade" value=""  />
-        <input type="hidden" id="hdnAcao" name="hdnAcao" value="" />
-        <div class="form-group">
-            <label for="lblUsuario" class="col-sm-2 control-label">Login</label>
-            <div class="col-sm-3">
-                <input type="text" id="txtlogin" class="form-control" placeholder="Informe o login">
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="lblSenha" class="col-sm-2 control-label">Senha</label>
-            <div class="col-sm-3">
-                <input type="password" class="form-control" id="txtsenha" placeholder="Informe a sua senha">
-            </div>
-        </div>
-        <!--            <div class="form-group">
-                        <div class="col-sm-offset-2 col-sm-10">
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox"> Remember me
-                                </label>
-                            </div>
+    <form id="form" class="form-horizontal" action="index.php" method="post">
+                    <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Usuario"  />
+                    <input type="hidden" id="hdnAcao" name="hdnAcao" value="autenticar" />
+                    <input type="hidden" id="hdnToken" name="hdnToken" value="<?php echo $_SESSION['token']; ?>" />
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label" for="txtLogin">Login</label>
+                        <div class="col-lg-9">
+                            <input type="text" id="txtLogin" name="txtLogin" class="form-control" placeholder="Informe o Login">
                         </div>
-                    </div>-->
-        <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
-                <button type="button" class="btn btn-default" id="btnAcessar">Entrar</button>
-            </div>
-        </div>
-    </form>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label" for="txtSenha">Senha</label>
+                        <div class="col-lg-9">
+                            <input type="password" id="txtSenha" name="txtSenha" class="form-control" placeholder="Informe a Senha">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <div class="col-lg-offset-2 col-lg-10">
+                                    <button type="submit" class="btn btn-primary">Login</button>
+                                    <button type="button" class="btn btn-warning">Cancelar</button>
+                                </div>
+                            </div>                
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-5 control-label"><a href="index.php?entidade=Usuario&acao=form&tipo=esquecisenha">Esqueceu sua a senha?</a></label>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-5 control-label"><a href="index.php?entidade=Usuario&acao=form&tipo=cadastro">Ainda não é cadastrado?</a></label>
+                    </div>
+
+                </form>
 </div>
 
