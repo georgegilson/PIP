@@ -3,7 +3,7 @@
 class ConsultaUrl {
 
     public static function consulta($pagina) {
-        $controlador = fopen("/var/www/PIP/assets/txt/urls.php", "r");
+        $controlador = fopen(PIPROOT."/assets/txt/urls.php", "r");
         $resultado = NULL;
         if ($controlador) {
             $pesquisando = true;
