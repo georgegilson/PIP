@@ -148,9 +148,9 @@ if (Sessao::verificarSessaoUsuario()) {
                         </ul>
                     </li>
 <!--                    <li><a href="#about">Sobre a Empresa</a></li>-->
-                    <li><a href="index.php?entidade=Usuario&acao=formlogin">Login</a></li>
-                    <li><a href="index.php?entidade=Usuario&acao=form">Cadastre-se</a></li>
-                    <li><a href="#">Esqueci Login/Senha</a></li>
+                    <li><a href="index.php?entidade=Usuario&acao=form&tipo=login">Login</a></li>
+                    <li><a href="index.php?entidade=Usuario&acao=form&tipo=cadastro">Cadastre-se</a></li>
+                    <li><a href="index.php?entidade=Usuario&acao=form&tipo=esquecisenha">Esqueci Login/Senha</a></li>
                 </ul>
                 <div class="form-group">
                     <form class="navbar-form navbar-right">
