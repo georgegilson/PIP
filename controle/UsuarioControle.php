@@ -4,17 +4,39 @@ include_once 'modelo/Usuario.php';
 include_once 'modelo/Endereco.php';
 include_once 'modelo/Telefone.php';
 include_once 'modelo/Empresa.php';
+include_once 'modelo/RecuperaSenha.php';
 include_once 'controle/UsuarioPlanoControle.php';
 include_once 'DAO/GenericoDAO.php';
+include_once 'assets/mailer/class.phpmailer.php';
+include_once 'assets/mailer/class.smtp.php';
+include_once 'configuracao/ConsultaUrl.php';
 
 class UsuarioControle {
 
-    function form() {
-        //modelo
-        # definir regras de negocio tal como permissao de acesso
-        //visao
+    function form($parametros) {
         $visao = new Template();
-        $visao->exibir('UsuarioVisaoCadastro.php');
+        switch ($parametros['tipo']) {
+            case "cadastro":
+                $visao->exibir('UsuarioVisaoCadastro.php');
+                break;
+            case "login":
+                $visao->exibir('UsuarioVisaoLogin.php');
+                break;
+            case "esquecisenha":
+                $visao->exibir('UsuarioVisaoEsqueciSenha.php');
+                break;
+            case "alterarsenha":
+                $recuperasenha = new RecuperaSenha();
+                $genericoDAO = new GenericoDAO();
+                $selecionarRecuperaSenha = $genericoDAO->consultar($recuperasenha, false, array("hash" => $parametros["id"]));
+                if($selecionarRecuperaSenha && $selecionarRecuperaSenha[0]->getStatus() == "A"){
+                    $_SESSION['idRecuperaSenhaUsuario'] = $selecionarRecuperaSenha[0]->getIdusuario();
+                    $_SESSION['idRecuperaSenha'] = $selecionarRecuperaSenha[0]->getId();
+                    $visao->exibir('UsuarioVisaoAlterarSenha.php');
+                }else
+                    //link invalido ou já utiliado
+                    break;
+        }
     }
 
     function cadastrar($parametros) {
@@ -68,7 +90,6 @@ class UsuarioControle {
     function selecionar($parametro) {
         //modelo
         if (Sessao::verificarSessaoUsuario()) {
-
             $usuario = new Usuario();
             $genericoDAO = new GenericoDAO();
             $selecionarUsuario = $genericoDAO->consultar($usuario, true, array("id" => $_SESSION["idusuario"]));
@@ -83,7 +104,7 @@ class UsuarioControle {
     }
 
     function alterar($parametros) {
-        
+
         if (Sessao::verificarToken($parametros)) {
             $genericoDAO = new GenericoDAO();
             $genericoDAO->iniciarTransacao();
@@ -105,7 +126,7 @@ class UsuarioControle {
     }
 
     function buscarLogin($parametros) {
-        
+
         if (Sessao::verificarToken($parametros)) {
             $usuario = new Usuario();
             $genericoDAO = new GenericoDAO();
@@ -122,17 +143,24 @@ class UsuarioControle {
     }
 
     function autenticar($parametros) {
-      
         if (Sessao::verificarToken($parametros)) {
             $usuario = new Usuario();
             $genericoDAO = new GenericoDAO();
             $selecionarUsuario = $genericoDAO->consultar($usuario, false, array("login" => $parametros['txtLogin']));
-
             if (!$selecionarUsuario == 0) {
                 if ($selecionarUsuario[0]->getSenha() == md5($parametros['txtSenha'])) {
                     Sessao::configurarSessaoUsuario($selecionarUsuario);
-                    $redirecionamento = new UsuarioPlanoControle();
-                    $redirecionamento->listar();
+                    $resultado = ConsultaUrl::consulta($_SERVER['HTTP_REFERER']);
+                    switch ($resultado) {
+                        case "login":
+                            $visao = new Template();
+                            $visao->exibir('index', 1);
+                            break;
+                        case "plano":
+                            $redirecionamento = new UsuarioPlanoControle();
+                            $redirecionamento->listar();
+                            break;
+                    }
                 } else {
                     echo json_encode(array("resultado" => 0, "condicao" => "senha"));
                     //login ou senha inválido
@@ -151,6 +179,89 @@ class UsuarioControle {
             echo json_encode(array("resultado" => 1));
         } else {
             echo json_encode(array("resultado" => 0));
+        }
+    }
+
+    //ajax
+    function esquecersenha($parametros) {       
+        if (Sessao::verificarToken($parametros)) {
+            //verifica se tem link ativo
+            // pendente!
+           
+            //Verificar o email
+            $usuario = new Usuario();
+            $genericoDAO = new GenericoDAO();
+            $selecionarUsuario = $genericoDAO->consultar($usuario, false, array("email" => $parametros['txtEmail']));
+            if ($selecionarUsuario) {
+                //gravar registro no banco
+                $genericoDAO = new GenericoDAO();
+                $genericoDAO->iniciarTransacao();
+                $recuperasenha = new RecuperaSenha();
+                $entidadeRecuperaSenha = $recuperasenha->cadastrar($selecionarUsuario[0]->getId());
+                $idResuperaSenha = $genericoDAO->cadastrar($entidadeRecuperaSenha);
+                if ($idResuperaSenha) {
+                    $genericoDAO->commit();
+                    $genericoDAO->fecharConexao();
+                    //enviar email
+                    $mail = new PHPMailer();
+
+                    $mail->Charset = 'UTF-8';
+
+                    $mail->From = 'emailfrom@email.com';
+                    $mail->FromName = 'Nome de quem enviou';
+
+                    $mail->IsHTML(true);
+                    $mail->Subject = 'Assunto do e-mail';
+                    $mail->Body = "&lt;h1&gt;Teste de envio de e-mail&lt;/h1&gt; &lt;p&gt;Isso é um teste&lt;/p&gt;
+                        <br> 
+                        <a href=http://localhost/PIP/index.php?entidade=Usuario&acao=form&tipo=alterarsenha&id=" . $entidadeRecuperaSenha->getHash() . ">http://localhost/PIP/index.php?entidade=Usuario&acao=form&tipo=alterarsenha&id=" . $entidadeRecuperaSenha->getHash() . "</a>";
+                    $mail->AltBody = 'Conteudo sem HTML para editores que não suportam, sim, existem alguns';
+
+                    $mail->IsSMTP();
+                    $mail->SMTPAuth = true;
+                    $mail->Host = "ssl://smtp.googlemail.com";
+                    $mail->Port = 465;
+                    $mail->Username = 'adoniaspp@gmail.com';
+                    $mail->Password = '';
+
+                    $mail->AddAddress($selecionarUsuario[0]->getEmail(), $selecionarUsuario[0]->getNome());
+
+                    if ($mail->Send())
+                        echo 'E-mail enviado com sucesso';
+                    else
+                        echo 'Erro ao enviar e-mail';
+                } else {
+                    //não gravou no banco
+                }
+            } else {
+                //email não consta no bd
+            }
+        } else {
+            // token invalido
+        }
+    }
+    
+    //ajax
+    function alterarsenha($parametros){
+        if (Sessao::verificarToken($parametros)) {
+            $genericoDAO = new GenericoDAO();
+            $genericoDAO->iniciarTransacao();
+            $usuario = new Usuario();
+            $entidadeUsuario = $usuario->alterarSenha($parametros);
+            $resultadoUsuario = $genericoDAO->editar($entidadeUsuario);
+            $recuperasenha = new RecuperaSenha();
+            $entidadeRecuperaSenha = $recuperasenha->editar($parametros);
+            $resultadoAlterarSenha = $genericoDAO->editar($entidadeRecuperaSenha);
+            if($resultadoUsuario && $resultadoAlterarSenha){
+                $genericoDAO->commit();
+                $genericoDAO->fecharConexao();                
+            }else{
+                $genericoDAO->rollback();
+                $genericoDAO->fecharConexao();
+                //não gravou no banco
+            }
+        } else {
+            // token invalido
         }
     }
 
