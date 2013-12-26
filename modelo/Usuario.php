@@ -157,5 +157,12 @@ class Usuario {
         $usuario->setDatahoraalteracao(date('d/m/Y H:i:s'));     
         return $usuario;
     }
+    function alterarSenha($parametros){      
+        $usuario = new Usuario();
+        $usuario->setId($_SESSION["idRecuperaSenhaUsuario"]);
+        $senha = md5($parametros['txtSenha']);
+        $usuario->setSenha($senha);     
+        return $usuario;
+    }
 
 }
