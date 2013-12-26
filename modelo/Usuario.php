@@ -136,13 +136,13 @@ class Usuario {
         $usuario->setLogin($parametros['txtLogin']);
         $senha = md5($parametros['txtSenha']);
         $usuario->setSenha($senha);
-        if ($usuario->getTipousuario() == "fisica") {
+        if ($usuario->getTipousuario() == "pf") {
             $usuario->setCpfcnpj($parametros['txtCpf']);
         } else {
             $usuario->setCpfcnpj($parametros['txtCnpj']);
         }
         $usuario->setEmail($parametros['txtEmail']);
-        $usuario->setStatus("A");
+        $usuario->setStatus("ativo");
         $usuario->setDatahoracadastro(date('d/m/Y H:i:s'));
         $usuario->setDatahoraalteracao("");
         $usuario->setIdendereco($idendereco);
@@ -153,7 +153,6 @@ class Usuario {
         $usuario->setId($_SESSION["idusuario"]);
         $usuario->setNome($parametros['txtNome']);
         $usuario->setEmail($parametros['txtEmail']);
-        $usuario->setStatus("A");
         $usuario->setDatahoraalteracao(date('d/m/Y H:i:s'));     
         return $usuario;
     }

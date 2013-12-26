@@ -3,18 +3,19 @@
 include_once 'modelo/Imovel.php';
 include_once 'modelo/Endereco.php';
 include_once 'modelo/Anuncio.php';
-include_once 'modelo/pager/Pager.php';
+include_once 'assets/pager/Pager.php';
 include_once 'DAO/GenericoDAO.php';
-
 
 class ImovelControle {
 
     function form() {
         //modelo
         # definir regras de negocio tal como permissao de acesso
-        //visao
-        $visao = new Template();
-        $visao->exibir('ImovelVisaoCadastro.php');
+        if (Sessao::verificarSessaoUsuario()) {
+            //visao
+            $visao = new Template();
+            $visao->exibir('ImovelVisaoCadastro.php');
+        }
     }
 
     function cadastrar($parametros) {
@@ -41,36 +42,35 @@ class ImovelControle {
         }
     }
 
-    function listar() {     
-//modelo
-        $imovel = new Imovel();
-        $genericoDAO = new GenericoDAO();
-        $listarImovel = $genericoDAO->consultar($imovel, true);
-        //visao
-        $visao = new Template();
-        $visao->setItem($listarImovel);
-        $visao->exibir('ImovelVisaoListagem.php');
+    function listar() {
+        if (Sessao::verificarSessaoUsuario()) {
+            $imovel = new Imovel();
+            $genericoDAO = new GenericoDAO();
+            $listarImovel = $genericoDAO->consultar($imovel, true, array("idusuario" => $_SESSION['idusuario']));
+            //visao
+            $visao = new Template();
+            $visao->setItem($listarImovel);
+            $visao->exibir('ImovelVisaoListagem.php');
+        }
     }
 
     function selecionar($parametro) {
-        //modelo
+        if (Sessao::verificarSessaoUsuario() & Sessao::verificarToken(array("hdnToken" => $parametros["token"]))) {
+            $imovel = new Imovel();
 
-        session_start();
-        
-        $imovel = new Imovel();
+            $parametros["id"] = $parametro["id"];
 
-        $parametros["id"] = $parametro["id"];
-
-        $genericoDAO = new GenericoDAO();
-        $selecionarImovel = $genericoDAO->consultar($imovel, true, $parametros);
-        $_SESSION['id'] = $selecionarImovel[0]->getId();
-        $_SESSION['idendereco'] = $selecionarImovel[0]->getIdEndereco();
+            $genericoDAO = new GenericoDAO();
+            $selecionarImovel = $genericoDAO->consultar($imovel, true, $parametros);
+            $_SESSION['id'] = $selecionarImovel[0]->getId();
+            $_SESSION['idendereco'] = $selecionarImovel[0]->getIdEndereco();
 //        var_dump($_SESSION);
 //        die();
-        //visao
-        $visao = new Template();
-        $visao->setItem($selecionarImovel);
-        $visao->exibir('ImovelVisaoEdicao.php');
+            //visao
+            $visao = new Template();
+            $visao->setItem($selecionarImovel);
+            $visao->exibir('ImovelVisaoEdicao.php');
+        }
     }
 
     function publicar($parametro) {
@@ -90,9 +90,6 @@ class ImovelControle {
         $genericoDAO->iniciarTransacao();
         $imovel = new Imovel();
 
-        session_start();
-//        var_dump($_SESSION);
-//        die();
         $parametros["id"] = $_SESSION['id'];
 
         $entidadeImovel = $imovel->editar($parametro);

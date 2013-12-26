@@ -348,8 +348,8 @@
                         <div class="col-lg-8">
                             <select class="form-control" id="sltTipoUsuario" name="sltTipoUsuario">
                                 <option value="">Informe o Tipo de Pessoa</option>
-                                <option value="fisica">Física</option>
-                                <option value="juridica">Jurídica</option>
+                                <option value="pf">Física</option>
+                                <option value="pj">Jurídica</option>
                             </select>
                         </div>
                     </div>

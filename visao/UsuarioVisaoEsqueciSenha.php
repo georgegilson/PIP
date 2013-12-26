@@ -13,7 +13,7 @@ Sessao::gerarToken();
                     <input type="hidden" id="hdnToken" name="hdnToken" value="<?php echo $_SESSION['token']; ?>" />
                     <div class="form-group">
                         <label class="col-lg-3 control-label" for="txtLogin">Email</label>
-                        <div class="col-lg-9">
+                        <div class="col-lg-3">
                             <input type="text" id="txtEmail" name="txtEmail" class="form-control" placeholder="Informe o email cadastrado">
                         </div>
                     </div>

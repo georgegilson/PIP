@@ -29,7 +29,7 @@ class UsuarioControle {
                 $recuperasenha = new RecuperaSenha();
                 $genericoDAO = new GenericoDAO();
                 $selecionarRecuperaSenha = $genericoDAO->consultar($recuperasenha, false, array("hash" => $parametros["id"]));
-                if($selecionarRecuperaSenha && $selecionarRecuperaSenha[0]->getStatus() == "A"){
+                if($selecionarRecuperaSenha && $selecionarRecuperaSenha[0]->getStatus() == "ativo"){
                     $_SESSION['idRecuperaSenhaUsuario'] = $selecionarRecuperaSenha[0]->getIdusuario();
                     $_SESSION['idRecuperaSenha'] = $selecionarRecuperaSenha[0]->getId();
                     $visao->exibir('UsuarioVisaoAlterarSenha.php');
@@ -53,7 +53,7 @@ class UsuarioControle {
             $idUsuario = $genericoDAO->cadastrar($entidadeUsuario);
             //Empresa
             $idEmpresa = false;
-            if ($entidadeUsuario->getTipousuario() == "juridica") {
+            if ($entidadeUsuario->getTipousuario() == "pj") {
                 $empresa = new Empresa();
                 $entidadeEmpresa = $empresa->cadastrar($parametros, $idUsuario);
                 $idEmpresa = $genericoDAO->cadastrar($entidadeEmpresa);
@@ -83,7 +83,7 @@ class UsuarioControle {
                 echo json_encode(array("resultado" => 0));
             }
         } else {
-            
+            //token
         }
     }
 
@@ -121,7 +121,7 @@ class UsuarioControle {
             else
                 echo json_encode(array("resultado" => 0));
         }else {
-            /* More than five minutes has passed. */
+            /* token. */
         }
     }
 
@@ -221,8 +221,8 @@ class UsuarioControle {
                     $mail->SMTPAuth = true;
                     $mail->Host = "ssl://smtp.googlemail.com";
                     $mail->Port = 465;
-                    $mail->Username = 'adoniaspp@gmail.com';
-                    $mail->Password = '';
+                    $mail->Username = 'pipcontato@gmail.com';
+                    $mail->Password = 'osestudantes1';
 
                     $mail->AddAddress($selecionarUsuario[0]->getEmail(), $selecionarUsuario[0]->getNome());
 

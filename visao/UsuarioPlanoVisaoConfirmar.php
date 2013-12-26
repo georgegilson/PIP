@@ -56,7 +56,7 @@ Sessao::gerarToken();
                 <div class="col-lg-offset-1">
                     <form id="form" class="form-horizontal" method="POST" action="index.php">
                         <button type="submit" class="btn btn-success">Confirmar o Pagamento</button> 
-                        <button id="btnCancelar" type="button" class="btn btn-danger">Abortar Operação</button>
+                        <button id="btnCancelar" type="button" class="btn btn-danger">Cancelar Operação</button>
                         <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="UsuarioPlano" />
                         <input type="hidden" id="hdnAcao" name="hdnAcao" value="comprar" />
                         <input type="hidden" id="hdnPlano" name="hdnPlano" value="<?php echo $item["confirmacao"]["tokenPlano"]; ?>" />

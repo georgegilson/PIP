@@ -61,14 +61,14 @@ class RecuperaSenha {
         $recuperasenha->setHash(md5(uniqid(rand(), TRUE)));
         $recuperasenha->setDataRecuperacao(date('d/m/Y H:i:s'));
         $recuperasenha->setDataAlteracao("");
-        $recuperasenha->setStatus("A");
+        $recuperasenha->setStatus("ativo");
         return $recuperasenha;
     }
     function editar(){
         $recuperasenha = new RecuperaSenha();
         $recuperasenha->setId($_SESSION["idRecuperaSenha"]);
         $recuperasenha->setDataAlteracao(date('d/m/Y H:i:s'));
-        $recuperasenha->setStatus("U");
+        $recuperasenha->setStatus("utilizado");
         return $recuperasenha;
     }
 }

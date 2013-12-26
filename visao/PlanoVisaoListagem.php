@@ -19,6 +19,7 @@
                             <th>Plano</th>
                             <th>Descrição Completa</th>
                             <th>Publicação</th>
+                            <th>Preço</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -30,6 +31,7 @@
                                 echo "<td>" . $plano->getTitulo() . "</td>";
                                 echo "<td>" . $plano->getDescricao() . "</td>";
                                 echo "<td>" . $plano->getValidadepublicacao() . " dias</td>";
+                                echo "<td> R$ " . $plano->getPreco() . " </td>";
                                 echo "</tr>";
                             }
                         }
@@ -48,13 +50,13 @@
                     <input type="hidden" id="hdnToken" name="hdnToken" value="<?php echo $_SESSION['token']; ?>" />
                     <div class="form-group">
                         <label class="col-lg-3 control-label" for="txtLogin">Login</label>
-                        <div class="col-lg-9">
+                        <div class="col-lg-4">
                             <input type="text" id="txtLogin" name="txtLogin" class="form-control" placeholder="Informe o Login">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-lg-3 control-label" for="txtSenha">Senha</label>
-                        <div class="col-lg-9">
+                        <div class="col-lg-4">
                             <input type="password" id="txtSenha" name="txtSenha" class="form-control" placeholder="Informe a Senha">
                         </div>
                     </div>

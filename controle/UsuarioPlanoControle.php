@@ -16,8 +16,8 @@ class UsuarioPlanoControle {
 
             $listarUsuarioPlano = $genericoDAO->consultar($usuarioPlano, true, array("idusuario" => $_SESSION["idusuario"]));
             $condicoes["status"] = "ativo";
-            if ($_SESSION["tipopessoa"] == "fisica") {
-                $condicoes["tipo"] = "fisica";
+            if ($_SESSION["tipopessoa"] == "pf") {
+                $condicoes["tipo"] = "pf";
             }
             $listarPlano = $genericoDAO->consultar($plano, true, $condicoes);
 

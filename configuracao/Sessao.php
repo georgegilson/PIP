@@ -23,7 +23,7 @@ class Sessao {
             return false;
     }
 
-    public static function desconfigurarVariavelSessao($variavel){
+    public static function desconfigurarVariavelSessao($variavel) {
         
     }
 
@@ -49,23 +49,23 @@ class Sessao {
         }
     }
 
-    public static function configurarSessaoUsuario($usuario){
+    public static function configurarSessaoUsuario($usuario) {
         $_SESSION["idusuario"] = $usuario[0]->getId();
         $_SESSION["idendereco"] = $usuario[0]->getIdendereco();
         $_SESSION["nome"] = $usuario[0]->getNome();
         $_SESSION["tipopessoa"] = $usuario[0]->getTipousuario();
     }
 
-    public static function configurarSessaoUsuarioPlanoConfirmacao($confirmacao){
+    public static function configurarSessaoUsuarioPlanoConfirmacao($confirmacao) {
         $_SESSION["usuarioPlano"]["planos"] = $confirmacao["planos"];
         //$_SESSION["usuarioPlano"]["precos"] = $confirmacao["precos"];
         $_SESSION["usuarioPlano"]["total"] = $confirmacao["total"];
         $_SESSION["usuarioPlano"]["tokenPlano"] = $confirmacao["tokenPlano"];
     }
-    
-    public static function configurarSessaoAnuncio($anuncio){
+
+    public static function configurarSessaoAnuncio($anuncio) {
         $_SESSION["anuncio"]["idimovel"] = $anuncio["idimovel"];
         //$_SESSION["anuncio"]["plano"] = $anuncio["plano"];
     }
-}
 
+}

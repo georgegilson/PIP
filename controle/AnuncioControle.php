@@ -22,7 +22,7 @@ class AnuncioControle {
             $condicoes["status"] = 'ativo';
             $listarUsuarioPlano = $genericoDAO->consultar($usuarioPlano, true, $condicoes);
 
-            $empresa = ($_SESSION["tipopessoa"] == "juridica");
+            $empresa = ($_SESSION["tipopessoa"] == "pj");
             if ($empresa) {
                 $pagina = 'AnuncioVisaoEmpresaPublicar.php';
             } else {
@@ -53,7 +53,7 @@ class AnuncioControle {
                     $genericoDAO = new GenericoDAO();
                     $genericoDAO->iniciarTransacao();
 
-                    $empresa = ($_SESSION["tipopessoa"] == "juridica");
+                    $empresa = ($_SESSION["tipopessoa"] == "pj");
                     if ($empresa) {
                         //$parametros['sltPlano'] = 1; #se for empresa trocar pelo idusuarioplano na sessão
                     }
@@ -65,7 +65,7 @@ class AnuncioControle {
                     if (!$empresa) { #se não for pessoa fisica atualiza o status do usuarioplano
                         $entidadeUsuarioPlano = new UsuarioPlano();
                         $entidadeUsuarioPlano->setId($parametros["sltPlano"]);
-                        $entidadeUsuarioPlano->setStatus("publicado");
+                        $entidadeUsuarioPlano->setStatus("utilizado");
                         $genericoDAO->editar($entidadeUsuarioPlano);
                     }
 
@@ -91,10 +91,7 @@ class AnuncioControle {
     }
 
     function listar() {
-
-        $estaLogado = Sessao::verificarSessaoUsuario();
-
-        if ($estaLogado) {
+       if (Sessao::verificarSessaoUsuario()){
             $anuncio = new Anuncio();
             $genericoDAO = new GenericoDAO();
             $listarAnuncio = $genericoDAO->consultar($anuncio, true, array("idusuarioplano" => $_SESSION['idusuario']));
@@ -102,11 +99,7 @@ class AnuncioControle {
             $visao = new Template();
             $visao->setItem($listarAnuncio);
             $visao->exibir('AnuncioVisaoListagem.php');
-        } else {
-            $visao = new Template();
-            $visao->exibir('PlanoVisaoListagem.php');
-            //modelo
-        }
+        } 
     }
 
     /*

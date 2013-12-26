@@ -22,7 +22,7 @@
     
     $pager = & Pager::factory($params);
     $data  = $pager->getPageData();
-    
+    Sessao::gerarToken();
     foreach($data as $imovel){?>
         <tr>        
         <?php
@@ -32,20 +32,20 @@
         echo "<td>" . $imovel->getEndereco()->getBairro() . "</td>";
         echo "<td>" . $imovel->getDatahoracadastro() . "</td>";
         echo "<td><a href='#' id='popover".$imovel->getId()."'class='btn btn-success'>Detalhes do Imóvel</a></td>";
-        echo "<td><a href='index.php?entidade=Imovel&acao=selecionar&id=".$imovel->getId()."'class='btn btn-warning'>Editar</a> <br /></td>";
+        echo "<td><a href='index.php?entidade=Imovel&acao=selecionar&id=".$imovel->getId()."&token=".$_SESSION['token']."' class='btn btn-warning'>Editar</a> <br /></td>";
         if(count($imovel->getAnuncio())>0){echo"<td><span class='btn btn-default'>Anuncio Publicado</span></td>";}
          if(count($imovel->getAnuncio())==0){
-             echo"<td><a href='index.php?entidade=Anuncio&acao=form&idImovel=".$imovel->getId()."'class='btn btn-primary'>Publicar Anuncio</a></td>";}   
+             echo"<td><a href='index.php?entidade=Anuncio&acao=form&idImovel=".$imovel->getId()."&token=".$_SESSION['token']."' class='btn btn-primary'>Publicar Anuncio</a></td>";}   
     }
     ?>             
         </tr>         
             </tbody>
         </table>
-        
+        &nbsp;
     <?php
     
     $links = $pager->getLinks();
-    echo $links['all']; 
+    echo "&nbsp;&nbsp;&nbsp;&nbsp;Página: ".$links['all']; 
     
     ?>
         
