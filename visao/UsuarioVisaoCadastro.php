@@ -75,13 +75,13 @@
         $("#txtCnpj").mask("99.999.999/9999-99");
         $("#txtCpfResponsavel").mask("999.999.999-99");
         $("#sltTipoUsuario").change(function() {
-            if ($(this).val() == "fisica") {
+            if ($(this).val() == "pf") {
                 $("#divnome").fadeIn('slow');
                 $("#divEmpresa").fadeOut('slow'); //oculta campos do DIVEMPRESA 
                 $("#divCnpj").hide();
                 $("#divCpf").show();
                 $("#lblNome").html("Nome da Completo");
-            } else if ($(this).val() == "juridica") {
+            } else if ($(this).val() == "pj") {
                 $("#divnome").fadeIn('slow');
                 $("#divEmpresa").fadeIn('slow'); //mostra campos do DIVEMPRESA
                 $("#divCnpj").show();
@@ -172,11 +172,33 @@
                 },
                 txtCpf: {
                     required: true,
-                    cpf: 'both'
+                    cpf: 'both',
+                    remote:
+                            {
+                                url: "index.php",
+                                dataType: "json",
+                                type: "POST",
+                                data: {
+                                    hdnEntidade: "Usuario",
+                                    hdnAcao: "buscarCpf",
+                                    hdnToken: $("#hdnToken").val()
+                                }
+                            }
                 },
                 txtCnpj: {
                     required: true,
-                    cnpj: 'both'
+                    cnpj: 'both',
+                    remote:
+                            {
+                                url: "index.php",
+                                dataType: "json",
+                                type: "POST",
+                                data: {
+                                    hdnEntidade: "Usuario",
+                                    hdnAcao: "buscarCnpj",
+                                    hdnToken: $("#hdnToken").val()
+                                }
+                            }
                 },
                 txtCpfResponsavel: {
                     required: true,
@@ -196,13 +218,23 @@
                                     hdnToken: $("#hdnToken").val()
                                 }
                             }
-                    //locate: true
                 },
                 txtResponsavel: {
                     required: true
                 },
                 txtEmail: {
                     email: true,
+                    remote:
+                            {
+                                url: "index.php",
+                                dataType: "json",
+                                type: "POST",
+                                data: {
+                                    hdnEntidade: "Usuario",
+                                    hdnAcao: "buscarEmail",
+                                    hdnToken: $("#hdnToken").val()
+                                }
+                            }
                 },
                 txtRazaoSocial: {
                     required: true
@@ -225,10 +257,15 @@
             },
             messages: {
                 txtCpf: {
-                    required: "Campo obrigatório"
+                    required: "Campo obrigatório",
+                    remote: "CPF já utilizado"
                 },
                 txtCnpj: {
-                    required: "Campo obrigatório"
+                    required: "Campo obrigatório",
+                    remote: "CNPJ já utilizado"
+                },
+                txtEmail: {                 
+                    remote: "Email já utilizado"
                 },
                 sltTipoUsuario: {
                     required: "Campo obrigatório"
@@ -288,14 +325,16 @@
                             $('.alert').html("...processando...").attr('class', 'alert alert-warning');
                             $('button[type=submit]').attr('disabled', 'disabled');
                         },
-                        success: function(resposta) {                       
+                        success: function(resposta) {  
+                            $('.page-header').hide();
+                            $(".alert").hide();
                             $('button[type=submit]').removeAttr('disabled');
                             if (resposta.resultado == 1) {
-                                $('.alert').html(
-                                        "<p align=center> <h4>A sua conta de usuário foi criada com sucesso!\n\
-                    <br>Confira o seu email, " + $("#txtEmail").val() +", e confirme seu cadastro\n\
-                    <br>Caso não tenha recebido a confirmação de cadastro, verifique também a sua caixa de SPAM\n\
-                    <br>Lembramos que a ativação de sua conta se dá mediante sua confirmação.</h4> </center>").attr('class', 'alert alert-success');
+                                $('#divmsg').fadeIn('slow');
+                                $('#divmsg').html("<h2 class=text-center>A sua conta de usuário foi criada com sucesso!</h2>\n\
+                                 <p class=text-center>Em breve você receberá um e-mail para confirmação do cadastro. </p>\n\
+                                 <p class=text-center>Caso não tenha recebido a confirmação de cadastro, verifique também a sua caixa de SPAM. </p>\n\
+                                 <p class=text-center>Lembramos que a ativação de sua conta se dá mediante sua confirmação. </p>");
                                 $('#divlinha1').fadeOut('slow');
                                 $('#divlinha2').fadeOut('slow');
                                 $('#divlinha3').fadeOut('slow'); 
@@ -327,7 +366,7 @@
     </div>
     <!-- Alertas -->
     <div class="alert">Preencha os campos abaixo</div>
-
+    <div class="row text-success" id="divmsg" hidden="true"></div>
     <!-- form -->
     <form id="form" class="form-horizontal">
         <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Usuario"  />
