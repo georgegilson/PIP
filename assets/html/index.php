@@ -43,21 +43,45 @@
 
 <div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
     <!-- Example row of columns -->
+
+    <?php
+    $item = $this->getItem();
+    $count = 0;
+    $anuncios = $item['anuncios'];
+    if (count($anuncios) % 3 != 0) {
+        //Append 1 or 2 items from start of array if needed
+        $anuncios = array_merge($anuncios, array_slice($anuncios, 0, 3 - count($anuncios) % 3));
+    }
+    ?>
+
     <div class="row">
-        <div class="col-lg-4">
-            <h2>Alugue</h2>
-            <p>Casa no Jurunão perto da boca dos manos sem quartos, cozinha, sala e banheiro, só mesmo a área da produção. Valor: 150 contos + o do cigarro</p>
-            <p><a class="btn btn-default" href="#">Veja mais detalhes &raquo;</a></p>
-        </div>
-        <div class="col-lg-4">
-            <h2>Compre</h2>
-            <p>Vendo AP na estrada nova esquina com perebebui, 3 quartos, piscina 2 suites e 2 banheiros. Possui varanda gourmet.</p>
-            <p><a class="btn btn-default" href="#">Veja mais detalhes &raquo;</a></p>
-        </div>
-        <div class="col-lg-4">
-            <h2>Compre</h2>
-            <p>Sua casa sua vida. Ótima localização proximo de tudo. Proximo dos principais bairros da cidade (canudos, terra firme e guamá). Venha conhecer agende sua visita!</p>
-            <p><a class="btn btn-default" href="#">Veja mais detalhes &raquo;</a></p>
-        </div>
+        <?php
+        foreach ($anuncios as $anuncio) {
+            if (($count > 0) and ($count % 3 == 0)) {
+                ?>
+            </div><div class="row">
+                <?php
+            }
+            ?>
+            <div class="col-lg-4">
+                <h2><?php echo $anuncio->getTituloAnuncio(); ?></h2>
+                <p><?php echo $anuncio->getDescricaoAnuncio(); ?>
+                    <?php
+                    if (count($anuncio->getImagem()) > 0) {
+                        $imagem = $anuncio->getImagem();
+                        $imagem = (is_array($imagem) ? $imagem[0] : $imagem);
+                        echo '<img src="' . $imagem->getDiretorio() . '" width="250px" >';
+                    }
+                    ?>
+                </p>
+
+                <p><a class="btn btn-default" href="#">Veja mais detalhes &raquo;</a></p>
+            </div>
+            <?php
+            $count++;
+        }
+        ?>
     </div>
 </div>    
+
+

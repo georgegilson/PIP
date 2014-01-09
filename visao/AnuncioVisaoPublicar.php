@@ -8,7 +8,6 @@
 <script src="assets/js/upload/tmpl.min.js"></script>
 <script src="assets/js/upload/load-image.min.js"></script>
 <script src="assets/js/upload/canvas-to-blob.min.js"></script>
-<script src="assets/js/upload/jquery.blueimp-gallery.min.js"></script>
 <script src="assets/js/upload/jquery.iframe-transport.js"></script>
 <script src="assets/js/upload/jquery.fileupload.js"></script>
 <script src="assets/js/upload/jquery.fileupload-process.js"></script>
@@ -297,19 +296,6 @@
         </div>
     </div>
 </form>
-<!-- The blueimp Gallery widget -->
-<div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls" data-filter=":even">
-    <div class="slides"></div>
-    <h3 class="title"></h3>
-    <a class="prev">‹</a>
-    <a class="next">›</a>
-    <a class="close">×</a>
-    <a class="play-pause"></a>
-    <ol class="indicator"></ol>
-</div>
-
-
-
 <!-- The template to display files available for upload -->
 <script id="template-upload" type="text/x-tmpl">
     {% for (var i=0, file; file=o.files[i]; i++) { %}
@@ -322,7 +308,7 @@
     <strong class="error text-danger"></strong>
     </td>
     <td>
-    <input type="text" id="txtLegenda{%=i%}" name="txtLegenda{%=i%}" placeholder="Informe a Legenda" class="form-control" />
+    <input type="text" id="txtLegenda[]" name="txtLegenda[]" placeholder="Informe a Legenda" class="form-control" />
     </td>    
     <td>
     <p class="size">Processing...</p>
@@ -554,7 +540,7 @@
                     $(".alert").hide();
                     if (resposta.resultado == 1) {
                         $("#step5").html('<div class="row text-success">\n\
-    <h2 class="text-center">Congratulações!</h2>\n\
+    <h2 class="text-center">Obrigado!</h2>\n\
     <p class="text-center">O cadastro de seu anúncio foi concluído com sucesso. </p>\n\
     <p class="text-center">Em breve você receberá um e-mail confirmando a publicação do mesmo. </p>\n\
     <p class="text-center">Não perca tempo clique aqui e compre mais anúncios! </p>\n\

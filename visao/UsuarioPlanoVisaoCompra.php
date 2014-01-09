@@ -10,7 +10,7 @@
             setTimeout(
                     function()
                     {
-                        location.href = "index.php?entidade=usuarioplano&acao=listar"
+                        location.href = "index.php?entidade=UsuarioPlano&acao=listar"
                     }, 5000);
 
         })

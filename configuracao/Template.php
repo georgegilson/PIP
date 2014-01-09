@@ -28,7 +28,7 @@ class Template {
 
     public function corpo($visao, $paginaInicial) {
         if ($paginaInicial === 1) {
-            include_once 'assets/html/index.html';
+            include_once 'assets/html/index.php';
         } else {
             include_once 'visao/' . $visao;
         }

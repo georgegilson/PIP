@@ -55,7 +55,7 @@ class ImovelControle {
     }
 
     function selecionar($parametro) {
-        if (Sessao::verificarSessaoUsuario() & Sessao::verificarToken(array("hdnToken" => $parametros["token"]))) {
+        if (Sessao::verificarSessaoUsuario() & Sessao::verificarToken(array("hdnToken" => $parametro["token"]))) {
             $imovel = new Imovel();
 
             $parametros["id"] = $parametro["id"];

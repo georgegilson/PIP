@@ -353,12 +353,12 @@
                                     <select class="form-control" id="sltTipoUsuario" name="sltTipoUsuario">
                                         <option value="">Informe o Tipo de Pessoa</option>
                                         <option <?php
-                                        if ($usuario->getTipousuario() == "fisica") {
+                                        if ($usuario->getTipousuario() == "pf") {
                                             print "selected='true'";
                                         }
                                         ?> value="fisica">Física</option>
                                         <option <?php
-                                        if ($usuario->getTipousuario() == "juridica") {
+                                        if ($usuario->getTipousuario() == "pj") {
                                             print "selected='true'";
                                         }
                                         ?> value="juridica">Jurídica</option>
@@ -366,7 +366,7 @@
                                 </div>
                             </div>-->
                             <div class="form-group" id="divnome" <?php
-                            if ($usuario->getTipousuario() == "juridica") {
+                            if ($usuario->getTipousuario() == "pj") {
                                 print "hidden";
                             }
                             ?>>
@@ -376,7 +376,7 @@
                                 </div>
                             </div>
                             <div class="form-group" id="divnomeempresa" <?php
-                            if ($usuario->getTipousuario() == "fisica") {
+                            if ($usuario->getTipousuario() == "pf") {
                                 print "hidden";
                             }
                             ?>>
@@ -386,7 +386,7 @@
                                 </div>
                             </div>
                             <div class="form-group" id="divCpf" <?php
-                            if ($usuario->getTipousuario() == "juridica") {
+                            if ($usuario->getTipousuario() == "pj") {
                                 print "hidden";
                             }
                             ?>>
@@ -396,7 +396,7 @@
                                 </div>
                             </div>
                             <div class="form-group" id="divCnpj" <?php
-                            if ($usuario->getTipousuario() == "fisica") {
+                            if ($usuario->getTipousuario() == "pf") {
                                 print "hidden";
                             }
                             ?>>
@@ -430,7 +430,7 @@
                                 </div>
                             </div>
                             <div id="divEmpresa" <?php
-                            if ($usuario->getTipousuario() == "fisica") {
+                            if ($usuario->getTipousuario() == "pf") {
                                 print "hidden";
                             }
                             ?>>
@@ -438,7 +438,7 @@
                                     <label class="col-lg-3 control-label" for="txtResponsavel">Responsável</label>
                                     <div class="col-lg-8">
                                         <input type="text" id="txtResponsavel" name="txtResponsavel" class="form-control" placeholder="Informe o nome do responsável da empresa" value="<?php
-                                        if ($usuario->getTipousuario() == "juridica") {
+                                        if ($usuario->getTipousuario() == "pj") {
                                             echo $usuario->getEmpresa()->getResponsavel();
                                         }
                                         ?>">
@@ -448,7 +448,7 @@
                                     <label class="col-lg-3 control-label" for="txtCpfResponsavel">CPF do Responsável</label>
                                     <div class="col-lg-8">
                                         <input type="text" id="txtCpfResponsavel" name="txtCpfResponsavel" class="form-control" placeholder="Informe o CPF do responsável da empresa" value="<?php
-                                        if ($usuario->getTipousuario() == "juridica") {
+                                        if ($usuario->getTipousuario() == "pj") {
                                             echo $usuario->getEmpresa()->getCpfresponsavel();
                                         }
                                         ?>">
@@ -458,7 +458,7 @@
                                     <label class="col-lg-3 control-label" for="txtRazaoSocial">Razão Social</label>
                                     <div class="col-lg-8">
                                         <input type="text" id="txtRazaoSocial" name="txtRazaoSocial" class="form-control" placeholder="Informe a razão social da empresa" value="<?php
-                                        if ($usuario->getTipousuario() == "juridica") {
+                                        if ($usuario->getTipousuario() == "pj") {
                                             echo $usuario->getEmpresa()->getRazaosocial();
                                         }
                                         ?>">

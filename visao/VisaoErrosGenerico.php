@@ -39,6 +39,17 @@ switch ($item) {
                     $("#divmsg").html("<h2 class=text-left>O E-mail digitado é inválido.</h2>");
         <?php
         break;
+    case "sucessocadastrousuario":
+        ?>
+                    $('#diverro').attr('class', 'row text-success');
+                    var img = $("<h1>", {class: "glyphicon glyphicon-ok"}, "</h1>");
+                    $('#divimg').append(img);
+                    $("#divmsg").html("<h2 class=text-center>A sua conta de usuário foi criada com sucesso!</h2>\n\
+                                 <p class=text-center>Em breve você receberá um e-mail para confirmação do cadastro. </p>\n\
+                                 <p class=text-center>Caso não tenha recebido a confirmação de cadastro, verifique também a sua caixa de SPAM. </p>\n\
+                                 <p class=text-center>Lembramos que a ativação de sua conta se dá mediante sua confirmação. </p>");
+        <?php
+        break;
 }
 ?>
         });

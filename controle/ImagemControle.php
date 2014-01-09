@@ -21,8 +21,8 @@ class ImagemControle extends UploadHandler {
     }
 
     protected function handle_form_data($file, $index) {
-        //var_dump(2);
-        $file->legenda = $this->parametros["txtLegenda" . $index];
+        $legenda = $this->parametros["txtLegenda"];
+        $file->legenda = $legenda[0];
         $file->idImagem = '';
     }
 

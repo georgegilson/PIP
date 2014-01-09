@@ -276,7 +276,7 @@ class Imovel {
         $imovel->setSuite($parametros['sltSuite']);
         $imovel->setDescricao($parametros['txtDescricao']);
         
-        $imovel->setIdusuario("usuariosimon");
+        $imovel->setIdusuario($_SESSION["idusuario"]);
         
         if (isset($parametros["sltAndar"])){
             $imovel->setAndar($parametros['sltAndar']);
@@ -341,7 +341,7 @@ class Imovel {
         $imovel->setSuite($parametros['sltSuite']);
         $imovel->setDescricao($parametros['txtDescricao']);
         
-        $imovel->setIdusuario("usuariosimon");
+        $imovel->setIdusuario($_SESSION["idusuario"]);
         
         if (isset($parametros["sltAndar"])){
             $imovel->setAndar($parametros['sltAndar']);

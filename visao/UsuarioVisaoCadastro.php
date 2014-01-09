@@ -315,35 +315,37 @@
                 }
             },
             submitHandler: function() {
-                if ($("#hdnCEP").val() != "") {               
-                    $.ajax({
-                        url: "index.php",
-                        dataType: "json",
-                        type: "POST",
-                        data: $('#form').serialize(),
-                        beforeSend: function() {                      
-                            $('.alert').html("...processando...").attr('class', 'alert alert-warning');
-                            $('button[type=submit]').attr('disabled', 'disabled');
-                        },
-                        success: function(resposta) {  
-                            $('.page-header').hide();
-                            $(".alert").hide();
-                            $('button[type=submit]').removeAttr('disabled');
-                            if (resposta.resultado == 1) {
-                                $('#divmsg').fadeIn('slow');
-                                $('#divmsg').html("<h2 class=text-center>A sua conta de usuário foi criada com sucesso!</h2>\n\
-                                 <p class=text-center>Em breve você receberá um e-mail para confirmação do cadastro. </p>\n\
-                                 <p class=text-center>Caso não tenha recebido a confirmação de cadastro, verifique também a sua caixa de SPAM. </p>\n\
-                                 <p class=text-center>Lembramos que a ativação de sua conta se dá mediante sua confirmação. </p>");
-                                $('#divlinha1').fadeOut('slow');
-                                $('#divlinha2').fadeOut('slow');
-                                $('#divlinha3').fadeOut('slow'); 
-                            } else {
-                                $('.alert').html("Erro ao cadastrar").attr('class', 'alert alert-danger');
-                            }
-                        }
-                    })
-                    return false;
+                if ($("#hdnCEP").val() != "") {         
+                    $('#form').submit();
+//                    $.ajax({
+//                        url: "index.php",
+//                        dataType: "json",
+//                        type: "POST",
+//                        data: $('#form').serialize(),
+//                        beforeSend: function() {                      
+//                            $('.alert').html("...processando...").attr('class', 'alert alert-warning');
+//                            $('button[type=submit]').attr('disabled', 'disabled');
+//                        },
+//                        success: function(resposta) {  
+//                            $('.page-header').hide();
+//                            $(".alert").hide();
+//                            $('button[type=submit]').removeAttr('disabled');
+//                            if (resposta.resultado == 1) {
+//                                $('#divmsg').fadeIn('slow');
+//                                $('#divmsg').html("<h2 class=text-center>A sua conta de usuário foi criada com sucesso!</h2>\n\
+//                                 <p class=text-center>Em breve você receberá um e-mail para confirmação do cadastro. </p>\n\
+//                                 <p class=text-center>Caso não tenha recebido a confirmação de cadastro, verifique também a sua caixa de SPAM. </p>\n\
+//                                 <p class=text-center>Lembramos que a ativação de sua conta se dá mediante sua confirmação. </p>");
+//                                $('#divlinha1').fadeOut('slow');
+//                                $('#divlinha2').fadeOut('slow');
+//                                $('#divlinha3').fadeOut('slow'); 
+//                            } else {
+//                                $('.alert').html("Erro ao cadastrar").attr('class', 'alert alert-danger');
+//                            }
+//                        }
+//                    })
+//                    return false;
+
                 } else {
                     $("#msgCEP").remove();
                     var msgCEP = $("<div>", {id: "msgCEP"});
@@ -368,7 +370,7 @@
     <div class="alert">Preencha os campos abaixo</div>
     <div class="row text-success" id="divmsg" hidden="true"></div>
     <!-- form -->
-    <form id="form" class="form-horizontal">
+    <form id="form" class="form-horizontal" action="index.php" method="post">
         <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Usuario"  />
         <input type="hidden" id="hdnAcao" name="hdnAcao" value="cadastrar" />
         <input type="hidden" id="hdnCEP" name="hdnCEP" />

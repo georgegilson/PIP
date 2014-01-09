@@ -8,7 +8,7 @@ class Controle {
             $entidade = (isset($parametros['entidade']))?$parametros['entidade']:"";
             $acao = (isset($parametros['acao']))?$parametros['acao']:"";
             if ($entidade == "" && $acao == "") {
-                $this->index();
+                self::index();
             } else {
                 include_once ($entidade . "Controle.php");
                 $classe = $entidade . "Controle";
@@ -33,12 +33,20 @@ class Controle {
         }
     }
 
-    public function index() {
+    public static function index() {
         //modelo
-        
+        include_once 'DAO/GenericoDAO.php';
+        include_once 'modelo/Anuncio.php';
+        include_once 'modelo/Imovel.php';
+        include_once 'modelo/Imagem.php';
+        $genericoDAO = new GenericoDAO();
+        $anuncios = $genericoDAO->consultar(new Anuncio(),true,array("status"=>"cadastrado"));
+        $item['anuncios'] = $anuncios;
+
         //visao
         $visao = new Template();
-        $visao ->exibir('index', 1);
+        $visao->setItem($item);
+        $visao->exibir('index', 1);
     }
 
 }

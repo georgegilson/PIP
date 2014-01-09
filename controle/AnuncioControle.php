@@ -7,6 +7,7 @@ include_once 'modelo/Plano.php';
 include_once 'modelo/Imagem.php';
 include_once 'modelo/UsuarioPlano.php';
 include_once 'DAO/GenericoDAO.php';
+include_once 'DAO/ConsultasAdHoc.php';
 
 class AnuncioControle {
 
@@ -22,12 +23,6 @@ class AnuncioControle {
             $condicoes["status"] = 'ativo';
             $listarUsuarioPlano = $genericoDAO->consultar($usuarioPlano, true, $condicoes);
 
-            $empresa = ($_SESSION["tipopessoa"] == "pj");
-            if ($empresa) {
-                $pagina = 'AnuncioVisaoEmpresaPublicar.php';
-            } else {
-                $pagina = 'AnuncioVisaoPublicar.php';
-            }
             $sessao["idimovel"] = $parametros['idImovel'];
             Sessao::configurarSessaoAnuncio($sessao);
             $formAnuncio = array();
@@ -38,14 +33,14 @@ class AnuncioControle {
             //visao
             $visao = new Template();
             $visao->setItem($formAnuncio);
-            $visao->exibir($pagina);
+            $visao->exibir("AnuncioVisaoPublicar.php");
         }
     }
 
     function cadastrar($parametros) {
         //modelo
         if (Sessao::verificarSessaoUsuario()) {
-            if (isset($parametros['upload']) && $parametros['upload'] === "1") {
+            if (isset($parametros['upload']) & $parametros['upload'] === "1") {
                 include_once 'controle/ImagemControle.php';
                 $imagem = new ImagemControle($parametros);
             } else {
@@ -53,18 +48,14 @@ class AnuncioControle {
                     $genericoDAO = new GenericoDAO();
                     $genericoDAO->iniciarTransacao();
 
-                    $empresa = ($_SESSION["tipopessoa"] == "pj");
-                    if ($empresa) {
-                        //$parametros['sltPlano'] = 1; #se for empresa trocar pelo idusuarioplano na sessão
-                    }
-
                     $anuncio = new Anuncio();
                     $entidadeAnuncio = $anuncio->cadastrar($parametros);
                     $idAnuncio = $genericoDAO->cadastrar($entidadeAnuncio);
 
-                    if (!$empresa) { #se não for pessoa fisica atualiza o status do usuarioplano
-                        $entidadeUsuarioPlano = new UsuarioPlano();
-                        $entidadeUsuarioPlano->setId($parametros["sltPlano"]);
+                    $entidadeUsuarioPlano = $genericoDAO->consultar(new UsuarioPlano(), true, array("id" => $parametros["sltPlano"]));
+                    $entidadeUsuarioPlano = $entidadeUsuarioPlano[0];
+                    if (($entidadeUsuarioPlano->getPlano()->getTitulo() != "infinity" && $_SESSION["tipopessoa"] == "pj")||$_SESSION["tipopessoa"] == "pf") {
+                        //se o plano nao eh infinity e nem eh uma empresa, entao atualiza o status do usuarioplano
                         $entidadeUsuarioPlano->setStatus("utilizado");
                         $genericoDAO->editar($entidadeUsuarioPlano);
                     }
@@ -91,15 +82,15 @@ class AnuncioControle {
     }
 
     function listar() {
-       if (Sessao::verificarSessaoUsuario()){
+        if (Sessao::verificarSessaoUsuario()) {
             $anuncio = new Anuncio();
-            $genericoDAO = new GenericoDAO();
-            $listarAnuncio = $genericoDAO->consultar($anuncio, true, array("idusuarioplano" => $_SESSION['idusuario']));
+            $consultasAdHoc = new ConsultasAdHoc();
+            $listarAnuncio = $consultasAdHoc->ConsultarAnunciosPorUsuario($_SESSION['idusuario']);
             //visao
             $visao = new Template();
             $visao->setItem($listarAnuncio);
             $visao->exibir('AnuncioVisaoListagem.php');
-        } 
+        }
     }
 
     /*

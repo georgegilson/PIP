@@ -23,9 +23,9 @@ class UsuarioControle {
                 $visao->exibir('UsuarioVisaoLogin.php');
                 break;
             case "esquecisenha":
-                $visao->setItem("erroemail");
-                $visao->exibir('VisaoErrosGenerico.php');
-                //$visao->exibir('UsuarioVisaoEsqueciSenha.php');
+//                $visao->setItem("erroemail");
+//                $visao->exibir('VisaoErrosGenerico.php');
+                $visao->exibir('UsuarioVisaoEsqueciSenha.php');
                 break;
             case "alterarsenha":
                 $recuperasenha = new RecuperaSenha();
@@ -35,15 +35,17 @@ class UsuarioControle {
                     $_SESSION['idRecuperaSenhaUsuario'] = $selecionarRecuperaSenha[0]->getIdusuario();
                     $_SESSION['idRecuperaSenha'] = $selecionarRecuperaSenha[0]->getId();
                     $visao->exibir('UsuarioVisaoAlterarSenha.php');
-                } else
+                } else {
                     $visao->setItem("errolink");
-                $visao->exibir('VisaoErrosGenerico.php');
+                    $visao->exibir('VisaoErrosGenerico.php');
+                }
                 break;
         }
     }
 
     function cadastrar($parametros) {
         //Endereço
+        $visao = new Template();
         if (Sessao::verificarToken($parametros)) {
             $genericoDAO = new GenericoDAO();
             $genericoDAO->iniciarTransacao();
@@ -79,12 +81,13 @@ class UsuarioControle {
             if ($idEndereco && $idUsuario && $idEmpresa && $resultadoTelefone) {
                 $genericoDAO->commit();
                 $genericoDAO->fecharConexao();
-                echo json_encode(array("resultado" => 1));
+                $visao->setItem("sucessocadastrousuario");
+                $visao->exibir('VisaoErrosGenerico.php');
             } else {
                 $genericoDAO->rollback();
                 $genericoDAO->fecharConexao();
                 $visao->setItem("errobanco");
-                $visao->exibir('VisaoErros.php');
+                $visao->exibir('VisaoErrosGenerico.php');
             }
         } else {
             $visao->setItem("errotoken");
@@ -127,10 +130,10 @@ class UsuarioControle {
                 $genericoDAO->rollback();
             $genericoDAO->fecharConexao();
             $visao->setItem("errobanco");
-            $visao->exibir('VisaoErros.php');
+            $visao->exibir('VisaoErrosGenerico.php');
         }else {
             $visao->setItem("errotoken");
-            $visao->exibir('VisaoErros.php');
+            $visao->exibir('VisaoErrosGenerico.php');
         }
     }
 
@@ -147,10 +150,10 @@ class UsuarioControle {
                 echo "true";
         }else {
             $visao->setItem("errotoken");
-            $visao->exibir('VisaoErros.php');
+            $visao->exibir('VisaoErrosGenerico.php');
         }
     }
-    
+
     function buscarEmail($parametros) {
 
         if (Sessao::verificarToken($parametros)) {
@@ -164,10 +167,10 @@ class UsuarioControle {
                 echo "true";
         }else {
             $visao->setItem("errotoken");
-            $visao->exibir('VisaoErros.php');
+            $visao->exibir('VisaoErrosGenerico.php');
         }
     }
-    
+
     function buscarCpf($parametros) {
 
         if (Sessao::verificarToken($parametros)) {
@@ -181,10 +184,10 @@ class UsuarioControle {
                 echo "true";
         }else {
             $visao->setItem("errotoken");
-            $visao->exibir('VisaoErros.php');
+            $visao->exibir('VisaoErrosGenerico.php');
         }
     }
-    
+
     function buscarCnpj($parametros) {
 
         if (Sessao::verificarToken($parametros)) {
@@ -198,7 +201,7 @@ class UsuarioControle {
                 echo "true";
         }else {
             $visao->setItem("errotoken");
-            $visao->exibir('VisaoErros.php');
+            $visao->exibir('VisaoErrosGenerico.php');
         }
     }
 
@@ -211,9 +214,8 @@ class UsuarioControle {
                 Sessao::configurarSessaoUsuario($selecionarUsuario);
                 $resultado = ConsultaUrl::consulta($_SERVER['HTTP_REFERER']);
                 switch ($resultado) {
-                    case "login":
-                        $visao = new Template();
-                        $visao->exibir('index', 1);
+                    case "login":                                          
+                        Controle::index();
                         break;
                     case "plano":
                         $redirecionamento = new UsuarioPlanoControle();
@@ -227,7 +229,7 @@ class UsuarioControle {
             }
         } else {
             $visao->setItem("errotoken");
-            $visao->exibir('VisaoErros.php');
+            $visao->exibir('VisaoErrosGenerico.php');
         }
     }
 
@@ -293,12 +295,14 @@ class UsuarioControle {
                     $visao->exibir('UsuarioVisaoLogin.php');
                 }
             } else {
+                $visao = new Template();
                 $visao->setItem("erroemail");
-                $visao->exibir('VisaoErros.php');
+                $visao->exibir('VisaoErrosGenerico.php');
             }
         } else {
+            $visao = new Template();
             $visao->setItem("errotoken");
-            $visao->exibir('VisaoErros.php');
+            $visao->exibir('VisaoErrosGenerico.php');
         }
     }
 
@@ -324,7 +328,7 @@ class UsuarioControle {
             }
         } else {
             $visao->setItem("errotoken");
-            $visao->exibir('VisaoErros.php');
+            $visao->exibir('VisaoErrosGenerico.php');
         }
     }
 
