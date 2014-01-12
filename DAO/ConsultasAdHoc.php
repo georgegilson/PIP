@@ -37,5 +37,16 @@ class ConsultasAdHoc extends GenericoDAO {
         $resultado = $statement->fetchAll(PDO::FETCH_CLASS, "Anuncio");
         return $resultado;
     }
+    public function ConsultarRegistroAtivoDeRecuperarSenha($idUsuario) {
+        $sql = "SELECT r.* "
+                . " FROM recuperasenha r"
+                . " WHERE r.status = 'ativo'"
+                . " AND r.idusuario = :idUsuario ";
+        $statement = $this->conexao->prepare($sql);
+        $statement->bindParam(':idUsuario', $idUsuario);
+        $statement->execute();
+        $resultado = $statement->fetchAll(PDO::FETCH_CLASS, "RecuperaSenha");
+        return $resultado;
+    }
 }
 ?>

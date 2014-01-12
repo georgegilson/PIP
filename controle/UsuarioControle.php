@@ -10,6 +10,7 @@ include_once 'DAO/GenericoDAO.php';
 include_once 'assets/mailer/class.phpmailer.php';
 include_once 'assets/mailer/class.smtp.php';
 include_once 'configuracao/ConsultaUrl.php';
+include_once 'DAO/ConsultasAdHoc.php';
 
 class UsuarioControle {
 
@@ -214,7 +215,7 @@ class UsuarioControle {
                 Sessao::configurarSessaoUsuario($selecionarUsuario);
                 $resultado = ConsultaUrl::consulta($_SERVER['HTTP_REFERER']);
                 switch ($resultado) {
-                    case "login":                                          
+                    case "login":
                         Controle::index();
                         break;
                     case "plano":
@@ -243,14 +244,19 @@ class UsuarioControle {
 
     function esquecersenha($parametros) {
         if (Sessao::verificarToken($parametros)) {
-            //verifica se tem link ativo
-            // pendente!
-            //Verificar o email
             $usuario = new Usuario();
+            $recuperaSenha = new RecuperaSenha();
             $genericoDAO = new GenericoDAO();
             $genericoDAO->iniciarTransacao();
+            $avisoRecuperaSenha = false;
             $selecionarUsuario = $genericoDAO->consultar($usuario, false, array("email" => $parametros['txtEmail']));
             if ($selecionarUsuario) {
+                $consultasAdHoc = new ConsultasAdHoc();
+                $selecionarRegistroRecuperaSenha = $consultasAdHoc->ConsultarRegistroAtivoDeRecuperarSenha($selecionarUsuario[0]->getId());
+                if ($selecionarRegistroRecuperaSenha) {
+                    $resultadoExcluirRecuperaSenha = $genericoDAO->excluir($recuperaSenha, $selecionarRegistroRecuperaSenha[0]->getId());
+                    $avisoRecuperaSenha = true;
+                }
                 //gravar registro no banco
                 $recuperasenha = new RecuperaSenha();
                 $entidadeRecuperaSenha = $recuperasenha->cadastrar($selecionarUsuario[0]->getId());
@@ -266,11 +272,18 @@ class UsuarioControle {
 
                     $mail->IsHTML(true);
                     $mail->Subject = 'Assunto do e-mail';
-                    $mail->Body = "&lt;h1&gt;Teste de envio de e-mail&lt;/h1&gt; &lt;p&gt;Isso é um teste&lt;/p&gt;
+                    if ($avisoRecuperaSenha) {
+                        $mail->Body = "&lt;h1&gt;Teste de envio de e-mail&lt;/h1&gt; &lt;p&gt;Isso é um teste&lt;/p&gt;
+                        <br> 
+                        &lt;h1&gt;Você já solicitou uma troca de senha. Desconsidere o email já enviado e clique no link abaixo para processar a troca&lt;/h1&gt; 
+                        <a href=http://localhost/PIP/index.php?entidade=Usuario&acao=form&tipo=alterarsenha&id=" . $entidadeRecuperaSenha->getHash() . ">http://localhost/PIP/index.php?entidade=Usuario&acao=form&tipo=alterarsenha&id=" . $entidadeRecuperaSenha->getHash() . "</a>";
+                        $mail->AltBody = 'Conteudo sem HTML para editores que não suportam, sim, existem alguns';
+                    } else {
+                        $mail->Body = "&lt;h1&gt;Teste de envio de e-mail&lt;/h1&gt; &lt;p&gt;Isso é um teste&lt;/p&gt;
                         <br> 
                         <a href=http://localhost/PIP/index.php?entidade=Usuario&acao=form&tipo=alterarsenha&id=" . $entidadeRecuperaSenha->getHash() . ">http://localhost/PIP/index.php?entidade=Usuario&acao=form&tipo=alterarsenha&id=" . $entidadeRecuperaSenha->getHash() . "</a>";
-                    $mail->AltBody = 'Conteudo sem HTML para editores que não suportam, sim, existem alguns';
-
+                        $mail->AltBody = 'Conteudo sem HTML para editores que não suportam, sim, existem alguns';
+                    }
                     $mail->IsSMTP();
                     $mail->SMTPAuth = true;
                     $mail->Host = "ssl://smtp.googlemail.com";
@@ -280,11 +293,11 @@ class UsuarioControle {
 
                     $mail->AddAddress($selecionarUsuario[0]->getEmail(), $selecionarUsuario[0]->getNome());
 
-                    if ($mail->Send()){
+                    if ($mail->Send()) {
                         $genericoDAO->commit();
                         $genericoDAO->fecharConexao();
                         echo json_encode(array("resultado" => 0));
-                    }else{
+                    } else {
                         echo json_encode(array("resultado" => 1));
                     }
                 } else {
