@@ -91,16 +91,13 @@ Sessao::gerarToken();
     <div class="page-header">
         <h1>Identificação de Usuário</h1>
     </div>
-    <!-- Example row of columns -->
-    <!--    <div class="alert">Todos</div> -->
+    
     <div id="divalert">
         <div class="col-lg-2">
             <div class="text-right" id="divimg">
             </div>
         </div>
-        <div class="col-lg-8" id="divmsg">
-            <!--            <h2 class=text-center>Em breve você receberá um e-mail para realizar a alteração de sua senha!</h2>
-                        <p class=text-center>Caso não tenha recebido o e-mail, verifique também a sua caixa de SPAM. </p>-->
+        <div class="col-lg-8" id="divmsg">           
         </div>
     </div>
 
@@ -126,8 +123,6 @@ Sessao::gerarToken();
                 </div>                
             </div>
         </div>
-
-
     </form>
 </div>
 

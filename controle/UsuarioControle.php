@@ -315,15 +315,14 @@ class UsuarioControle {
             if ($resultadoUsuario && $resultadoAlterarSenha) {
                 $genericoDAO->commit();
                 $genericoDAO->fecharConexao();
-                echo json_encode(array("resultado" => 1));
+                echo json_encode(array("resultado" => 0));
             } else {
                 $genericoDAO->rollback();
                 $genericoDAO->fecharConexao();
-                echo json_encode(array("resultado" => 0));
+                echo json_encode(array("resultado" => 1));
             }
         } else {
-            $visao->setItem("errotoken");
-            $visao->exibir('VisaoErrosGenerico.php');
+            echo json_encode(array("resultado" => 2));
         }
     }
 
