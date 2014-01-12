@@ -31,14 +31,6 @@ switch ($item) {
                     $("#divmsg").html("<h2 class=text-center>Ops! Não podemos processar sua requisição. <br>Tente novamente.</h2>");
         <?php
         break;
-    case "erroemail":
-        ?>
-                    $('#diverro').attr('class', 'row text-danger');
-                    var img = $("<h1>", {class: "glyphicon glyphicon-exclamation-sign"}, "</h1>");
-                    $('#divimg').append(img);
-                    $("#divmsg").html("<h2 class=text-left>O E-mail digitado é inválido.</h2>");
-        <?php
-        break;
     case "sucessocadastrousuario":
         ?>
                     $('#diverro').attr('class', 'row text-success');

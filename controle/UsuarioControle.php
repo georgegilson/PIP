@@ -241,7 +241,6 @@ class UsuarioControle {
         }
     }
 
-    //ajax
     function esquecersenha($parametros) {
         if (Sessao::verificarToken($parametros)) {
             //verifica se tem link ativo
@@ -249,17 +248,14 @@ class UsuarioControle {
             //Verificar o email
             $usuario = new Usuario();
             $genericoDAO = new GenericoDAO();
+            $genericoDAO->iniciarTransacao();
             $selecionarUsuario = $genericoDAO->consultar($usuario, false, array("email" => $parametros['txtEmail']));
             if ($selecionarUsuario) {
                 //gravar registro no banco
-                $genericoDAO = new GenericoDAO();
-                $genericoDAO->iniciarTransacao();
                 $recuperasenha = new RecuperaSenha();
                 $entidadeRecuperaSenha = $recuperasenha->cadastrar($selecionarUsuario[0]->getId());
                 $idResuperaSenha = $genericoDAO->cadastrar($entidadeRecuperaSenha);
                 if ($idResuperaSenha) {
-                    $genericoDAO->commit();
-                    $genericoDAO->fecharConexao();
                     //enviar email
                     $mail = new PHPMailer();
 
@@ -284,29 +280,28 @@ class UsuarioControle {
 
                     $mail->AddAddress($selecionarUsuario[0]->getEmail(), $selecionarUsuario[0]->getNome());
 
-                    if ($mail->Send())
-                        echo 'E-mail enviado com sucesso';
-                    else
-                        echo 'Erro ao enviar e-mail';
+                    if ($mail->Send()){
+                        $genericoDAO->commit();
+                        $genericoDAO->fecharConexao();
+                        echo json_encode(array("resultado" => 0));
+                    }else{
+                        echo json_encode(array("resultado" => 1));
+                    }
                 } else {
                     $genericoDAO->rollback();
                     $genericoDAO->fecharConexao();
-                    $visao = new Template();
-                    $visao->exibir('UsuarioVisaoLogin.php');
+                    echo json_encode(array("resultado" => 3));
                 }
             } else {
-                $visao = new Template();
-                $visao->setItem("erroemail");
-                $visao->exibir('VisaoErrosGenerico.php');
+                echo json_encode(array("resultado" => 2));
             }
         } else {
             $visao = new Template();
             $visao->setItem("errotoken");
-            $visao->exibir('VisaoErrosGenerico.php');
+            echo json_encode(array("resultado" => 4));
         }
     }
 
-    //ajax
     function alterarsenha($parametros) {
         if (Sessao::verificarToken($parametros)) {
             $genericoDAO = new GenericoDAO();
@@ -320,11 +315,11 @@ class UsuarioControle {
             if ($resultadoUsuario && $resultadoAlterarSenha) {
                 $genericoDAO->commit();
                 $genericoDAO->fecharConexao();
+                echo json_encode(array("resultado" => 1));
             } else {
                 $genericoDAO->rollback();
                 $genericoDAO->fecharConexao();
-                $visao = new Template();
-                $visao->exibir('UsuarioVisaoLogin.php');
+                echo json_encode(array("resultado" => 0));
             }
         } else {
             $visao->setItem("errotoken");
