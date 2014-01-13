@@ -24,8 +24,6 @@ class UsuarioControle {
                 $visao->exibir('UsuarioVisaoLogin.php');
                 break;
             case "esquecisenha":
-//                $visao->setItem("erroemail");
-//                $visao->exibir('VisaoErrosGenerico.php');
                 $visao->exibir('UsuarioVisaoEsqueciSenha.php');
                 break;
             case "alterarsenha":
@@ -40,6 +38,9 @@ class UsuarioControle {
                     $visao->setItem("errolink");
                     $visao->exibir('VisaoErrosGenerico.php');
                 }
+                break;
+            case "trocarsenha":
+                $visao->exibir('UsuarioVisaoTrocarSenha.php');
                 break;
         }
     }
@@ -256,6 +257,11 @@ class UsuarioControle {
                 if ($selecionarRegistroRecuperaSenha) {
                     $resultadoExcluirRecuperaSenha = $genericoDAO->excluir($recuperaSenha, $selecionarRegistroRecuperaSenha[0]->getId());
                     $avisoRecuperaSenha = true;
+                    if (!$resultadoExcluirRecuperaSenha) {
+                        $genericoDAO->rollback();
+                        $genericoDAO->fecharConexao();
+                        echo json_encode(array("resultado" => 3));
+                    }
                 }
                 //gravar registro no banco
                 $recuperasenha = new RecuperaSenha();
@@ -333,6 +339,32 @@ class UsuarioControle {
                 $genericoDAO->rollback();
                 $genericoDAO->fecharConexao();
                 echo json_encode(array("resultado" => 1));
+            }
+        } else {
+            echo json_encode(array("resultado" => 2));
+        }
+    }
+
+    function trocarsenha($parametros) {
+        if (Sessao::verificarToken($parametros)) {
+            $genericoDAO = new GenericoDAO();
+            $genericoDAO->iniciarTransacao();
+            $usuario = new Usuario();
+            if ($_SESSION["senha"] == md5($parametros['txtSenhaAtual'])) {
+                $entidadeUsuario = $usuario->trocarSenha($parametros);
+                $resultadoUsuario = $genericoDAO->editar($entidadeUsuario);
+                if ($resultadoUsuario) {
+                    $genericoDAO->commit();
+                    $genericoDAO->fecharConexao();
+                    $_SESSION["senha"] = md5($parametros['txtSenha']);
+                    echo json_encode(array("resultado" => 0));
+                } else {
+                    $genericoDAO->rollback();
+                    $genericoDAO->fecharConexao();
+                    echo json_encode(array("resultado" => 1));
+                }
+            } else {
+                echo json_encode(array("resultado" => 3));
             }
         } else {
             echo json_encode(array("resultado" => 2));

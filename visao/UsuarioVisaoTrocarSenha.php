@@ -1,5 +1,5 @@
 <script src="assets/js/util.validate.js"></script>
-
+<script src="assets/js/pwstrength.js"></script>
 <?php
 Sessao::gerarToken();
 ?>
@@ -7,21 +7,49 @@ Sessao::gerarToken();
 
     $(document).ready(function() {
         $('.alert').hide();
-        $("#txtEmail").focusin(function() {
+        $("#txtSenhaAtual").focusin(function() {
             $('.alert').fadeOut();
         });
         $('#divalert').hide();
+        "use strict";
+        var options = {
+            bootstrap3: true,
+            minChar: 8,
+            errorMessages: {
+                password_too_short: "<font color='red'>A senha é muito pequena</font>",
+                same_as_username: "<font color='red'>Sua senha não pode ser igual ao seu login</font>"
+            },
+            verdicts: ["Fraca", "Normal", "Média", "Forte", "Muito Forte"],
+            usernameField: "#txtLogin",
+            onLoad: function() {
+                $('#messages').text('Start typing password');
+            },
+            onKeyUp: function(evt) {
+                $(evt.target).pwstrength("outputErrorList");
+            }
+        };
+        $('#txtSenha').pwstrength(options);
+
         $('#form').validate({
             rules: {
-                txtEmail: {
-                    email: true,
-                    required: true
+                txtSenha: {
+                    required: true,
+                    minlength: 4
+                },
+                txtSenhaConfirmacao: {
+                    required: true,
+                    equalTo: "#txtSenha"
                 }
             },
             messages: {
-                txtEmail: {
-                    required: "Campo obrigatório"
+                txtSenha: {
+                    required: "Campo obrigatório",
+                    minlength: "Senha deve possuir no mínimo 4 caracteres"
                 },
+                txtSenhaConfirmacao: {
+                    required: "Campo obrigatório",
+                    equalTo: "Por Favor digite o mesmo valor novamente"
+                }
             },
             highlight: function(element) {
                 $(element).closest('.form-group').addClass('has-error');
@@ -45,7 +73,6 @@ Sessao::gerarToken();
                     type: "POST",
                     data: $('#form').serialize(),
                     success: function(resposta) {
-                        $('button[type=submit]').removeAttr('disabled');
                         if (resposta.resultado == 0) {
                             $(".alert").hide();
                             $("#form").hide();
@@ -53,18 +80,9 @@ Sessao::gerarToken();
                             $('#divalert').attr('class', 'row text-success');
                             var img = $("<h1>", {class: "glyphicon glyphicon-ok"}, "</h1>");
                             $('#divimg').append(img);
-                            $("#divmsg").html("<h2 class=text-center>Em breve você receberá um e-mail para realizar a alteração de sua senha!</h2>\n\
-                                 <p class=text-center>Caso não tenha recebido o e-mail, verifique também a sua caixa de SPAM. </p>");
+                            $("#divmsg").html("<h2 class=text-center>Sua senha foi alterada com sucesso!</h2>");                               
                             $("#divalert").fadeIn();
-                        } else if (resposta.resultado == 1) {
-                            $(".alert").fadeIn();
-                            $('.alert').html("Falha no envio do email").attr('class', 'alert alert-danger');
-                        } else if (resposta.resultado == 2) {
-                            $(".alert").fadeIn();
-                            $('#mensagem').html("Não há cadastro para o email informado").attr('class', 'text-danger');
-                            $('.alert').html("Não há cadastro para o email informado").attr('class', 'alert alert-danger');
-                        }
-                        else if (resposta.resultado == 3) {
+                        }else if (resposta.resultado == 1) {
                             $(".alert").hide();
                             $("#form").hide();
                             $('.page-header').hide();
@@ -74,7 +92,7 @@ Sessao::gerarToken();
                             $("#divmsg").html("<h2 class=text-center>Desculpe, não foi possível realizar a operação!</h2>\n\
                                                     <h4 class=text-center>Tente novamente em alguns minutos.</h4>");
                             $("#divalert").fadeIn();
-                        } else if (resposta.resultado == 4) {
+                        }else if (resposta.resultado == 2) {
                             $(".alert").hide();
                             $("#form").hide();
                             $('.page-header').hide();
@@ -83,6 +101,9 @@ Sessao::gerarToken();
                             $('#divimg').append(img);
                             $("#divmsg").html("<h2 class=text-center>Ops! Não podemos processar sua requisição. <br>Tente novamente.</h2>");
                             $("#divalert").fadeIn();
+                        }else if (resposta.resultado == 3) {
+                            $(".alert").fadeIn();
+                            $('.alert').html("A Senha atual está incorreta.").attr('class', 'alert alert-danger');
                         }
                     }
                 })
@@ -93,40 +114,55 @@ Sessao::gerarToken();
 
 <div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
     <div class="page-header">
-        <h1>Identificação de Usuário</h1>
+        <h1>Alterar Senha</h1>
     </div>
-    
     <div id="divalert">
         <div class="col-lg-2">
             <div class="text-right" id="divimg">
             </div>
         </div>
-        <div class="col-lg-8" id="divmsg">           
+        <div class="col-lg-8" id="divmsg">
         </div>
     </div>
-
     <div class="alert"></div>
     <form id="form" class="form-horizontal">
         <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Usuario"  />
-        <input type="hidden" id="hdnAcao" name="hdnAcao" value="esquecersenha" />
+        <input type="hidden" id="hdnAcao" name="hdnAcao" value="trocarsenha" />
         <input type="hidden" id="hdnToken" name="hdnToken" value="<?php echo $_SESSION['token']; ?>" />
-        <div class="form-group">
-            <label class="col-lg-3 control-label" for="txtEmail">Email</label>
-            <div class="col-lg-3">
-                <input type="text" id="txtEmail" name="txtEmail" class="form-control" placeholder="Informe o email cadastrado">
-                <!--                            <div id="mensagem" class="col-lg-3 control-label"></div>-->
+        
+        <div class="form-group" id="divlinha1">
+            <label class="col-lg-3 control-label" for="txtSenhaAtual">Senha Atual</label>
+            <div class="col-lg-9">
+                <input type="password" id="txtSenhaAtual" name="txtSenhaAtual" class="form-control" placeholder="Informe a nova senha">
             </div>
         </div>
-        <div class="row">
+
+        <div class="form-group" id="divlinha1">
+            <label class="col-lg-3 control-label" for="txtSenha">Nova Senha</label>
+            <div class="col-lg-9">
+                <input type="password" id="txtSenha" name="txtSenha" class="form-control" placeholder="Informe a nova senha">
+            </div>
+        </div>
+
+        <div class="form-group" id="divlinha2">
+            <label class="col-lg-3 control-label" for="txtSenhaConfirmacao">Repita a Nova Senha</label>
+            <div class="col-lg-9">
+                <input type="password" id="txtSenha" name="txtSenhaConfirmacao" class="form-control" placeholder="Informe a nova senha">
+            </div>
+        </div>
+
+        <div class="row" id="divlinha3">
             <div class="col-lg-12">
                 <div class="form-group">
                     <div class="col-lg-offset-2 col-lg-10">
-                        <button type="submit" class="btn btn-primary">Enviar</button>
+                        <button type="submit" class="btn btn-primary">Alterar</button>
                         <button type="button" class="btn btn-warning">Cancelar</button>
                     </div>
                 </div>                
             </div>
         </div>
+
+
     </form>
 </div>
 

@@ -16,23 +16,23 @@ class Usuario {
     protected $endereco;
     protected $telefone;
     protected $empresa;
-    
+
     public function setEmpresa($empresa) {
         $this->empresa = $empresa;
     }
-    
+
     public function getEmpresa() {
         return $this->empresa;
     }
-    
+
     public function setTelefone($telefone) {
         $this->telefone = $telefone;
     }
-    
+
     public function getTelefone() {
         return $this->telefone;
     }
-    
+
     public function getEndereco() {
         return $this->endereco;
     }
@@ -148,19 +148,29 @@ class Usuario {
         $usuario->setIdendereco($idendereco);
         return $usuario;
     }
-    function editar($parametros){      
+
+    function editar($parametros) {
         $usuario = new Usuario();
         $usuario->setId($_SESSION["idusuario"]);
         $usuario->setNome($parametros['txtNome']);
         $usuario->setEmail($parametros['txtEmail']);
-        $usuario->setDatahoraalteracao(date('d/m/Y H:i:s'));     
+        $usuario->setDatahoraalteracao(date('d/m/Y H:i:s'));
         return $usuario;
     }
-    function alterarSenha($parametros){      
+
+    function alterarSenha($parametros) {
         $usuario = new Usuario();
         $usuario->setId($_SESSION["idRecuperaSenhaUsuario"]);
         $senha = md5($parametros['txtSenha']);
-        $usuario->setSenha($senha);     
+        $usuario->setSenha($senha);
+        return $usuario;
+    }
+
+    function trocarSenha($parametros) {
+        $usuario = new Usuario();
+        $usuario->setId($_SESSION["idusuario"]);
+        $senha = md5($parametros['txtSenha']);
+        $usuario->setSenha($senha);
         return $usuario;
     }
 

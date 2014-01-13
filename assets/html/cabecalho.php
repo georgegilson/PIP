@@ -138,6 +138,7 @@ if (Sessao::verificarSessaoUsuario()) {
                         <ul class="dropdown-menu">
 <!--                            <li><a href="index.php?entidade=Usuario&acao=form">Cadastro</a></li>-->
                             <li><a href="index.php?entidade=Usuario&acao=selecionar">Atualizar Cadastro</a></li>
+                            <li><a href="index.php?entidade=Usuario&acao=form&tipo=trocarsenha">Alterar Senha</a></li>
 <!--                            <li><a href="#">Alterar Login/Senha</a></li>-->
                             <!--<li><a href="#">Another action</a></li>
                             <li><a href="#">Something else here</a></li>
