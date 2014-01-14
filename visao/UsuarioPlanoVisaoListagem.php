@@ -32,7 +32,7 @@
 </script>
 <div class="container">
     <div class="page-header">
-        <h1>Meu PIP!</h1>
+        <h1>Comprar Planos</h1>
     </div>
     <!-- Primeira Linha -->        
     <div class="row">
@@ -54,8 +54,8 @@
                             <thead>
                                 <tr>
                                     <th>Plano</th>
-                                    <th>Descrição Completa</th>
-                                    <th>Compra</th>
+                                    <th>Descrição</th>
+                                    <th>Data de Compra</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>

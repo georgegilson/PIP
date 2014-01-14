@@ -217,7 +217,7 @@ class UsuarioControle {
                 $resultado = ConsultaUrl::consulta($_SERVER['HTTP_REFERER']);
                 switch ($resultado) {
                     case "login":
-                        Controle::index();
+                        $this->meuPIP();
                         break;
                     case "plano":
                         $redirecionamento = new UsuarioPlanoControle();
@@ -230,6 +230,7 @@ class UsuarioControle {
                 $visao->exibir('UsuarioVisaoLogin.php');
             }
         } else {
+            $visao = new Template();
             $visao->setItem("errotoken");
             $visao->exibir('VisaoErrosGenerico.php');
         }
@@ -368,6 +369,26 @@ class UsuarioControle {
             }
         } else {
             echo json_encode(array("resultado" => 2));
+        }
+    }
+
+        public function meuPIP() {
+        if (Sessao::verificarSessaoUsuario()) {
+            //modelo
+            $usuarioPlano = new UsuarioPlano();
+            $genericoDAO = new GenericoDAO();
+
+            $listarUsuarioPlano = $genericoDAO->consultar($usuarioPlano, true, array("idusuario" => $_SESSION["idusuario"]));
+
+            $formUsuarioPlano = array();
+            $formUsuarioPlano["usuarioPlano"] = $listarUsuarioPlano;
+            //visao
+            $visao = new Template();
+            $visao->setItem($formUsuarioPlano);
+            $visao->exibir('UsuarioVisaoMeuPIP.php');
+        } else {
+            $visao = new Template();
+            $visao->exibir('UsuarioVisaoLogin.php');
         }
     }
 
