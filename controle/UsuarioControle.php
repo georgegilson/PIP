@@ -223,6 +223,9 @@ class UsuarioControle {
                         $redirecionamento = new UsuarioPlanoControle();
                         $redirecionamento->listar();
                         break;
+                    case "index":
+                        echo json_encode(array("resultado" => 1, "nome" => $_SESSION['nome']));
+                        break;
                 }
             } else {
                 $visao = new Template();

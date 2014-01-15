@@ -18,8 +18,6 @@
 <script src="assets/js/bootstrap.min.js"></script> 
 <!-- JQUERY VALIDATE JS --> 
 <script src="assets/js/jquery.validate.min.js"></script> 
-<!-- blueimp Gallery styles -->
-<link rel="stylesheet" href="assets/css/blueimp-gallery.css">
 <!-- CSS adjustments for browsers with JavaScript disabled -->
 <noscript><link rel="stylesheet" href="assets/css/jquery.fileupload-noscript.css"></noscript>
 <noscript><link rel="stylesheet" href="assets/css/jquery.fileupload-ui-noscript.css"></noscript>
@@ -27,16 +25,15 @@
 <script>
     $(document).ready(function() {
 <?php
-//session_start();
 if (Sessao::verificarSessaoUsuario()) {
     ?>
-            /*$('#divLogin').hide();
-            $('#divSenha').hide();
-            $('#divAcessar').hide();
-            $("#divUsuario").fadeIn('slow');*/
-            $("#divUsuario").html("<h4>Seja bem vindo <?php echo $_SESSION['nome']; ?>  <h4>");
-            $("#btnLogout").attr('class','btn btn-danger');
+            $("#divForm").hide();
+            $("#divUsuario").show();
+            $("#divUsuario").attr('class', 'text');
+            $("#divNome").html("<h4>Seja bem vindo <?php echo $_SESSION['nome']; ?>  <h4>");
     <?php
+} else {
+    Sessao::gerarToken();
 }
 ?>
         $("#btnAcessar").click(function() {
@@ -51,24 +48,19 @@ if (Sessao::verificarSessaoUsuario()) {
                 dataType: "json",
                 type: "POST",
                 data: {
-                    login: $('#txtlogin').val(),
-                    senha: $('#txtsenha').val(),
-                    hdnToken: $('#hdnToken').val(),
+                    txtLogin: $('#txtLoginIndex').val(),
+                    txtSenha: $('#txtSenhaIndex').val(),
+                    hdnToken: "<?php echo $_SESSION["token"]; ?>",
                     hdnEntidade: "Usuario",
                     hdnAcao: "autenticar"
-                },
-                beforeSend: function() {
                 },
                 success: function(resposta) {
                     if (resposta.resultado == 1) {
                         var nome = resposta.nome;
-                        $('#divLogin').hide();
-                        $('#divSenha').hide();
-                        $('#divAcessar').hide();
+                        $('#divForm').hide();
                         $("#divUsuario").fadeIn('slow');
-                        $("#divUsuario").html("<h4>Seja bem vindo  " + resposta.nome + "<h4>");
-                    } else {
-
+                        $("#divUsuario").attr('class', 'text');
+                        $("#divNome").html("<h4>Seja bem vindo  " + resposta.nome + "<h4>");
                     }
                 }
             })
@@ -83,16 +75,10 @@ if (Sessao::verificarSessaoUsuario()) {
                     hdnEntidade: "Usuario",
                     hdnAcao: "logout"
                 },
-                beforeSend: function() {
-
-                },
                 success: function(resposta) {
                     if (resposta.resultado == 1) {
                         $("#divUsuario").hide();
-                        $('#divLogin').show();
-                        $('#divSenha').show();
-                        $('#divAcessar').show(); 
-                        $('#btnLogout').hide(); 
+                        $('#divForm').show();
                     }
                 }
             })
@@ -101,77 +87,42 @@ if (Sessao::verificarSessaoUsuario()) {
 </script>
 
 <body>
-    <!-- Fixed navb ar -->
-    <input type="hidden" id="hdnEntidade" name="hdnEntidade" value=""  />
-    <input type="hidden" id="hdnAcao" name="hdnAcao" value="" />
-    
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="index.php">Procure Im&oacute;veis Pai d'egua</a>
+    <div class="container cabecalho">
+        <div class="row">
+            <div class="col-md-2"><a href="index.php"> <img src="assets/imagens/logo.png" width="120px" /> </a> </div>
+            <div class="col-md-6">
+                <h4> Temos a Ferramenta Tecnológica de busca do seu imóvel desejado <br /> Procure aqui!</h4>
             </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">In&iacute;cio</a></li>
-                    <li><a href="#compare">Compare</a></li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Im&oacute;veis <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="index.php?entidade=Imovel&acao=form">Cadastro</a></li>
-                            <li><a href="index.php?entidade=Imovel&acao=listar">Listagem</a></li>
-                            <li><a href="index.php?entidade=Anuncio&acao=listar">Meus Anúncios</a></li>
-                            <!--<li><a href="#">Another action</a></li>
-                            <li><a href="#">Something else here</a></li>
-                            <li class="divider"></li>
-                            <li class="dropdown-header">Nav header</li>
-                            <li><a href="#">Separated link</a></li>
-                            <li><a href="#">One more separated link</a></li>-->
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Usuário <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-<!--                            <li><a href="index.php?entidade=Usuario&acao=form">Cadastro</a></li>-->
-                            <li><a href="index.php?entidade=Usuario&acao=selecionar">Atualizar Cadastro</a></li>
-                            <li><a href="index.php?entidade=Usuario&acao=form&tipo=trocarsenha">Alterar Senha</a></li>
-<!--                            <li><a href="#">Alterar Login/Senha</a></li>-->
-                            <!--<li><a href="#">Another action</a></li>
-                            <li><a href="#">Something else here</a></li>
-                            <li class="divider"></li>
-                            <li class="dropdown-header">Nav header</li>
-                            <li><a href="#">Separated link</a></li>
-                            <li><a href="#">One more separated link</a></li>-->
-                        </ul>
-                    </li>
-<!--                    <li><a href="#about">Sobre a Empresa</a></li>-->
-                    <li><a href="index.php?entidade=Usuario&acao=form&tipo=login">Login</a></li>
-                    <li><a href="index.php?entidade=Usuario&acao=form&tipo=cadastro">Cadastre-se</a></li>
-                    <li><a href="index.php?entidade=Usuario&acao=form&tipo=esquecisenha">Esqueci Login/Senha</a></li>
-                </ul>
-                <div class="form-group">
-                    <form class="navbar-form navbar-right">
-                       <!-- <div class="form-group" id="divLogin">
-                            <input id="txtlogin" type="text" placeholder="login" class="form-control">     
-                        </div>
-                        <div class="form-group" id="divSenha">
-                            <input id="txtsenha" type="password" placeholder="senha" class="form-control">
-                        </div>
-                        <div class="form-group" id="divAcessar">
-                            <button id="btnAcessar" type="button" class="btn btn-info">Acessar</button>
-                        </div>-->
-                        <div class = "form-group" id="divUsuario" hidden="true">
-                        </div>
-                        <button id="btnLogout" type="button" class="hide">Sair</button>         
-                    </form>            
+            <div class="col-md-4">
+                <div id="divForm">
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td colspan="3"><h4> Acesse o Meu PIP! </h4></td>
+                            </tr>
+                            <tr>
+                                <td width="151"><input name="txtLoginIndex" type="text" class="form-control" id="txtLoginIndex" style="width:145px" placeholder="Informe o Usuário"></td>
+                                <td width="75"><input name="txtSenhaIndex" type="password" class="form-control" id="txtSenhaIndex" style="width:70px" placeholder="Senha"></td>
+                                <td><button type="button" id="btnAcessar" class="btn btn-sm btn-primary">Acessar</button></td>
+                            </tr>
+                            <tr>
+                                <td height="30" colspan="3">
+                                    <a href="index.php?entidade=Usuario&acao=form&tipo=cadastro" class="text text-success">Ainda não é cadastrado?</a>
+                                    <a href="index.php?entidade=Usuario&acao=form&tipo=trocarsenha" class="text text-danger">Não lembra a senha?</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
 
-            </div><!--/.nav-collapse -->
+                <div id="divUsuario" class="hide">
+                    <form class="navbar-form navbar-right">
+                        <div class="form-group" id="divNome"></div>
+                        <p></p>
+                        <a href="index.php?entidade=Usuario&acao=meuPIP"> <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-th-large"></span> Meu Pip</button></a>
+                        <button id="btnLogout" type="button" class="btn btn-danger">Sair</button>         
+                    </form>            
+                </div>
+            </div>
         </div>
-    </div>	    
-    <hr />
-
+    </div>

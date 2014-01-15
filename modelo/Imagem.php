@@ -17,6 +17,15 @@ class Imagem {
     private $idanuncio;
     private $diretorio;
     private $legenda;
+    private $destaque;
+
+    public function getDestaque() {
+        return $this->destaque;
+    }
+
+    public function setDestaque($destaque) {
+        $this->destaque = $destaque;
+    }
 
     public function getId() {
         return $this->id;
@@ -55,6 +64,8 @@ class Imagem {
         $imagem->setIdanuncio("");
         $imagem->setDiretorio($file->url);
         $imagem->setLegenda($file->legenda);
+        $imagem->setDestaque($file->destaque);
         return $imagem;
     }
+
 }

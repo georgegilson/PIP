@@ -13,13 +13,11 @@
                     <button type="button" class="btn btn-primary">
                         <span class="glyphicon glyphicon-user"></span> 
                         <span class="glyphicon glyphicon-pencil"></span> Atualizar Cadastro
-                    </button>
-                </a>
+                    </button></a>
                 <a href="index.php?entidade=Usuario&acao=form&tipo=trocarsenha"> 
                     <button type="button" class="btn btn-primary navbar-btn">
                         <span class="glyphicon glyphicon-lock"></span> Alterar Senha 
-                    </button>
-                </a>    
+                    </button></a>    
             </div>
         </div>
         <div class="panel panel-success">
@@ -31,8 +29,7 @@
                     <button type="button" class="btn btn-success">
                         <span class="glyphicon glyphicon-home"></span>
                         <span class="glyphicon glyphicon-plus"></span> Cadastrar Imóvel
-                    </button>
-                </a>
+                    </button></a>
                 <button type="button" class="btn btn-success">
                     <span class="glyphicon glyphicon-home"></span>
                     <span class="glyphicon glyphicon-pencil"></span> Editar Imóvel
@@ -41,8 +38,7 @@
                     <button type="button" class="btn btn-success">
                         <span class="glyphicon glyphicon-home"></span> 
                         <span class="glyphicon glyphicon-list-alt"></span> Visualizar Todos Meus Imóveis
-                    </button>
-                </a>
+                    </button></a>
                 <button type="button" class="btn btn-success">
                     <span class="glyphicon glyphicon-home"></span> 
                     <span class="glyphicon glyphicon-star-empty"></span> Imóveis Favoritos
@@ -66,8 +62,7 @@
                     <button type="button" class="btn btn-info">
                         <span class="glyphicon glyphicon-bullhorn"></span> 
                         <span class="glyphicon glyphicon-list-alt"></span> Visualizar Todos Meus Anúncios
-                    </button>
-                </a>
+                    </button></a>
             </div>
         </div>
         <div class="panel panel-warning">
@@ -78,8 +73,7 @@
                 <a href="index.php?entidade=UsuarioPlano&acao=listar">
                     <button type="button" class="btn btn-warning">
                         <span class="glyphicon glyphicon-shopping-cart"></span> Comprar
-                    </button>
-                </a>
+                    </button></a>
             </div>
             <?php
             $item = $this->getItem();
