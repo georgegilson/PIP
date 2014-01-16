@@ -15,7 +15,8 @@
                         <span class="glyphicon glyphicon-pencil"></span> Atualizar Cadastro
                     </button></a>
                 <a href="index.php?entidade=Usuario&acao=form&tipo=trocarsenha"> 
-                    <button type="button" class="btn btn-primary navbar-btn">
+                    <button type="button" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-user"></span> 
                         <span class="glyphicon glyphicon-lock"></span> Alterar Senha 
                     </button></a>    
             </div>

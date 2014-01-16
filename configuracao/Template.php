@@ -3,6 +3,7 @@
 class Template {
 
     private $item;
+    private $tipo;
 
     public function getItem() {
         return $this->item;
@@ -12,12 +13,21 @@ class Template {
         $this->item = $item;
     }
 
-    public function __construct() {
-        $this->cabecalho();
+    public function __construct($tipo = '') {
+        //$this->cabecalho();
+        $this->tipo = $tipo;
     }
 
     public function exibir($visao, $paginaInicial = 0) {
-        $this->corpo($visao, $paginaInicial);
+        if($this->tipo == 'ajax'){
+            $this->corpo($visao, 0);
+        }
+        else {
+            $this->cabecalho();
+            $this->corpo($visao, $paginaInicial);
+            $this->rodape();
+        }
+        
     }
 
     public function cabecalho() {
@@ -39,7 +49,7 @@ class Template {
     }
 
     public function __destruct() {
-        $this->rodape();
+        //$this->rodape();
     }
 
 }

@@ -6,6 +6,9 @@ include_once 'modelo/Imovel.php';
 include_once 'modelo/Plano.php';
 include_once 'modelo/Imagem.php';
 include_once 'modelo/UsuarioPlano.php';
+include_once 'modelo/Usuario.php';
+include_once 'modelo/Telefone.php';
+include_once 'modelo/Empresa.php';
 include_once 'DAO/GenericoDAO.php';
 include_once 'DAO/ConsultasAdHoc.php';
 
@@ -54,7 +57,7 @@ class AnuncioControle {
 
                     $entidadeUsuarioPlano = $genericoDAO->consultar(new UsuarioPlano(), true, array("id" => $parametros["sltPlano"]));
                     $entidadeUsuarioPlano = $entidadeUsuarioPlano[0];
-                    if (($entidadeUsuarioPlano->getPlano()->getTitulo() != "infinity" && $_SESSION["tipopessoa"] == "pj")||$_SESSION["tipopessoa"] == "pf") {
+                    if (($entidadeUsuarioPlano->getPlano()->getTitulo() != "infinity" && $_SESSION["tipopessoa"] == "pj") || $_SESSION["tipopessoa"] == "pf") {
                         //se o plano nao eh infinity e nem eh uma empresa, entao atualiza o status do usuarioplano
                         $entidadeUsuarioPlano->setStatus("utilizado");
                         $genericoDAO->editar($entidadeUsuarioPlano);
@@ -91,6 +94,51 @@ class AnuncioControle {
             $visao->setItem($listarAnuncio);
             $visao->exibir('AnuncioVisaoListagem.php');
         }
+    }
+
+    function comparar($parametros) {
+        $consultasAdHoc = new ConsultasAdHoc();
+        $listarAnuncio = $consultasAdHoc->ConsultarAnunciosPublicos($parametros['selecoes']);
+        $visao = new Template();
+        $visao->setItem($listarAnuncio);
+        $visao->exibir('AnuncioVisaoComparar.php');
+//        Tratamento de exceção para nenhum anuncio selecionado.
+//        print_r($listarAnuncio[0]->condicao);
+//        die();
+    }
+
+    function buscar($parametros) {
+
+        //erro ano passar o parametro
+
+        $anuncio = new Anuncio();
+
+        $genericoDAO = new GenericoDAO();
+        $selecionarAnuncio = $genericoDAO->consultar($anuncio, true, array("",$parametros[]));
+        //retorno da busca está errado
+//            echo "<pre>";
+//             print_r($selecionarAnuncio);
+//            echo "</pre>";
+//            die();
+//            
+//        var_dump($_SESSION);
+//        die();
+        //visao
+        $visao = new Template();
+        $visao->setItem($selecionarAnuncio);
+        $visao->exibir('AnuncioVisaoBusca.php');
+    }
+
+    function modal($parametros) {
+        $visao = new Template('ajax');
+        $genericoDAO = new GenericoDAO();
+        $item["anuncio"] = $genericoDAO->consultar(new Anuncio(), false, array("id" => $parametros["hdnModal"]));
+        $item["imagem"] = $genericoDAO->consultar(new Imagem(), false, array("idanuncio" => $item["anuncio"][0]->getId()));
+        $item["imovel"] = $genericoDAO->consultar(new Imovel(), false, array("id" => $item["anuncio"][0]->getIdimovel()));
+        $item["endereco"] = $genericoDAO->consultar(new Endereco(), false, array("id" => $item["imovel"][0]->getIdendereco()));
+        $item["usuario"] = $genericoDAO->consultar(new Usuario(), true, array("id" => $item["imovel"][0]->getIdusuario()));
+        $visao->setItem($item);
+        $visao->exibir('AnuncioVisaoModal.php');
     }
 
     /*
