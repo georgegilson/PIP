@@ -13,8 +13,8 @@
         <div class="tab-pane fade in active" id="home">
 
             <form id="form" class="form-horizontal" action="index.php" method="post">
-                <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Imovel"  />
-                <input type="hidden" id="hdnAcao" name="hdnAcao" value="buscarSimples" />    
+                <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Anuncio"  />
+                <input type="hidden" id="hdnAcao" name="hdnAcao" value="buscar" />    
 
                 <div class="row">
                     <p />
@@ -113,7 +113,7 @@
         <!--        <div class="row text-danger" id="divmsgerro" hidden="true"></div>-->
         <div class="tab-pane fade" id="profile">
             <form id="form" class="form-horizontal" action="index.php" method="post">
-                <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Imovel"  />
+                <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Anuncio"  />
                 <input type="hidden" id="hdnAcao" name="hdnAcao" value="buscarAvancada" />    
 
                 <div class="row">
@@ -263,14 +263,6 @@
     </div>
 </form>  
 
-<div class="row">
-    <div class="col-lg-4">
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary">TESTE</button>
-        </div>
-    </div>
-</div>
-
 </div>
 
 <div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
@@ -283,35 +275,85 @@
         $anuncios = array_merge($anuncios, array_slice($anuncios, 0, 3 - count($anuncios) % 3));
     }
     ?>
-
-    <div class="row">
-        <?php
-        foreach ($anuncios as $anuncio) {
-            if (($count > 0) and ($count % 3 == 0)) {
+    <form id="form" class="form-horizontal" action="index.php" method="post">
+        <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Anuncio"  />
+        <input type="hidden" id="hdnAcao" name="hdnAcao" value="comparar" />
+        <div class="row">
+            <?php
+            foreach ($anuncios as $anuncio) {
+                $imovel = $anuncio->getImovel();
+                if (($count > 0) and ($count % 3 == 0)) {
+                    ?>
+                </div><div class="row">
+                    <?php
+                }
                 ?>
-            </div><div class="row">
+                <div class="col-lg-4">
+                    <input type="checkbox" id="selecoes[]" name="selecoes[]" value=<?php echo $anuncio->getId(); ?>> 
+                    <h2><span class="glyphicon glyphicon-bullhorn"></span> <?php echo $anuncio->getTituloAnuncio(); ?></h2>
+                    <p><?php echo $anuncio->getDescricaoAnuncio(); ?>
+                        <?php
+                        if (count($anuncio->getImagem()) > 0) {
+                            $imagem = $anuncio->getImagem();
+                            $imagem = (is_array($imagem) ? $imagem[0] : $imagem);
+                            echo '<img src="' . $imagem->getDiretorio() . '" width="250px" >';
+                        }
+                        ?>
+                    </p>
+
+                    <button id="btnAnuncioModal<?php echo $imovel->Referencia(); ?>" class="btn btn-default btn-sm" data-toggle="modal" data-target="#divAnuncioModal" data-modal="<?php echo $anuncio->getId(); ?>" data-title="<?php echo $anuncio->getTituloAnuncio(); ?>">
+                        <span class="glyphicon glyphicon-plus-sign"></span> Veja mais detalhes
+                    </button>
+                </div>
                 <?php
+                $count++;
             }
             ?>
-            <div class="col-lg-4">
-                <h2><span class="glyphicon glyphicon-bullhorn"></span> <?php echo $anuncio->getTituloAnuncio(); ?></h2>
-                <p><?php echo $anuncio->getDescricaoAnuncio(); ?>
-                    <?php
-                    if (count($anuncio->getImagem()) > 0) {
-                        $imagem = $anuncio->getImagem();
-                        $imagem = (is_array($imagem) ? $imagem[0] : $imagem);
-                        echo '<img src="' . $imagem->getDiretorio() . '" width="250px" >';
-                    }
-                    ?>
-                </p>
-
-                <p><a class="btn btn-default" href="#"><span class="glyphicon glyphicon-plus-sign"></span> Veja mais detalhes</a></p>
-            </div>
-            <?php
-            $count++;
-        }
-        ?>
-    </div>
+                          <button type="submit" class="btn btn-link" id="comparar">Comparar</button>
+        </div>
+    </form>
 </div>    
 
+<!-- Modal -->
+<div class="modal fade" id="divAnuncioModal" tabindex="-1" role="dialog" aria-labelledby="lblAnuncioModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h2 class="modal-title" id="lblAnuncioModal"></h2>
+            </div>
+            <div id="modal-body" class="modal-body text-center">
+            </div>
+            <div class="modal-footer text-right"><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-print"></span> Imprimir</button>
+            </div>
+        </div>
+    </div>
+</div><!-- /.modal -->
 
+<script>
+    $(document).ready(function() {
+        $('[id^=btnAnuncioModal]').click(function() {
+            $("#lblAnuncioModal").html("<span class='glyphicon glyphicon-bullhorn'></span> " + $(this).attr('data-title'));
+            $("#modal-body").html('<img src="assets/imagens/loading.gif" /><h2>Aguarde... Carregando...</h2>');
+            $("#modal-body").load("index.php", {hdnEntidade:'Anuncio', hdnAcao:'modal', hdnToken:'<?php //Sessao::gerarToken(); echo $_SESSION["token"]; ?>', hdnModal:$(this).attr('data-modal')});
+        })
+
+        var NumeroMaximo = 3;
+        $("input[type='checkbox']").click(function() {
+            if ($("input[type='checkbox']").filter(':checked').size() > NumeroMaximo) {
+                alert('Selecione no máximo 3 imóveis para a comparação');
+                return false;
+            }
+        })
+
+        $("input[type='submit']").click(function() {
+                alert('teste');
+    //            if ($("input[type='checkbox']").filter(':checked').size( ) == 0)
+    //            {
+    //                alert('Selecione no mínimo 2 imóveis para a comparação');
+    //                return false;
+    //            }
+        })
+        
+    })
+</script>
