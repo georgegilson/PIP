@@ -114,7 +114,7 @@ class AnuncioControle {
         $anuncio = new Anuncio();
 
         $genericoDAO = new GenericoDAO();
-        $selecionarAnuncio = $genericoDAO->consultar($anuncio, true, array("",$parametros[]));
+        //$selecionarAnuncio = $genericoDAO->consultar($anuncio, true, array("",$parametros[]));
         //retorno da busca está errado
 //            echo "<pre>";
 //             print_r($selecionarAnuncio);
