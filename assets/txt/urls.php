@@ -1,5 +1,2 @@
-http://localhost/pip/PIP/index.php?entidade=Plano&acao=listar   plano
-http://localhost/pip/PIP/index.php?entidade=Usuario&acao=form&tipo=login    login
-http://localhost/pip/PIP/index.php    index
-
-
+http://localhost/pip/PIP/index.php?entidade=Plano&acao=listar   http://localhost/pip/PIP/index.php?entidade=UsuarioPlano&acao=listar
+default http://localhost/pip/PIP/index.php?entidade=Usuario&acao=meuPIP

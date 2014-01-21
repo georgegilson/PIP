@@ -16,7 +16,7 @@ class ConsultaUrl {
             }
         }
         fclose($controlador);
-        return $resultado;
+        return (is_null($resultado)) ? $urlinfo[1] : $resultado;
     }
 
 }

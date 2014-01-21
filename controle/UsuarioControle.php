@@ -208,35 +208,20 @@ class UsuarioControle {
     }
 
     function autenticar($parametros) {
-        if (Sessao::verificarToken($parametros)) {
+        //if (Sessao::verificarToken($parametros)) {
             $usuario = new Usuario();
             $genericoDAO = new GenericoDAO();
             $selecionarUsuario = $genericoDAO->consultar($usuario, false, array("login" => $parametros['txtLogin']));
-            if (($selecionarUsuario != 0) && ($selecionarUsuario[0]->getSenha() == md5($parametros['txtSenha']))) {
+            if ((count($selecionarUsuario) > 0) && ($selecionarUsuario[0]->getSenha() == md5($parametros['txtSenha']))) {
                 Sessao::configurarSessaoUsuario($selecionarUsuario);
-                $resultado = ConsultaUrl::consulta($_SERVER['HTTP_REFERER']);
-                switch ($resultado) {
-                    case "login":
-                        $this->meuPIP();
-                        break;
-                    case "plano":
-                        $redirecionamento = new UsuarioPlanoControle();
-                        $redirecionamento->listar();
-                        break;
-                    case "index":
-                        echo json_encode(array("resultado" => 1, "nome" => $_SESSION['nome']));
-                        break;
-                }
+                $redirecionamento = ConsultaUrl::consulta($_SERVER['HTTP_REFERER']);
+                echo json_encode(array("resultado" => 1, "nome" => $_SESSION['nome'], "redirecionamento" => $redirecionamento));
             } else {
-                $visao = new Template();
-                $visao->setItem("errologinsenha");
-                $visao->exibir('UsuarioVisaoLogin.php');
+                echo json_encode(array("resultado" => 2)); //usuario ou senha invalido
             }
-        } else {
-            $visao = new Template();
-            $visao->setItem("errotoken");
-            $visao->exibir('VisaoErrosGenerico.php');
-        }
+        //} else {
+        //    echo json_encode(array("resultado" => 3)); //erro token
+        //}
     }
 
     function logout($parametros) {
@@ -375,7 +360,7 @@ class UsuarioControle {
         }
     }
 
-        public function meuPIP() {
+    public function meuPIP() {
         if (Sessao::verificarSessaoUsuario()) {
             //modelo
             $usuarioPlano = new UsuarioPlano();
