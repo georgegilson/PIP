@@ -48,5 +48,20 @@ class ConsultasAdHoc extends GenericoDAO {
         $resultado = $statement->fetchAll(PDO::FETCH_CLASS, "RecuperaSenha");
         return $resultado;
     }
+    public function ConsultarAnunciosPublicos($idanuncios) {       
+        
+        $sql = "SELECT * "
+                . " FROM anuncio a"
+                . " JOIN imovel i ON a.idimovel = i.id"
+                . " WHERE a.id"
+                . " IN ( ";
+        
+        $sql = $sql . implode(", ", $idanuncios) . " )";
+        
+        $statement = $this->conexao->prepare($sql);
+        $statement->execute();
+        $resultado = $statement->fetchAll(PDO::FETCH_OBJ);
+        return $resultado;
+    }
 }
 ?>
