@@ -118,7 +118,7 @@
             // If maximum height is exceeded a scrollbar will be displayed.
             maxHeight: false,
             includeSelectAllOption: false,
-            selectAllText: ' Select all',
+            selectAllText: ' Selecionar todos',
             selectAllValue: 'multiselect-all',
             enableFiltering: false,
             enableCaseInsensitiveFiltering: false,
@@ -126,7 +126,7 @@
             // possible options: 'text', 'value', 'both'
             filterBehavior: 'text',
             preventInputChangeEvent: false,
-            nonSelectedText: 'None selected',
+            nonSelectedText: 'Nenhum selecionado',
             nSelectedText: 'selected',
             numberDisplayed: 3
         },

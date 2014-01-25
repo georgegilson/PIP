@@ -13,6 +13,8 @@
         <link href="assets/css/carousel.css" rel="stylesheet" type="text/css" />
         <!-- Grid Form -->
         <link href="assets/css/gridforms.css" rel="stylesheet" type="text/css" />
+        <!-- Switch Button -->
+        <link href="assets/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css" />
         <!-- JQUERY --> 
         <script src="assets/js/jquery-2.0.2.min.js"></script> 
         <!-- TWITTER BOOTSTRAP JS --> 

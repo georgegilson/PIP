@@ -22,50 +22,20 @@ class ImagemControle extends UploadHandler {
 
     protected function handle_form_data($file, $index) {
         $legenda = $this->parametros["txtLegenda"];
-        $file->legenda = $legenda[0];
+        $file->legenda = (isset($_FILES["files"]["name"][0])?$legenda[$_FILES["files"]["name"][0]]:$legenda[$file->name]);
         $file->idImagem = '';
+//        var_dump($_FILES["files"]["name"][0]);
+//        echo "<pre>";
+//        print_r($_SESSION);
+//        print_r($this->parametros);
+//        die();
     }
 
     public function delete($print_response = true) {
+//        var_dump(4);
+        Sessao::configurarSessaoImagem("excluir", $_REQUEST["file"]);
         parent::delete();
-
-        //var_dump(4);
         exit();
-        $genericoDAO = new GenericoDAO();
-        $imagem = new Imagem();
-        //var_dump($file);
-        $resultado = $genericoDAO->consultar($imagem, false, array("id" => $this->idImagem));
-
-        $file_name = isset($_REQUEST['file']) ?
-                basename(stripslashes($_REQUEST['file'])) : null;
-
-        $file_path = $this->options['upload_dir'] . $file_name;
-        $success = is_file($file_path) && $file_name[0] !== '.' && unlink($file_path);
-        $deleta = "DELETE FROM fotos WHERE imagemP = '$file_name'";
-        $executa = mysql_query($deleta) or die(mysql_error());
-        if ($success) {
-            foreach ($this->options['image_versions'] as $version => $options) {
-                $file = $options['upload_dir'] . $file_name;
-                if (is_file($file)) {
-                    unlink($file);
-                }
-            }
-        }
-        header('Content-type: application/json');
-        echo json_encode($success);
-        die();
-        $response = parent::delete(false);
-        foreach ($response as $name => $deleted) {
-            /* if ($deleted) {
-              $sql = 'DELETE FROM `'
-              .$this->options['db_table'].'` WHERE `name`=?';
-              $query = $this->db->prepare($sql);
-              $query->bind_param('s', $name);
-              $query->execute();
-              } */
-            #sql para excluir
-        }
-        return $this->generate_response($response, $print_response);
     }
 
     protected function handle_file_upload($uploaded_file, $name, $size, $type, $error, $index = null, $content_range = null) {
@@ -74,14 +44,11 @@ class ImagemControle extends UploadHandler {
                         $uploaded_file, $name, $size, $type, $error, $index, $content_range
         );
         if (empty($file->error)) {
-            $genericoDAO = new GenericoDAO();
-            $imagem = new Imagem();
-            $entidadeImagem = $imagem->cadastrar($this->parametros, $file);
-            $idImagem = $genericoDAO->cadastrar($entidadeImagem);
-            //var_dump($idImagem);
+            Sessao::configurarSessaoImagem("inserir", $file->name, $file);
             $file->idImagem = $idImagem;
             $file->id = $idImagem;
         }
+
         return $file;
     }
 
@@ -99,4 +66,5 @@ class ImagemControle extends UploadHandler {
         //$file->deleteUrl = 'index.php?hdnEntidade=Imagem&hdnAcao=excluir&idImagem=11'.$file->idImagem.'&files='.rawurlencode($file->name);
         //var_dump($file);
     }
+
 }

@@ -19,15 +19,13 @@ class Template {
     }
 
     public function exibir($visao, $paginaInicial = 0) {
-        if($this->tipo == 'ajax'){
+        if ($this->tipo == 'ajax') {
             $this->corpo($visao, 0);
-        }
-        else {
+        } else {
             $this->cabecalho();
             $this->corpo($visao, $paginaInicial);
             $this->rodape();
         }
-        
     }
 
     public function cabecalho() {
@@ -40,7 +38,11 @@ class Template {
         if ($paginaInicial === 1) {
             include_once 'assets/html/index.php';
         } else {
-            include_once 'visao/' . $visao;
+            if (is_file('visao/' . $visao)) {
+                include_once 'visao/' . $visao;
+            } else {
+                include_once 'assets/html/error404.php';
+            }
         }
     }
 

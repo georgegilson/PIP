@@ -39,7 +39,7 @@ class Sessao {
 
             $token_age = time() - $_SESSION['token_time'];
 
-            if ($token_age <= 300) {
+            if ($token_age <= 1200) {//20 minutos de sessão
                 return true;
             } else {
                 
@@ -66,7 +66,17 @@ class Sessao {
 
     public static function configurarSessaoAnuncio($anuncio) {
         $_SESSION["anuncio"]["idimovel"] = $anuncio["idimovel"];
-        //$_SESSION["anuncio"]["plano"] = $anuncio["plano"];
+        $_SESSION["imagem"] = NULL;
+    }
+
+    public static function configurarSessaoImagem($acao,$nome,$dados=NULL) {
+        if($acao=="inserir"){
+            $_SESSION["imagem"][$nome] = $dados;
+        }
+        
+        if($acao=="excluir"){
+            unset($_SESSION["imagem"][$nome]);
+        }
     }
 
 }

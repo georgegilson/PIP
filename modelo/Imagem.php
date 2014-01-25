@@ -59,12 +59,12 @@ class Imagem {
         $this->legenda = $legenda;
     }
 
-    public function cadastrar($parametros, $file) {
+    public function cadastrar($file,$idanuncio,$destaque) {
         $imagem = new Imagem();
-        $imagem->setIdanuncio("");
+        $imagem->setIdanuncio($idanuncio);
         $imagem->setDiretorio($file->url);
         $imagem->setLegenda($file->legenda);
-        $imagem->setDestaque($file->destaque);
+        $imagem->setDestaque(($destaque == $file->name)?"SIM":"NÃO");
         return $imagem;
     }
 

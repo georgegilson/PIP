@@ -31,10 +31,11 @@
                         <span class="glyphicon glyphicon-home"></span>
                         <span class="glyphicon glyphicon-plus"></span> Cadastrar Imóvel
                     </button></a>
+                <a href="index.php?entidade=Imovel&acao=listarEditar">
                 <button type="button" class="btn btn-success">
                     <span class="glyphicon glyphicon-home"></span>
                     <span class="glyphicon glyphicon-pencil"></span> Editar Imóvel
-                </button>
+                </button></a>
                 <a href="index.php?entidade=Imovel&acao=listar">
                     <button type="button" class="btn btn-success">
                         <span class="glyphicon glyphicon-home"></span> 
@@ -51,10 +52,11 @@
                 <h3 class="panel-title">Meus Anúncios</h3>
             </div>
             <div class="panel-body">
-                <button type="button" class="btn btn-info">
-                    <span class="glyphicon glyphicon-bullhorn"></span> 
-                    <span class="glyphicon glyphicon-plus"></span> Cadastrar Anúncio
-                </button>
+                <a href="index.php?entidade=Anuncio&acao=listarCadastrar">
+                    <button type="button" class="btn btn-info">
+                        <span class="glyphicon glyphicon-bullhorn"></span> 
+                        <span class="glyphicon glyphicon-plus"></span> Cadastrar Anúncio
+                    </button></a>
                 <button type="button" class="btn btn-info">
                     <span class="glyphicon glyphicon-bullhorn"></span> 
                     <span class="glyphicon glyphicon-pencil"></span> Editar Anúncio

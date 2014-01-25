@@ -68,10 +68,14 @@
 
             // Error and info messages:
             messages: {
-                maxNumberOfFiles: 'Maximum number of files exceeded',
-                acceptFileTypes: 'File type not allowed',
-                maxFileSize: 'File is too large',
-                minFileSize: 'File is too small'
+                maxNumberOfFiles: 'Quantidade máxima de fotos excedida. Cancele o envio.',
+                acceptFileTypes: 'Formato de arquivo não permitido. Cancele o envio.',
+                maxFileSize: 'O arquivo é muito grande. Cancele o envio.',
+                minFileSize: 'O arquivo é muito pequeno. Cancele o envio.'
+//                maxNumberOfFiles: 'Maximum number of files exceeded',
+//                acceptFileTypes: 'File type not allowed',
+//                maxFileSize: 'File is too large',
+//                minFileSize: 'File is too small'
             }
         },
 

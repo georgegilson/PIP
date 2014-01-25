@@ -11,6 +11,7 @@ include_once 'modelo/Telefone.php';
 include_once 'modelo/Empresa.php';
 include_once 'DAO/GenericoDAO.php';
 include_once 'DAO/ConsultasAdHoc.php';
+include_once 'assets/pager/Pager.php';
 
 class AnuncioControle {
 
@@ -48,6 +49,7 @@ class AnuncioControle {
                 $imagem = new ImagemControle($parametros);
             } else {
                 if (Sessao::verificarToken($parametros)) {
+
                     $genericoDAO = new GenericoDAO();
                     $genericoDAO->iniciarTransacao();
 
@@ -63,14 +65,14 @@ class AnuncioControle {
                         $genericoDAO->editar($entidadeUsuarioPlano);
                     }
 
-                    if (isset($parametros["hdnImagem"])) {
-                        foreach ($parametros["hdnImagem"] as $idImagem) {
-                            $entidadeImagem = new Imagem();
-                            $entidadeImagem->setId($idImagem);
-                            $entidadeImagem->setIdanuncio($idAnuncio);
-                            $genericoDAO->editar($entidadeImagem);
+                    if (isset($_SESSION["imagem"])) {
+                        foreach ($_SESSION["imagem"] as $file) {
+                            $imagem = new Imagem();
+                            $entidadeImagem = $imagem->cadastrar($file, $idAnuncio, $parametros["rdbCapa"]);
+                            $idImagem = $genericoDAO->cadastrar($entidadeImagem);
                         }
                     }
+
                     //visao
                     if ($idAnuncio) {
                         echo json_encode(array("resultado" => 1));
@@ -93,6 +95,19 @@ class AnuncioControle {
             $visao = new Template();
             $visao->setItem($listarAnuncio);
             $visao->exibir('AnuncioVisaoListagem.php');
+        }
+    }
+
+    function listarCadastrar() {
+        if (Sessao::verificarSessaoUsuario()) {
+            $consultasAdHoc = new ConsultasAdHoc();
+            $listarCadastrarAnuncio = $consultasAdHoc->ConsultarImoveisNaoAnunciadosPorUsuario($_SESSION['idusuario']);
+//            var_dump($_SESSION['idusuario']);
+            //echo "<pre>";print_r($listarCadastrarAnuncio);
+            //visao
+            $visao = new Template();
+            $visao->setItem($listarCadastrarAnuncio);
+            $visao->exibir('AnuncioVisaoListagemCadastrar.php');
         }
     }
 

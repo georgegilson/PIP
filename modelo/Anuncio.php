@@ -140,8 +140,8 @@ class Anuncio {
         $anuncio->setDatahoracadastro(date('d/m/Y H:i:s'));
         $anuncio->setDatahoraalteracao("");
         $anuncio->setStatus('cadastrado');
-        $anuncio->setPublicarmapa($parametros['rdbMapa']);
-        $anuncio->setIdImovel($parametros['hdnIdImovel']);
+        $anuncio->setPublicarmapa((isset($parametros['chkMapa'])?"SIM":"NAO"));
+        $anuncio->setIdImovel($_SESSION["anuncio"]["idimovel"]);
         $anuncio->setIdusuarioplano($parametros['sltPlano']);
 
         return $anuncio;

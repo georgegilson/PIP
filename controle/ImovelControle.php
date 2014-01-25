@@ -54,6 +54,18 @@ class ImovelControle {
         }
     }
 
+    function listarEditar() {
+        if (Sessao::verificarSessaoUsuario()) {
+            $imovel = new Imovel();
+            $genericoDAO = new GenericoDAO();
+            $listarImovel = $genericoDAO->consultar($imovel, true, array("idusuario" => $_SESSION['idusuario']));
+            //visao
+            $visao = new Template();
+            $visao->setItem($listarImovel);
+            $visao->exibir('ImovelVisaoListagemEditar.php');
+        }
+    }
+
     function selecionar($parametro) {
         if (Sessao::verificarSessaoUsuario() & Sessao::verificarToken(array("hdnToken" => $parametro["token"]))) {
             $imovel = new Imovel();
