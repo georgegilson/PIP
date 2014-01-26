@@ -116,11 +116,12 @@ class AnuncioControle {
         $listarAnuncio = $consultasAdHoc->ConsultarAnunciosPublicos($parametros['selecoes']);
         $visao = new Template();
         $visao->setItem($listarAnuncio);
-        $visao->exibir('AnuncioVisaoComparar.php');
+        $visao->exibir('AnuncioVisaoTeste3.php');
 //        Tratamento de exceção para nenhum anuncio selecionado.
 //        print_r($listarAnuncio[0]->condicao);
 //        die();
     }
+
 
     function buscar($parametros) {
 
@@ -128,7 +129,11 @@ class AnuncioControle {
 
         $anuncio = new Anuncio();
 
-        $genericoDAO = new GenericoDAO();
+        $consultasAdHoc = new ConsultasAdHoc();
+        $listarAnuncio = $consultasAdHoc->bucarImovel($parametros);
+        $visao = new Template();
+        $visao->setItem($listarAnuncio);
+        $visao->exibir('AnuncioVisaoBusca.php'); 
         //$selecionarAnuncio = $genericoDAO->consultar($anuncio, true, array("",$parametros[]));
         //retorno da busca está errado
 //            echo "<pre>";
@@ -139,11 +144,8 @@ class AnuncioControle {
 //        var_dump($_SESSION);
 //        die();
         //visao
-        $visao = new Template();
-        $visao->setItem($selecionarAnuncio);
-        $visao->exibir('AnuncioVisaoBusca.php');
     }
-
+    
     function modal($parametros) {
         $visao = new Template('ajax');
         $genericoDAO = new GenericoDAO();

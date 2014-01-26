@@ -1,4 +1,20 @@
-<div class="container divBusca"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
+<script>
+     
+$(document).ready(function(){
+    $("select[name=sltCidade]").change(function(){
+    $('select[name=sltBairro]').html('<option value="">Procurando...</option>');
+            $.post('index.php?hdnEntidade=Bairro&hdnAcao=selecionarBairro&idcidade='+$('#sltCidade').val(),
+                    function(resposta){
+                    $('select[name=sltBairro]').html(resposta);
+                    }
+
+            );
+            });
+});
+
+</script>
+
+   <div class="container divBusca"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) -->         
     <!-- Example row of columns -->
     <!--    <div class="alert">Todos</div> -->
 
@@ -38,17 +54,7 @@
                     </div>
 
                     <div class="col-lg-3">
-                        <label  for="sltCondicao">Condição do Imóvel</label>
-                        <select class="form-control" id="sltCondicao" name="sltCondicao">
-                            <option value="">Informe a Condição</option>
-                            <option value="construcao">Em Construção</option>
-                            <option value="novo">Novo</option>
-                            <option value="usado">Usado</option>
-                        </select>
-                    </div>
-
-                    <div class="col-lg-3">
-                        <label  for="sltQuarto">Quarto</label>
+                        <label  for="sltQuarto">Quarto(s)</label>
                         <select class="form-control" id="sltQuarto" name="sltQuarto">
                             <option value="">Informe Número de Quarto(s)</option>
                             <option value="01">01</option>
@@ -56,49 +62,75 @@
                             <option value="03">03</option>
                             <option value="04">04</option>
                             <option value="05">05</option>
-                            <option value="06"> de 05</option>
+                            <option value="06">Mais de 05</option>
                         </select>
                     </div>
 
-
-                </div>
-
-                <br />
-
-                <div class="row">
                     <div class="col-lg-3">
-                        <label  for="sltGaragem">Garagem</label>
-                        <select class="form-control" id="sltGaragem" name="sltGaragem">
-                            <option value="">Informe Número de Garagem(ns)</option>
-                            <option value="nenhuma">Nenhuma</option>
+                        <label  for="sltBanheiro">Banheiro(s)</label>
+                        <select class="form-control" id="sltGaragem" name="sltBanheiro">
+                            <option value="">Informe Número de Banheiro(s)</option>
                             <option value="01">01</option>
                             <option value="02">02</option>
                             <option value="03">03</option>
                             <option value="04">04</option>
                             <option value="05">05</option>
-                            <option value="06"> de 05</option>
+                            <option value="06">Mais de 05</option>
                         </select>
                     </div>
+                    
+                </div>
+
+                <br />
+
+                <div class="row">
 
                     <div class="col-lg-3">
                         <label  for="sltCidade">Cidade</label>
-                        <select class="form-control" id="sltGaragem" name="sltCidade">
+                        <select class="form-control" id="sltCidade" name="sltCidade">
                             <option value="">Informe a Cidade</option>
-                            <option value="nenhuma">Nenhuma</option>
-                            <option value="belem">Belém</option>
-                            <option value="ananindeua">Ananindeua</option>
-                            <option value="marituba">Marituba</option>
+                            <option value="1">Belém</option>
+                            <option value="2">Ananindeua</option>
+                            <option value="3">Marituba</option>
                         </select>
                     </div>
 
                     <div class="col-lg-3">
                         <label  for="sltBairro">Bairro</label>
-                        <select class="form-control" id="sltGaragem" name="sltBairro">
-                            <option value="">Informe o Bairro</option>
-                            <option value="jurunas">Jurunas</option>
-                            <option value="batistacampos">Batista Campos</option>
-                            <option value="cremacao">Cremação</option>
-                            <option value="umarizal">Umarizal</option>
+                        <select class="form-control" id="sltBairro" name="sltBairro">
+                            <option value="">Selecione a Cidade</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-lg-3">
+                        <label  for="sltValor">Valor do Imóvel</label>
+                        <select class="form-control" id="sltCidade" name="sltValor">
+                            <option value="">Informe o Valor</option>
+                            <option value="2">Menos de R$40.000</option>
+                            <option value="4">Entre R$40.000 e R$60.000</option>
+                            <option value="6">Entre R$60.000 e R$80.000</option>
+                            <option value="8">Entre R$80.000 e R$100.000</option>
+                            <option value="10">Entre R$100.000 e R$120.000</option>
+                            <option value="12">Entre R$120.000 e R$140.000</option>
+                            <option value="14">Entre R$140.000 e R$160.000</option>
+                            <option value="16">Entre R$160.000 e R$180.000</option>
+                            <option value="18">Entre R$180.000 e R$200.000</option>
+                            <option value="20">Entre R$200.000 e R$220.000</option>
+                            <option value="22">Entre R$220.000 e R$240.000</option>
+                            <option value="24">Entre R$240.000 e R$260.000</option>
+                            <option value="26">Entre R$260.000 e R$280.000</option>
+                            <option value="28">Entre R$280.000 e R$300.000</option>
+                            <option value="30">Entre R$300.000 e R$320.000</option>
+                            <option value="32">Entre R$320.000 e R$340.000</option>
+                            <option value="34">Entre R$340.000 e R$360.000</option>
+                            <option value="36">Entre R$360.000 e R$380.000</option>
+                            <option value="38">Entre R$380.000 e R$400.000</option>
+                            <option value="40">Entre R$400.000 e R$420.000</option>
+                            <option value="42">Entre R$420.000 e R$440.000</option>
+                            <option value="44">Entre R$440.000 e R$460.000</option>
+                            <option value="46">Entre R$460.000 e R$480.000</option>
+                            <option value="48">Entre R$480.000 e R$500.000</option>
+                            <option value="50">Mais de R$500.000</option>
                         </select>
                     </div>
 
@@ -148,7 +180,7 @@
                     </div>
 
                     <div class="col-lg-3">
-                        <label  for="sltQuarto">Quarto</label>
+                        <label  for="sltQuarto">Quarto(s)</label>
                         <select class="form-control" id="sltQuarto" name="sltQuarto">
                             <option value="">Informe Número de Quarto(s)</option>
                             <option value="01">01</option>
@@ -156,7 +188,7 @@
                             <option value="03">03</option>
                             <option value="04">04</option>
                             <option value="05">05</option>
-                            <option value="06"> de 05</option>
+                            <option value="06">Mais de 05</option>
                         </select>
                     </div>
 
@@ -168,7 +200,7 @@
                 <div class="row">
 
                     <div class="col-lg-3">
-                        <label  for="sltGaragem">Garagem</label>
+                        <label  for="sltGaragem">Garagem(ns)</label>
                         <select class="form-control" id="sltGaragem" name="sltGaragem">
                             <option value="">Informe Número de Garagem(ns)</option>
                             <option value="nenhuma">Nenhuma</option>
@@ -177,7 +209,7 @@
                             <option value="03">03</option>
                             <option value="04">04</option>
                             <option value="05">05</option>
-                            <option value="06"> de 05</option>
+                            <option value="06">Mais de 05</option>
                         </select>
                     </div>
 
@@ -185,10 +217,9 @@
                         <label  for="sltCidade">Cidade</label>
                         <select class="form-control" id="sltGaragem" name="sltCidade">
                             <option value="">Informe a Cidade</option>
-                            <option value="nenhuma">Nenhuma</option>
-                            <option value="belem">Belém</option>
-                            <option value="ananindeua">Ananindeua</option>
-                            <option value="marituba">Marituba</option>
+                            <option value="1">Belém</option>
+                            <option value="2">Ananindeua</option>
+                            <option value="3">Marituba</option>
                         </select>
                     </div>
 
@@ -204,14 +235,15 @@
                     </div>
 
                     <div class="col-lg-3">
-                        <label  for="sltBanheiro">Banheiros</label>
-                        <select class="form-control" id="sltGaragem" name="sltBairro">
+                        <label  for="sltBanheiro">Banheiro(s)</label>
+                        <select class="form-control" id="sltGaragem" name="sltBanheiro">
+                            <option value="">Informe Número de Banheiro(s)</option>
                             <option value="01">01</option>
                             <option value="02">02</option>
                             <option value="03">03</option>
                             <option value="04">04</option>
                             <option value="05">05</option>
-                            <option value="06"> de 05</option>
+                            <option value="06">Mais de 05</option>
                         </select>
                     </div>
 
@@ -220,6 +252,19 @@
                 <hr />
 
                 <div class="row">
+                    
+                    <div class="col-lg-3">
+                        <label  for="sltSuite">Suite(s)</label>
+                        <select class="form-control" id="sltGaragem" name="sltSuite">
+                            <option value="">Informe Número de Suite(s)</option>
+                            <option value="01">01</option>
+                            <option value="02">02</option>
+                            <option value="03">03</option>
+                            <option value="04">04</option>
+                            <option value="05">05</option>
+                            <option value="06">Mais de 05</option>
+                        </select>
+                    </div>
 
                     <div class="col-lg-3">
                         <label  for="sltDiferencial">Diferencial</label>
@@ -236,8 +281,9 @@
                     </div>
 
                     <div class="col-lg-3">
-                        <label  for="sltM2">M2</label>
+                        <label  for="sltM2">Área (m²)</label>
                         <select class="form-control" id="sltM2" name="sltM2">
+                            <option value="">Informe a Área(s)</option>
                             <option value="00">Menos de 40</option>
                             <option value="40">Mais de 40</option>
                             <option value="60">Mais de 60</option>
@@ -338,10 +384,10 @@
             $("#modal-body").load("index.php", {hdnEntidade:'Anuncio', hdnAcao:'modal', hdnToken:'<?php //Sessao::gerarToken(); echo $_SESSION["token"]; ?>', hdnModal:$(this).attr('data-modal')});
         })
 
-        var NumeroMaximo = 3;
+        var NumeroMaximo = 10;
         $("input[type='checkbox']").click(function() {
             if ($("input[type='checkbox']").filter(':checked').size() > NumeroMaximo) {
-                alert('Selecione no máximo 3 imóveis para a comparação');
+                alert('Selecione no máximo '+ NumeroMaximo +' imóveis para a comparação');
                 return false;
             }
         })

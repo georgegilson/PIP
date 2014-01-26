@@ -135,7 +135,7 @@ class Anuncio {
 
         $anuncio->setTituloAnuncio($parametros['txtTitulo']);
         $anuncio->setDescricaoAnuncio($parametros['txtDescricao']);
-        $anuncio->setValor($parametros['txtValor']);
+        $anuncio->setValor($this->limpaValorNumerico($parametros['txtValor']));
         $anuncio->setValorVisivel((isset($parametros['sltCamposVisiveis']) ? json_encode($parametros['sltCamposVisiveis']) : ""));
         $anuncio->setDatahoracadastro(date('d/m/Y H:i:s'));
         $anuncio->setDatahoraalteracao("");
@@ -145,6 +145,14 @@ class Anuncio {
         $anuncio->setIdusuarioplano($parametros['sltPlano']);
 
         return $anuncio;
+    }
+    
+    function limpaValorNumerico($valor){
+        $valor = str_replace("R$","",$valor);
+        $valor = str_replace(",","",$valor);
+        $valor = str_replace(".","",$valor);
+        $valor = trim($valor);
+        return $valor;
     }
 
 }

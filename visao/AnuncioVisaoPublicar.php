@@ -134,20 +134,21 @@
                                     <div class="form-group">
                                         <label class="col-lg-3 control-label" for="txtTitulo">Título</label>
                                         <div class="col-lg-8">
-                                            <input type="text" class="form-control" id="txtTitulo" name="txtTitulo" placeholder="Informe o Título">
+                                            <input type="text" class="form-control" id="txtTitulo" name="txtTitulo" placeholder="Informe o Título" maxlength="50">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-lg-3 control-label" for="txtDescricao"> Descrição </label>
                                         <div class="col-lg-8">
-                                            <textarea maxlength="100" id="txtDescricao" name="txtDescricao" class="form-control" placeholder="Informe uma Descrição do Imóvel"> </textarea>
+                                            <textarea maxlength="150" id="txtDescricao" name="txtDescricao" class="form-control" placeholder="Informe uma Descrição do Imóvel"> </textarea>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-lg-3 control-label" for="txtValor">Valor</label>
-                                        <div class="col-lg-8">
+                                        <div class="col-lg-4">
                                             <input type="text" class="form-control" id="txtValor" name="txtValor" placeholder="Informe o Valor do Imóvel">
                                         </div>
+                                        <span class="col-lg-4"> (Não informar os centavos) </span>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-lg-6 control-label" for="chkMapa"> Permitir a exibição do mapa?</label>
@@ -421,10 +422,10 @@
                 },
                 txtTitulo: {
                     required: true,
-                    minlength: 10
+                    minlength: 5
                 },
                 txtDescricao: {
-                    required: true,
+                    //required: true,
                     minlength: 10
                 },
                 txtValor: {
@@ -489,7 +490,18 @@
 
         $('#txtDescricao').maxlength({
             alwaysShow: true,
-            threshold: 100,
+            threshold: 150,
+            warningClass: "label label-success",
+            limitReachedClass: "label label-danger",
+            separator: ' de ',
+            preText: 'Voc&ecirc; digitou ',
+            postText: ' caracteres permitidos.',
+            validate: true
+        });
+
+        $('#txtTitulo').maxlength({
+            alwaysShow: true,
+            threshold: 50,
             warningClass: "label label-success",
             limitReachedClass: "label label-danger",
             separator: ' de ',
@@ -550,6 +562,8 @@
         $('#txtValor').priceFormat({
             prefix: 'R$ ',
             centsSeparator: ',',
+            centsLimit: 0,
+            limit: 8,
             thousandsSeparator: '.'
         });
     });
@@ -638,7 +652,7 @@
         </td>
         {% if (file.url) { %}
         <td style="vertical-align: middle;">
-            <span class="size"><input type="radio" name="rdbCapa" value="{%=file.name%}" data-text-label="Capa?" /></span>
+            <span class="size"><input type="radio" name="rdbCapa" value="{%=file.name%}" data-text-label="Destaque?" /></span>
         </td>
         {% } %}
     </tr>

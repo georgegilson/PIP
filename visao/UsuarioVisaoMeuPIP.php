@@ -39,7 +39,7 @@
                 <a href="index.php?entidade=Imovel&acao=listar">
                     <button type="button" class="btn btn-success">
                         <span class="glyphicon glyphicon-home"></span> 
-                        <span class="glyphicon glyphicon-list-alt"></span> Visualizar Todos Meus Imóveis
+                        <span class="glyphicon glyphicon-list-alt"></span> Visualizar Meus Imóveis
                     </button></a>
                 <button type="button" class="btn btn-success">
                     <span class="glyphicon glyphicon-home"></span> 
@@ -64,7 +64,7 @@
                 <a href="index.php?entidade=Anuncio&acao=listar">
                     <button type="button" class="btn btn-info">
                         <span class="glyphicon glyphicon-bullhorn"></span> 
-                        <span class="glyphicon glyphicon-list-alt"></span> Visualizar Todos Meus Anúncios
+                        <span class="glyphicon glyphicon-list-alt"></span> Visualizar Meus Anúncios
                     </button></a>
             </div>
         </div>

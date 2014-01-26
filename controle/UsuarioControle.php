@@ -126,14 +126,15 @@ class UsuarioControle {
             $genericoDAO = new GenericoDAO();
             $resultado = $genericoDAO->editar($entidadeUsuario);
             //visao
-            if ($resultado)
+            if ($resultado) {
                 echo json_encode(array("resultado" => 1));
-            else
+            } else {
                 $genericoDAO->rollback();
-            $genericoDAO->fecharConexao();
-            $visao->setItem("errobanco");
-            $visao->exibir('VisaoErrosGenerico.php');
-        }else {
+                $genericoDAO->fecharConexao();
+                $visao->setItem("errobanco");
+                $visao->exibir('VisaoErrosGenerico.php');
+            }
+        } else {
             $visao->setItem("errotoken");
             $visao->exibir('VisaoErrosGenerico.php');
         }
@@ -209,16 +210,16 @@ class UsuarioControle {
 
     function autenticar($parametros) {
         //if (Sessao::verificarToken($parametros)) {
-            $usuario = new Usuario();
-            $genericoDAO = new GenericoDAO();
-            $selecionarUsuario = $genericoDAO->consultar($usuario, false, array("login" => $parametros['txtLogin']));
-            if ((count($selecionarUsuario) > 0) && ($selecionarUsuario[0]->getSenha() == md5($parametros['txtSenha']))) {
-                Sessao::configurarSessaoUsuario($selecionarUsuario);
-                $redirecionamento = ConsultaUrl::consulta($_SERVER['HTTP_REFERER']);
-                echo json_encode(array("resultado" => 1, "nome" => $_SESSION['nome'], "redirecionamento" => $redirecionamento));
-            } else {
-                echo json_encode(array("resultado" => 2)); //usuario ou senha invalido
-            }
+        $usuario = new Usuario();
+        $genericoDAO = new GenericoDAO();
+        $selecionarUsuario = $genericoDAO->consultar($usuario, false, array("login" => $parametros['txtLogin']));
+        if ((count($selecionarUsuario) > 0) && ($selecionarUsuario[0]->getSenha() == md5($parametros['txtSenha']))) {
+            Sessao::configurarSessaoUsuario($selecionarUsuario);
+            $redirecionamento = ConsultaUrl::consulta($_SERVER['HTTP_REFERER']);
+            echo json_encode(array("resultado" => 1, "nome" => $_SESSION['nome'], "redirecionamento" => $redirecionamento));
+        } else {
+            echo json_encode(array("resultado" => 2)); //usuario ou senha invalido
+        }
         //} else {
         //    echo json_encode(array("resultado" => 3)); //erro token
         //}
