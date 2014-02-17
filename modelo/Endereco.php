@@ -4,12 +4,15 @@ class Endereco {
     
     private $id;
     private $cep;
-    private $estado;
-    private $cidade;
-    private $bairro;
+    private $idestado;
+    private $idcidade;
+    private $idbairro;
     private $logradouro;
     private $numero;
     private $complemento;
+    protected $estado;
+    protected $cidade;
+    protected $bairro;
 
     public function getId() {
         return $this->id;
@@ -42,9 +45,33 @@ class Endereco {
     public function getComplemento() {
         return $this->complemento;
     }
+    
+    public function getIdestado() {
+        return $this->idestado;
+    }
+    
+    public function getIdcidade() {
+        return $this->idcidade;
+    }
+    
+    public function getIdbairro() {
+        return $this->idbairro;
+    }
 
     public function setId($id) {
         $this->id = $id;
+    }
+    
+     public function setIdestado($idestado) {
+        $this->idestado = $idestado;
+    }
+    
+    public function setIdcidade($idcidade) {
+        $this->idcidade = $idcidade;
+    }
+    
+    public function setIdbairro($idbairro) {
+        $this->idbairro = $idbairro;
     }
 
     public function setCep($cep) {
@@ -75,13 +102,13 @@ class Endereco {
         $this->complemento = $complemento;
     }
 
-    function cadastrar($parametros){
+    function cadastrar($parametros, $idestado, $idcidade, $idbairro){
         
         $endereco = new Endereco();
         $endereco->setCep($parametros['txtCEP']);
-        $endereco->setEstado($parametros['txtEstado']);
-        $endereco->setCidade($parametros['txtCidade']);
-        $endereco->setBairro($parametros['txtBairro']);
+        $endereco->setIdestado($idestado);
+        $endereco->setIdcidade($idcidade);
+        $endereco->setIdbairro($idbairro);
         $endereco->setLogradouro($parametros['txtLogradouro']);
         $endereco->setNumero($parametros['txtNumero']);
         $endereco->setComplemento($parametros['txtComplemento']);
@@ -89,11 +116,7 @@ class Endereco {
     }
     
     function editar($parametros){
-        
-//        if(!isset($_SESSION)){ 
-//        session_start(); 
-//        }
-        
+
         $endereco = new Endereco();
         $endereco->setId($_SESSION['idendereco']);
         $endereco->setCep($parametros['txtCEP']);

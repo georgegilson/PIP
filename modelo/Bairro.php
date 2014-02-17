@@ -39,4 +39,11 @@ class Bairro {
         $this->cidade = $cidade;
     }
 
+    function cadastrar($parametros, $idcidade) {
+        $bairro = new Bairro();
+        $bairro->setIdcidade($idcidade);
+        $bairro->setNome($parametros['txtBairro']);
+        return $bairro;
+     }
+    
 }

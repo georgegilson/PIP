@@ -38,5 +38,12 @@ class Cidade {
     public function setEstado($estado) {
         $this->estado = $estado;
     }
+    
+    function cadastrar($parametros, $idestado) {
+        $cidade = new Cidade();
+        $cidade->setIdestado($idestado);
+        $cidade->setNome($parametros['txtCidade']);
+        return $cidade;
+     }
 
 }
