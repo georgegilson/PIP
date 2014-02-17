@@ -4,6 +4,9 @@ include_once 'modelo/Usuario.php';
 include_once 'modelo/Endereco.php';
 include_once 'modelo/Telefone.php';
 include_once 'modelo/Empresa.php';
+include_once 'modelo/Estado.php';
+include_once 'modelo/Cidade.php';
+include_once 'modelo/Bairro.php';
 include_once 'modelo/RecuperaSenha.php';
 include_once 'controle/UsuarioPlanoControle.php';
 include_once 'DAO/GenericoDAO.php';
@@ -51,13 +54,54 @@ class UsuarioControle {
         if (Sessao::verificarToken($parametros)) {
             $genericoDAO = new GenericoDAO();
             $genericoDAO->iniciarTransacao();
+            
+            //consultar existencia de estado, se não existir gravar no banco
+            $estado = new Estado();
+            $genericoDAO = new GenericoDAO();
+            $selecionarEstado = $genericoDAO->consultar($estado, false, array("uf" => $parametros['txtEstado']));
+            if (!count($selecionarEstado) > 0)
+            {
+                $entidadeEstado = $estado->cadastrar($parametros);
+                $idEstado = $genericoDAO->cadastrar($entidadeEstado);
+            }else{
+                $idEstado = $selecionarEstado[0]->getId();
+            }
+                
+            //consultar existencia de cidade, se não existir gravar no banco e utilizar idestado
+            $cidade = new Cidade();
+            $genericoDAO = new GenericoDAO();
+            $selecionarCidade = $genericoDAO->consultar($cidade, false, array("nome" => $parametros['txtCidade'], "idestado" => $idEstado));
+            if (!count($selecionarCidade) > 0)
+            {
+                $entidadeCidade = $cidade->cadastrar($parametros, $idEstado);
+                $idCidade = $genericoDAO->cadastrar($entidadeCidade);
+            }else{
+                $idCidade = $selecionarCidade[0]->getId();
+            }
+            
+            //consultar existencia de bairro, se não existir gravar no banco e utilizar idcidade
+            $bairro = new Bairro();
+            $genericoDAO = new GenericoDAO();
+            $selecionarBairro = $genericoDAO->consultar($bairro, false, array("nome" => $parametros['txtBairro'], "idcidade" => $idCidade));
+            if (!count($selecionarBairro) > 0)
+            {
+                $entidadeBairro = $bairro->cadastrar($parametros, $idCidade);
+                $idBairro = $genericoDAO->cadastrar($entidadeBairro);
+            }else{
+                $idBairro = $selecionarBairro[0]->getId();
+            }
+            
+            //gravar endereço e utilizar idestado, idcdidade e idbairro
             $endereco = new Endereco();
-            $entidadeEndereco = $endereco->cadastrar($parametros);
+            $entidadeEndereco = $endereco->cadastrar($parametros, $idEstado, $idCidade, $idBairro);
             $idEndereco = $genericoDAO->cadastrar($entidadeEndereco);
+            
+            
             //Usuário
             $usuario = new Usuario();
             $entidadeUsuario = $usuario->cadastrar($parametros, $idEndereco);
             $idUsuario = $genericoDAO->cadastrar($entidadeUsuario);
+                       
             //Empresa
             $idEmpresa = false;
             if ($entidadeUsuario->getTipousuario() == "pj") {
