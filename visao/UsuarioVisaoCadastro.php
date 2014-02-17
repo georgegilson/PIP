@@ -347,6 +347,7 @@
         <input type="hidden" id="hdnAcao" name="hdnAcao" value="cadastrar" />
         <input type="hidden" id="hdnCEP" name="hdnCEP" />
         <input type="hidden" id="hdnToken" name="hdnToken" value="<?php echo $_SESSION['token']; ?>" />
+
 <!--        <input type="hidden" id="hdnTipoTelefone[]" name="hdnTipoTelefone[]" value=""  />-->
         <!-- Primeira Linha -->    
         <div class="row" id="divlinha1">
