@@ -316,7 +316,7 @@ class Imovel {
 
         $imovel = new Imovel();
 
-        $imovel->setIdendereco($_SESSION['idendereco']);
+        $imovel->setIdendereco($_SESSION["imovel"]["idendereco"]);
         $imovel->setId($_SESSION["imovel"]["id"]);
         $imovel->setFinalidade($parametros['sltFinalidade']);
         $imovel->setCondicao($parametros['sltCondicao']);

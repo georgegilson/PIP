@@ -35,10 +35,10 @@
         echo "<td>" . $imovel->getEndereco()->getBairro() . "</td>";
         echo "<td>" . $imovel->getDatahoracadastro() . "</td>";
         echo "<td><a href='#' id='popover".$imovel->getId()."'class='btn btn-success'><span class='glyphicon glyphicon-home'></span> Detalhes do Imóvel</a></td>";
-        echo "<td><a href='index.php?entidade=Imovel&acao=selecionar&id=".$imovel->getId()."&token=".$_SESSION['token']."' class='btn btn-warning'><span class='glyphicon glyphicon-pencil'></span> Editar</a> <br /></td>";
-        /*if(count($imovel->getAnuncio())>0){echo"<td><span class='glyphicon glyphicon-bullhorn'></span> <span class='btn btn-default'>Anuncio Publicado</span></td>";}
-         if(count($imovel->getAnuncio())==0){
-             echo"<td><a href='index.php?entidade=Anuncio&acao=form&idImovel=".$imovel->getId()."&token=".$_SESSION['token']."' class='btn btn-primary'>Publicar Anuncio</a></td>";}   */
+       // echo "<td><a href='index.php?entidade=Imovel&acao=selecionar&id=".$imovel->getId()."&token=".$_SESSION['token']."' class='btn btn-warning'><span class='glyphicon glyphicon-pencil'></span> Editar</a> <br /></td>";
+        if(count($imovel->getAnuncio())>0){echo"<td><span class='text-primary'><span class='glyphicon glyphicon-bullhorn'></span> Este Imóvel já possui um anúncio publicado</span></td>";}
+          else {
+             echo "<td><a href='index.php?entidade=Imovel&acao=selecionar&id=".$imovel->getId()."&token=".$_SESSION['token']."' class='btn btn-warning'><span class='glyphicon glyphicon-pencil'></span> Editar</a> <br /></td>";}   
     }
     ?>             
         </tr>         

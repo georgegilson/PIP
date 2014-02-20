@@ -22,10 +22,7 @@ switch ($item) {
         break;
     case "sucessoedicaoimovel":
         ?>
-                $('#diverro').attr('class', 'row text-success');
-                var img = $("<h1>", {class: "glyphicon glyphicon-ok"}, "</h1>");
-                $('#divimg').append(img);
-                alert("Imóvel atualizado com sucesso");
+                alert("Imóvel Atualizado com Sucesso");
                 location.href = "index.php?entidade=Imovel&acao=listarEditar";
         <?php
         break;

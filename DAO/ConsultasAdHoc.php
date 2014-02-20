@@ -95,11 +95,10 @@ class ConsultasAdHoc extends GenericoDAO {
         return $resultado;
     }
 
-    public function bucarImovel($parametros) {
-
+    public function buscarImovel($parametros) {
         $parametro = array_slice($parametros, 0);
 
-        $fromInicial = " SELECT * FROM anuncio a, imovel i, usuario u, endereco e ";
+        $fromInicial = " SELECT * FROM anuncio a, imovel i, usuario u, endereco e, imagem im ";
 
         if (!empty($parametro["sltCidade"]) && empty($parametro["sltBairro"])) {
             $fromCidade = ", cidade c ";
@@ -117,23 +116,68 @@ class ConsultasAdHoc extends GenericoDAO {
                             a.idimovel = i.id 
                             AND i.idusuario = u.id 
                             AND i.idendereco = e.id
-                            AND a.status = 'cadastrado'";
+                            AND a.id = im.idanuncio
+                            AND a.status = 'cadastrado'
+                            AND im.destaque = 'SIM'";
+
+        if (isset($parametro["chkGaragem"])) {
+            $sqlGaragem = " AND i.garagem in ('01', '02', '03', '04', '05', '06')";
+        } else
+            $sqlGaragem = " AND i.garagem = 'nenhuma'";
+
+        $sql = $sql . $sqlGaragem;
 
 
-        $sqlFinalidade = " AND i.finalidade = :finalidade";
+        //    $sqlFinalidade = " AND i.finalidade = :finalidade";
         $sqlTipo = " AND i.tipo = :tipo";
         $sqlQuarto = " AND i.quarto = :quarto";
         $sqlBanheiro = " AND i.banheiro = :banheiro";
         $sqlCidade = " AND e.cidade = c.id AND c.id = :cidade";
         $sqlCidadeBairro = " AND e.bairro = b.id AND b.id = :bairro";
 
-        if ($parametro["sltValor"] == 2) {
-            $sqlValor = " AND a.valor < 40000";
-        } elseif ($parametro["sltValor"] == 50) {
-            $sqlValor = " AND a.valor > 500000";
-        } else {
-            $sqlValor = " AND a.valor >= " . $parametro['sltValor'] . "0000  AND a.valor <= " . $parametro['sltValor'] . "0000 + 20000";
+        if ($parametro["sltValorVenda"] != null && $parametro["sltValorAluguel"] == null) {
+
+            if ($parametro["sltValorVenda"] == 20000) {
+
+                $sqlFinalidadeValor = " AND i.finalidade = :finalidade AND a.valor < 40000";
+            }
+
+            if ($parametro["sltValorVenda"] == 500000) {
+
+                $sqlFinalidadeValor = " AND i.finalidade = :finalidade AND a.valor > 500000";
+            }
+
+            if ($parametro["sltValorVenda"] != 20000 && $parametro["sltValorVenda"] != 500000) {
+
+                $sqlFinalidadeValor = " AND i.finalidade = :finalidade AND a.valor >= " . $parametro["sltValorVenda"] . " AND a.valor <= " . $parametro["sltValorVenda"] . " + 20000";
+            }
         }
+
+        if ($parametro["sltValorAluguel"] != null && $parametro["sltValorVenda"] == null) {
+
+            if ($parametro["sltValorAluguel"] == 100) {
+
+                $sqlFinalidadeValor = " AND i.finalidade = :finalidade AND a.valor < 200";
+            }
+
+            if ($parametro["sltValorAluguel"] == 4000) {
+
+                $sqlFinalidadeValor = " AND i.finalidade = :finalidade AND a.valor > 4000";
+            }
+
+            if ($parametro["sltValorAluguel"] != 100 && $parametro["sltValorAluguel"] != 4000) {
+
+                $sqlFinalidadeValor = " AND i.finalidade = :finalidade AND a.valor >= " . $parametro["sltValorAluguel"] . " AND a.valor <= " . $parametro["sltValorAluguel"] . " + 200";
+            }
+        }
+
+        if ($parametro["sltFinalidade"] != null && $parametro["sltValorAluguel"] == null && $parametro["sltValorVenda"] == null) {
+
+            $sqlFinalidadeValor = " AND i.finalidade = :finalidade";
+        }
+
+        $parametro["sltValorAluguel"] = $parametro["sltValor"];
+        $parametro["sltValorVenda"] = $parametro["sltValor"];
 
 //       foreach($parametros as $postValor){
 //            
@@ -145,11 +189,12 @@ class ConsultasAdHoc extends GenericoDAO {
 //        }
 //        
 //        die();
-//        
+//      
+        
         $statement = $this->conexao->prepare($sql);
 
         if (!empty($parametro["sltFinalidade"]) && empty($parametro["sltTipo"]) && empty($parametro["sltQuarto"]) && empty($parametro["sltBanheiro"]) && empty($parametro["sltCidade"]) && empty($parametro["sltValor"])) { //apenas a finalidade preenchida
-            $sqlFinal = $sql . $sqlFinalidade;
+            $sqlFinal = $sql . $sqlFinalidadeValor;
             $statement = $this->conexao->prepare($sqlFinal);
             $statement->bindParam(':finalidade', $parametro["sltFinalidade"]);
         }
@@ -189,47 +234,50 @@ class ConsultasAdHoc extends GenericoDAO {
             $statement = $this->conexao->prepare($sqlFinal);
             $statement->bindParam(':valor', $parametro["sltValor"]);
         }
+        
 
         if (!empty($parametro["sltFinalidade"]) && !empty($parametro["sltTipo"])) { //finalidade e tipo preenchidos
-            $sqlFinal = $sql . $sqlFinalidade . $sqlTipo;
+            $sqlFinal = $sql . $sqlFinalidadeValor . $sqlTipo;
             $statement = $this->conexao->prepare($sqlFinal);
             $statement->bindParam(':finalidade', $parametro["sltFinalidade"]);
             $statement->bindParam(':tipo', $parametro["sltTipo"]);
         }
+        
+
 
         if (!empty($parametro["sltFinalidade"]) && !empty($parametro["sltQuarto"])) { //finalidade e quarto preenchidos
-            $sqlFinal = $sql . $sqlFinalidade . $sqlQuarto;
+            $sqlFinal = $sql . $sqlFinalidadeValor . $sqlQuarto;
             $statement = $this->conexao->prepare($sqlFinal);
             $statement->bindParam(':finalidade', $parametro["sltFinalidade"]);
             $statement->bindParam(':quarto', $parametro["sltQuarto"]);
         }
 
         if (!empty($parametro["sltFinalidade"]) && !empty($parametro["sltBanheiro"])) { //finalidade e banheiro preenchidos
-            $sqlFinal = $sql . $sqlFinalidade . $sqlBanheiro;
+            $sqlFinal = $sql . $sqlFinalidadeValor . $sqlBanheiro;
             $statement = $this->conexao->prepare($sqlFinal);
             $statement->bindParam(':finalidade', $parametro["sltFinalidade"]);
             $statement->bindParam(':banheiro', $parametro["sltBanheiro"]);
         }
 
         if (!empty($parametro["sltFinalidade"]) && !empty($parametro["sltCidade"])) { //finalidade e cidade preenchidos
-            $sqlFinal = $sql . $sqlFinalidade . $sqlCidade;
+            $sqlFinal = $sql . $sqlFinalidadeValor . $sqlCidade;
             $statement = $this->conexao->prepare($sqlFinal);
             $statement->bindParam(':finalidade', $parametro["sltFinalidade"]);
             $statement->bindParam(':cidade', $parametro["sltCidade"]);
         }
 
         if (!empty($parametro["sltFinalidade"]) && !empty($parametro["sltCidade"]) && !empty($parametro["sltBairro"])) { //finalidade, cidade e bairro preenchidos
-            $sqlFinal = $sql . $sqlFinalidade . $sqlCidadeBairro;
+            $sqlFinal = $sql . $sqlFinalidadeValor . $sqlCidadeBairro;
             $statement = $this->conexao->prepare($sqlFinal);
             $statement->bindParam(':finalidade', $parametro["sltFinalidade"]);
             $statement->bindParam(':bairro', $parametro["sltBairro"]);
         }
 
         if (!empty($parametro["sltFinalidade"]) && !empty($parametro["sltValor"])) { //finalidade e valor preenchidos
-            $sqlFinal = $sql . $sqlFinalidade . $sqlValor;
+            $sqlFinal = $sql . $sqlFinalidadeValor;
             $statement = $this->conexao->prepare($sqlFinal);
             $statement->bindParam(':finalidade', $parametro["sltFinalidade"]);
-            $statement->bindParam(':valor', $parametro["sltValor"]);
+            //    $statement->bindParam(':valor', $parametro["sltValorVenda"]);
         }
 
         if (!empty($parametro["sltTipo"]) && !empty($parametro["sltQuarto"])) { //tipo e quarto preenchidos
@@ -339,6 +387,7 @@ class ConsultasAdHoc extends GenericoDAO {
             $statement->bindParam(':tipo', $parametro["sltTipo"]);
             $statement->bindParam(':quarto', $parametro["sltQuarto"]);
             $statement->bindParam(':banheiro', $parametro["sltBanheiro"]);
+            $statement->bindParam(':cidade', $parametro["sltCidade"]);
             $statement->bindParam(':bairro', $parametro["sltBairro"]);
             $statement->bindParam(':valor', $parametro["sltValor"]);
         }

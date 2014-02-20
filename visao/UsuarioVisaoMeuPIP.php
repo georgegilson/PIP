@@ -57,10 +57,10 @@
                         <span class="glyphicon glyphicon-bullhorn"></span> 
                         <span class="glyphicon glyphicon-plus"></span> Cadastrar Anúncio
                     </button></a>
-                <button type="button" class="btn btn-info">
+<!--                <button type="button" class="btn btn-info">
                     <span class="glyphicon glyphicon-bullhorn"></span> 
                     <span class="glyphicon glyphicon-pencil"></span> Editar Anúncio
-                </button>
+                </button>-->
                 <a href="index.php?entidade=Anuncio&acao=listar">
                     <button type="button" class="btn btn-info">
                         <span class="glyphicon glyphicon-bullhorn"></span> 

@@ -363,7 +363,7 @@
 
                             <div class="form-group">
                                 <label  class="col-lg-3 control-label" for="sltBanheiro">Banheiro</label>
-                                <div class="col-lg-9">
+                                <div class="col-lg-8">
                                     <select class="form-control" id="sltBanheiro" name="sltBanheiro">
                                         <option value="">Informe a Quantidade de Banheiro</option>
                                         <option <?php if ($imovel->getBanheiro() == "01") {
@@ -395,7 +395,7 @@
                             <div class="panel-heading">Informações Adicionais </div>
                             <div class="form-group">
                                 <label  class="col-lg-3 control-label" for="sltDiferencial">Diferencial</label>
-                                <div class="col-lg-9">
+                                <div class="col-lg-8">
                                     <select id="sltDiferencial" multiple="multiple" name="sltDiferencial[]">
                                         <option <?php if ($imovel->getAcademia() == "SIM") {
             print "selected='true'";
@@ -420,14 +420,14 @@
                             </div>                      
                             <div class="form-group">
                                 <label class="col-lg-3 control-label" for="txtArea">Área (M<sup>2</sup>)</label>
-                                <div class="col-lg-9">
+                                <div class="col-lg-8">
                                     <input type="text" id="txtArea" name="txtArea" class="form-control" placeholder="Informe a Área" value="<?php print $imovel->getArea() ?>">
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label  class="col-lg-3 control-label" for="sltSuite">Suite</label>
-                                <div class="col-lg-9">
+                                <div class="col-lg-8">
                                     <select class="form-control" id="sltSuite" name="sltSuite">
                                         <option value="">Informe Nº de Suite</option>
                                         <option <?php if ($imovel->getSuite() == "nenhuma") {
@@ -456,14 +456,14 @@
 
                             <div class="form-group">
                                 <label class="col-lg-3 control-label" for="txtDescricao"> Descrição </label>
-                                <div class="col-lg-9">
+                                <div class="col-lg-8">
                                     <textarea maxlength="100" id="txtDescricao" name="txtDescricao" class="form-control" placeholder="Informe uma Descrição do Imóvel"><?php print $imovel->getDescricao(); ?> </textarea><br />
                                 </div>
 
                                 <div id="divApartamento">
 
                                     <label class="col-lg-3 control-label" for="sltAndar">Andar</label>
-                                    <div class="col-lg-9">
+                                    <div class="col-lg-8">
                                         <select class="form-control" id="sltAndar" name="sltAndar">
                                             <option value="">Informe o Andar</option>
                                             <option <?php if ($imovel->getAndar() == "1") {
@@ -575,23 +575,23 @@
                                     </div>    
 
                                     <div class="checkbox">
-                                        <label class="col-lg-3 control-label" for="chkCobertura"></label>
+                                        <label class="col-sm-offset-3 col-sm-9" for="chkCobertura">
                                         <input type="checkbox" id="chkCobertura" name="chkCobertura" <?php if ($imovel->getCobertura() == "SIM") {
             print "checked='true'";
-        } ?>> Está na Cobertura                            
+        } ?>> Está na Cobertura                        </label>    
                                     </div> 
 
                                     <div class="checkbox">
-                                        <label class="col-lg-3 control-label" for="chkSacada"></label>
+                                        <label class="col-sm-offset-3 col-sm-9" for="chkSacada">
                                         <input type="checkbox" id="chkSacada" name="chkSacada" <?php if ($imovel->getSacada() == "SIM") {
             print "checked='true'";
-        } ?>> Possui Sacada                            
+        } ?>> Possui Sacada                            </label>
                                     </div>
 
                                     <br />  
 
                                     <label class="col-lg-3 control-label" for="txtArea">Valor do Condomínio</label>
-                                    <div class="col-lg-9">
+                                    <div class="col-lg-8">
                                         <input type="text" id="txtCondominio" name="txtCondominio" class="form-control" placeholder="Informe o Valor do Condominio" value="<?php print $imovel->getCondominio() ?>">
                                     </div> 
 
@@ -611,7 +611,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label class="col-lg-3 control-label" for="txtCEP">CEP</label>
-                                        <div class="col-lg-9">
+                                        <div class="col-lg-8">
                                             <input type="text" class="form-control" id="txtCEP" name="txtCEP" placeholder="Informe o CEP do Imóvel" value="<?php print $imovel->getEndereco()->getCep(); ?>">
                                         </div>
                                     </div>
@@ -619,37 +619,37 @@
                                     <div id="divCEP">
                                         <div class="form-group">
                                             <label class="col-lg-3 control-label" for="txtCidade">Cidade</label>
-                                            <div class="col-lg-9">
+                                            <div class="col-lg-8">
                                                 <input type="text" class="form-control" id="txtCidade" name="txtCidade" readonly="true" value="<?php print $imovel->getEndereco()->getCidade()->getNome(); ?>">  
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="col-lg-3 control-label" for="txtEstado">Estado</label>
-                                            <div class="col-lg-9">
+                                            <div class="col-lg-8">
                                                 <input type="text" class="form-control" id="txtEstado" name="txtEstado" readonly="true" value="<?php print $imovel->getEndereco()->getEstado()->getUf(); ?>"> 
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="col-lg-3 control-label" for="txtBairro">Bairro</label>
-                                            <div class="col-lg-9">
+                                            <div class="col-lg-8">
                                                 <input type="text" class="form-control" id="txtBairro" name="txtBairro" readonly="true" value="<?php print $imovel->getEndereco()->getBairro()->getNome(); ?>"> 
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="col-lg-3 control-label" for="txtLogradouro">Logradouro</label>
-                                            <div class="col-lg-9">
+                                            <div class="col-lg-8">
                                                 <input type="text" class="form-control" id="txtLogradouro" name="txtLogradouro" readonly="true" value="<?php print $imovel->getEndereco()->getLogradouro(); ?>"> 
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="col-lg-3 control-label" for="txtNumero">N&uacute;mero</label>
-                                            <div class="col-lg-9">
+                                            <div class="col-lg-8">
                                                 <input type="text" class="form-control" id="txtNumero" name="txtNumero" placeholder="Informe o n&ordm;" value="<?php print $imovel->getEndereco()->getNumero(); ?>"> 
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="col-lg-3 control-label" for="txtComplemento">Complemento</label>
-                                            <div class="col-lg-9">
+                                            <div class="col-lg-8">
                                                 <input type="text" class="form-control" id="txtComplemento" name="txtComplemento" placeholder="Informe o Complemento" value="<?php print $imovel->getEndereco()->getComplemento(); ?>"> 
                                             </div>
                                         </div>                                

@@ -120,13 +120,14 @@ class ImovelControle {
             $genericoDAO = new GenericoDAO();
             $selecionarImovel = $genericoDAO->consultar($imovel, true, $parametros);
 
-            #verificar a melhor forma de tratar o blindado recursivo
-            $selecionarEndereco = $genericoDAO->consultar(new Endereco(), true, array("id" => $selecionarImovel[0]->getIdEndereco()));
-            $selecionarImovel[0]->setEndereco($selecionarEndereco[0]);
-
             if ($selecionarImovel) {
+
+                #verificar a melhor forma de tratar o blindado recursivo
+                $selecionarEndereco = $genericoDAO->consultar(new Endereco(), true, array("id" => $selecionarImovel[0]->getIdEndereco()));
+                $selecionarImovel[0]->setEndereco($selecionarEndereco[0]);
+
                 $sessao["id"] = $selecionarImovel[0]->getId();
-                $sessao["idendereco"] =  $selecionarImovel[0]->getIdEndereco();
+                $sessao["idendereco"] = $selecionarImovel[0]->getIdEndereco();
                 Sessao::configurarSessaoImovel($sessao);
                 $item = $selecionarImovel;
                 $pagina = 'ImovelVisaoEdicao.php';

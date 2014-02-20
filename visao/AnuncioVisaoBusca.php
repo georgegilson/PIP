@@ -1,21 +1,56 @@
- 
+<?php
+include_once 'modelo/Imovel.php';
+
+$imovel = new Imovel();
+?>
+
 <script>
-     
-$(document).ready(function(){
-    $("select[name=sltCidade]").change(function(){
-    $('select[name=sltBairro]').html('<option value="">Procurando...</option>');
-            $.post('index.php?hdnEntidade=Bairro&hdnAcao=selecionarBairro&idcidade='+$('#sltCidade').val(),
-                    function(resposta){
-                    $('select[name=sltBairro]').html(resposta);
+
+    $(document).ready(function() {
+        $("select[name=sltCidade]").change(function() {
+            $('select[name=sltBairro]').html('<option value="">Procurando...</option>');
+            $.post('index.php?hdnEntidade=Bairro&hdnAcao=selecionarBairro&idcidade=' + $('#sltCidade').val(),
+                    function(resposta) {
+                        $('select[name=sltBairro]').html(resposta);
                     }
 
             );
-            });
-});
+        });
+    });
 
 </script>
 
-   <div class="container divBusca"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) -->         
+<script>
+    $(document).ready(function() {
+        $("#divValorVenda").hide(); //oculta a div dos valores de venda 
+        $("#divValorAluguel").hide(); //oculta a div dos valores de aluguel
+
+        $("#sltFinalidade").change(function() {
+            if ($(this).val() == "venda") {
+                $("#divValorInicial").fadeOut(); //oculta campos exclusivos do apartamento 
+                $("#divValorAluguel").fadeOut(); //oculta campos exclusivos do apartamento 
+                $("#divValorVenda").fadeIn(); //oculta campos exclusivos do apartamento 
+                //             $("#lblCpfCnpj").html("CPF")
+                //             $("#txtCpfCnpj").attr("placeholder", "Informe o CPF");
+            }
+            if ($(this).val() == "aluguel") {
+                $("#divValorInicial").fadeOut(); //oculta campos exclusivos do apartamento 
+                $("#divValorVenda").fadeOut(); //oculta campos exclusivos do apartamento 
+                $("#divValorAluguel").fadeIn(); //oculta campos exclusivos do apartamento 
+                //             $("#lblCpfCnpj").html("CNPJ");
+                //             $("#txtCpfCnpj").attr("placeholder", "Informe o CNPJ");
+            }
+
+            if ($(this).val() == "") {
+                $("#divValorVenda").fadeOut(); //oculta campos exclusivos do apartamento 
+                $("#divValorAluguel").fadeOut(); //oculta campos exclusivos do apartamento 
+                $("#divValorInicial").fadeIn(); //oculta campos exclusivos do apartamento 
+            }
+
+        })
+    });
+</script>
+<div class="container divBusca"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) -->         
     <!-- Example row of columns -->
     <!--    <div class="alert">Todos</div> -->
 
@@ -34,14 +69,89 @@ $(document).ready(function(){
                 <input type="hidden" id="hdnAcao" name="hdnAcao" value="buscar" />    
 
                 <div class="row">
-                    <p />
-                    <div class="col-lg-3">
-                        <label class="col-lg-3" for="sltFinalidade">Finalidade</label>
-                        <select class="form-control" id="sltFinalidade" name="sltFinalidade">
-                            <option value="">Informe a Finalidade</option>
-                            <option value="venda">Venda</option>
-                            <option value="aluguel">Aluguel</option>
-                        </select>
+                    <div id="divFinalidade">
+                        <p />
+                        <div class="col-lg-3">
+                            <label class="col-lg-3" for="sltFinalidade">Finalidade</label>
+                            <select class="form-control" id="sltFinalidade" name="sltFinalidade">
+                                <option value="">Informe a Finalidade</option>
+                                <option value="venda">Venda</option>
+                                <option value="aluguel">Aluguel</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="divValorInicial">
+                        <div class="col-lg-3">
+                            <label  for="sltValor">Valor do Imóvel</label>
+                            <select class="form-control" id="sltValor" name="sltValor">
+                                <option value="">Selecione a Finalidade</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="divValorVenda">
+                        <div class="col-lg-3">
+                            <label  for="sltValorVenda">Valor do Imóvel</label>
+                            <select class="form-control" id="sltValorVenda" name="sltValorVenda">
+                                <option value="">Selecione o Valor</option>
+                                <option value="20000">Menos de R$40.000</option>
+                                <option value="40000">Entre R$40.000 e R$60.000</option>
+                                <option value="60000">Entre R$60.000 e R$80.000</option>
+                                <option value="80000">Entre R$80.000 e R$100.000</option>
+                                <option value="100000">Entre R$100.000 e R$120.000</option>
+                                <option value="120000">Entre R$120.000 e R$140.000</option>
+                                <option value="140000">Entre R$140.000 e R$160.000</option>
+                                <option value="160000">Entre R$160.000 e R$180.000</option>
+                                <option value="180000">Entre R$180.000 e R$200.000</option>
+                                <option value="200000">Entre R$200.000 e R$220.000</option>
+                                <option value="220000">Entre R$220.000 e R$240.000</option>
+                                <option value="240000">Entre R$240.000 e R$260.000</option>
+                                <option value="260000">Entre R$260.000 e R$280.000</option>
+                                <option value="280000">Entre R$280.000 e R$300.000</option>
+                                <option value="300000">Entre R$300.000 e R$320.000</option>
+                                <option value="320000">Entre R$320.000 e R$340.000</option>
+                                <option value="340000">Entre R$340.000 e R$360.000</option>
+                                <option value="360000">Entre R$360.000 e R$380.000</option>
+                                <option value="380000">Entre R$380.000 e R$400.000</option>
+                                <option value="400000">Entre R$400.000 e R$420.000</option>
+                                <option value="420000">Entre R$420.000 e R$440.000</option>
+                                <option value="440000">Entre R$440.000 e R$460.000</option>
+                                <option value="460000">Entre R$460.000 e R$480.000</option>
+                                <option value="480000">Entre R$480.000 e R$500.000</option>
+                                <option value="500000">Mais de R$500.000</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="divValorAluguel">
+                        <div class="col-lg-3">
+                            <label  for="sltValorAluguel">Valor do Aluguel</label>
+                            <select class="form-control" id="sltValorAluguel" name="sltValorAluguel">
+                                <option value="">Selecione o Valor</option>
+                                <option value="100">Menos de R$200,00</option>
+                                <option value="200">Entre R$200,00 e R$400,00</option>
+                                <option value="400">Entre R$400,00 e R$600,00</option>
+                                <option value="600">Entre R$600,00 e R$800,00</option>
+                                <option value="800">Entre R$800,00 e R$1000,00</option>
+                                <option value="1000">Entre R$1.000,00 e R$1200,00</option>
+                                <option value="1200">Entre R$1.200,00 e R$1400,00</option>
+                                <option value="1400">Entre R$1.400,00 e R$1600,00</option>
+                                <option value="1600">Entre R$1.600,00 e R$1.800,00</option>
+                                <option value="1800">Entre R$1.800,00 e R$2.000,00</option>
+                                <option value="2000">Entre R$2.000,00 e R$2.200,00</option>
+                                <option value="2200">Entre R$2.200,00 e R$2.400,00</option>
+                                <option value="2400">Entre R$2.400,00 e R$2.600,00</option>
+                                <option value="2600">Entre R$2.600,00 e R$2.800,00</option>
+                                <option value="2800">Entre R$2.800,00 e R$3.000,00</option>
+                                <option value="3000">Entre R$3.000,00 e R$3.200,00</option>
+                                <option value="3200">Entre R$3.200,00 e R$3.400,00</option>
+                                <option value="3400">Entre R$3.400,00 e R$3.600,00</option>
+                                <option value="3600">Entre R$3.600,00 e R$3.800,00</option>
+                                <option value="3800">Entre R$3.800,00 e R$4.000,00</option>
+                                <option value="4000">Mais de R$4.000,00</option>
+                            </select>
+                        </div>
                     </div>
 
                     <div class="col-lg-3">
@@ -67,19 +177,6 @@ $(document).ready(function(){
                         </select>
                     </div>
 
-                    <div class="col-lg-3">
-                        <label  for="sltBanheiro">Banheiro(s)</label>
-                        <select class="form-control" id="sltGaragem" name="sltBanheiro">
-                            <option value="">Informe Número de Banheiro(s)</option>
-                            <option value="01">01</option>
-                            <option value="02">02</option>
-                            <option value="03">03</option>
-                            <option value="04">04</option>
-                            <option value="05">05</option>
-                            <option value="06">Mais de 05</option>
-                        </select>
-                    </div>
-                    
                 </div>
 
                 <br />
@@ -102,41 +199,24 @@ $(document).ready(function(){
                             <option value="">Selecione a Cidade</option>
                         </select>
                     </div>
-                    
+
                     <div class="col-lg-3">
-                        <label  for="sltValor">Valor do Imóvel</label>
-                        <select class="form-control" id="sltCidade" name="sltValor">
-                            <option value="">Informe o Valor</option>
-                            <option value="2">Menos de R$40.000</option>
-                            <option value="4">Entre R$40.000 e R$60.000</option>
-                            <option value="6">Entre R$60.000 e R$80.000</option>
-                            <option value="8">Entre R$80.000 e R$100.000</option>
-                            <option value="10">Entre R$100.000 e R$120.000</option>
-                            <option value="12">Entre R$120.000 e R$140.000</option>
-                            <option value="14">Entre R$140.000 e R$160.000</option>
-                            <option value="16">Entre R$160.000 e R$180.000</option>
-                            <option value="18">Entre R$180.000 e R$200.000</option>
-                            <option value="20">Entre R$200.000 e R$220.000</option>
-                            <option value="22">Entre R$220.000 e R$240.000</option>
-                            <option value="24">Entre R$240.000 e R$260.000</option>
-                            <option value="26">Entre R$260.000 e R$280.000</option>
-                            <option value="28">Entre R$280.000 e R$300.000</option>
-                            <option value="30">Entre R$300.000 e R$320.000</option>
-                            <option value="32">Entre R$320.000 e R$340.000</option>
-                            <option value="34">Entre R$340.000 e R$360.000</option>
-                            <option value="36">Entre R$360.000 e R$380.000</option>
-                            <option value="38">Entre R$380.000 e R$400.000</option>
-                            <option value="40">Entre R$400.000 e R$420.000</option>
-                            <option value="42">Entre R$420.000 e R$440.000</option>
-                            <option value="44">Entre R$440.000 e R$460.000</option>
-                            <option value="46">Entre R$460.000 e R$480.000</option>
-                            <option value="48">Entre R$480.000 e R$500.000</option>
-                            <option value="50">Mais de R$500.000</option>
+                        <label  for="sltBanheiro">Banheiro(s)</label>
+                        <select class="form-control" id="sltBanheiro" name="sltBanheiro">
+                            <option value="">Informe Número de Banheiro(s)</option>
+                            <option value="01">01</option>
+                            <option value="02">02</option>
+                            <option value="03">03</option>
+                            <option value="04">04</option>
+                            <option value="05">05</option>
+                            <option value="06">Mais de 05</option>
                         </select>
                     </div>
-                    
+
                     <div class="col-lg-3">
-                        <button type="submit" class="btn btn-primary">Buscar Imóvel</button>
+                        <br/>
+                        <input type="checkbox" id="chkGaragem" name="chkGaragem" checked="true"> Imóvel com Garagem &nbsp; &nbsp; &nbsp; &nbsp; 
+                        <button type="submit" class="btn btn-primary">Buscar</button>
                     </div>
 
                 </div>
@@ -253,11 +333,11 @@ $(document).ready(function(){
                 <hr />
 
                 <div class="row">
-                    
+
                     <div class="col-lg-3">
                         <label  for="sltSuite">Suite(s)</label>
                         <select class="form-control" id="sltGaragem" name="sltSuite">
-                            <option value="">Informe Número de Banheiro(s)</option>
+                            <option value="">Informe Número de Suite(s)</option>
                             <option value="01">01</option>
                             <option value="02">02</option>
                             <option value="03">03</option>
@@ -299,6 +379,7 @@ $(document).ready(function(){
                     </div>
 
                     <div class="col-lg-3">
+
                         <button type="submit" class="btn btn-primary">Buscar Imóvel</button>
                     </div> 
 
@@ -306,12 +387,13 @@ $(document).ready(function(){
 
         </div>
 
+        <p/>
 
     </div>
 </form>  
 
 </div>
- 
+
 <div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
     <!-- Example row of columns -->
     <form>   
@@ -326,68 +408,129 @@ $(document).ready(function(){
                 </tr>-->
             </thead>
             <tbody>
-                
-                <br/>
-                
-                <?php
-                $item = $this->getItem();
-                
-                $_POST = array_slice($_POST, 2);
-                
-                print "Sua Busca: ";
-                
-                foreach ($_POST as $post)
-                    
-                    if(!empty($post)){    
 
-                    print "<span class='label label-primary'>".$post."</span>, ";
+            <br/>
 
-                    }
-                print "<br/>";
-                
-                echo count($item)." imóvel(is) encontrado(s)<br/>";
-                
-                if ($item) {
-                    foreach ($item as $anuncio) {
-                        ?>
-                
-            <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title"><?php echo $anuncio->tituloanuncio; ?></h3>
-                        </div>
+            <?php
+            $item = $this->getItem();
+//                $_POST = array_slice($_POST, 2);
+//                print "Sua Busca: ";
+//                
+//                foreach ($_POST as $post)
+//                    
+//                    if(!empty($post)){    
+//
+//                    print "<span class='label label-primary'>".$post."</span>, ";
+//
+//                    }
+//                print "<br/>";
+            ?>
+
+            <script>
+                $(document).ready(function() {
+                    var NumeroMaximo = 10;
+                    $("input[id^='selecoes_']").click(function() {
+                        if ($("input[id^='selecoes_']").filter(':checked').size() > NumeroMaximo) {
+                            alert('Selecione no máximo ' + NumeroMaximo + ' imóveis para a comparação');
+                            return false;
+                        } else {
+                            if ($(this).filter(':checked').size() > 0) {
+                                $(this).parent().parent().parent().css('border', '3px dotted orange');
+                            } else {
+                                $(this).parent().parent().parent().css('border', '0px');
+                            }
+                        }
+                    })
+                });
+            </script>
+
+            <?php
+            echo "<span class='label label-danger'>" . count($item) . "</span> imóvel(is) encontrado(s)<p/>";
+
+            if ($item) {
+                foreach ($item as $anuncio) {
+                    ?>
+
+                    <div class="panel panel-warning" id="<?php echo $anuncio->id; ?>">
+
                         <div class="panel-body">
-                            <label>Finalidade:</label>
-                            <?php  echo $anuncio->finalidade."<br/>";?>
-                            <label>Tipo:</label>
-                            <?php echo $anuncio->tipo."<br/>";?>
-                            <label>Descrição:</label>
-                            <?php echo $anuncio->descricao."<br/>";?>
-                            <label>Valor: R$ </label>
-                            <?php echo $anuncio->valor."<br/>";?>
-                            <label>Quarto(s):</label>
-                            <?php echo $anuncio->quarto."<br/>";?>
-                            <label>Garagem(ns):</label>
-                            <?php echo $anuncio->garagem."<br/>";?>
-                            <label>Cidade:</label>
-                            <?php echo $anuncio->cidade."<br/>";?>
-                            <label>Bairro:</label>
-                            <?php echo $anuncio->bairro."<br/>";?>
-                            <label>Banheiro(s):</label>
-                            <?php echo $anuncio->banheiro."<br/>";?>
+
+                            <div class="row">
+
+                                <div class="col-lg-4">
+                                    <input type="checkbox" id="selecoes_<?php echo $anuncio->id; ?>" class="option" name="selecoes[]" value=<?php echo $anuncio->id; ?>> Selecionar Imóvel 
+                                </div>
+
+                                <div class="col-lg-4">
+                                    Finalidade: <?php echo "<span class='label label-primary'>" . strtoupper($anuncio->finalidade); ?>
+                                </div>    
+
+                                <div class="col-lg-4">
+                                    <?php echo "Título: <span class='label label-info'>" . strtoupper($anuncio->tituloanuncio) . "</span>"; ?>
+                                </div>
+
+                            </div>
+
+                            <p/>
+
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <img src="<?php echo $anuncio->diretorio ?>" height="160" width="160" class="img-thumbnail">
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <label>Descrição:</label>
+                                    <?php echo $anuncio->descricao . "<br/>"; ?>
+                                    <label>Tipo:</label>
+                                    <?php echo strtoupper($anuncio->tipo) . "<br/>"; ?>
+                                    <label>Quarto(s):</label>
+                                    <?php echo $anuncio->quarto . "<br/>"; ?>
+                                    <label>Banheiro(s):</label>
+                                    <?php echo $anuncio->banheiro . "<br/>"; ?>
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <label>Valor (R$):  </label>
+                                    <label class="text-warning"><?php echo $anuncio->valor . "</label><br/>"; ?>
+                                        <label>Cidade: </label>
+                                        <?php echo $anuncio->cidade . "<br/>"; ?>    
+                                        <label>Endereço: </label>
+                                        <?php echo $anuncio->logradouro . ", Nº " . $anuncio->numero . ",<br/>"; ?>
+                                        <label>Bairro: </label>
+                                        <?php echo $anuncio->bairro; ?>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-4">
+
+                                </div>
+
+                                <div class="col-lg-4">
+
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <?php echo "Referência: <span class='label label-info'>" . substr($anuncio->datahoracadastro, 6, -9) . substr($anuncio->datahoracadastro, 3, -14) . str_pad($anuncio->id, 5, "0", STR_PAD_LEFT) . "</span>"; ?>
+                                </div>
+
+                            </div>    
+
                         </div>
-           </div>
-             
-                        <tr>
-                            <td><?php echo $anuncio->valor; ?></td>
-                            <td><?php echo $anuncio->tituloanuncio; ?></td>
-                            <td><?php echo $anuncio->descricao; ?></td>
-                            <td><?php echo $anuncio->banheiro; ?></td>
-                            <td><?php echo $anuncio->cidade; ?></td>
-                        </tr>
-                        <?php
-                    }
+                    </div>
+
+                    <tr>
+                        <td><?php echo $anuncio->valor; ?></td>
+                        <td><?php echo $anuncio->tituloanuncio; ?></td>
+                        <td><?php echo $anuncio->descricao; ?></td>
+                        <td><?php echo $anuncio->banheiro; ?></td>
+                        <td><?php echo $anuncio->cidade; ?></td>
+                    </tr>
+                    <?php
                 }
-                ?>
+            }
+            ?>
             </tbody>
         </table>
         <!-- Divs ocultas que serao exibidas dentro do popover. -->
@@ -419,7 +562,8 @@ $(document).ready(function(){
                     }
                     ?>
                 </div>
-            <?php }
+                <?php
+            }
         }
         ?>
 

@@ -151,7 +151,7 @@ class AnuncioControle {
         $anuncio = new Anuncio();
 
         $consultasAdHoc = new ConsultasAdHoc();
-        $listarAnuncio = $consultasAdHoc->bucarImovel($parametros);
+        $listarAnuncio = $consultasAdHoc->buscarImovel($parametros);
         $visao = new Template();
         $visao->setItem($listarAnuncio);
         $visao->exibir('AnuncioVisaoBusca.php');
