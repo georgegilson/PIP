@@ -28,7 +28,7 @@ class Imovel {
     private $condicao;
     protected $endereco;
     protected $anuncio;
-    
+
     public function getIdendereco() {
         return $this->idendereco;
     }
@@ -37,7 +37,7 @@ class Imovel {
         $this->idendereco = $idendereco;
     }
 
-        public function getDescricao() {
+    public function getDescricao() {
         return $this->descricao;
     }
 
@@ -144,15 +144,15 @@ class Imovel {
     public function getEndereco() {
         return $this->endereco;
     }
-  
+
     public function getAnuncio() {
         return $this->anuncio;
     }
-    
+
     public function getCondicao() {
         return $this->condicao;
     }
-    
+
     public function setId($id) {
         $this->id = $id;
     }
@@ -228,15 +228,15 @@ class Imovel {
     public function setEndereco($endereco) {
         $this->endereco = $endereco;
     }
-    
+
     public function setAnuncio($anuncio) {
         $this->anuncio = $anuncio;
     }
-    
+
     public function setCondicao($condicao) {
         $this->condicao = $condicao;
     }
-    
+
     public function Referencia() {
         return substr($this->getDatahoracadastro(), 6, -9) . substr($this->getDatahoracadastro(), 3, -14) . str_pad($this->getId(), 5, "0", STR_PAD_LEFT);
     }
@@ -244,7 +244,7 @@ class Imovel {
     function cadastrar($parametros, $idendereco) {
 
         $imovel = new Imovel();
-        
+
         $imovel->setIdendereco($idendereco);
         $imovel->setFinalidade($parametros['sltFinalidade']);
         $imovel->setCondicao($parametros['sltCondicao']);
@@ -263,7 +263,7 @@ class Imovel {
             $imovel->setElevador((in_array("Elevador", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
             $imovel->setPiscina((in_array("Piscina", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
             $imovel->setQuadra((in_array("Quadra", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
-        }else{
+        } else {
             $imovel->setAcademia("NAO");
             $imovel->setAreaServico("NAO");
             $imovel->setDependenciaEmpregada("NAO");
@@ -275,42 +275,49 @@ class Imovel {
         $imovel->setArea($parametros['txtArea']);
         $imovel->setSuite($parametros['sltSuite']);
         $imovel->setDescricao($parametros['txtDescricao']);
-        
+
         $imovel->setIdusuario($_SESSION["idusuario"]);
-        
-        if (isset($parametros["sltAndar"])){
-            $imovel->setAndar($parametros['sltAndar']);
-        } elseif ($parametros['sltTipo'] == 'apartamento' && ($parametros['sltAndar'] == "")){ $imovel->setAndar("NAO"); /*usuário não informou o andar do prédio*/}
-        else {$imovel->setAndar("NSA");} //não se aplica, pois é uma casa ou terreno
-        
-        if (isset($parametros["chkCobertura"])){
-            $imovel->setCobertura($parametros['chkCobertura'] = 'SIM');
-        } elseif ($parametros['sltTipo'] == 'apartamento' && !isset($parametros['chkCobertura'])){ $imovel->setCobertura("NAO"); /*usuário não informou se é na cobertura*/}
-        else {$imovel->setCobertura("NSA");} //não se aplica, pois é uma casa ou terreno
-        
-        if (isset($parametros["chkSacada"])){
-            $imovel->setSacada($parametros['chkSacada'] = 'SIM');
-        } elseif ($parametros['sltTipo'] == 'apartamento' && !isset($parametros['chkSacada'])){ $imovel->setSacada("NAO"); /*usuário não informou se possui sacada*/}
-        else {$imovel->setSacada("NSA");} //não se aplica, pois é uma casa ou terreno
-        
-       if (isset($parametros["txtCondominio"])){
-            $imovel->setCondominio($parametros['txtCondominio']);
-        } elseif ($parametros['sltTipo'] == 'apartamento' && ($parametros['txtCondominio'] == "")){ $imovel->setCondominio("NAO"); /*usuário não informou o valor do condominio*/}
-        else {$imovel->setCondominio("NSA");} //não se aplica, pois é uma casa ou terreno
+
+        if ($parametros['sltTipo'] != "apartamento") {
+            $imovel->setAndar(""); //não se aplica, pois é uma casa ou terreno
+            $imovel->setCobertura(""); //não se aplica, pois é uma casa ou terreno
+            $imovel->setSacada(""); //não se aplica, pois é uma casa ou terreno
+            $imovel->setCondominio(""); //não se aplica, pois é uma casa ou terreno
+        } else {
+            if (isset($parametros["sltAndar"])) {
+                $imovel->setAndar($parametros['sltAndar']);
+            } elseif ($parametros['sltAndar'] == "") {
+                $imovel->setAndar("NAO"); /* usuário não informou o andar do prédio */
+            }
+
+            if (isset($parametros["chkCobertura"])) {
+                $imovel->setCobertura($parametros['chkCobertura'] = 'SIM');
+            } elseif (!isset($parametros['chkCobertura'])) {
+                $imovel->setCobertura("NAO"); /* usuário não informou se é na cobertura */
+            }
+
+            if (isset($parametros["chkSacada"])) {
+                $imovel->setSacada($parametros['chkSacada'] = 'SIM');
+            } elseif (!isset($parametros['chkSacada'])) {
+                $imovel->setSacada("NAO"); /* usuário não informou se possui sacada */
+            }
+
+            if (isset($parametros["txtCondominio"])) {
+                $imovel->setCondominio($this->limpaValorNumerico($parametros['txtCondominio']));
+            } elseif ($parametros['txtCondominio'] == "") {
+                $imovel->setCondominio("NAO"); /* usuário não informou o valor do condominio */
+            }
+        }
 
         return $imovel;
     }
 
     function editar($parametros) {
-       
-        if(!isset($_SESSION)){ 
-        session_start(); 
-        }
-     
+
         $imovel = new Imovel();
-        
+
         $imovel->setIdendereco($_SESSION['idendereco']);
-        $imovel->setId($_SESSION['id']);
+        $imovel->setId($_SESSION["imovel"]["id"]);
         $imovel->setFinalidade($parametros['sltFinalidade']);
         $imovel->setCondicao($parametros['sltCondicao']);
         $imovel->setTipo($parametros['sltTipo']);
@@ -318,17 +325,15 @@ class Imovel {
         $imovel->setGaragem($parametros['sltGaragem']);
         $imovel->setBanheiro($parametros['sltBanheiro']);
         $imovel->setDatahoraalteracao(date('d/m/Y H:i:s'));
-        
-        
 
-       if (isset($parametros['sltDiferencial'])) {
+        if (isset($parametros['sltDiferencial'])) {
             $imovel->setAcademia((in_array("Academia", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
             $imovel->setAreaServico((in_array("AreaServico", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
             $imovel->setDependenciaEmpregada((in_array("DependenciaEmpregada", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
             $imovel->setElevador((in_array("Elevador", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
             $imovel->setPiscina((in_array("Piscina", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
             $imovel->setQuadra((in_array("Quadra", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
-        }else{
+        } else {
             $imovel->setAcademia("NAO");
             $imovel->setAreaServico("NAO");
             $imovel->setDependenciaEmpregada("NAO");
@@ -340,30 +345,48 @@ class Imovel {
         $imovel->setArea($parametros['txtArea']);
         $imovel->setSuite($parametros['sltSuite']);
         $imovel->setDescricao($parametros['txtDescricao']);
-        
-        $imovel->setIdusuario($_SESSION["idusuario"]);
-        
-        if (isset($parametros["sltAndar"])){
-            $imovel->setAndar($parametros['sltAndar']);
-        } elseif ($parametros['sltTipo'] == 'apartamento' && ($parametros['sltAndar'] == "")){ $imovel->setAndar("NAO"); /*usuário não informou o andar do prédio*/}
-        else {$imovel->setAndar("NSA");} //não se aplica, pois é uma casa ou terreno
-        
-        if (isset($parametros["chkCobertura"])){
-            $imovel->setCobertura($parametros['chkCobertura'] = 'SIM');
-        } elseif ($parametros['sltTipo'] == 'apartamento' && !isset($parametros['chkCobertura'])){ $imovel->setCobertura("NAO"); /*usuário não informou se é na cobertura*/}
-        else {$imovel->setCobertura("NSA");} //não se aplica, pois é uma casa ou terreno
-        
-        if (isset($parametros["chkSacada"])){
-            $imovel->setSacada($parametros['chkSacada'] = 'SIM');
-        } elseif ($parametros['sltTipo'] == 'apartamento' && !isset($parametros['chkSacada'])){ $imovel->setSacada("NAO"); /*usuário não informou se possui sacada*/}
-        else {$imovel->setSacada("NSA");} //não se aplica, pois é uma casa ou terreno
-        
-       if (isset($parametros["txtCondominio"])){
-            $imovel->setCondominio($parametros['txtCondominio']);
-        } elseif ($parametros['sltTipo'] == 'apartamento' && ($parametros['txtCondominio'] == "")){ $imovel->setCondominio("NAO"); /*usuário não informou o valor do condominio*/}
-        else {$imovel->setCondominio("NSA");} //não se aplica, pois é uma casa ou terreno
 
+        $imovel->setIdusuario($_SESSION["idusuario"]);
+
+        if ($parametros['sltTipo'] != "apartamento") {
+            $imovel->setAndar(""); //não se aplica, pois é uma casa ou terreno
+            $imovel->setCobertura(""); //não se aplica, pois é uma casa ou terreno
+            $imovel->setSacada(""); //não se aplica, pois é uma casa ou terreno
+            $imovel->setCondominio(""); //não se aplica, pois é uma casa ou terreno
+        } else {
+            if (isset($parametros["sltAndar"])) {
+                $imovel->setAndar($parametros['sltAndar']);
+            } elseif ($parametros['sltAndar'] == "") {
+                $imovel->setAndar("NAO"); /* usuário não informou o andar do prédio */
+            }
+
+            if (isset($parametros["chkCobertura"])) {
+                $imovel->setCobertura($parametros['chkCobertura'] = 'SIM');
+            } elseif (!isset($parametros['chkCobertura'])) {
+                $imovel->setCobertura("NAO"); /* usuário não informou se é na cobertura */
+            }
+
+            if (isset($parametros["chkSacada"])) {
+                $imovel->setSacada($parametros['chkSacada'] = 'SIM');
+            } elseif (!isset($parametros['chkSacada'])) {
+                $imovel->setSacada("NAO"); /* usuário não informou se possui sacada */
+            }
+
+            if (isset($parametros["txtCondominio"])) {
+                $imovel->setCondominio($this->limpaValorNumerico($parametros['txtCondominio']));
+            } elseif ($parametros['txtCondominio'] == "") {
+                $imovel->setCondominio("NAO"); /* usuário não informou o valor do condominio */
+            }
+        }
         return $imovel;
+    }
+
+    function limpaValorNumerico($valor) {
+        $valor = str_replace("R$", "", $valor);
+        $valor = str_replace(",", "", $valor);
+        $valor = str_replace(".", "", $valor);
+        $valor = trim($valor);
+        return $valor;
     }
 
 }

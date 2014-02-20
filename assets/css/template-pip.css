@@ -314,3 +314,7 @@ footer {
 .divBusca{
     background-color: #fcf8e3;
 }
+
+div#step3.step-pane div.has-switch{
+	min-width: 245px
+}

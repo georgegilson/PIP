@@ -347,7 +347,7 @@ $(document).ready(function(){
                         ?>
                     </p>
 
-                    <button id="btnAnuncioModal<?php echo $imovel->Referencia(); ?>" class="btn btn-default btn-sm" data-toggle="modal" data-target="#divAnuncioModal" data-modal="<?php echo $anuncio->getId(); ?>" data-title="<?php echo $anuncio->getTituloAnuncio(); ?>">
+                    <button type="button" id="btnAnuncioModal<?php echo $imovel->Referencia(); ?>" class="btn btn-default btn-sm" data-toggle="modal" data-target="#divAnuncioModal" data-modal="<?php echo $anuncio->getId(); ?>" data-title="<?php echo $anuncio->getTituloAnuncio(); ?>">
                         <span class="glyphicon glyphicon-plus-sign"></span> Veja mais detalhes
                     </button>
                 </div>
@@ -362,7 +362,7 @@ $(document).ready(function(){
 
 <!-- Modal -->
 <div class="modal fade" id="divAnuncioModal" tabindex="-1" role="dialog" aria-labelledby="lblAnuncioModal" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>

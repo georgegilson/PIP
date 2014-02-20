@@ -9,6 +9,9 @@ include_once 'modelo/UsuarioPlano.php';
 include_once 'modelo/Usuario.php';
 include_once 'modelo/Telefone.php';
 include_once 'modelo/Empresa.php';
+include_once 'modelo/Estado.php';
+include_once 'modelo/Cidade.php';
+include_once 'modelo/Bairro.php';
 include_once 'DAO/GenericoDAO.php';
 include_once 'DAO/ConsultasAdHoc.php';
 include_once 'assets/pager/Pager.php';
@@ -20,24 +23,41 @@ class AnuncioControle {
             //modelo
             $imovel = new Imovel();
             $genericoDAO = new GenericoDAO();
-            $selecionarImovel = $genericoDAO->consultar($imovel, true, array("id" => $parametros['idImovel']));
+            $selecionarImovel = $genericoDAO->consultar($imovel, true, array("id" => $parametros['idImovel'], "idUsuario" => $_SESSION['idusuario']));
 
-            $usuarioPlano = new UsuarioPlano();
-            $condicoes["idusuario"] = $_SESSION["idusuario"];
-            $condicoes["status"] = 'ativo';
-            $listarUsuarioPlano = $genericoDAO->consultar($usuarioPlano, true, $condicoes);
+            #verificar a melhor forma de tratar o blindado recursivo
+            $selecionarEndereco = $genericoDAO->consultar(new Endereco(), true, array("id" => $selecionarImovel[0]->getIdEndereco()));
+            $selecionarImovel[0]->setEndereco($selecionarEndereco[0]);
 
-            $sessao["idimovel"] = $parametros['idImovel'];
-            Sessao::configurarSessaoAnuncio($sessao);
-            $formAnuncio = array();
-            $formAnuncio["usuarioPlano"] = $listarUsuarioPlano;
-            $formAnuncio["imovel"] = $selecionarImovel;
+            //verifica se existe o imovel selecionado
+            if ($selecionarImovel) {
+                //verificar se o anuncio ja foi publicado e redirecionar para a tela de consulta
+                if (count($selecionarImovel[0]->getAnuncio()) > 0) {
+                    $redirecionamento = $this;
+                    $redirecionamento->listarCadastrar();
+                    return;
+                } else {
+                    $usuarioPlano = new UsuarioPlano();
+                    $condicoes["idusuario"] = $_SESSION["idusuario"];
+                    $condicoes["status"] = 'ativo';
+                    $listarUsuarioPlano = $genericoDAO->consultar($usuarioPlano, true, $condicoes);
 
-            #verificar se o anuncio ja foi publicado e redirecionar para a tela de consulta
+                    $sessao["idimovel"] = $parametros['idImovel'];
+                    Sessao::configurarSessaoAnuncio($sessao);
+                    $formAnuncio = array();
+                    $formAnuncio["usuarioPlano"] = $listarUsuarioPlano;
+                    $formAnuncio["imovel"] = $selecionarImovel;
+                    $item = $formAnuncio;
+                    $pagina = "AnuncioVisaoPublicar.php";
+                }
+            } else {
+                $item = "errotoken";
+                $pagina = "VisaoErrosGenerico.php";
+            }
             //visao
             $visao = new Template();
-            $visao->setItem($formAnuncio);
-            $visao->exibir("AnuncioVisaoPublicar.php");
+            $visao->setItem($item);
+            $visao->exibir($pagina);
         }
     }
 
@@ -68,18 +88,20 @@ class AnuncioControle {
                     if (isset($_SESSION["imagem"])) {
                         foreach ($_SESSION["imagem"] as $file) {
                             $imagem = new Imagem();
-                            $entidadeImagem = $imagem->cadastrar($file, $idAnuncio, $parametros["rdbCapa"]);
+                            $entidadeImagem = $imagem->cadastrar($file, $idAnuncio, $parametros["rdbDestaque"]);
                             $idImagem = $genericoDAO->cadastrar($entidadeImagem);
                         }
                     }
 
                     //visao
                     if ($idAnuncio) {
-                        echo json_encode(array("resultado" => 1));
                         $genericoDAO->commit();
+                        Sessao::desconfigurarVariavelSessao("anuncio");
+                        Sessao::desconfigurarVariavelSessao("imagem");
+                        echo json_encode(array("resultado" => 1));
                     } else {
-                        echo json_encode(array("resultado" => 0));
                         $genericoDAO->rollback();
+                        echo json_encode(array("resultado" => 0));
                     }
                 }
             }
@@ -122,7 +144,6 @@ class AnuncioControle {
 //        die();
     }
 
-
     function buscar($parametros) {
 
         //erro ano passar o parametro
@@ -133,7 +154,7 @@ class AnuncioControle {
         $listarAnuncio = $consultasAdHoc->bucarImovel($parametros);
         $visao = new Template();
         $visao->setItem($listarAnuncio);
-        $visao->exibir('AnuncioVisaoBusca.php'); 
+        $visao->exibir('AnuncioVisaoBusca.php');
         //$selecionarAnuncio = $genericoDAO->consultar($anuncio, true, array("",$parametros[]));
         //retorno da busca está errado
 //            echo "<pre>";
@@ -145,14 +166,14 @@ class AnuncioControle {
 //        die();
         //visao
     }
-    
+
     function modal($parametros) {
         $visao = new Template('ajax');
         $genericoDAO = new GenericoDAO();
         $item["anuncio"] = $genericoDAO->consultar(new Anuncio(), false, array("id" => $parametros["hdnModal"]));
         $item["imagem"] = $genericoDAO->consultar(new Imagem(), false, array("idanuncio" => $item["anuncio"][0]->getId()));
         $item["imovel"] = $genericoDAO->consultar(new Imovel(), false, array("id" => $item["anuncio"][0]->getIdimovel()));
-        $item["endereco"] = $genericoDAO->consultar(new Endereco(), false, array("id" => $item["imovel"][0]->getIdendereco()));
+        $item["endereco"] = $genericoDAO->consultar(new Endereco(), true, array("id" => $item["imovel"][0]->getIdendereco()));
         $item["usuario"] = $genericoDAO->consultar(new Usuario(), true, array("id" => $item["imovel"][0]->getIdusuario()));
         $visao->setItem($item);
         $visao->exibir('AnuncioVisaoModal.php');

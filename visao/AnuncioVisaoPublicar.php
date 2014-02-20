@@ -28,46 +28,47 @@
                 $idImovel = $objImovel->getId();
                 $tipoImovel = $objImovel->getTipo();
                 $endereco = $objImovel->getEndereco()->enderecoMapa();
-                $imovel = $objImovel;                
+                $imovel = $objImovel;
             }
         }
         ?>
-                <!-- Modal -->
-                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                <h4 class="modal-title" id="myModalLabel">Imóvel #<?php echo $referencia ?></h4>
-                            </div>
-                            <div class="modal-body">
-                                <?php
-                                echo "Finalidade: " . $imovel->getFinalidade() . "<br />";
-                                echo "Tipo: " . $imovel->getTipo() . "<br />";
-                                echo "Descrição: " . $imovel->getDescricao() . "<br />";
-                                echo "Quartos: " . $imovel->getQuarto() . "<br />";
-                                echo "Garagen(s): " . $imovel->getGaragem() . "<br />";
-                                echo "Banheiro(s): " . $imovel->getBanheiro() . "<br />";
-                                echo "Área: " . $imovel->getArea() . " m<sup>2</sup><br />";
-                                echo "Suite(s): " . (($imovel->getSuite() != "nenhuma") ? '<span class="text-primary">' . $imovel->getSuite() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
-                                echo "Academia: " . (($imovel->getAcademia() == "SIM") ? '<span class="text-primary">' . $imovel->getAcademia() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
-                                echo "Área Serviço: " . (($imovel->getAreaServico() == "SIM") ? '<span class="text-primary">' . $imovel->getAreaServico() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
-                                echo "Dependencia de Empregada: " . (($imovel->getDependenciaEmpregada() == "SIM") ? '<span class="text-primary">' . $imovel->getDependenciaEmpregada() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
-                                echo "Elevador: " . (($imovel->getElevador() == "SIM") ? '<span class="text-primary">' . $imovel->getElevador() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
-                                echo "Piscina: " . (($imovel->getPiscina() == "SIM") ? '<span class="text-primary">' . $imovel->getPiscina() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
-                                echo "Quadra: " . (($imovel->getQuadra() == "SIM") ? '<span class="text-primary">' . $imovel->getQuadra() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
-                                if ($tipoImovel == "apartamento") {
-                                    echo "Sacada: " . (($imovel->getSacada() == "SIM") ? '<span class="text-primary">' . $imovel->getSacada() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
-                                    echo "Cobertura: " . (($imovel->getCobertura() == "SIM") ? '<span class="text-primary">' . $imovel->getCobertura() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
-                                    echo "Condomínio: " . (($imovel->getCondominio() != "") ? '<span class="text-primary">' . $imovel->getCondominio() . '</span>' : '<span class="text-danger">Não Informado</span>') . '<br />';
-                                    echo "Andar: " . (($imovel->getAndar() != "") ? '<span class="text-primary">' . $imovel->getAndar() . '</span>' : '<span class="text-danger">Não Informado</span>') . '<br />';
-                                }
-                                ?>
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel">Imóvel #<?php echo $referencia ?></h4>
+                    </div>
+                    <div class="modal-body">
+                        <?php
+                        echo "Finalidade: " . $imovel->getFinalidade() . "<br />";
+                        echo "Tipo: " . $imovel->getTipo() . "<br />";
+                        echo "Condição: " . $imovel->getCondicao() . "<br />";
+                        echo "Descrição: " . $imovel->getDescricao() . "<br />";
+                        echo "Quartos: " . $imovel->getQuarto() . "<br />";
+                        echo "Garagen(s): " . $imovel->getGaragem() . "<br />";
+                        echo "Banheiro(s): " . $imovel->getBanheiro() . "<br />";
+                        echo "Área: " . $imovel->getArea() . " m<sup>2</sup><br />";
+                        echo "Suite(s): " . (($imovel->getSuite() != "nenhuma") ? '<span class="text-primary">' . $imovel->getSuite() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
+                        echo "Academia: " . (($imovel->getAcademia() == "SIM") ? '<span class="text-primary">' . $imovel->getAcademia() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
+                        echo "Área Serviço: " . (($imovel->getAreaServico() == "SIM") ? '<span class="text-primary">' . $imovel->getAreaServico() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
+                        echo "Dependencia de Empregada: " . (($imovel->getDependenciaEmpregada() == "SIM") ? '<span class="text-primary">' . $imovel->getDependenciaEmpregada() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
+                        echo "Elevador: " . (($imovel->getElevador() == "SIM") ? '<span class="text-primary">' . $imovel->getElevador() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
+                        echo "Piscina: " . (($imovel->getPiscina() == "SIM") ? '<span class="text-primary">' . $imovel->getPiscina() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
+                        echo "Quadra: " . (($imovel->getQuadra() == "SIM") ? '<span class="text-primary">' . $imovel->getQuadra() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
+                        if ($tipoImovel == "apartamento") {
+                            echo "Sacada: " . (($imovel->getSacada() == "SIM") ? '<span class="text-primary">' . $imovel->getSacada() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
+                            echo "Cobertura: " . (($imovel->getCobertura() == "SIM") ? '<span class="text-primary">' . $imovel->getCobertura() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
+                            echo "Condomínio: " . (($imovel->getCondominio() != "") ? '<span class="text-primary">' . $imovel->getCondominio() . '</span>' : '<span class="text-danger">Não Informado</span>') . '<br />';
+                            echo "Andar: " . (($imovel->getAndar() != "") ? '<span class="text-primary">' . $imovel->getAndar() . '</span>' : '<span class="text-danger">Não Informado</span>') . '<br />';
+                        }
+                        ?>
 
-                            </div>
-                        </div><!-- /.modal-content -->
-                    </div><!-- /.modal-dialog -->
-                </div><!-- /.modal -->
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
         <div class="row">
             <div class="alert alert-warning">Aguarde Processando...</div>
             <div class="well wizard-example">
@@ -146,7 +147,7 @@
                                     <div class="form-group">
                                         <label class="col-lg-3 control-label" for="txtValor">Valor</label>
                                         <div class="col-lg-4">
-                                            <input type="text" class="form-control" id="txtValor" name="txtValor" placeholder="Informe o Valor do Imóvel">
+                                            <input type="text" class="form-control" id="txtValor" name="txtValor" placeholder="Valor do Imóvel">
                                         </div>
                                         <span class="col-lg-4"> (Não informar os centavos) </span>
                                     </div>
@@ -175,9 +176,9 @@
                                                 <?php if ($imovel->getQuadra() == "SIM") { ?><option value="quadra">Quadra</option> <?php } ?>
                                                 <option value="area">Área m2</option>
                                                 <option value="suite">Suíte</option>
-                                                <option value="descricao">Descrição</option>
+                                                <!--<option value="descricao">Descrição</option>-->
                                                 <?php if ($tipoImovel == "apartamento") { ?>
-                                                <optgroup label="Informações Adicionais Apt.">...</optgroup>                                                
+                                                    <optgroup label="Informações Adicionais Apt.">...</optgroup>                                                
                                                     <?php if ($imovel->getAndar() != "") { ?><option value="andar">Andar</option> <?php } ?>                                                
                                                     <?php if ($imovel->getCondominio() != "") { ?><option value="condominio">Condominio</option> <?php } ?>                                                                                                    
                                                     <?php if ($imovel->getCobertura() == "SIM") { ?><option value="cobertura">Cobertura</option> <?php } ?>                                                
@@ -290,6 +291,7 @@
                     </div>
                     <div class="step-pane" id="step5"></div>
                 </div>
+                <button id="btnCancelar" type="button" class="btn btn-danger"> <span class="glyphicon glyphicon-ok-circle"></span> Cancelar </button>
                 <button id="btnWizardPrev" type="button" class="btn btn-warning btn-prev"> <span class="glyphicon glyphicon-chevron-left"></span> Voltar </button>
                 <button id="btnWizardNext" type="button" class="btn btn-primary btn-next" data-last="Fim" > Avançar <span class="glyphicon glyphicon-chevron-right"></span></button>
             </div>
@@ -314,7 +316,12 @@
             $(this).popover('show');
         });
 
-
+        $("#btnCancelar").click(function() {
+            if (confirm("Deseja cancelar o cadastro do anúncio?")) {
+                location.href = "index.php?entidade=Anuncio&acao=listarCadastrar";
+            }
+        });
+        
         $('#MyWizard').on('change', function(e, data) {
             if (data.direction === 'next') {
                 if (data.step === 1) {
@@ -332,8 +339,8 @@
                     }
                     if (typeof($("input[name=delete]").val()) !== "undefined") {
 
-                        if (typeof($("input[name=rdbCapa]:checked").val()) === "undefined") {
-                            alert("Informe uma Foto para ser a capa do seu anúncio");
+                        if (typeof($("input[name=rdbDestaque]:checked").val()) === "undefined") {
+                            alert("Informe uma Foto para ser Destaque do seu anúncio");
                             return e.preventDefault();
                         }
                     }
@@ -378,7 +385,7 @@
                 $("#colTitulo").html($("#txtTitulo").val());
                 $("#colDescricao").html($("#txtDescricao").val());
                 $("#colValor").html($("#txtValor").val());
-                $("#colMapa").html((typeof($("input[name=chkMapa]:checked").val()) === "undefined"?"Não":"Sim"));
+                $("#colMapa").html((typeof($("input[name=chkMapa]:checked").val()) === "undefined" ? "Não" : "Sim"));
                 var varCampos = new Array();
                 $('#sltCamposVisiveis :selected').each(function() {
                     if ($(this).val() != "multiselect-all")
@@ -557,7 +564,7 @@
         $('input[name="chkMapa"]').bootstrapSwitch('setOnLabel', 'Sim');
         $('input[name="chkMapa"]').bootstrapSwitch('setOffLabel', 'Não');
         $('input[name="chkMapa"]').bootstrapSwitch('setOffClass', 'danger');
-        
+
         //MOEDA
         $('#txtValor').priceFormat({
             prefix: 'R$ ',
@@ -570,91 +577,91 @@
 </script>
 <!-- The template to display files available for upload -->
 <script id="template-upload" type="text/x-tmpl">
-{% for (var i=0, file; file=o.files[i]; i++) { %}
+    {% for (var i=0, file; file=o.files[i]; i++) { %}
     <tr class="template-upload fade">
-        <td>
-            <span class="preview"></span>
-        </td>
-        <td>
-            <p class="name">{%=file.name%}</p>
-            <strong class="error text-danger"></strong>
-        </td>
-        <td>
-            <input type="text" id="txtLegenda[{%=file.name%}]" name="txtLegenda[{%=file.name%}]" placeholder="Informe a Legenda" class="form-control" />
-        </td>    
-        <td>
-        <p class="size">Processing...</p>
-            <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-                <div class="progress-bar progress-bar-success" style="width:0%;"></div>
-            </div>
-        </td>
-        <td>
-            {% if (!i && !o.options.autoUpload) { %}
-                <button class="btn btn-primary start" disabled>
-                    <span class="glyphicon glyphicon-upload"></span>
-                    Enviar
-                </button>
-            {% } %}
-            {% if (!i) { %}
-                <button class="btn btn-warning cancel">
-                    <span class="glyphicon glyphicon-ban-circle"></span>
-                    Cancelar envio
-                </button>
-            {% } %}
-        </td>
+    <td>
+    <span class="preview"></span>
+    </td>
+    <td>
+    <p class="name">{%=file.name%}</p>
+    <strong class="error text-danger"></strong>
+    </td>
+    <td>
+    <input type="text" id="txtLegenda[{%=file.name%}]" name="txtLegenda[{%=file.name%}]" placeholder="Informe a Legenda" class="form-control" />
+    </td>    
+    <td>
+    <p class="size">Processing...</p>
+    <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+    <div class="progress-bar progress-bar-success" style="width:0%;"></div>
+    </div>
+    </td>
+    <td>
+    {% if (!i && !o.options.autoUpload) { %}
+    <button class="btn btn-primary start" disabled>
+    <span class="glyphicon glyphicon-upload"></span>
+    Enviar
+    </button>
+    {% } %}
+    {% if (!i) { %}
+    <button class="btn btn-warning cancel">
+    <span class="glyphicon glyphicon-ban-circle"></span>
+    Cancelar envio
+    </button>
+    {% } %}
+    </td>
     </tr>
-{% } %}
+    {% } %}
 </script>
 <!-- The template to display files available for download -->
 <script id="template-download" type="text/x-tmpl">
-{% for (var i=0, file; file=o.files[i]; i++) { %}
+    {% for (var i=0, file; file=o.files[i]; i++) { %}
     <tr class="template-download fade">
-        <td style="vertical-align: middle;">
-            <input type="checkbox" name="delete" value="1" class="toggle">
-        </td>
-        <td style="vertical-align: middle;">
-            <span class="preview">
-                {% if (file.thumbnailUrl) { %}
-                    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" data-gallery><img src="{%=file.thumbnailUrl%}"></a>
-                {% } %}
-            </span>
-        </td>
-        <td style="vertical-align: middle;">
-            <p class="name">
-                {% if (file.url) { %}
-                    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" {%=file.thumbnailUrl?'data-gallery':''%}>{%=file.name%}</a>
-                {% } else { %}
-                    <span>{%=file.name%}</span>
-                {% } %}
-            </p>
-            {% if (file.error) { %}
-                <div><span class="label label-danger">Error</span> {%=file.error%}</div>
-            {% } %}
-        </td>
-        <td style="vertical-align: middle;">
-            <span class="legenda">{%=file.legenda%}</span>
-        </td>
-        <td style="vertical-align: middle;">
-            <span class="size">{%=o.formatFileSize(file.size)%}</span>
-        </td>
-        <td style="vertical-align: middle;">
-            {% if (file.deleteUrl) { %}
-                <button class="btn btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
-                    <span class="glyphicon glyphicon-trash"></span>
-                    Excluir
-                </button>
-            {% } else { %}
-                <button class="btn btn-warning cancel">
-                    <span class="glyphicon glyphicon-ban-circle"></span>
-                    Cancelar envio
-                </button>
-            {% } %}
-        </td>
-        {% if (file.url) { %}
-        <td style="vertical-align: middle;">
-            <span class="size"><input type="radio" name="rdbCapa" value="{%=file.name%}" data-text-label="Destaque?" /></span>
-        </td>
-        {% } %}
+    <td style="vertical-align: middle;">
+    <input type="checkbox" name="delete" value="1" class="toggle">
+    </td>
+    <td style="vertical-align: middle;">
+    <span class="preview">
+    {% if (file.thumbnailUrl) { %}
+    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" data-gallery><img src="{%=file.thumbnailUrl%}"></a>
+    {% } %}
+    </span>
+    </td>
+    <td style="vertical-align: middle;">
+    <p class="name">
+    {% if (file.url) { %}
+    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" {%=file.thumbnailUrl?'data-gallery':''%}>{%=file.name%}</a>
+    {% } else { %}
+    <span>{%=file.name%}</span>
+    {% } %}
+    </p>
+    {% if (file.error) { %}
+    <div><span class="label label-danger">Error</span> {%=file.error%}</div>
+    {% } %}
+    </td>
+    <td style="vertical-align: middle;">
+    <span class="legenda">{%=file.legenda%}</span>
+    </td>
+    <td style="vertical-align: middle;">
+    <span class="size">{%=o.formatFileSize(file.size)%}</span>
+    </td>
+    <td style="vertical-align: middle;">
+    {% if (file.deleteUrl) { %}
+    <button class="btn btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
+    <span class="glyphicon glyphicon-trash"></span>
+    Excluir
+    </button>
+    {% } else { %}
+    <button class="btn btn-warning cancel">
+    <span class="glyphicon glyphicon-ban-circle"></span>
+    Cancelar envio
+    </button>
+    {% } %}
+    </td>
+    {% if (file.url) { %}
+    <td style="vertical-align: middle;">
+    <span class="size"><input type="radio" name="rdbDestaque" value="{%=file.name%}" data-text-label="Foto Destaque?" /></span>
+    </td>
+    {% } %}
     </tr>
-{% } %}
+    {% } %}
 </script>

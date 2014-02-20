@@ -103,9 +103,8 @@ class Endereco {
     }
 
     function cadastrar($parametros, $idestado, $idcidade, $idbairro){
-        
         $endereco = new Endereco();
-        $endereco->setCep($parametros['txtCEP']);
+        $endereco->setCep($parametros['hdnCEP']);
         $endereco->setIdestado($idestado);
         $endereco->setIdcidade($idcidade);
         $endereco->setIdbairro($idbairro);
@@ -115,14 +114,13 @@ class Endereco {
         return $endereco;
     }
     
-    function editar($parametros){
-
+    function editar($parametros,$idendereco,$idestado, $idcidade, $idbairro){
         $endereco = new Endereco();
-        $endereco->setId($_SESSION['idendereco']);
-        $endereco->setCep($parametros['txtCEP']);
-        $endereco->setEstado($parametros['txtEstado']);
-        $endereco->setCidade($parametros['txtCidade']);
-        $endereco->setBairro($parametros['txtBairro']);
+        $endereco->setId($idendereco);
+        $endereco->setCep($parametros['hdnCEP']);
+        $endereco->setIdestado($idestado);
+        $endereco->setIdcidade($idcidade);
+        $endereco->setIdbairro($idbairro);
         $endereco->setLogradouro($parametros['txtLogradouro']);
         $endereco->setNumero($parametros['txtNumero']);
         $endereco->setComplemento($parametros['txtComplemento']);
@@ -130,6 +128,6 @@ class Endereco {
     }
     
     public function enderecoMapa(){
-        return 'Brazil, ' . $this->getEstado() . ', ' . $this->getCidade() . ', ' . $this->getBairro() . ', ' . $this->getLogradouro();        
+        return 'Brazil, ' . $this->getEstado()->getUf() . ', ' . $this->getCidade()->getNome() . ', ' . $this->getBairro()->getNome() . ', ' . $this->getLogradouro();        
     }
 }

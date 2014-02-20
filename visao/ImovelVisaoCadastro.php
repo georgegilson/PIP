@@ -5,6 +5,7 @@
 <script src="assets/js/jquery.maskedinput.min.js"></script>
 <script src="assets/js/bootstrap-multiselect.js"></script>
 <script src="assets/js/bootstrap-maxlength.js"></script>
+<script src="assets/js/jquery.price_format.min.js"></script>
 <script>
     $(document).ready(function() {
 
@@ -13,12 +14,8 @@
         $("#sltTipo").change(function() {
             if ($(this).val() == "casa" || $(this).val() == "terreno") {
                 $("#divApartamento").fadeOut('slow'); //oculta campos exclusivos do apartamento 
-                //             $("#lblCpfCnpj").html("CPF")
-                //             $("#txtCpfCnpj").attr("placeholder", "Informe o CPF");
             } else {
                 $("#divApartamento").fadeIn('slow'); //mostra campos exclusivos do apartamento
-                //             $("#lblCpfCnpj").html("CNPJ");
-                //             $("#txtCpfCnpj").attr("placeholder", "Informe o CNPJ");
             }
         })
 
@@ -28,9 +25,68 @@
         $("#btnCEP").click(function() {
             buscarCep()
         });
+        //MOEDA
+        $('#txtCondominio').priceFormat({
+            prefix: 'R$ ',
+            centsSeparator: ',',
+            centsLimit: 0,
+            limit: 8,
+            thousandsSeparator: '.'
+        });
+
         $("#txtCEP").blur(function() {
             buscarCep()
         });
+        $("#btnCadastrar").click(function() {
+            $("#form").submit();
+        });
+        $("#btnCancelar").click(function() {
+            if (confirm("Deseja cancelar o cadastro do imóvel?")) {
+                location.href = "index.php?entidade=Usuario&acao=meuPIP";
+            }
+        });
+        $("#btnConfirmar").click(function() {
+            if ($("#form").valid()) {
+                if ($("#hdnCEP").val() != "") {
+                    //chama modal de confirmacao    
+                    carregaDadosModal($("div[class='modal-body']"));
+                    $('#myModal').modal('show');
+                } else {
+                    $("#msgCEP").remove();
+                    var msgCEP = $("<div>", {id: "msgCEP"});
+                    msgCEP.attr('class', 'alert alert-danger').html("Primeiro faça a busca do CEP").append('<button data-dismiss="alert" class="close" type="button">×</button>');
+                    $("#alertCEP").append(msgCEP);
+                }
+            }
+        });
+
+        function carregaDadosModal($div) {
+            $div.html("");
+            $div.append("Finalidade: " + $("#sltFinalidade").val() + "<br />");
+            $div.append("Tipo: " + $("#sltTipo").val() + "<br />");
+            $div.append("Condição: " + $("#sltCondicao").val() + "<br />");
+            $div.append("Descrição: " + $("#txtDescricao").val() + "<br />");
+            $div.append("Quartos: " + $("#sltQuarto").val() + "<br />");
+            $div.append("Garagen(s): " + $("#sltGaragem").val() + "<br />");
+            $div.append("Banheiro(s): " + $("#sltBanheiro").val() + "<br />");
+            $div.append("Área: " + $("#txtArea").val() + "m<sup>2</sup><br />");
+            $div.append("Suite(s): " + $("#sltSuite").val() + "<br />");
+
+            var varCampos = new Array();
+            $('#sltDiferencial :selected').each(function() {
+                if ($(this).val() != "multiselect-all")
+                    varCampos.push($(this).text());
+            })
+            if (varCampos.length > 0)
+                $div.append("Diferenciais: " + varCampos.join(", ") + "<br />");
+
+            if ($("#sltTipo").val() == "apartamento") {
+                $div.append("Sacada: " + (typeof($("#chkSacada:checked").val()) === "undefined" ? "Não" : "Sim") + "<br />");
+                $div.append("Cobertura: " + (typeof($("#chkCobertura:checked").val()) === "undefined" ? "Não" : "Sim") + "<br />");
+                $div.append("Condomínio: " + $("#txtCondominio").val() + "<br />");
+                $div.append("Andar: " + $("#sltAndar").val() + "<br />");
+            }
+        }
 
         function buscarCep() {
             var validator = $("#form").validate();
@@ -167,39 +223,16 @@
                     error.insertAfter(element);
                 }
             },
-            submitHandler: function() {
-                if ($("#hdnCEP").val() != "") {
-                    $.ajax({
-                        url: "index.php",
-                        dataType: "json",
-                        type: "POST",
-                        data: $('#form').serialize(),
-                        beforeSend: function() {
-                            $('.alert').html("...processando...").attr('class', 'alert alert-warning');
-                            $('button[type=submit]').attr('disabled', 'disabled');
-                        },
-                        success: function(resposta) {
-                            $('button[type=submit]').removeAttr('disabled');
-                            if (resposta.resultado == 1) {
-                                $('.alert').html("Imovel Cadastrado Com Sucesso").attr('class', 'alert alert-success');
-                            } else {
-                                $('.alert').html("Erro ao cadastrar").attr('class', 'alert alert-danger');
-                            }
-                        }
-                    })
-                    return false;
-                } else {
-                    $("#msgCEP").remove();
-                    var msgCEP = $("<div>", {id: "msgCEP"});
-                    msgCEP.attr('class', 'alert alert-danger').html("Primeiro faça a busca do CEP").append('<button data-dismiss="alert" class="close" type="button">×</button>');
-                    $("#alertCEP").append(msgCEP);
-                }
+            submitHandler: function(form) {
+                form.submit();
             }
         });
     })
 
 </script>
-
+<?php
+Sessao::gerarToken();
+?>
 
 <div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
     <div class="page-header">
@@ -208,11 +241,12 @@
     <!-- Alertas -->
     <div class="alert">Preencha os campos abaixo</div>
     <!-- form -->
-    <form id="form" class="form-horizontal">
+    <form id="form" class="form-horizontal" action="index.php" method="post">
         <input type="hidden" id="hdnId" name="hdnId" />
         <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Imovel"  />
         <input type="hidden" id="hdnAcao" name="hdnAcao" value="cadastrar" />
         <input type="hidden" id="hdnCEP" name="hdnCEP" />
+        <input type="hidden" id="hdnToken" name="hdnToken" value="<?php echo $_SESSION['token']; ?>" />
         <!-- Primeira Linha -->        
         <div class="row">
             <div class="col-lg-6">
@@ -249,7 +283,7 @@
                                 <option value="usado">Usado</option>
                             </select></div>
                     </div>
-                    
+
                     <div class="form-group">
                         <label  class="col-lg-3 control-label" for="sltQuarto">Quarto</label>
                         <div class="col-lg-8">
@@ -481,11 +515,28 @@
             <div class="col-lg-12">
                 <div class="form-group">
                     <div class="col-lg-offset-2 col-lg-10">
-                        <button type="submit" class="btn btn-primary">Cadastrar</button>
-                        <button type="button" class="btn btn-warning">Cancelar</button>
+                        <button id="btnConfirmar"  type="button" class="btn btn-primary">Confirmar</button>
+                        <button id="btnCancelar" type="button" class="btn btn-warning">Cancelar</button>
                     </div>
                 </div>                
             </div>
         </div>
     </form>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Confirmação</h4>
+            </div>
+            <div class="modal-body">  </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
+                <button id="btnCadastrar" type="button" class="btn btn-primary">Cadastrar</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

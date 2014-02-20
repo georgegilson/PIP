@@ -3,6 +3,9 @@
 include_once 'modelo/Imovel.php';
 include_once 'modelo/Endereco.php';
 include_once 'modelo/Anuncio.php';
+include_once 'modelo/Estado.php';
+include_once 'modelo/Cidade.php';
+include_once 'modelo/Bairro.php';
 include_once 'assets/pager/Pager.php';
 include_once 'DAO/GenericoDAO.php';
 
@@ -20,25 +23,66 @@ class ImovelControle {
 
     function cadastrar($parametros) {
         //modelo
-        $genericoDAO = new GenericoDAO();
-        $genericoDAO->iniciarTransacao();
-        $endereco = new Endereco();
-        $entidadeEndereco = $endereco->cadastrar($parametros);
-        $idEndereco = $genericoDAO->cadastrar($entidadeEndereco);
+        if (Sessao::verificarSessaoUsuario()) {
+            $visao = new Template();
+            if (Sessao::verificarToken($parametros)) {
+                $genericoDAO = new GenericoDAO();
+                $genericoDAO->iniciarTransacao();
+                //consultar existencia de estado, se não existir gravar no banco
+                $estado = new Estado();
+                $selecionarEstado = $genericoDAO->consultar($estado, false, array("uf" => $parametros['txtEstado']));
+                if (!count($selecionarEstado) > 0) {
+                    $entidadeEstado = $estado->cadastrar($parametros);
+                    $idEstado = $genericoDAO->cadastrar($entidadeEstado);
+                } else {
+                    $idEstado = $selecionarEstado[0]->getId();
+                }
+                //consultar existencia de cidade, se não existir gravar no banco e utilizar idestado
+                $cidade = new Cidade();
+                $genericoDAO = new GenericoDAO();
+                $selecionarCidade = $genericoDAO->consultar($cidade, false, array("nome" => $parametros['txtCidade'], "idestado" => $idEstado));
+                if (!count($selecionarCidade) > 0) {
+                    $entidadeCidade = $cidade->cadastrar($parametros, $idEstado);
+                    $idCidade = $genericoDAO->cadastrar($entidadeCidade);
+                } else {
+                    $idCidade = $selecionarCidade[0]->getId();
+                }
+                //consultar existencia de bairro, se não existir gravar no banco e utilizar idcidade
+                $bairro = new Bairro();
+                $genericoDAO = new GenericoDAO();
+                $selecionarBairro = $genericoDAO->consultar($bairro, false, array("nome" => $parametros['txtBairro'], "idcidade" => $idCidade));
+                if (!count($selecionarBairro) > 0) {
+                    $entidadeBairro = $bairro->cadastrar($parametros, $idCidade);
+                    $idBairro = $genericoDAO->cadastrar($entidadeBairro);
+                } else {
+                    $idBairro = $selecionarBairro[0]->getId();
+                }
 
-        $imovel = new Imovel();
-        $entidadeImovel = $imovel->cadastrar($parametros, $idEndereco);
-        $resultado = $genericoDAO->cadastrar($entidadeImovel);
+                //gravar endereço e utilizar idestado, idcdidade e idbairro
+                $endereco = new Endereco();
+                $entidadeEndereco = $endereco->cadastrar($parametros, $idEstado, $idCidade, $idBairro);
 
-        //visao
-        if ($resultado && $idEndereco) {
-            $genericoDAO->commit();
-            $genericoDAO->fecharConexao();
-            echo json_encode(array("resultado" => 1));
-        } else {
-            $genericoDAO->rollback();
-            $genericoDAO->fecharConexao();
-            echo json_encode(array("resultado" => 0));
+                $idEndereco = $genericoDAO->cadastrar($entidadeEndereco);
+                $imovel = new Imovel();
+                $entidadeImovel = $imovel->cadastrar($parametros, $idEndereco);
+                $resultado = $genericoDAO->cadastrar($entidadeImovel);
+
+                //visao
+                if ($resultado && $idEndereco) {
+                    $genericoDAO->commit();
+                    $genericoDAO->fecharConexao();
+                    $visao->setItem("sucessocadastroimovel");
+                    $visao->exibir('VisaoErrosGenerico.php');
+                } else {
+                    $genericoDAO->rollback();
+                    $genericoDAO->fecharConexao();
+                    $visao->setItem("errobanco");
+                    $visao->exibir('VisaoErrosGenerico.php');
+                }
+            } else {
+                $visao->setItem("errotoken");
+                $visao->exibir('VisaoErrosGenerico.php');
+            }
         }
     }
 
@@ -71,18 +115,32 @@ class ImovelControle {
             $imovel = new Imovel();
 
             $parametros["id"] = $parametro["id"];
+            $parametros["idUsuario"] = $_SESSION['idusuario'];
 
             $genericoDAO = new GenericoDAO();
             $selecionarImovel = $genericoDAO->consultar($imovel, true, $parametros);
-            $_SESSION['id'] = $selecionarImovel[0]->getId();
-            $_SESSION['idendereco'] = $selecionarImovel[0]->getIdEndereco();
-//        var_dump($_SESSION);
-//        die();
-            //visao
-            $visao = new Template();
-            $visao->setItem($selecionarImovel);
-            $visao->exibir('ImovelVisaoEdicao.php');
+
+            #verificar a melhor forma de tratar o blindado recursivo
+            $selecionarEndereco = $genericoDAO->consultar(new Endereco(), true, array("id" => $selecionarImovel[0]->getIdEndereco()));
+            $selecionarImovel[0]->setEndereco($selecionarEndereco[0]);
+
+            if ($selecionarImovel) {
+                $sessao["id"] = $selecionarImovel[0]->getId();
+                $sessao["idendereco"] =  $selecionarImovel[0]->getIdEndereco();
+                Sessao::configurarSessaoImovel($sessao);
+                $item = $selecionarImovel;
+                $pagina = 'ImovelVisaoEdicao.php';
+            } else {
+                $item = "errotoken";
+                $pagina = 'VisaoErrosGenerico.php';
+            }
+        } else {
+            $item = "errotoken";
+            $pagina = 'VisaoErrosGenerico.php';
         }
+        $visao = new Template();
+        $visao->setItem($item);
+        $visao->exibir($pagina);
     }
 
     function publicar($parametro) {
@@ -96,31 +154,67 @@ class ImovelControle {
         $visao->exibir('AnuncioVisaoPublicar.php');
     }
 
-    function editar($parametro) {
-        //modelo
-        $genericoDAO = new GenericoDAO();
-        $genericoDAO->iniciarTransacao();
-        $imovel = new Imovel();
+    function editar($parametros) {
+        $visao = new Template();
+        if (Sessao::verificarSessaoUsuario() & Sessao::verificarToken($parametros)) {
+            //modelo
+            $genericoDAO = new GenericoDAO();
+            $genericoDAO->iniciarTransacao();
 
-        $parametros["id"] = $_SESSION['id'];
+            //consultar existencia de estado, se não existir gravar no banco
+            $estado = new Estado();
+            $selecionarEstado = $genericoDAO->consultar($estado, false, array("uf" => $parametros['txtEstado']));
+            if (!count($selecionarEstado) > 0) {
+                $entidadeEstado = $estado->cadastrar($parametros);
+                $idEstado = $genericoDAO->cadastrar($entidadeEstado);
+            } else {
+                $idEstado = $selecionarEstado[0]->getId();
+            }
+            //consultar existencia de cidade, se não existir gravar no banco e utilizar idestado
+            $cidade = new Cidade();
+            $genericoDAO = new GenericoDAO();
+            $selecionarCidade = $genericoDAO->consultar($cidade, false, array("nome" => $parametros['txtCidade'], "idestado" => $idEstado));
+            if (!count($selecionarCidade) > 0) {
+                $entidadeCidade = $cidade->cadastrar($parametros, $idEstado);
+                $idCidade = $genericoDAO->cadastrar($entidadeCidade);
+            } else {
+                $idCidade = $selecionarCidade[0]->getId();
+            }
+            //consultar existencia de bairro, se não existir gravar no banco e utilizar idcidade
+            $bairro = new Bairro();
+            $genericoDAO = new GenericoDAO();
+            $selecionarBairro = $genericoDAO->consultar($bairro, false, array("nome" => $parametros['txtBairro'], "idcidade" => $idCidade));
+            if (!count($selecionarBairro) > 0) {
+                $entidadeBairro = $bairro->cadastrar($parametros, $idCidade);
+                $idBairro = $genericoDAO->cadastrar($entidadeBairro);
+            } else {
+                $idBairro = $selecionarBairro[0]->getId();
+            }
 
-        $entidadeImovel = $imovel->editar($parametro);
-        $editarImovel = $genericoDAO->editar($entidadeImovel);
+            //gravar endereço e utilizar idestado, idcdidade e idbairro
+            $endereco = new Endereco();
+            $entidadeEndereco = $endereco->editar($parametros, $_SESSION["imovel"]["idendereco"], $idEstado, $idCidade, $idBairro);
+            $editarEndereco = $genericoDAO->editar($entidadeEndereco);
 
-        $endereco = new Endereco();
-        $parametros["idendereco"] = $_SESSION['idendereco'];
-        $entidadeEndereco = $endereco->editar($parametro);
-        $editarEndereco = $genericoDAO->editar($entidadeEndereco);
+            $imovel = new Imovel();
+            $entidadeImovel = $imovel->editar($parametros);
+            $editarImovel = $genericoDAO->editar($entidadeImovel);
 
-        if ($editarImovel && $editarEndereco) {
-            $genericoDAO->commit();
-            $genericoDAO->fecharConexao();
-            session_destroy();
-            echo json_encode(array("resultado" => 1));
+            if ($editarImovel & $editarEndereco) {
+                $genericoDAO->commit();
+                $genericoDAO->fecharConexao();
+                Sessao::desconfigurarVariavelSessao("imovel");
+                $visao->setItem("sucessoedicaoimovel");
+                $visao->exibir('VisaoErrosGenerico.php');
+            } else {
+                $genericoDAO->rollback();
+                $genericoDAO->fecharConexao();
+                $visao->setItem("errobanco");
+                $visao->exibir('VisaoErrosGenerico.php');
+            }
         } else {
-            $genericoDAO->rollback();
-            $genericoDAO->fecharConexao();
-            echo json_encode(array("resultado" => 0));
+            $visao->setItem("errotoken");
+            $visao->exibir('VisaoErrosGenerico.php');
         }
     }
 

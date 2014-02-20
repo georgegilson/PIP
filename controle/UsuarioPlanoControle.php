@@ -80,7 +80,7 @@ class UsuarioPlanoControle {
                     }
                 }
                 $genericoDAO->commit();
-                unset($_SESSION["usuarioPlano"]);
+                Sessao::desconfigurarVariavelSessao("usuarioPlano");
                 //$redirecionamento = new UsuarioPlanoControle();
                 //$redirecionamento->listar();
                 $visao = new Template();

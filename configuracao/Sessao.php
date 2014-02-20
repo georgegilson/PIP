@@ -24,7 +24,8 @@ class Sessao {
     }
 
     public static function desconfigurarVariavelSessao($variavel) {
-        
+        if(isset($_SESSION[$variavel]))
+            unset($_SESSION[$variavel]);
     }
 
     public static function gerarToken() {
@@ -77,6 +78,11 @@ class Sessao {
         if($acao=="excluir"){
             unset($_SESSION["imagem"][$nome]);
         }
+    }
+    
+    public static function configurarSessaoImovel($imovel){
+        $_SESSION["imovel"]["id"] = $imovel["id"];
+        $_SESSION["imovel"]["idendereco"] = $imovel["idendereco"];
     }
 
 }
