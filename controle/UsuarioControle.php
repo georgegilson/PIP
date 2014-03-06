@@ -149,6 +149,8 @@ class UsuarioControle {
             $selecionarUsuario = $genericoDAO->consultar($usuario, true, array("id" => $_SESSION["idusuario"]));
             //visao
             $visao = new Template();
+//            var_dump($selecionarUsuario);
+//            die();
             $visao->setItem($selecionarUsuario);
             $visao->exibir('UsuarioVisaoEdicao.php');
         } else {

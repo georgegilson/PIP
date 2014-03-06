@@ -14,6 +14,69 @@
             buscarCep()
         });
 
+        $("#btnCadastrar").click(function() {
+            $("#form").submit();
+        });
+        $("#btnCancelar").click(function() {
+            if (confirm("Deseja cancelar o cadastro do usuário?")) {
+                location.href = "index.php?entidade=Usuario&acao=meuPIP";
+            }
+        });
+        $("#btnConfirmar").click(function() {
+            if ($("#form").valid()) {
+                if (typeof($("input[name^=hdnTipoTelefone]").val()) == "undefined") {
+                        alert("Você deve cadastrar pelo menos um telefone para contato.");
+                }else
+                if ($("#hdnCEP").val() != "") {
+                    //chama modal de confirmacao    
+                    carregaDadosModal($("div[class='modal-body']"));
+                    $('#myModal').modal('show');
+                } else {
+                    $("#msgCEP").remove();
+                    var msgCEP = $("<div>", {id: "msgCEP"});
+                    msgCEP.attr('class', 'alert alert-danger').html("Primeiro faça a busca do CEP").append('<button data-dismiss="alert" class="close" type="button">×</button>');
+                    $("#alertCEP").append(msgCEP);
+                }
+            }
+        });
+
+        function carregaDadosModal($div) {
+            $div.html("");
+            if ($("#sltTipoUsuario").val() === "pf")
+            {
+                $div.append("Tipo de Pessoa: " + "Física" + "<br />");
+                $div.append("Nome: " + $("#txtNome").val() + "<br />");
+                $div.append("CPF: " + $("#txtCpf").val() + "<br />");
+                $div.append("Login: " + $("#txtLogin").val() + "<br />");
+                $div.append("Email: " + $("#txtEmail").val() + "<br />");
+                $div.append("Logradouro: " + $("#txtLogradouro").val() + "<br />");
+                $div.append("Numero: " + $("#txtNumero").val() + "<br />");
+                $div.append("Complemento: " + $("#txtComplemento").val() + "<br />");
+                $div.append("Bairro: " + $("#txtBairro").val() + "<br />");
+                $div.append("Cidade: " + $("#txtCidade").val() + "<br />");
+                $div.append("Estado: " + $("#txtEstado").val() + "<br />");
+                $div.append("CEP: " + $("#txtCEP").val() + "<br />");
+
+            } else {
+                $div.append("Tipo de Pessoa: " + "Jurídica" + "<br />");
+                $div.append("Nome: " + $("#txtNome").val() + "<br />");
+                $div.append("CNPJ: " + $("#txtCnpj").val() + "<br />");
+                $div.append("Login: " + $("#txtLogin").val() + "<br />");
+                $div.append("Email: " + $("#txtEmail").val() + "<br />");
+                $div.append("Responsável: " + $("#txtResponsavel").val() + "<br />");
+                $div.append("CPF do Responsável: " + $("#txtCpfResponsavel").val() + "<br />");
+                $div.append("Razão Social: " + $("#txtRazaoSocial").val() + "<br />");
+                $div.append("Logradouro: " + $("#txtLogradouro").val() + "<br />");
+                $div.append("Numero: " + $("#txtNumero").val() + "<br />");
+                $div.append("Complemento: " + $("#txtComplemento").val() + "<br />");
+                $div.append("Bairro: " + $("#txtBairro").val() + "<br />");
+                $div.append("Cidade: " + $("#txtCidade").val() + "<br />");
+                $div.append("Estado: " + $("#txtEstado").val() + "<br />");
+                $div.append("CEP: " + $("#txtCEP").val() + "<br />");
+            }
+
+        }
+
         function buscarCep() {
             var validator = $("#form").validate();
             if (validator.element("#txtCEP")) {
@@ -80,7 +143,7 @@
                 $("#divEmpresa").fadeOut('slow'); //oculta campos do DIVEMPRESA 
                 $("#divCnpj").hide();
                 $("#divCpf").show();
-                $("#lblNome").html("Nome da Completo");
+                $("#lblNome").html("Nome Completo");
             } else if ($(this).val() == "pj") {
                 $("#divnome").fadeIn('slow');
                 $("#divEmpresa").fadeIn('slow'); //mostra campos do DIVEMPRESA
@@ -88,7 +151,7 @@
                 $("#divCpf").hide();
                 $("#lblNome").html("Nome da Empresa");
                 $("#txtNome").attr("placeholder", "Informe o nome da empresa");
-                
+
             } else {
                 $("#divnome").fadeOut('slow');
                 $("#divEmpresa").fadeOut('slow'); //mostra campos do DIVEMPRESA
@@ -115,9 +178,9 @@
             }
         };
         $('#txtSenha').pwstrength(options);
-        
+
 //        Fim Informações Básicas
-        
+
 //        Inicio Telefone
         $("#btnTelefone").click(function() {
             $("#txtTel").rules("add", {
@@ -157,7 +220,7 @@
         });
 
         $("#txtTel").mask("(99)9999-9999");
-        
+
 //        Fim do Telefone
 
         //######### VALIDACAO DO FORMULARIO ########
@@ -264,7 +327,7 @@
                     required: "Campo obrigatório",
                     remote: "CNPJ já utilizado"
                 },
-                txtEmail: {                 
+                txtEmail: {
                     remote: "Email já utilizado"
                 },
                 sltTipoUsuario: {
@@ -315,15 +378,7 @@
                 }
             },
             submitHandler: function() {
-                if ($("#hdnCEP").val() != "") {         
-                    $('#form').submit();
-
-                } else {
-                    $("#msgCEP").remove();
-                    var msgCEP = $("<div>", {id: "msgCEP"});
-                    msgCEP.attr('class', 'alert alert-danger').html("Primeiro faça a busca do CEP").append('<button data-dismiss="alert" class="close" type="button">×</button>');
-                    $("#alertCEP").append(msgCEP);
-                }
+                form.submit();
             }
         });
     })
@@ -331,7 +386,7 @@
 </script> 
 
 <?php
-    Sessao::gerarToken();  
+Sessao::gerarToken();
 ?>
 
 <div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
@@ -351,8 +406,8 @@
 <!--        <input type="hidden" id="hdnTipoTelefone[]" name="hdnTipoTelefone[]" value=""  />-->
         <!-- Primeira Linha -->    
         <div class="row" id="divlinha1">
-            
-<!--            <div id="alertsucesso" class="col-lg-12"></div>-->
+
+            <!--            <div id="alertsucesso" class="col-lg-12"></div>-->
             <div class="col-lg-6" id="divinformacoesbasicas">
                 <div id="forms" class="panel panel-default">
                     <div class="panel-heading">Informações Básicas </div>
@@ -549,11 +604,27 @@
             <div class="col-lg-12" id="divbotoes">
                 <div class="form-group">
                     <div class="col-lg-offset-2 col-lg-10">
-                        <button type="submit" class="btn btn-primary">Cadastrar</button>
-                        <button type="button" class="btn btn-warning">Cancelar</button>
+                        <button id="btnConfirmar"  type="button" class="btn btn-primary">Confirmar</button>
+                        <button id="btnCancelar" type="button" class="btn btn-warning">Cancelar</button>
                     </div>
                 </div>
             </div>
         </div>
     </form>
 </div> 
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Confirmação</h4>
+            </div>
+            <div class="modal-body">  </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
+                <button id="btnCadastrar" type="button" class="btn btn-primary">Cadastrar</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

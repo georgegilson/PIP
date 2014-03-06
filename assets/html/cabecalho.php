@@ -78,7 +78,7 @@ if (Sessao::verificarSessaoUsuario()) {
     <?php
 } else {
     Sessao::gerarToken();
-}
+};
 ?>
                 $("#btnAcessar").click(function() {
                     autenticarUsuario();
@@ -98,7 +98,6 @@ if (Sessao::verificarSessaoUsuario()) {
                             data: {
                                 txtLogin: $('#txtLoginIndex').val(),
                                 txtSenha: $('#txtSenhaIndex').val(),
-                                hdnToken: "<?php echo $_SESSION["token"]; ?>",
                                 hdnEntidade: "Usuario",
                                 hdnAcao: "autenticar"
                             },

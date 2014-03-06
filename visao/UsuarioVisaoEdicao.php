@@ -573,8 +573,14 @@
                                             </tr>
                                         </thead>-->
                                         <tbody id="dadosTelefone">
-                                            <?php
-                                            foreach ($usuario->getTelefone() as $telefone) {
+                                            <?php 
+                                            $quantidade = count($usuario->getTelefone());
+                                            if($quantidade == 1){
+                                                $array = array($usuario->getTelefone());
+                                            }else{
+                                                $array = $usuario->getTelefone();
+                                            }
+                                            foreach ($array as $telefone) {
                                                 ?> 
                                                 <tr>
                                                     <td> <input type=hidden id=hdnTipoTelefone[] name=hdnTipoTelefone[] value="<?php echo $telefone->getTipotelefone() ?>"> <?php echo $telefone->getTipotelefone() ?> </td>

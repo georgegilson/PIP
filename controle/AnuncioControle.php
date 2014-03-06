@@ -167,6 +167,29 @@ class AnuncioControle {
         //visao
     }
 
+    function buscarAvancado($parametros) {
+
+        //erro ano passar o parametro
+
+        $anuncio = new Anuncio();
+
+        $consultasAdHoc = new ConsultasAdHoc();
+        $listarAnuncio = $consultasAdHoc->buscarAvancado($parametros);
+        $visao = new Template();
+        $visao->setItem($listarAnuncio);
+        $visao->exibir('AnuncioVisaoBusca.php');
+        //$selecionarAnuncio = $genericoDAO->consultar($anuncio, true, array("",$parametros[]));
+        //retorno da busca está errado
+//            echo "<pre>";
+//             print_r($selecionarAnuncio);
+//            echo "</pre>";
+//            die();
+//            
+//        var_dump($_SESSION);
+//        die();
+        //visao
+    }
+
     function modal($parametros) {
         $visao = new Template('ajax');
         $genericoDAO = new GenericoDAO();
@@ -177,6 +200,35 @@ class AnuncioControle {
         $item["usuario"] = $genericoDAO->consultar(new Usuario(), true, array("id" => $item["imovel"][0]->getIdusuario()));
         $visao->setItem($item);
         $visao->exibir('AnuncioVisaoModal.php');
+    }
+
+    function enviarContato() {
+        //$visao = new Template('ajax');
+        //$visao->setItem($item);
+        //$visao->exibir('AnuncioVisaoModal.php');
+//        if (Sessao::verificarToken($parametros)) {
+        //Gravar a mensagem no banco / Correlacionar com o Anuncio
+        //Enviar email para o dono do anúncio
+//            $genericoDAO = new GenericoDAO();
+//            $genericoDAO->iniciarTransacao();
+//            $usuario = new Usuario();
+//            $entidadeUsuario = $usuario->alterarSenha($parametros);
+//            $resultadoUsuario = $genericoDAO->editar($entidadeUsuario);
+//            $recuperasenha = new RecuperaSenha();
+//            $entidadeRecuperaSenha = $recuperasenha->editar($parametros);
+//            $resultadoAlterarSenha = $genericoDAO->editar($entidadeRecuperaSenha);
+//            if ($resultadoUsuario && $resultadoAlterarSenha) {
+//                $genericoDAO->commit();
+//                $genericoDAO->fecharConexao();
+//                echo json_encode(array("resultado" => 0));
+//            } else {
+//                $genericoDAO->rollback();
+//                $genericoDAO->fecharConexao();
+//                echo json_encode(array("resultado" => 1));
+//            }
+//        } else {
+//            echo json_encode(array("resultado" => 2));
+//        }
     }
 
     /*
