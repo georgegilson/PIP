@@ -127,7 +127,7 @@
             filterBehavior: 'text',
             preventInputChangeEvent: false,
             nonSelectedText: 'Nenhum selecionado',
-            nSelectedText: 'selected',
+            nSelectedText: 'selecionados',
             numberDisplayed: 3
         },
         

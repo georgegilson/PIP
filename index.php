@@ -6,6 +6,8 @@ date_default_timezone_set("America/Belem");
 
 ####CONSTANTES################################
 define(PIPROOT, dirname (__FILE__));
+define(PIPURL, "http://" . $_SERVER['HTTP_HOST']. dirname( $_SERVER["SCRIPT_NAME"]) );
+define(TEMPOTOKEN, 600); // 10 minutos
 
 ####INCLUDES##################################
 include_once 'configuracao/Template.php';

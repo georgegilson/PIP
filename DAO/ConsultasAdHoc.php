@@ -100,7 +100,7 @@ class ConsultasAdHoc extends GenericoDAO {
     public function buscarImovel($parametros) {
         $parametro = array_slice($parametros, 0);
 
-        $fromInicial = " SELECT * FROM anuncio a, imovel i, usuario u, endereco e, imagem im ";
+        $fromInicial = " SELECT i.*,im.*,a.*, b.nome as bairro, c.nome as cidade, e.logradouro, e.numero FROM anuncio a, imovel i, usuario u, endereco e, imagem im, bairro b, cidade c ";
 
         if (!empty($parametro["sltCidade"]) && empty($parametro["sltBairro"])) {
             $fromCidade = ", cidade c ";
@@ -120,6 +120,8 @@ class ConsultasAdHoc extends GenericoDAO {
                             AND i.idendereco = e.id
                             AND a.id = im.idanuncio
                             AND a.status = 'cadastrado'
+                            AND e.idbairro = b.id
+                            AND e.idcidade = c.id
                             AND im.destaque = 'SIM'";
 
         if (isset($parametro["chkGaragem"])) {
@@ -402,8 +404,47 @@ class ConsultasAdHoc extends GenericoDAO {
     public function buscarAvancado($parametros) {
 
         $parametro = array_slice($parametros, 0);
-
+        
         $fromInicial = " SELECT * FROM anuncio a, imovel i, usuario u, endereco e, imagem im ";
+        
+        $sql = $fromInicial . "
+                            WHERE 
+                            a.idimovel = i.id 
+                            AND i.idusuario = u.id 
+                            AND i.idendereco = e.id
+                            AND a.id = im.idanuncio
+                            AND a.status = 'cadastrado'
+                            AND im.destaque = 'SIM'";
+        
+        if(!empty($parametro["txtReferencia"])){
+            
+ //           $ano = substr(chunk_split($parametro["txtReferencia"], 4),0,4); //ano do imóvel
+            
+//            $mesParametro = substr(chunk_split($parametro["txtReferencia"], 2), 7,8);
+          
+ //           $mes = substr($mesParametro, 1, 2); //mês do imóvel
+            
+            $codigo = substr($parametro["txtReferencia"], -5); //código do imóvel
+            
+           
+//            echo $ano."</br>";
+            
+//            echo $mes."</br>";
+            
+//            echo $codigo."</br>";
+            
+//            echo $parametro["txtReferencia"];
+            
+      //      die();
+            
+            $sqlReferencia = " AND i.id = :codigo";
+            
+            
+            $sqlFinal = $sql . $sqlReferencia;
+            $statement = $this->conexao->prepare($sqlFinal);
+            $statement->bindParam(':codigo', substr($parametro["txtReferencia"], -5)); 
+            
+        } else{
 
         if (!empty($parametro["sltCidade"]) && empty($parametro["sltBairro"])) {
             $fromCidade = ", cidade c ";
@@ -415,15 +456,6 @@ class ConsultasAdHoc extends GenericoDAO {
             $fromCidadeBairro = ", bairro b ";
             $fromInicial = $fromInicial . $fromCidadeBairro;
         }
-
-        $sql = $fromInicial . "
-                            WHERE 
-                            a.idimovel = i.id 
-                            AND i.idusuario = u.id 
-                            AND i.idendereco = e.id
-                            AND a.id = im.idanuncio
-                            AND a.status = 'cadastrado'
-                            AND im.destaque = 'SIM'";
 
         //    $sqlFinalidade = " AND i.finalidade = :finalidade";
         $sqlTipo = " AND i.tipo = :tipo";
@@ -1097,11 +1129,13 @@ class ConsultasAdHoc extends GenericoDAO {
             $statement->bindParam(':suite', $parametro["sltSuite"]);
         }
 
-        $statement->execute();
-        $resultado = $statement->fetchAll(PDO::FETCH_OBJ);
-        return $resultado;
+      
     }
-
+      $statement->execute();
+        $resultado = $statement->fetchAll(PDO::FETCH_OBJ);
+        return $resultado;  
+    } //fim do else
+    
 }
 
 ?>

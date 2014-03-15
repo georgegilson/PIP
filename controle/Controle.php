@@ -3,27 +3,46 @@
 class Controle {
 
     public function __construct($parametros) {
+        //checa tamanho da requisição
+        $cabecalho = $_SERVER['CONTENT_LENGTH'];
+        $tamanho = ($cabecalho / 1024) / 1024;
+        if ($tamanho > 10) {
+            if ($_SERVER['REQUEST_METHOD'] === "GET") {
+                $visao = new Template();
+                $visao->setItem("errotoken");
+                $visao->exibir("VisaoErrosGenerico.php");
+            } else {
+                echo json_decode(array("resposta" => 0));
+            }
+            die();
+        }
         //vem do menu
         if ($_SERVER['REQUEST_METHOD'] === "GET") {
-            $entidade = (isset($parametros['entidade']))?$parametros['entidade']:"";
-            $acao = (isset($parametros['acao']))?$parametros['acao']:"";
+            $entidade = (isset($parametros['entidade'])) ? $parametros['entidade'] : "";
+            $acao = (isset($parametros['acao'])) ? $parametros['acao'] : "";
             if ($entidade == "" && $acao == "") {
                 self::index();
             } else {
-                include_once ($entidade . "Controle.php");
-                $classe = $entidade . "Controle";
-                $controle = new $classe;
-                $contexto = $controle->$acao($parametros);
+                if (is_file(PIPROOT . '/controle/' . $entidade . "Controle.php")) {
+                    include_once ($entidade . "Controle.php");
+                    $classe = $entidade . "Controle";
+                    $controle = new $classe;
+                    $contexto = $controle->$acao($parametros);
+                } else {
+                    Template::error404();
+                }
             }
         }
         //vem do formulario
         if ($_SERVER['REQUEST_METHOD'] === "POST") {
             $entidade = $parametros['hdnEntidade'];
             $acao = $parametros['hdnAcao'];
-            include_once ($entidade . "Controle.php");
-            $classe = $entidade . "Controle";
-            $controle = new $classe;
-            $controle->$acao($parametros);
+            if (is_file(PIPROOT . '/controle/' . $entidade . "Controle.php")) {
+                include_once ($entidade . "Controle.php");
+                $classe = $entidade . "Controle";
+                $controle = new $classe;
+                $controle->$acao($parametros);
+            }
         }
         //vem do upload e somente do upload
         if ($_SERVER['REQUEST_METHOD'] === "DELETE") {
@@ -40,7 +59,7 @@ class Controle {
         include_once 'modelo/Imovel.php';
         include_once 'modelo/Imagem.php';
         $genericoDAO = new GenericoDAO();
-        $anuncios = $genericoDAO->consultar(new Anuncio(),true,array("status"=>"cadastrado"));
+        $anuncios = $genericoDAO->consultar(new Anuncio(), true, array("status" => "cadastrado"));
         $item['anuncios'] = $anuncios;
 
         //visao

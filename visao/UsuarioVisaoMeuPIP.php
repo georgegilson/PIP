@@ -66,7 +66,7 @@
                         <span class="glyphicon glyphicon-bullhorn"></span> 
                         <span class="glyphicon glyphicon-list-alt"></span> Visualizar Meus Anúncios
                     </button></a>
-                <a href="index.php?entidade=Anuncio&acao=listarMensagem">
+                <a href="index.php?entidade=Usuario&acao=listarMensagem">
                     <button type="button" class="btn btn-info">
                         <span class="glyphicon glyphicon-bullhorn"></span> 
                         <span class="glyphicon glyphicon-envelope"></span> Visualizar Mensagens

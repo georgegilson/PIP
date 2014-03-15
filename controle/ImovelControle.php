@@ -90,7 +90,15 @@ class ImovelControle {
         if (Sessao::verificarSessaoUsuario()) {
             $imovel = new Imovel();
             $genericoDAO = new GenericoDAO();
-            $listarImovel = $genericoDAO->consultar($imovel, true, array("idusuario" => $_SESSION['idusuario']));
+            $listaImoveis = $genericoDAO->consultar($imovel, true, array("idusuario" => $_SESSION['idusuario']));
+
+            #verificar a melhor forma de tratar o blindado recursivo
+            foreach ($listaImoveis as $selecionarImovel) {
+                $selecionarEndereco = $genericoDAO->consultar(new Endereco(), true, array("id" => $selecionarImovel->getIdEndereco()));
+                $selecionarImovel->setEndereco($selecionarEndereco[0]);
+                $listarImovel[] = $selecionarImovel;
+            }
+
             //visao
             $visao = new Template();
             $visao->setItem($listarImovel);
@@ -102,8 +110,15 @@ class ImovelControle {
         if (Sessao::verificarSessaoUsuario()) {
             $imovel = new Imovel();
             $genericoDAO = new GenericoDAO();
-            $listarImovel = $genericoDAO->consultar($imovel, true, array("idusuario" => $_SESSION['idusuario']));
-            //visao
+            $listaImoveis = $genericoDAO->consultar($imovel, true, array("idusuario" => $_SESSION['idusuario']));
+
+            #verificar a melhor forma de tratar o blindado recursivo
+            foreach ($listaImoveis as $selecionarImovel) {
+                $selecionarEndereco = $genericoDAO->consultar(new Endereco(), true, array("id" => $selecionarImovel->getIdEndereco()));
+                $selecionarImovel->setEndereco($selecionarEndereco[0]);
+                $listarImovel[] = $selecionarImovel;
+            }
+
             $visao = new Template();
             $visao->setItem($listarImovel);
             $visao->exibir('ImovelVisaoListagemEditar.php');

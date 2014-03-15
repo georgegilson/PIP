@@ -23,7 +23,13 @@ class Template {
             $this->corpo($visao, 0);
         } else {
             $this->cabecalho();
-            $this->corpo($visao, $paginaInicial);
+            if ($paginaInicial === 1) {
+                $this->inicial();
+            } elseif (is_file('visao/' . $visao)) {
+                $this->corpo($visao);
+            } else {
+                self::error404();
+            }
             $this->rodape();
         }
     }
@@ -34,16 +40,16 @@ class Template {
         include_once 'assets/html/cabecalho.php';
     }
 
-    public function corpo($visao, $paginaInicial) {
-        if ($paginaInicial === 1) {
-            include_once 'assets/html/index.php';
-        } else {
-            if (is_file('visao/' . $visao)) {
-                include_once 'visao/' . $visao;
-            } else {
-                include_once 'assets/html/error404.php';
-            }
-        }
+    public function corpo($visao) {
+        include_once 'visao/' . $visao;
+    }
+
+    public function inicial() {
+        include_once 'assets/html/index.php';
+    }
+
+    public static function error404() {
+        include_once 'assets/html/error404.php';
     }
 
     public function rodape() {

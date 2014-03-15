@@ -47,7 +47,7 @@
                                 <tr>
                                     <td height="30" colspan="3">
                                         <a href="index.php?entidade=Usuario&acao=form&tipo=cadastro" class="text text-success">Ainda não é cadastrado?</a>
-                                        <a href="index.php?entidade=Usuario&acao=form&tipo=trocarsenha" class="text text-danger">Não lembra a senha?</a>
+                                        <a href="index.php?entidade=Usuario&acao=form&tipo=esquecisenha" class="text text-danger">Não lembra a senha?</a>
                                     </td>
                                 </tr>
                             </tbody>

@@ -32,7 +32,7 @@
         echo "<td>" . $imovel->Referencia() . "</td>";
         echo "<td>" . $imovel->getDescricao() . "</td>";
         echo "<td>" . $imovel->getEndereco()->getLogradouro() . "</td>";
-        echo "<td>" . $imovel->getEndereco()->getBairro() . "</td>";
+        echo "<td>" . $imovel->getEndereco()->getBairro()->getNome() . "</td>";
         echo "<td>" . $imovel->getDatahoracadastro() . "</td>";
         echo "<td><a href='#' id='popover".$imovel->getId()."'class='btn btn-success'><span class='glyphicon glyphicon-home'></span> Detalhes do Imóvel</a></td>";
        // echo "<td><a href='index.php?entidade=Imovel&acao=selecionar&id=".$imovel->getId()."&token=".$_SESSION['token']."' class='btn btn-warning'><span class='glyphicon glyphicon-pencil'></span> Editar</a> <br /></td>";

@@ -487,19 +487,19 @@
                                 <div class="form-group">
                                     <label class="col-lg-3 control-label" for="txtCidade">Cidade</label>
                                     <div class="col-lg-8">
-                                        <input type="text" class="form-control" id="txtCidade" name="txtCidade" readonly="true" value="<?php echo $usuario->getEndereco()->getCidade() ?>"> 
+                                        <input type="text" class="form-control" id="txtCidade" name="txtCidade" readonly="true" value="<?php echo $usuario->getEndereco()->getCidade()->getNome(); ?>"> 
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-lg-3 control-label" for="txtEstado">Estado</label>
                                     <div class="col-lg-8">
-                                        <input type="text" class="form-control" id="txtEstado" name="txtEstado" readonly="true" value="<?php echo $usuario->getEndereco()->getEstado() ?>"> 
+                                        <input type="text" class="form-control" id="txtEstado" name="txtEstado" readonly="true" value="<?php echo $usuario->getEndereco()->getEstado()->getUf() ?>"> 
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-lg-3 control-label" for="txtBairro">Bairro</label>
                                     <div class="col-lg-8">
-                                        <input type="text" class="form-control" id="txtBairro" name="txtBairro" readonly="true" value="<?php echo $usuario->getEndereco()->getBairro() ?>"> 
+                                        <input type="text" class="form-control" id="txtBairro" name="txtBairro" readonly="true" value="<?php echo $usuario->getEndereco()->getBairro()->getNome() ?>"> 
                                     </div>
                                 </div>
                                 <div class="form-group">

@@ -1,7 +1,6 @@
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
 <script src="assets/js/gmaps.js"></script>
 <script src="assets/js/wizard.js"></script>
-<script src="assets/js/bootstrap-multiselect.js"></script>
 <script src="assets/js/bootstrap-maxlength.js"></script>
 <script src="assets/js/bootstrap-switch.js"></script>
 <script src="assets/js/jquery.price_format.min.js"></script>
@@ -129,9 +128,9 @@
                         <input type="hidden" id="hdnAcao" name="hdnAcao" value="Cadastrar" />
                         <input type="hidden" id="hdnToken" name="hdnToken" value="<?php echo $_SESSION['token']; ?>" />
                         <div class="row">
-                            <div class="col-lg-6">
+                            <div class="col-lg-7">
                                 <div id="forms" class="panel panel-default">
-                                    <div class="panel-heading">Informações Básicas </div>
+
                                     <div class="form-group">
                                         <label class="col-lg-3 control-label" for="txtTitulo">Título</label>
                                         <div class="col-lg-8">
@@ -147,9 +146,9 @@
                                     <div class="form-group">
                                         <label class="col-lg-3 control-label" for="txtValor">Valor</label>
                                         <div class="col-lg-4">
-                                            <input type="text" class="form-control" id="txtValor" name="txtValor" placeholder="Valor do Imóvel">
+                                            <input type="text" class="form-control" id="txtValor" name="txtValor" placeholder="Valor do Imóvel"> 
                                         </div>
-                                        <span class="col-lg-4"> (Não informar os centavos) </span>
+                                        <span class="col-lg-4 ">(Não informar os centavos)</span>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-lg-6 control-label" for="chkMapa"> Permitir a exibição do mapa?</label>
@@ -158,38 +157,114 @@
                                         </div>
                                     </div>
 
+                                    <div class="form-group">
+                                        <label class="col-lg-offset-1 col-lg-9" for="sltCamposVisiveis">Escolha quais informações do imóvel deseja exibir:</label>
+                                    </div>
 
                                     <div class="form-group">
-                                        <label class="col-lg-6 control-label" for="sltCamposVisiveis">Exibir as Informações Cadastradas</label>
-                                        <div class="col-lg-5">
-                                            <select class="form-control" id="sltCamposVisiveis" name="sltCamposVisiveis[]" multiple=multiple>
-                                                <optgroup label="Informações Básicas">...</optgroup>
-                                                <option value="quarto">Quarto</option>
-                                                <option value="garagem">Garagem</option>
-                                                <option value="banheiro">Banheiro</option>
-                                                <optgroup label="Informações Adicionais">...</optgroup>
-                                                <?php if ($imovel->getAcademia() == "SIM") { ?><option value="academia">Academia</option> <?php } ?>
-                                                <?php if ($imovel->getAreaServico() == "SIM") { ?><option value="areaservico">Área de Serviço</option> <?php } ?>
-                                                <?php if ($imovel->getDependenciaEmpregada() == "SIM") { ?><option value="dependenciaempregada">Dependência de Empregada</option> <?php } ?>
-                                                <?php if ($imovel->getElevador() == "SIM") { ?><option value="elevador">Elevador</option> <?php } ?>
-                                                <?php if ($imovel->getPiscina() == "SIM") { ?><option value="piscina">Piscina</option> <?php } ?>
-                                                <?php if ($imovel->getQuadra() == "SIM") { ?><option value="quadra">Quadra</option> <?php } ?>
-                                                <option value="area">Área m2</option>
-                                                <option value="suite">Suíte</option>
-                                                <!--<option value="descricao">Descrição</option>-->
-                                                <?php if ($tipoImovel == "apartamento") { ?>
-                                                    <optgroup label="Informações Adicionais Apt.">...</optgroup>                                                
-                                                    <?php if ($imovel->getAndar() != "") { ?><option value="andar">Andar</option> <?php } ?>                                                
-                                                    <?php if ($imovel->getCondominio() != "") { ?><option value="condominio">Condominio</option> <?php } ?>                                                                                                    
-                                                    <?php if ($imovel->getCobertura() == "SIM") { ?><option value="cobertura">Cobertura</option> <?php } ?>                                                
-                                                    <?php if ($imovel->getSacada() == "SIM") { ?><option value="sacada">Sacada</option> <?php } ?> 
-                                                <?php } ?>
-                                            </select>
+                                        <div class="col-sm-offset-1 col-sm-3">
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">Básicas</div>
+                                                <div class="panel-body">
+                                                    <label class="checkbox">
+                                                        <input type="checkbox" name="sltCamposVisiveis[]" value="quarto"> Quarto
+                                                    </label>
+                                                    <label class="checkbox">
+                                                        <input type="checkbox" name="sltCamposVisiveis[]" value="banheiro"> Banheiro
+                                                    </label>
+                                                    <label class="checkbox">
+                                                        <input type="checkbox" name="sltCamposVisiveis[]" value="garagem"> Garagem
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">Adicionais</div>
+                                                <div class="panel-body">
+                                                    <?php if ($imovel->getAcademia() == "SIM") { ?>
+                                                        <label class="checkbox">
+                                                            <input type="checkbox" name="sltCamposVisiveis[]" value="academia"> Academia
+                                                        </label>
+                                                    <?php } ?>
+                                                    <?php if ($imovel->getAreaServico() == "SIM") { ?>
+                                                        <label class="checkbox">
+                                                            <input type="checkbox" name="sltCamposVisiveis[]" value="areaservico"> Área de Serviço
+                                                        </label>
+                                                    <?php } ?>
+                                                    <?php if ($imovel->getDependenciaEmpregada() == "SIM") { ?>
+                                                        <label class="checkbox">
+                                                            <input type="checkbox" name="sltCamposVisiveis[]" value="dependenciaempregada"> Dependência de Empregada
+                                                        </label>
+                                                    <?php } ?>
+                                                    <?php if ($imovel->getElevador() == "SIM") { ?>
+                                                        <label class="checkbox">
+                                                            <input type="checkbox" name="sltCamposVisiveis[]" value="elevador"> Elevador
+                                                        </label>
+                                                    <?php } ?>
+                                                    <?php if ($imovel->getPiscina() == "SIM") { ?>
+                                                        <label class="checkbox">
+                                                            <input type="checkbox" name="sltCamposVisiveis[]" value="piscina"> Piscina
+                                                        </label>
+                                                    <?php } ?>
+                                                    <?php if ($imovel->getQuadra() == "SIM") { ?>
+                                                        <label class="checkbox">
+                                                            <input type="checkbox" name="sltCamposVisiveis[]" value="quadra"> Quadra
+                                                        </label>
+                                                    <?php } ?>
+                                                    <?php if ($imovel->getArea() != "") { ?>
+                                                        <label class="checkbox">
+                                                            <input type="checkbox" name="sltCamposVisiveis[]" value="area"> Área m<sup>2</sup>
+                                                        </label>
+                                                    <?php } ?>
+                                                    <?php if ($imovel->getSuite() != "") { ?>
+                                                        <label class="checkbox">
+                                                            <input type="checkbox" name="sltCamposVisiveis[]" value="suite"> Suíte
+                                                        </label>
+                                                    <?php } ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">Apartamento</div>
+                                                <div class="panel-body">
+                                                    <?php if ($tipoImovel == "apartamento") { ?>
+                                                        <?php if ($imovel->getAndar() != "") { ?>
+                                                            <label class="checkbox">
+                                                                <input type="checkbox" name="sltCamposVisiveis[]" value="andar"> Andar
+                                                            </label>
+                                                        <?php } ?>                                                
+                                                        <?php if ($imovel->getCondominio() != "") { ?>
+                                                            <label class="checkbox">
+                                                                <input type="checkbox" name="sltCamposVisiveis[]" value=condominio> Condomínio
+                                                            </label>
+                                                        <?php } ?>                                                                                                    
+                                                        <?php if ($imovel->getCobertura() == "SIM") { ?>
+                                                            <label class="checkbox">
+                                                                <input type="checkbox" name="sltCamposVisiveis[]" value="cobertura"> Cobertura
+                                                            </label>
+                                                        <?php } ?>                                                
+                                                        <?php if ($imovel->getSacada() == "SIM") { ?>
+                                                            <label class="checkbox">
+                                                                <input type="checkbox" name="sltCamposVisiveis[]" value="sacada"> Sacada
+                                                            </label>
+                                                        <?php } ?> 
+                                                        <?php
+                                                    } else {
+                                                        echo "Não se aplica.";
+                                                    }
+                                                    ?>
+
+
+
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-6">
+                            <div class="col-lg-5">
                                 <div id="forms" class="panel panel-default">
                                     <div class="panel-heading">Mapa do Endereço Cadastrado</div>
                                     <div class="row">
@@ -321,7 +396,7 @@
                 location.href = "index.php?entidade=Anuncio&acao=listarCadastrar";
             }
         });
-        
+
         $('#MyWizard').on('change', function(e, data) {
             if (data.direction === 'next') {
                 if (data.step === 1) {
@@ -333,13 +408,13 @@
                         return e.preventDefault();
                 }
                 if (data.step === 3) {
-                    if (typeof($("input[name^=txtLegenda]").val()) !== "undefined") {
+                    if (typeof ($("input[name^=txtLegenda]").val()) !== "undefined") {
                         alert("Você ainda não enviou todas as fotos. \n Clique no botão Enviar");
                         return e.preventDefault();
                     }
-                    if (typeof($("input[name=delete]").val()) !== "undefined") {
+                    if (typeof ($("input[name=delete]").val()) !== "undefined") {
 
-                        if (typeof($("input[name=rdbDestaque]:checked").val()) === "undefined") {
+                        if (typeof ($("input[name=rdbDestaque]:checked").val()) === "undefined") {
                             alert("Informe uma Foto para ser Destaque do seu anúncio");
                             return e.preventDefault();
                         }
@@ -385,11 +460,12 @@
                 $("#colTitulo").html($("#txtTitulo").val());
                 $("#colDescricao").html($("#txtDescricao").val());
                 $("#colValor").html($("#txtValor").val());
-                $("#colMapa").html((typeof($("input[name=chkMapa]:checked").val()) === "undefined" ? "Não" : "Sim"));
+                $("#colMapa").html((typeof ($("input[name=chkMapa]:checked").val()) === "undefined" ? "Não" : "Sim"));
                 var varCampos = new Array();
-                $('#sltCamposVisiveis :selected').each(function() {
-                    if ($(this).val() != "multiselect-all")
-                        varCampos.push($(this).text());
+                $("input[name='sltCamposVisiveis[]']:checked").each(function() {
+                    //if ($(this).val() != "Todas")
+                    //  varCampos.push($(this).text());
+                    varCampos.push($(this).parent().text().trim());
                 })
                 if (varCampos.length > 0)
                     $("#colCampos").html("&bullet; " + varCampos.join("<br /> &bullet; "));
@@ -476,17 +552,17 @@
                         $(".alert").hide();
                         if (resposta.resultado == 1) {
                             $("#step5").html('<div class="row text-success">\n\
-    <h2 class="text-center">Obrigado!</h2>\n\
-    <p class="text-center">O cadastro de seu anúncio foi concluído com sucesso. </p>\n\
-    <p class="text-center">Em breve você receberá um e-mail confirmando a publicação do mesmo. </p>\n\
-    <p class="text-center">Não perca tempo clique aqui e compre mais anúncios! </p>\n\
-    <p class="text-center">Divulgue esse anuncio no Facebook </p>\n\
-    </div>');
+<h2 class="text-center">Obrigado!</h2>\n\
+<p class="text-center">O cadastro de seu anúncio foi concluído com sucesso. </p>\n\
+<p class="text-center">Em breve você receberá um e-mail confirmando a publicação do mesmo. </p>\n\
+<p class="text-center">Não perca tempo clique aqui e compre mais anúncios! </p>\n\
+<p class="text-center">Divulgue esse anuncio no Facebook </p>\n\
+</div>');
                         } else {
                             $("#step5").html('<div class="row text-danger">\n\
-    <h2 class="text-center">Tente novamente mais tarde!</h2>\n\
-    <p class="text-center">Houve um erro no processamento de cadastro. </p>\n\
-    </div>');
+<h2 class="text-center">Tente novamente mais tarde!</h2>\n\
+<p class="text-center">Houve um erro no processamento de cadastro. </p>\n\
+</div>');
                             $('button').removeAttr('disabled');
                         }
                     }
@@ -517,10 +593,10 @@
             validate: true
         });
 
-        $('#sltCamposVisiveis').multiselect({
-            buttonClass: 'btn btn-default btn-sm',
-            includeSelectAllOption: true
-        });
+//        $('#sltCamposVisiveis').multiselect({
+//            buttonClass: 'btn btn-default btn-sm',
+//            includeSelectAllOption: true
+//        });
 
         // Initialize the jQuery File Upload widget:
         $('#fileupload').fileupload({
@@ -532,7 +608,11 @@
             disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator && navigator.userAgent),
             imageMaxWidth: 800,
             imageMaxHeight: 800,
-            imageCrop: true
+            imageCrop: true,
+            loadImageFileTypes: /^image\/(gif|jpeg|png)$/,
+            imageType: 'image/jpg',
+            imageForceResize: true,
+            loadImageMaxFileSize: 2
         }).on('fileuploadsubmit', function(e, data) {
             //data.formData = data.context.find(':input').serializeArray();
             data.formData = $("#fileupload").serializeArray();

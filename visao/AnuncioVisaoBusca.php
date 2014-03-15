@@ -3,7 +3,8 @@ include_once 'modelo/Imovel.php';
 
 $imovel = new Imovel();
 ?>
-
+       <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+        <script src="assets/js/gmaps.js"></script>
 <script>
      
 $(document).ready(function(){
@@ -116,7 +117,7 @@ $(document).ready(function(){
             <form id="form" class="form-horizontal" action="index.php" method="post">
                 <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Anuncio"  />
                 <input type="hidden" id="hdnAcao" name="hdnAcao" value="buscar" />    
-
+                
                 <div class="row">
                     <div id="divFinalidade">
                         <p />
@@ -470,7 +471,7 @@ $(document).ready(function(){
                 </div>
 
                 <br />
-
+                
                 <div class="row">            
                     
                     <div class="col-lg-3">
@@ -520,8 +521,10 @@ $(document).ready(function(){
 
 
 <div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
+     <script src="assets/js/gridforms.js"></script>
+     <form class="grid-form">
     <!-- Example row of columns -->
-    <form>   
+    
         <table class="table table-hover">
             <thead>
                 <!--<tr>
@@ -575,96 +578,184 @@ $(document).ready(function(){
             if ($item) {
                 foreach ($item as $anuncio) {
                     ?>
+        <link rel="stylesheet" type="text/css" href="assets/css/gridforms.css">            
+       
+        <div class="panel panel-warning col-md-11"  id="<?php echo $anuncio->id; ?>" >
 
-                    <div class="panel panel-warning"  id="<?php echo $anuncio->id; ?>" >
-
-                        <div class="panel-body">
-
-                            <div class="row">
-
-                                <div class="col-md-4">
-                                    <input type="checkbox" id="selecoes_<?php echo $anuncio->id; ?>" class="option" name="selecoes[]" value=<?php echo $anuncio->id; ?>> Selecionar Imóvel 
-                                </div>
-
-                                <div class="col-md-4">
-                                    Finalidade: <?php echo "<span class='label label-primary'>" . strtoupper($anuncio->finalidade); ?>
-                                </div>    
-
-                                <div class="col-md-4">
-                                    <?php echo "Título: <span class='label label-info'>" . strtoupper($anuncio->tituloanuncio) . "</span>"; ?>
-                                </div>
-
-                            </div>
-
-                            <p/>
-
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <img src="<?php echo $anuncio->diretorio ?>" height="160" width="160" class="img-thumbnail">
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label>Descrição:</label>
-                                    <?php echo $anuncio->descricao . "<br/>"; ?>
-                                    <label>Tipo:</label>
-                                    <?php echo strtoupper($anuncio->tipo) . "<br/>"; ?>
-                                    <label>Quarto(s):</label>
-                                    <?php echo $anuncio->quarto . "<br/>"; ?>
-                                    <label>Banheiro(s):</label>
-                                    <?php echo $anuncio->banheiro . "<br/>"; ?>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label>Valor (R$):  </label>
-                                    <label class="text-warning"><?php echo $anuncio->valor . "</label><br/>"; ?>
-                                        <label>Cidade: </label>
-                                        <?php echo $anuncio->cidade . "<br/>"; ?>    
-                                        <label>Endereço: </label>
-                                        <?php echo $anuncio->logradouro . ", Nº " . $anuncio->numero . ",<br/>"; ?>
-                                        <label>Bairro: </label>
-                                        <?php echo $anuncio->bairro; ?>
-                                </div>
-
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-4">
-
-                                </div>
-
-                                <div class="col-md-4">
-
-                                </div>
-
-                                <div class="col-md-4">
-                                    <?php echo "Referência: <span class='label label-info'>" . substr($anuncio->datahoracadastro, 6, -9) . substr($anuncio->datahoracadastro, 3, -14) . str_pad($anuncio->id, 5, "0", STR_PAD_LEFT) . "</span>"; ?>
-                                </div>
-
-                            </div>    
-
+        <div class="panel-body">
+        
+        <fieldset class="col-md-9">
+                        
+                        <div data-row-span="1">
+                         <input type="checkbox" id="selecoes_<?php echo $anuncio->id; ?>" class="option" name="selecoes[]" value=<?php echo $anuncio->id; ?>> Selecionar Imóvel         
                         </div>
-                    </div>
+            
+                        <div data-row-span="7">
+				<div data-field-span="2">
+                                    <label style="text-align: center">Título</label>
+					<?php echo "<span class='label label-info'>" . strtoupper($anuncio->tituloanuncio) . "</span>"; ?>
+				</div>
+                            
+                                <div data-field-span="1">
+					<label style="text-align: center">Tipo</label>
+					<?php echo "<span class='label label-warning'>" . strtoupper($anuncio->tipo) . "</span>"; ?>
+				</div>
+                            
+				<div data-field-span="1">
+					<label style="text-align: center">Finalidade</label>
+					<?php echo "<span class='label label-primary'>" . strtoupper($anuncio->finalidade) . "</span>"; ?>
+				</div>
+                                <div data-field-span="1">
+					<label style="text-align: center">Quarto(s)</label>
+					<?php echo $anuncio->quarto; ?>
+				</div>
+                                <div data-field-span="1">
+                                    <label style="text-align: center">Área (em m<sup>2</sup>)</label>
+					<?php echo $anuncio->area; ?>
+				</div>
+                                <div data-field-span="1">
+					<label style="text-align: center">Condição</label>
+					<?php echo $anuncio->condicao; ?>
+				</div>
+			</div>
+            
+			<div data-row-span="7">
+				<div data-field-span="3">
+					<label style="text-align: center">Descrição</label>
+					<?php echo $anuncio->descricao; ?>
+				</div>
+				<div data-field-span="1">
+					<label style="text-align: center">Valor</label>
+					 R$ <?php echo $anuncio->valor; ?>
+				</div>
+                                <div data-field-span="1">
+					<label style="text-align: center">Banheiro(s)</label>
+					<?php echo $anuncio->banheiro; ?>
+				</div>
+                                 <div data-field-span="1">
+					<label style="text-align: center">Garagem(ns)</label>
+					<?php echo $anuncio->garagem; ?>
+				</div>
+                                <div data-field-span="1">
+					<label style="text-align: center">Referência</label>
+					<?php echo "<span class='label label-info'>" . substr($anuncio->datahoracadastro, 6, -9) . substr($anuncio->datahoracadastro, 3, -14) . str_pad($anuncio->idimovel, 5, "0", STR_PAD_LEFT) . "</span>"; ?>
+				</div>
+			</div>
+            
+                        <div data-row-span="7">
+                            <div data-field-span="3" style="background-color: #e4fcff">
+					<label style="text-align: center;">Endereço</label>
+					<?php echo $anuncio->logradouro . ", Nº " . $anuncio->numero;?>
+				</div>
+                                <div data-field-span="1">
+					<label style="text-align: center">Cidade</label>
+					<?php echo $anuncio->cidade ;?>
+				</div>
+				<div data-field-span="1">
+					<label style="text-align: center">Bairro</label>
+					<?php echo $anuncio->bairro; ?>
+				</div>
+                                <div data-field-span="1">
+					<label style="text-align: center">Suite(s)</label>
+					<?php echo $anuncio->suite; ?>
+				</div>
+                                 <div data-field-span="1">
+					<label style="text-align: center">Condição</label>
+					<?php echo $anuncio->condicao; ?>
+				</div>
+                                
+			</div>
+                            
+                 
+            
+            
+        </fieldset>
+            <br/>
+            <fieldset class="col-md-2">
+                
+                <div>
+                    
+                    <img src="<?php echo $anuncio->diretorio ?>" height="160" width="160" class="img-thumbnail" style="margin-left: 60px">
+                    
+                </div>
+                
+                <br/>
+                
+                <div>
 
-                    <tr>
-                        <td><?php echo $anuncio->valor; ?></td>
-                        <td><?php echo $anuncio->tituloanuncio; ?></td>
-                        <td><?php echo $anuncio->descricao; ?></td>
-                        <td><?php echo $anuncio->banheiro; ?></td>
-                        <td><?php echo $anuncio->cidade; ?></td>
-                    </tr>
-                    <?php
+                    <button type="button" id="btnAnuncioModal<?php echo substr($anuncio->datahoracadastro, 6, -9) . substr($anuncio->datahoracadastro, 3, -14) . str_pad($anuncio->idimovel, 5, "0", STR_PAD_LEFT); ?>" class="btn btn-default btn-sm" style="margin-left: 60px" data-toggle="modal" data-target="#divAnuncioModal" data-modal="<?php echo $anuncio->id; ?>" data-title="<?php echo $anuncio->tituloanuncio; ?>">
+                        <span class="glyphicon glyphicon-plus-sign"></span> Veja mais detalhes
+                    </button>
+                    
+                </div>
+                
+            </fieldset>    
+           
+            <!-- Modal -->
+<div class="modal fade" id="divAnuncioModal" tabindex="-1" role="dialog" aria-labelledby="lblAnuncioModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+<!--            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h2 class="modal-title" id="lblAnuncioModal"></h2>
+            </div>-->
+            <div id="modal-body" class="modal-body text-center">
+            </div>
+<!--            <div class="modal-footer text-right"><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-print"></span> Imprimir</button>
+            </div>-->
+        </div>
+    </div>
+</div><!-- /.modal -->
+
+<script>
+    $(document).ready(function() {
+        $('[id^=btnAnuncioModal]').click(function() {
+            $("#lblAnuncioModal").html("<span class='glyphicon glyphicon-bullhorn'></span> " + $(this).attr('data-title'));
+            $("#modal-body").html('<img src="assets/imagens/loading.gif" /><h2>Aguarde... Carregando...</h2>');
+            $("#modal-body").load("index.php", {hdnEntidade:'Anuncio', hdnAcao:'modal', hdnToken:'<?php //Sessao::gerarToken(); echo $_SESSION["token"]; ?>', hdnModal:$(this).attr('data-modal')});
+        })
+
+        var NumeroMaximo = 10;
+        $("input[id^='selecoes_']").click(function() {
+            if ($("input[id^='selecoes_']").filter(':checked').size() > NumeroMaximo) {
+                alert('Selecione no máximo '+ NumeroMaximo +' imóveis para a comparação');
+                return false;
+            }
+        })
+
+        $("input[type='submit']").click(function() {
+                alert('teste');
+    //            if ($("input[type='checkbox']").filter(':checked').size( ) == 0)
+    //            {
+    //                alert('Selecione no mínimo 2 imóveis para a comparação');
+    //                return false;
+    //            }
+        })
+        
+    })
+</script>
+
+            
+        </div>
+            
+        </div>    
+            
+        <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+        
+            <?php
                 }
             }
             ?>
             </tbody>
         </table>
+       
         <!-- Divs ocultas que serao exibidas dentro do popover. -->
         <?php
         $item = $this->getItem();
         if ($item) {
             foreach ($item as $imovel) {
                 ?>   
-                <div id="popover<?php echo $imovel->getId(); ?>-content" class="hide">
+                <div id="popover<?php echo $imovel->id; ?>-content" class="hide">
                     <?php
                     echo "Tipo: " . $imovel->getTipo() . "<br />";
                     echo "Condição: " . $imovel->getCondicao() . "<br />";

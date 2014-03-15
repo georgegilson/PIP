@@ -68,4 +68,10 @@ class Imagem {
         return $imagem;
     }
 
+    public function miniatura(){
+        $posicao = strripos($this->diretorio,"/") ;
+        $diretorio = substr($this->diretorio, 0,$posicao);
+        $arquivo = substr($this->diretorio, $posicao+1);
+        return $diretorio . "/thumbnail/" . $arquivo;
+    }
 }

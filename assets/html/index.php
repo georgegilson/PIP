@@ -1,3 +1,5 @@
+       <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+        <script src="assets/js/gmaps.js"></script>
 <script>
      
 $(document).ready(function(){
@@ -564,14 +566,14 @@ $(document).ready(function(){
 <div class="modal fade" id="divAnuncioModal" tabindex="-1" role="dialog" aria-labelledby="lblAnuncioModal" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
+<!--            <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h2 class="modal-title" id="lblAnuncioModal"></h2>
-            </div>
+            </div>-->
             <div id="modal-body" class="modal-body text-center">
             </div>
-            <div class="modal-footer text-right"><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-print"></span> Imprimir</button>
-            </div>
+<!--            <div class="modal-footer text-right"><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-print"></span> Imprimir</button>
+            </div>-->
         </div>
     </div>
 </div><!-- /.modal -->

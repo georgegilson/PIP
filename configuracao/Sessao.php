@@ -10,6 +10,8 @@ class Sessao {
         if (isset($_SESSION["idusuario"])) {
             $_SESSION = array();
             session_destroy();
+            session_start();
+            session_regenerate_id(true);
             return true;
         } else {
             return false;
@@ -40,7 +42,7 @@ class Sessao {
 
             $token_age = time() - $_SESSION['token_time'];
 
-            if ($token_age <= 1200) {//20 minutos de sessão
+            if ($token_age <= TEMPOTOKEN) {//10 minutos de sessão
                 return true;
             } else {
                 
@@ -51,6 +53,8 @@ class Sessao {
     }
 
     public static function configurarSessaoUsuario($usuario) {
+        session_regenerate_id();
+        session_name("PIPONLINE");
         $_SESSION["idusuario"] = $usuario[0]->getId();
         $_SESSION["idendereco"] = $usuario[0]->getIdendereco();
         $_SESSION["nome"] = $usuario[0]->getNome();

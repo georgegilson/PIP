@@ -14,6 +14,9 @@ include_once 'assets/mailer/class.phpmailer.php';
 include_once 'assets/mailer/class.smtp.php';
 include_once 'configuracao/ConsultaUrl.php';
 include_once 'DAO/ConsultasAdHoc.php';
+include_once 'modelo/Mensagem.php';
+include_once 'modelo/Anuncio.php';
+include_once 'assets/pager/Pager.php';
 
 class UsuarioControle {
 
@@ -54,54 +57,51 @@ class UsuarioControle {
         if (Sessao::verificarToken($parametros)) {
             $genericoDAO = new GenericoDAO();
             $genericoDAO->iniciarTransacao();
-            
+
             //consultar existencia de estado, se não existir gravar no banco
             $estado = new Estado();
             $genericoDAO = new GenericoDAO();
             $selecionarEstado = $genericoDAO->consultar($estado, false, array("uf" => $parametros['txtEstado']));
-            if (!count($selecionarEstado) > 0)
-            {
+            if (!count($selecionarEstado) > 0) {
                 $entidadeEstado = $estado->cadastrar($parametros);
                 $idEstado = $genericoDAO->cadastrar($entidadeEstado);
-            }else{
+            } else {
                 $idEstado = $selecionarEstado[0]->getId();
             }
-                
+
             //consultar existencia de cidade, se não existir gravar no banco e utilizar idestado
             $cidade = new Cidade();
             $genericoDAO = new GenericoDAO();
             $selecionarCidade = $genericoDAO->consultar($cidade, false, array("nome" => $parametros['txtCidade'], "idestado" => $idEstado));
-            if (!count($selecionarCidade) > 0)
-            {
+            if (!count($selecionarCidade) > 0) {
                 $entidadeCidade = $cidade->cadastrar($parametros, $idEstado);
                 $idCidade = $genericoDAO->cadastrar($entidadeCidade);
-            }else{
+            } else {
                 $idCidade = $selecionarCidade[0]->getId();
             }
-            
+
             //consultar existencia de bairro, se não existir gravar no banco e utilizar idcidade
             $bairro = new Bairro();
             $genericoDAO = new GenericoDAO();
             $selecionarBairro = $genericoDAO->consultar($bairro, false, array("nome" => $parametros['txtBairro'], "idcidade" => $idCidade));
-            if (!count($selecionarBairro) > 0)
-            {
+            if (!count($selecionarBairro) > 0) {
                 $entidadeBairro = $bairro->cadastrar($parametros, $idCidade);
                 $idBairro = $genericoDAO->cadastrar($entidadeBairro);
-            }else{
+            } else {
                 $idBairro = $selecionarBairro[0]->getId();
             }
-            
+
             //gravar endereço e utilizar idestado, idcdidade e idbairro
             $endereco = new Endereco();
             $entidadeEndereco = $endereco->cadastrar($parametros, $idEstado, $idCidade, $idBairro);
             $idEndereco = $genericoDAO->cadastrar($entidadeEndereco);
-            
-            
+
+
             //Usuário
             $usuario = new Usuario();
             $entidadeUsuario = $usuario->cadastrar($parametros, $idEndereco);
             $idUsuario = $genericoDAO->cadastrar($entidadeUsuario);
-                       
+
             //Empresa
             $idEmpresa = false;
             if ($entidadeUsuario->getTipousuario() == "pj") {
@@ -147,9 +147,12 @@ class UsuarioControle {
             $usuario = new Usuario();
             $genericoDAO = new GenericoDAO();
             $selecionarUsuario = $genericoDAO->consultar($usuario, true, array("id" => $_SESSION["idusuario"]));
+            #verificar a melhor forma de tratar o blindado recursivo
+            $selecionarEndereco = $genericoDAO->consultar(new Endereco(), true, array("id" => $selecionarUsuario[0]->getIdEndereco()));
+            $selecionarUsuario[0]->setEndereco($selecionarEndereco[0]);
             //visao
             $visao = new Template();
-//            var_dump($selecionarUsuario);
+//            var_dump($selecionarUsuario[0]->getEndereco()->getIdCidade());
 //            die();
             $visao->setItem($selecionarUsuario);
             $visao->exibir('UsuarioVisaoEdicao.php');
@@ -425,6 +428,28 @@ class UsuarioControle {
             $visao = new Template();
             $visao->exibir('UsuarioVisaoLogin.php');
         }
+    }
+
+    public function listarMensagem() {
+        //if (Sessao::verificarToken($parametros)) {
+        $mensagem = new Mensagem();
+        $genericoDAO = new GenericoDAO();
+        $selecionarMensagens = $genericoDAO->consultar($mensagem, true, array("idusuario" => $_SESSION["idusuario"]));
+//            var_dump($selecionarMensagens);
+//            die();
+        if (count($selecionarMensagens) > 0) {
+            $visao = new Template();
+            $visao->setItem($selecionarMensagens);
+        } else {
+            $visao = new Template();
+            $visao->setItem(false);
+        }
+        $visao->exibir('UsuarioVisaoMinhasMensagens.php');
+//        }else {
+//            $visao->setItem("errotoken");
+//            $visao->exibir('VisaoErrosGenerico.php');
+//        }
+        //}
     }
 
 }

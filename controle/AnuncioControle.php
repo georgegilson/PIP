@@ -15,6 +15,7 @@ include_once 'modelo/Bairro.php';
 include_once 'DAO/GenericoDAO.php';
 include_once 'DAO/ConsultasAdHoc.php';
 include_once 'assets/pager/Pager.php';
+include_once 'modelo/Mensagem.php';
 
 class AnuncioControle {
 
@@ -91,6 +92,13 @@ class AnuncioControle {
                             $entidadeImagem = $imagem->cadastrar($file, $idAnuncio, $parametros["rdbDestaque"]);
                             $idImagem = $genericoDAO->cadastrar($entidadeImagem);
                         }
+                    } else {
+                        $imagem = new Imagem();
+                        $file->url = PIPURL . "/assets/imagens/foto_padrao.png";
+                        $file->legenda = "";
+                        $file->name = "padrao";
+                        $entidadeImagem = $imagem->cadastrar($file, $idAnuncio, "padrao");
+                        $idImagem = $genericoDAO->cadastrar($entidadeImagem);
                     }
 
                     //visao
@@ -138,7 +146,7 @@ class AnuncioControle {
         $listarAnuncio = $consultasAdHoc->ConsultarAnunciosPublicos($parametros['selecoes']);
         $visao = new Template();
         $visao->setItem($listarAnuncio);
-        $visao->exibir('AnuncioVisaoTeste3.php');
+        $visao->exibir('AnuncioVisaoComparar.php');
 //        Tratamento de exceção para nenhum anuncio selecionado.
 //        print_r($listarAnuncio[0]->condicao);
 //        die();
@@ -175,6 +183,7 @@ class AnuncioControle {
 
         $consultasAdHoc = new ConsultasAdHoc();
         $listarAnuncio = $consultasAdHoc->buscarAvancado($parametros);
+//        var_dump($listarAnuncio);
         $visao = new Template();
         $visao->setItem($listarAnuncio);
         $visao->exibir('AnuncioVisaoBusca.php');
@@ -202,33 +211,23 @@ class AnuncioControle {
         $visao->exibir('AnuncioVisaoModal.php');
     }
 
-    function enviarContato() {
-        //$visao = new Template('ajax');
-        //$visao->setItem($item);
-        //$visao->exibir('AnuncioVisaoModal.php');
-//        if (Sessao::verificarToken($parametros)) {
-        //Gravar a mensagem no banco / Correlacionar com o Anuncio
-        //Enviar email para o dono do anúncio
-//            $genericoDAO = new GenericoDAO();
-//            $genericoDAO->iniciarTransacao();
-//            $usuario = new Usuario();
-//            $entidadeUsuario = $usuario->alterarSenha($parametros);
-//            $resultadoUsuario = $genericoDAO->editar($entidadeUsuario);
-//            $recuperasenha = new RecuperaSenha();
-//            $entidadeRecuperaSenha = $recuperasenha->editar($parametros);
-//            $resultadoAlterarSenha = $genericoDAO->editar($entidadeRecuperaSenha);
-//            if ($resultadoUsuario && $resultadoAlterarSenha) {
-//                $genericoDAO->commit();
-//                $genericoDAO->fecharConexao();
-//                echo json_encode(array("resultado" => 0));
-//            } else {
-//                $genericoDAO->rollback();
-//                $genericoDAO->fecharConexao();
-//                echo json_encode(array("resultado" => 1));
-//            }
-//        } else {
-//            echo json_encode(array("resultado" => 2));
-//        }
+   function enviarContato($parametros) {
+//      if (Sessao::verificarToken($parametros)) {
+        //Enviar email para o usuario dono do anúncio
+        $genericoDAO = new GenericoDAO();
+        $genericoDAO->iniciarTransacao();
+        $mensagem = new Mensagem();
+        $entidadeMensagem = $mensagem->cadastrar($parametros);
+        $resultadoMensagem = $genericoDAO->cadastrar($entidadeMensagem);
+        if ($resultadoMensagem) {
+            $genericoDAO->commit();
+            $genericoDAO->fecharConexao();
+            echo json_encode(array("resultado" => 0));
+        } else {
+            $genericoDAO->rollback();
+            $genericoDAO->fecharConexao();
+            echo json_encode(array("resultado" => 1));
+        }
     }
 
     /*

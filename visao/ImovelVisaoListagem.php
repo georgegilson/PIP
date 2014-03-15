@@ -32,7 +32,7 @@
         echo "<td>" . $imovel->Referencia() . "</td>";
         echo "<td>" . $imovel->getDescricao() . "</td>";
         echo "<td>" . $imovel->getEndereco()->getLogradouro() . "</td>";
-        echo "<td>" . $imovel->getEndereco()->getBairro() . "</td>";
+        echo "<td>" . $imovel->getEndereco()->getBairro()->getNome() . "</td>";
         echo "<td>" . $imovel->getDatahoracadastro() . "</td>";
         echo "<td><a href='#' id='popover".$imovel->getId()."'class='btn btn-success'><span class='glyphicon glyphicon-home'></span> Detalhes do Imóvel</a></td>";
         if(count($imovel->getAnuncio())>0){echo"<td><span class='text-primary'><span class='glyphicon glyphicon-bullhorn'></span> Este Imóvel já possui um anúncio publicado</span></td>";}  
