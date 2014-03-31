@@ -17,6 +17,7 @@ include_once 'DAO/ConsultasAdHoc.php';
 include_once 'assets/pager/Pager.php';
 include_once 'modelo/Mensagem.php';
 
+
 class AnuncioControle {
 
     function form($parametros) {
@@ -213,7 +214,6 @@ class AnuncioControle {
 
    function enviarContato($parametros) {
 //      if (Sessao::verificarToken($parametros)) {
-        //Enviar email para o usuario dono do anúncio
         $genericoDAO = new GenericoDAO();
         $genericoDAO->iniciarTransacao();
         $mensagem = new Mensagem();
@@ -222,6 +222,11 @@ class AnuncioControle {
         if ($resultadoMensagem) {
             $genericoDAO->commit();
             $genericoDAO->fecharConexao();
+            //Enviar email para o anunciante;
+            $dadosEmail['destino'] = $parametros['email'];  
+            $dadosEmail['nome'] = $parametros['nome']; 
+            $dadosEmail['msg'] = "<br> <h1>Teste de envio</h1> <br>";   //Definir formato   
+            Email::enviarEmail($dadosEmail);
             echo json_encode(array("resultado" => 0));
         } else {
             $genericoDAO->rollback();

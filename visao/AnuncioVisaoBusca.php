@@ -4,10 +4,15 @@ include_once 'modelo/Imovel.php';
 $imovel = new Imovel();
 ?>
        <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
-        <script src="assets/js/gmaps.js"></script>
+       <script src="assets/js/gmaps.js"></script>
+       <script src="assets/js/bootstrap-multiselect.js"></script>
 <script>
      
 $(document).ready(function(){
+           $('#sltDiferencial').multiselect({
+            buttonClass: 'btn btn-default btn-sm',
+            includeSelectAllOption: true
+        });
     $("select[name=sltCidade]").change(function(){
     $('select[name=sltBairro]').html('<option value="">Procurando...</option>');
             $.post('index.php?hdnEntidade=Bairro&hdnAcao=selecionarBairro&idcidade='+$('#sltCidade').val(),
@@ -98,8 +103,7 @@ $(document).ready(function(){
         })
     });         
 </script>
-
-
+    
    <div class="container divBusca"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) -->         
     <!-- Example row of columns -->
     <!--    <div class="alert">Todos</div> -->
@@ -471,7 +475,7 @@ $(document).ready(function(){
                 </div>
 
                 <br />
-                
+
                 <div class="row">            
                     
                     <div class="col-lg-3">
@@ -489,20 +493,21 @@ $(document).ready(function(){
                          <input type="text" id="txtReferencia" name="txtReferencia" class="form-control" placeholder="Ex: 20130000001">
                     </div>
                     
-                     <div class="col-lg-3">
+                    <div class="col-lg-3">
                         <label  for="sltDiferencial">Diferencial</label>
                         <div class="form-group">
                             <select id="sltDiferencial" multiple="multiple"  name="sltDiferencial[]">
-                                <option value="Academia">Academia</option>
-                                <option value="AreaServico">Área de Serviço</option>
-                                <option value="DependenciaEmpregada">Dependência de Empregada</option>
-                                <option value="Elevador">Elevador</option>
-                                <option value="Piscina">Piscina</option>
-                                <option value="Quadra">Quadra</option>
+                                <option value="academia">Academia</option>
+                                <option value="areaservico">Área de Serviço</option>
+                                <option value="dependenciaempregada">Dependência de Empregada</option>
+                                <option value="elevador">Elevador</option>
+                                <option value="piscina">Piscina</option>
+                                <option value="quadra">Quadra</option>
                             </select>
                         </div>
                     
                     </div>
+                    
                     <br />
                     <div class="col-lg-2">
                         <button type="submit" class="btn btn-primary">Buscar Imóvel</button>
@@ -518,6 +523,7 @@ $(document).ready(function(){
             
         </div>
    </div>      
+
 
 
 <div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
@@ -579,7 +585,7 @@ $(document).ready(function(){
                 foreach ($item as $anuncio) {
                     ?>
         <link rel="stylesheet" type="text/css" href="assets/css/gridforms.css">            
-       
+        
         <div class="panel panel-warning col-md-11"  id="<?php echo $anuncio->id; ?>" >
 
         <div class="panel-body">

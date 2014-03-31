@@ -13,6 +13,9 @@ define(TEMPOTOKEN, 600); // 10 minutos
 include_once 'configuracao/Template.php';
 include_once 'controle/Controle.php';
 include_once 'configuracao/Sessao.php';
+include_once 'assets/mailer/class.phpmailer.php';
+include_once 'assets/mailer/class.smtp.php';
+include_once 'configuracao/Email.php';
 
 ####INDEX#####################################
 Sessao::criarSessaoUsuario();

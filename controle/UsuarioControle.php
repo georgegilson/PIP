@@ -10,13 +10,14 @@ include_once 'modelo/Bairro.php';
 include_once 'modelo/RecuperaSenha.php';
 include_once 'controle/UsuarioPlanoControle.php';
 include_once 'DAO/GenericoDAO.php';
-include_once 'assets/mailer/class.phpmailer.php';
-include_once 'assets/mailer/class.smtp.php';
 include_once 'configuracao/ConsultaUrl.php';
 include_once 'DAO/ConsultasAdHoc.php';
 include_once 'modelo/Mensagem.php';
 include_once 'modelo/Anuncio.php';
 include_once 'assets/pager/Pager.php';
+include_once 'modelo/Imovel.php';
+include_once 'modelo/Imagem.php';
+include_once 'modelo/RespostaMensagem.php';
 
 class UsuarioControle {
 
@@ -258,7 +259,6 @@ class UsuarioControle {
     }
 
     function autenticar($parametros) {
-        //if (Sessao::verificarToken($parametros)) {
         $usuario = new Usuario();
         $genericoDAO = new GenericoDAO();
         $selecionarUsuario = $genericoDAO->consultar($usuario, false, array("login" => $parametros['txtLogin']));
@@ -269,9 +269,7 @@ class UsuarioControle {
         } else {
             echo json_encode(array("resultado" => 2)); //usuario ou senha invalido
         }
-        //} else {
-        //    echo json_encode(array("resultado" => 3)); //erro token
-        //}
+
     }
 
     function logout($parametros) {
@@ -430,26 +428,52 @@ class UsuarioControle {
         }
     }
 
-    public function listarMensagem() {
-        //if (Sessao::verificarToken($parametros)) {
+    public function listarMensagem($parametros) {
         $mensagem = new Mensagem();
         $genericoDAO = new GenericoDAO();
-        $selecionarMensagens = $genericoDAO->consultar($mensagem, true, array("idusuario" => $_SESSION["idusuario"]));
-//            var_dump($selecionarMensagens);
-//            die();
-        if (count($selecionarMensagens) > 0) {
+        $listaMensagens = $genericoDAO->consultar($mensagem, true, array("idusuario" => $_SESSION["idusuario"]));
+        
+        foreach ($listaMensagens as $selecionarMensagem) {
+                $selecionarAnuncio = $genericoDAO->consultar(new Anuncio(), true, array("id" => $selecionarMensagem->getIdAnuncio()));
+                $selecionarResposta = $genericoDAO->consultar(new RespostaMensagem(), false, array("idmensagem" => $selecionarMensagem->getId()));
+                $selecionarMensagem->setRespostamensagem($selecionarResposta); 
+                $selecionarMensagem->setAnuncio($selecionarAnuncio[0]);
+                $listarMensagens[] = $selecionarMensagem;                
+            }
+        if($parametros["type"] == "face"){
+            echo json_encode(array("resultado" => $listarMensagens));
+        }else{            
+        if (count($listaMensagens) > 0) {
             $visao = new Template();
-            $visao->setItem($selecionarMensagens);
+            $visao->setItem($listarMensagens);
         } else {
             $visao = new Template();
             $visao->setItem(false);
         }
         $visao->exibir('UsuarioVisaoMinhasMensagens.php');
-//        }else {
-//            $visao->setItem("errotoken");
-//            $visao->exibir('VisaoErrosGenerico.php');
-//        }
-        //}
+        }
+    }
+    
+    public function responderMensagem($parametros){
+           $genericoDAO = new GenericoDAO();
+           $genericoDAO->iniciarTransacao();
+           $respostaMensagem = new RespostaMensagem();
+           $entidadeRespostaMensagem = $respostaMensagem->cadastrar($parametros);
+           $resultadoRespostaMensagem = $genericoDAO->cadastrar($entidadeRespostaMensagem);
+           if ($resultadoRespostaMensagem) {
+                $genericoDAO->commit();
+                $genericoDAO->fecharConexao();
+                //Enviar email para o usuário;
+                $dadosEmail['destino'] = 'simondelarocha@gmail.com';//$parametros["email"];  
+                $dadosEmail['nome'] = 'simon ';//$parametros["nome"]; 
+                $dadosEmail['msg'] = "<br> <h1>Teste de envio</h1> <br>";      
+                Email::enviarEmail($dadosEmail);
+                echo json_encode(array("resultado" => 1));
+            } else {
+                $genericoDAO->rollback();
+                $genericoDAO->fecharConexao();
+                echo json_encode(array("resultado" => 0));
+            }
     }
 
 }

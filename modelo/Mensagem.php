@@ -13,8 +13,17 @@ class Mensagem{
     private $datahora;
     protected $usuario;
     protected $anuncio;
+    protected $respostamensagem; #Utilizado somente para recuperar a resposta
     
-    public function getId() {
+    public function getRespostamensagem() {
+        return $this->respostamensagem;
+    }
+
+    public function setRespostamensagem($respostamensagem) {
+        $this->respostamensagem = $respostamensagem;
+    }
+
+            public function getId() {
         return $this->id;
     }
 
