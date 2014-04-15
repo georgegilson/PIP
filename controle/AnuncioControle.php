@@ -224,7 +224,7 @@ class AnuncioControle {
         $visao->exibir('AnuncioVisaoModal.php');
     }
 
-   function enviarContato($parametros) {
+    function enviarContato($parametros) {
 //      if (Sessao::verificarToken($parametros)) {
         $genericoDAO = new GenericoDAO();
         $genericoDAO->iniciarTransacao();
@@ -232,14 +232,23 @@ class AnuncioControle {
         $entidadeMensagem = $mensagem->cadastrar($parametros);
         $resultadoMensagem = $genericoDAO->cadastrar($entidadeMensagem);
         if ($resultadoMensagem) {
-            $genericoDAO->commit();
-            $genericoDAO->fecharConexao();
             //Enviar email para o anunciante;
-            $dadosEmail['destino'] = $parametros['email'];  
-            $dadosEmail['nome'] = $parametros['nome']; 
-            $dadosEmail['msg'] = "<br> <h1>Teste de envio</h1> <br>";   //Definir formato   
-            Email::enviarEmail($dadosEmail);
-            echo json_encode(array("resultado" => 0));
+            $selecionarUsuario = $genericoDAO->consultar(new Usuario(), false, array("id" => $parametros['idusuario']));
+            $selecionarAnuncio = $genericoDAO->consultar(new Anuncio(), false, array("id" => $parametros['idanuncio']));
+            $dadosEmail['destino'] = $selecionarUsuario[0]->getEmail();
+            $dadosEmail['contato'] = $parametros['nome'];
+            $dadosEmail['msg'] = "Você recebeu uma mensagem nova! Acesse a sua caixa de mensagens do PIP";
+            $dadosEmail['assunto'] = $selecionarAnuncio[0]->getTituloAnuncio();
+            if(Email::enviarEmail($dadosEmail))
+            {
+                $genericoDAO->commit();
+                $genericoDAO->fecharConexao();
+                echo json_encode(array("resultado" => 0));
+            }else{
+                $genericoDAO->rollback();
+                $genericoDAO->fecharConexao();
+                echo json_encode(array("resultado" => 1));
+            }
         } else {
             $genericoDAO->rollback();
             $genericoDAO->fecharConexao();

@@ -60,8 +60,7 @@ class UsuarioControle {
             $genericoDAO->iniciarTransacao();
 
             //consultar existencia de estado, se não existir gravar no banco
-            $estado = new Estado();
-            $genericoDAO = new GenericoDAO();
+            $estado = new Estado();          
             $selecionarEstado = $genericoDAO->consultar($estado, false, array("uf" => $parametros['txtEstado']));
             if (!count($selecionarEstado) > 0) {
                 $entidadeEstado = $estado->cadastrar($parametros);
@@ -72,7 +71,6 @@ class UsuarioControle {
 
             //consultar existencia de cidade, se não existir gravar no banco e utilizar idestado
             $cidade = new Cidade();
-            $genericoDAO = new GenericoDAO();
             $selecionarCidade = $genericoDAO->consultar($cidade, false, array("nome" => $parametros['txtCidade'], "idestado" => $idEstado));
             if (!count($selecionarCidade) > 0) {
                 $entidadeCidade = $cidade->cadastrar($parametros, $idEstado);
@@ -83,7 +81,6 @@ class UsuarioControle {
 
             //consultar existencia de bairro, se não existir gravar no banco e utilizar idcidade
             $bairro = new Bairro();
-            $genericoDAO = new GenericoDAO();
             $selecionarBairro = $genericoDAO->consultar($bairro, false, array("nome" => $parametros['txtBairro'], "idcidade" => $idCidade));
             if (!count($selecionarBairro) > 0) {
                 $entidadeBairro = $bairro->cadastrar($parametros, $idCidade);
@@ -429,17 +426,20 @@ class UsuarioControle {
     }
 
     public function listarMensagem($parametros) {
+        unset($_SESSION["mensagem"]);
         $mensagem = new Mensagem();
         $genericoDAO = new GenericoDAO();
         $listaMensagens = $genericoDAO->consultar($mensagem, true, array("idusuario" => $_SESSION["idusuario"]));
-        
         foreach ($listaMensagens as $selecionarMensagem) {
                 $selecionarAnuncio = $genericoDAO->consultar(new Anuncio(), true, array("id" => $selecionarMensagem->getIdAnuncio()));
-                $selecionarResposta = $genericoDAO->consultar(new RespostaMensagem(), false, array("idmensagem" => $selecionarMensagem->getId()));
+                $selecionarResposta = $genericoDAO->consultar(new RespostaMensagem(), false, array("idmensagem" => $selecionarMensagem->getId()));                 
+                $idMensagem = rand();
+                $_SESSION["mensagem"][$idMensagem] = $selecionarMensagem->getId();
+                $selecionarMensagem->setId($idMensagem);
                 $selecionarMensagem->setRespostamensagem($selecionarResposta); 
                 $selecionarMensagem->setAnuncio($selecionarAnuncio[0]);
-                $listarMensagens[] = $selecionarMensagem;                
-            }
+                $listarMensagens[] = $selecionarMensagem;
+            }           
         if($parametros["type"] == "face"){
             echo json_encode(array("resultado" => $listarMensagens));
         }else{            
@@ -461,14 +461,23 @@ class UsuarioControle {
            $entidadeRespostaMensagem = $respostaMensagem->cadastrar($parametros);
            $resultadoRespostaMensagem = $genericoDAO->cadastrar($entidadeRespostaMensagem);
            if ($resultadoRespostaMensagem) {
-                $genericoDAO->commit();
-                $genericoDAO->fecharConexao();
-                //Enviar email para o usuário;
-                $dadosEmail['destino'] = 'simondelarocha@gmail.com';//$parametros["email"];  
-                $dadosEmail['nome'] = 'simon ';//$parametros["nome"]; 
-                $dadosEmail['msg'] = "<br> <h1>Teste de envio</h1> <br>";      
-                Email::enviarEmail($dadosEmail);
-                echo json_encode(array("resultado" => 1));
+                //Enviar email para o usuário
+                $selecionarMensagem = $genericoDAO->consultar(new Mensagem(), false, array("id" => $_SESSION["mensagem"][$parametros["id"]]));
+                $selecionarAnuncio = $genericoDAO->consultar(new Anuncio(), false, array("id" => $selecionarMensagem[0]->getIdAnuncio()));
+                $dadosEmail['destino'] = $selecionarMensagem[0]->getEmail();//$parametros["email"];  
+                $dadosEmail['nome'] = $selecionarMensagem[0]->getNome();//$parametros["nome"]; 
+                $dadosEmail['msg'] = $parametros["msg"];  
+                $dadosEmail['contato'] = $_SESSION["nome"];
+                $dadosEmail['assunto'] = $selecionarAnuncio[0]->getTituloAnuncio();
+                if(Email::enviarEmail($dadosEmail)){
+                    $genericoDAO->commit();
+                    $genericoDAO->fecharConexao();
+                    echo json_encode(array("resultado" => 1));
+                }else{
+                   $genericoDAO->rollback();
+                    $genericoDAO->fecharConexao();
+                    echo json_encode(array("resultado" => 0));   
+                }
             } else {
                 $genericoDAO->rollback();
                 $genericoDAO->fecharConexao();

@@ -41,7 +41,7 @@ class RespostaMensagem{
 
     public function cadastrar($parametros){
         $respostaMensagem = new RespostaMensagem();
-        $respostaMensagem->setIdMensagem($parametros["id"]);
+        $respostaMensagem->setIdMensagem($_SESSION["mensagem"][$parametros["id"]]);
         $respostaMensagem->setResposta($parametros["msg"]);
         $respostaMensagem->setDatahora(date('d/m/Y H:i:s'));
         return $respostaMensagem;

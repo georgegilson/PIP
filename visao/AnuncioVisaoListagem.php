@@ -37,7 +37,7 @@
                                 <td>
                                     <button type="button" class="btn btn-danger btn-sm">
                                         <span class="glyphicon glyphicon-bullhorn"></span> 
-                                        <span class="glyphicon glyphicon-check"></span> Encerrar 
+                                        <span class="glyphicon glyphicon-thumbs-up"></span> Finalizar Negócio 
                                     </button>
                                 </td>
                             <?php } ?>

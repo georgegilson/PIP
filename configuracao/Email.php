@@ -9,10 +9,10 @@ class Email {
                     $mail->Charset = 'UTF-8';
 
                     $mail->From = 'emailfrom@email.com';
-                    $mail->FromName = 'Nome de quem enviou';
+                    $mail->FromName = $dadosEmail['contato'];
 
                     $mail->IsHTML(true);
-                    $mail->Subject = 'Assunto do e-mail';
+                    $mail->Subject = $dadosEmail['assunto'];
                     
                     $mail->Body = $dadosEmail['msg'];
 //                    $mail->Body = "<br> <h1>Teste de envio</h1> <br>";

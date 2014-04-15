@@ -4,6 +4,7 @@
 <!-- fotorama.css & fotorama.js. -->
 <script src="assets/js/bootstrap-maxlength.js"></script>
 <script src="assets/js/jquery.maskedinput.min.js"></script>
+<script src="assets/js/util.validate.js"></script>
 <?php
 $item = $this->getItem();
 $anuncio = $item["anuncio"][0];
@@ -188,22 +189,25 @@ $imagens = $item["imagem"];
 
         <!-- FIM DO MAPA --> 
     <?php } ?>
-    <div class="tab-pane fade" id="contato">
+    
+        <div class="tab-pane fade" id="contato">
+
         <div class="row">
             <div class="col-xs-10">
 
                 <div id="alert" class="col-xs-10"></div>
 
-                <form id="contato" class="form-horizontal">
+                <form id="formContato" class="form-horizontal">
                     <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Anuncio"  />
                     <input type="hidden" id="hdnAcao" name="hdnAcao" value="enviarContato" />
                     <input type="hidden" id="hdnIdAnuncio" name="hdnIdAnuncio" value= "<?php echo $anuncio->getId() ?> "/>
                     <input type="hidden" id="hdnIdUsuario" name="hdnIdUsuario" value= "<?php echo $usuario->getId() ?>" />
+                    <div id="forms" class="panel panel-default">
                     <br>
                     <div class="form-group">
                         <label class="col-xs-3 control-label" for="txtNome">Nome</label>
-                        <div class="col-xs-5">
-                            <input id="txtNome" name="txtNome" class="form-control" placeholder="Informe seu nome">
+                        <div class="col-xs-7">
+                            <input id="txtNome" name="txtNome" class="form-control" placeholder="Informe seu nome" >
                         </div>
                     </div>
 
@@ -226,6 +230,7 @@ $imagens = $item["imagem"];
                         <div class="col-lg-5">
                             <textarea maxlength="200" id="txtMensagem" name="txtMensagem" class="form-control" placeholder="Informe a mensagem" rows="7"> </textarea><br />            </div>
                     </div>
+                    </div>
 
                     <div class="row">
                         <div class="col-lg-12">
@@ -236,38 +241,14 @@ $imagens = $item["imagem"];
                             </div>                
                         </div>
                     </div>
+
+
                 </form>
             </div>
 
         </div>
     </div>
-    <div class="tab-pane fade" id="diferenciais">
-        <div class="row">
-            <div class="col-xs-12">
-                <div data-row-span="12">
-                    <?php
-                    //valores visiveis
-                    $valoresVisiveis = $anuncio->getValorvisivel();
-                    if ($valoresVisiveis != "") {
-                        $valoresVisiveis = (json_decode($valoresVisiveis));
-                        foreach ($valoresVisiveis as $campo) {
-                            ?>
-                            <div data-field-span="1">
-                                <label><?php echo $campo; ?></label>
-                                <span class="glyphicon glyphicon-compressed"></span>
-                                <?php
-                                //$get = "get" . ucfirst($campo);
-                                //echo $imovel->$get();
-                                ?>
-                            </div>
-                            <?php
-                        }
-                    }
-                    ?>
-                </div>
-            </div>
-        </div>
-    </div>
+        
 </div>
 
 <script>
@@ -285,8 +266,45 @@ $imagens = $item["imagem"];
             validate: true
         });
         $("#txtTelefone").mask("(99)9999-9999");
-        $("#contato").submit(function(e) {
-            e.preventDefault();
+        
+        $("#formContato").validate({
+            rules: {
+                txtNome: {
+                    required: true
+                },
+                txtEmail: {
+                    email: true,
+                    required: true
+                },
+            },
+            messages: {
+                txtNome: {
+                    required: "Campo obrigatório"
+                },
+                txtEmail: {
+                    required: "Campo obrigatório",
+                    email: "Informe um email válido"
+                },
+            },
+            highlight: function(element) {
+                $(element).closest('.form-group').addClass('has-error');
+            },
+            unhighlight: function(element) {
+                $(element).closest('.form-group').removeClass('has-error');
+            },
+            errorElement: 'span',
+            errorClass: 'help-block',
+            errorPlacement: function(error, element) {
+                if (element.parent('.input-group').length) {
+                    error.insertAfter(element.parent());
+                } else {
+                    error.insertAfter(element);
+                }
+            }
+        });
+
+        $("#formContato").submit(function(e) {
+          e.preventDefault();
             //$form = $(this);
 //           $post(document.location.url, $(this).serialize(), function(data){
             $.ajax({
@@ -320,5 +338,5 @@ $imagens = $item["imagem"];
             });
 
         });
-    })
+    });
 </script>

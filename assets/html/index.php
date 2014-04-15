@@ -439,9 +439,9 @@ $(document).ready(function(){
                     </div>
                     
                     <div class="col-lg-2">
-                        <label  for="sltSuite">Suite(s)</label>
-                        <select class="form-control" id="sltGaragem" name="sltSuite">
-                            <option value="">Nenhuma</option>
+                        <label  for="sltSuite">Suíte(s)</label>
+                        <select class="form-control" id="sltSuite" name="sltSuite">
+                            <option value="">Suíte(s)</option>
                             <option value="01">01</option>
                             <option value="02">02</option>
                             <option value="03">03</option>
