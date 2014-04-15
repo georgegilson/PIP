@@ -9,7 +9,6 @@
             var plano = 0;
             $("input[name^='spnPlano']").each(function() {
                 plano += ($(this).val() != "") ? parseInt($(this).val()) : 0;
-                console.log(plano);
             });
 
             if (parseInt(plano) > 0) {
@@ -124,7 +123,7 @@
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <div class="col-lg-offset-4 col-lg-6">
-                                    <button type="button" id="btnComprar" class="btn btn-primary">Comprar!</button>
+                                    <button type="button" id="btnComprar" class="btn btn-primary"><span class="glyphicon glyphicon-shopping-cart"></span> Comprar!</button>
                                     <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="UsuarioPlano" />
                                     <input type="hidden" id="hdnAcao" name="hdnAcao" value="confirmar" />
                                     <input type="hidden" id="hdnToken" name="hdnToken" value="<?php echo $_SESSION['token']; ?>" />

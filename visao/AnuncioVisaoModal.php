@@ -13,13 +13,17 @@ $usuario = $item["usuario"][0];
 $imagens = $item["imagem"];
 //echo "<pre>";print_r($imagens);die();
 ?>
-<ul id="myTab" class="nav nav-tabs">
+<ul id="myTab" class="nav nav-pills ">
     <li class="active"><a href="#detalhes" data-toggle="tab">Detalhes</a></li>
     <?php if ($anuncio->getPublicarmapa() == "SIM") { ?>
         <li><a href="#vernomapa" data-toggle="tab">Ver no Mapa</a></li>
     <?php } ?>
     <li><a href="#contato" data-toggle="tab">Contato</a></li>
+    <li><a href="#diferenciais" data-toggle="tab">Diferenciais</a></li>
+    <li class="navbar-right">
+        <h4><?php echo $anuncio->getTituloAnuncio(); ?> <span class="label label-info"><?php echo $imovel->Referencia() ?></span></h4></li>
 </ul>
+
 <div id="myTabContent" class="tab-content">
     <div class="tab-pane fade in active" id="detalhes">
         <script src="assets/js/gridforms.js"></script>
@@ -33,32 +37,34 @@ $imagens = $item["imagem"];
                     </div>
                 </div>
                 <div class="col-xs-4">
-                    <div data-row-span="2">
+                    <div data-row-span="1">
                         <div data-field-span="1">
-                            <label>Finalidade</label>
-                            <?php echo $imovel->getFinalidade(); ?>
-                        </div>
-                        <div data-field-span="1">
-                            <label>Condição</label>
-                            <?php echo $imovel->getCondicao(); ?>
+
+                            <?php echo $anuncio->getDescricaoanuncio(); ?>
                         </div>
                     </div>
                     <div data-row-span="2">
                         <div data-field-span="1">
-                            <label>Tipo</label>
-                            <?php echo $imovel->getTipo(); ?>
+                            <label>Finalidade</label>
+                            <span class="label label-primary"> <?php echo $imovel->getFinalidade(); ?> </span>
                         </div>
+                        <div data-field-span="1">
+                            <label>Tipo</label>
+                            <span class="label label-warning"> <?php echo $imovel->getTipo(); ?> </span>
+                        </div>
+                    </div>
+                    <div data-row-span="2">
+                        <div data-field-span="1">
+                            <label>Condição</label>
+                            <?php echo $imovel->getCondicao(); ?>
+                        </div>
+
                         <div data-field-span="1">
                             <label>Valor</label>
                             R$ <?php echo $anuncio->getValor(); ?>
                         </div>
                     </div>                    
-                    <div data-row-span="1">
-                        <div data-field-span="1">
-                            <label>Descrição</label>
-                            <?php echo $anuncio->getDescricaoanuncio(); ?>
-                        </div>
-                    </div>
+
                     <div data-row-span="2">
                         <div data-field-span="1">
                             <label>Quartos</label>
@@ -83,12 +89,34 @@ $imagens = $item["imagem"];
                             <?php echo $imovel->getGaragem(); ?>
                         </div>
                     </div> 
+                    <div data-row-span="1">
+                        <div data-field-span="1">
+                            <label>Localizado em <?php echo $endereco->getCidade()->getNome(); ?>
+                                <?php echo "/"; ?>
+                                <?php echo $endereco->getEstado()->getUf(); ?></label>
+                            <?php echo $endereco->getLogradouro(); ?>
+                            <?php echo "nº " . $endereco->getNumero(); ?>
+                            <?php echo $endereco->getComplemento(); ?>
+                            <?php echo $endereco->getBairro()->getNome(); ?>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <?php if ($anuncio->getPublicarmapa() == "SIM") { ?>
+        <div class="tab-pane fade" id="vernomapa">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="popin">
+                        <div id="mapaModal"></div>
+                    </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-xs-12">
-                    <div id="forms" class="panel panel-default">
-                        <div class="panel-heading">Localização</div>
+                <form class="grid-form">
+                    <div class="col-xs-12">
                         <div data-row-span="5">
                             <div data-field-span="1">
                                 <label>Logradouro</label>
@@ -114,48 +142,7 @@ $imagens = $item["imagem"];
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">Diferenciais</div>
-                        <div data-row-span="12">
-                            <?php
-                            //valores visiveis
-                            $valoresVisiveis = $anuncio->getValorvisivel();
-                            if ($valoresVisiveis != "") {
-                                $valoresVisiveis = (json_decode($valoresVisiveis));
-                                foreach ($valoresVisiveis as $campo) {
-                                    ?>
-
-                                    <div data-field-span="1">
-                                        <label><?php echo $campo; ?></label>
-                                        <span class="glyphicon glyphicon-compressed"></span>
-                                        <?php
-                                        //$get = "get" . ucfirst($campo);
-                                        //echo $imovel->$get();
-                                        ?>
-                                    </div>
-                                    <?php
-                                }
-                            }
-                            ?>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-    <?php if ($anuncio->getPublicarmapa() == "SIM") { ?>
-        <div class="tab-pane fade" id="vernomapa">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="popin">
-                        <div id="mapaModal"></div>
-                    </div>
-                </div>
-
+                </form>
             </div>
         </div>
         <!-- INICIO DO MAPA --> 
@@ -201,13 +188,12 @@ $imagens = $item["imagem"];
 
         <!-- FIM DO MAPA --> 
     <?php } ?>
- <div class="tab-pane fade" id="contato">
-
+    <div class="tab-pane fade" id="contato">
         <div class="row">
             <div class="col-xs-10">
-                
+
                 <div id="alert" class="col-xs-10"></div>
-                
+
                 <form id="contato" class="form-horizontal">
                     <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Anuncio"  />
                     <input type="hidden" id="hdnAcao" name="hdnAcao" value="enviarContato" />
@@ -250,11 +236,36 @@ $imagens = $item["imagem"];
                             </div>                
                         </div>
                     </div>
-
-
                 </form>
             </div>
 
+        </div>
+    </div>
+    <div class="tab-pane fade" id="diferenciais">
+        <div class="row">
+            <div class="col-xs-12">
+                <div data-row-span="12">
+                    <?php
+                    //valores visiveis
+                    $valoresVisiveis = $anuncio->getValorvisivel();
+                    if ($valoresVisiveis != "") {
+                        $valoresVisiveis = (json_decode($valoresVisiveis));
+                        foreach ($valoresVisiveis as $campo) {
+                            ?>
+                            <div data-field-span="1">
+                                <label><?php echo $campo; ?></label>
+                                <span class="glyphicon glyphicon-compressed"></span>
+                                <?php
+                                //$get = "get" . ucfirst($campo);
+                                //echo $imovel->$get();
+                                ?>
+                            </div>
+                            <?php
+                        }
+                    }
+                    ?>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -274,15 +285,15 @@ $imagens = $item["imagem"];
             validate: true
         });
         $("#txtTelefone").mask("(99)9999-9999");
-        $("#contato").submit(function(e){
+        $("#contato").submit(function(e) {
             e.preventDefault();
-           //$form = $(this);
+            //$form = $(this);
 //           $post(document.location.url, $(this).serialize(), function(data){
-           $.ajax({
-                    url: document.location.url,
-                    dataType: "json",
-                    type: "POST",
-                    data: {
+            $.ajax({
+                url: document.location.url,
+                dataType: "json",
+                type: "POST",
+                data: {
                     hdnEntidade: "Anuncio",
                     hdnAcao: "enviarContato",
                     nome: $('#txtNome').val(),
@@ -290,24 +301,24 @@ $imagens = $item["imagem"];
                     telefone: $('#txtTelefone').val(),
                     mensagem: $('#txtMensagem').val(),
                     idusuario: $('#hdnIdUsuario').val(),
-                    idanuncio: $('#hdnIdAnuncio').val()       
+                    idanuncio: $('#hdnIdAnuncio').val()
                 },
-                    success: function(resposta) {
-                        $("#msg").remove();
-                        var msg = $("<div>", {id: "msg"});
-                        if (resposta.resultado == 0) {
-                            msg.attr('class', 'alert alert-success').html("Mensagem enviada com sucesso").append('<button data-dismiss="alert" class="close" type="button">×</button>');
-                        } else {
-                            msg.attr('class', 'alert alert-danger').html("Falha no envio da mensagem, por favor tente mais tarde").append('<button data-dismiss="alert" class="close" type="button">×</button>');
-                        }
-                        $("#alert").append(msg);
-                        $('#txtNome').val('');
-                        $('#txtEmail').val('');
-                        $('#txtTelefone').val('');
-                        $('#txtMensagem').val('');
-                    }   
-           });
-             
+                success: function(resposta) {
+                    $("#msg").remove();
+                    var msg = $("<div>", {id: "msg"});
+                    if (resposta.resultado == 0) {
+                        msg.attr('class', 'alert alert-success').html("Mensagem enviada com sucesso").append('<button data-dismiss="alert" class="close" type="button">×</button>');
+                    } else {
+                        msg.attr('class', 'alert alert-danger').html("Falha no envio da mensagem, por favor tente mais tarde").append('<button data-dismiss="alert" class="close" type="button">×</button>');
+                    }
+                    $("#alert").append(msg);
+                    $('#txtNome').val('');
+                    $('#txtEmail').val('');
+                    $('#txtTelefone').val('');
+                    $('#txtMensagem').val('');
+                }
+            });
+
         });
     })
 </script>

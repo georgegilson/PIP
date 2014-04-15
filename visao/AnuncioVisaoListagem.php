@@ -7,9 +7,10 @@
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th>Valor</th>
+                    <th>Imóvel Referência</th>
                     <th>Titulo</th>
                     <th>Descrição</th> 
+                    <th>Valor</th>
                     <th>Status</th>
                     <th>Data da Publicação</th>
                 </tr>
@@ -21,11 +22,25 @@
                     foreach ($item as $anuncio) {
                         ?>
                         <tr>
-                            <td><?php echo "R$ ".$anuncio->getValor(); ?></td>
+                            <td><span class="label label-info"><?php echo $anuncio->getImovel()->Referencia() ?></span></td>
                             <td><?php echo $anuncio->getTituloAnuncio(); ?></td>
                             <td><?php echo $anuncio->getDescricaoAnuncio(); ?></td>
+                            <td><?php echo "R$ " . $anuncio->getValor(); ?></td>
                             <td><?php echo $anuncio->getStatus(); ?></td>
                             <td><?php echo $anuncio->getDatahoracadastro(); ?></td>
+                            <td><button type="button" id="btnAnuncioModal<?php echo $anuncio->getId(); ?>" class="btn btn-info btn-sm" data-toggle="modal" data-target="#divAnuncioModal" data-modal="<?php echo $anuncio->getId(); ?>" data-title="<?php echo $anuncio->getTituloAnuncio(); ?>">
+                                    <span class="glyphicon glyphicon-bullhorn"></span> 
+                                    <span class="glyphicon glyphicon-eye-open"></span> Visualizar 
+                                </button>
+                            </td>    
+                            <?php if ($anuncio->getStatus() == "cadastrado") { ?>
+                                <td>
+                                    <button type="button" class="btn btn-danger btn-sm">
+                                        <span class="glyphicon glyphicon-bullhorn"></span> 
+                                        <span class="glyphicon glyphicon-check"></span> Encerrar 
+                                    </button>
+                                </td>
+                            <?php } ?>
                         </tr>
                         <?php
                     }
@@ -33,56 +48,31 @@
                 ?>
             </tbody>
         </table>
-        <!-- Divs ocultas que serao exibidas dentro do popover. -->
-        <?php
-        $item = $this->getItem();
-        if ($item) {
-            foreach ($item as $imovel) {
-                ?>   
-                <div id="popover<?php echo $imovel->getId(); ?>-content" class="hide">
-                    <?php
-                    echo "Tipo: " . $imovel->getTipo() . "<br />";
-                    echo "Condição: " . $imovel->getCondicao() . "<br />";
-                    echo "Quartos: " . $imovel->getQuarto() . "<br />";
-                    echo "Garagen(s): " . $imovel->getGaragem() . "<br />";
-                    echo "Banheiro(s): " . $imovel->getBanheiro() . "<br />";
-                    echo "Área: " . $imovel->getArea() . " m<sup>2</sup><br />";
-                    echo "Suite(s): " . (($imovel->getSuite() != "nenhuma") ? '<span class="text-primary">' . $imovel->getSuite() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
-                    echo "Piscina: " . (($imovel->getPiscina() == "SIM") ? '<span class="text-primary">' . $imovel->getPiscina() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
-                    echo "Quadra: " . (($imovel->getQuadra() == "SIM") ? '<span class="text-primary">' . $imovel->getQuadra() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
-                    echo "Academia: " . (($imovel->getAcademia() == "SIM") ? '<span class="text-primary">' . $imovel->getAcademia() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
-                    echo "Área Serviço: " . (($imovel->getAreaServico() == "SIM") ? '<span class="text-primary">' . $imovel->getAreaServico() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
-                    echo "Dependencia: " . (($imovel->getDependenciaEmpregada() == "SIM") ? '<span class="text-primary">' . $imovel->getDependenciaEmpregada() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
-
-                    if ($imovel->getTipo() == "apartamento") {
-                        echo "Sacada: " . (($imovel->getSacada() == "SIM") ? '<span class="text-primary">' . $imovel->getSacada() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
-                        echo "Cobertura: " . (($imovel->getCobertura() == "SIM") ? '<span class="text-primary">' . $imovel->getCobertura() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
-                        echo "Condomínio: " . (($imovel->getCondominio() != "") ? '<span class="text-primary">' . $imovel->getCondominio() . '</span>' : '<span class="text-danger">Não Informado</span>') . '<br />';
-                        echo "Andar: " . (($imovel->getAndar() != "") ? '<span class="text-primary">' . $imovel->getAndar() . '</span>' : '<span class="text-danger">Não Informado</span>') . '<br />';
-                    }
-                    ?>
+        <!-- Modal -->
+        <div class="modal fade" id="divAnuncioModal" tabindex="-1" role="dialog" aria-labelledby="lblAnuncioModal" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <!--            <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    <h2 class="modal-title" id="lblAnuncioModal"></h2>
+                                </div>-->
+                    <div id="modal-body" class="modal-body text-center">
+                    </div>
+        <!--            <div class="modal-footer text-right"><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-print"></span> Imprimir</button>
+                    </div>-->
                 </div>
-            <?php }
-        }
-        ?>
-
+            </div>
+        </div><!-- /.modal -->
         <script type="text/javascript">
             $(document).ready(function() {
-                // Associa o evento do popover ao clicar no link.
-                $("a[id^='popover']").popover({
-                    trigger: 'hover',
-                    html: true,
-                    title: 'Detalhes do Imóvel',
-                    content: function() {
-                        var div = '#' + $(this).attr('id') + '-content';
-                        return $(div).html();
-                    }
-                }).click(function(e) {
-                    e.preventDefault();
-                    // Exibe o popover.
-                    $(this).popover('show');
-                });
+                $('[id^=btnAnuncioModal]').click(function() {
+                    $("#lblAnuncioModal").html("<span class='glyphicon glyphicon-bullhorn'></span> " + $(this).attr('data-title'));
+                    $("#modal-body").html('<img src="assets/imagens/loading.gif" /><h2>Aguarde... Carregando...</h2>');
+                    $("#modal-body").load("index.php", {hdnEntidade: 'Anuncio', hdnAcao: 'modal', hdnToken: '<?php //Sessao::gerarToken(); echo $_SESSION["token"];      ?>', hdnModal: $(this).attr('data-modal')});
+                })
             });
         </script>
+        <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+        <script src="assets/js/gmaps.js"></script>
     </form>
 </div>

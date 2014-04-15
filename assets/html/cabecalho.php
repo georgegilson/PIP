@@ -58,8 +58,8 @@
                         <form class="navbar-form navbar-right">
                             <div id="divNome"></div>
                             <div id="divBotoes">  
-                                <a href="index.php?entidade=Usuario&acao=meuPIP" class="btn btn-primary"><span class="glyphicon glyphicon-th-large"></span>Meu Pip</a>
-                                <a id="btnLogout" href="#" class="btn btn-danger">Sair</a>
+                                <a href="index.php?entidade=Usuario&acao=meuPIP" class="btn btn-primary"><span class="glyphicon glyphicon-th-large"></span> Meu Pip</a>
+                                <a id="btnLogout" href="#" class="btn btn-danger"><span class="glyphicon glyphicon-log-out"></span> Sair</a>
                             </div>
                         </form>            
                     </div>

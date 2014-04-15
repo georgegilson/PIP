@@ -120,8 +120,14 @@ class AnuncioControle {
     function listar() {
         if (Sessao::verificarSessaoUsuario()) {
             $anuncio = new Anuncio();
+            $genericoDAO = new GenericoDAO();
             $consultasAdHoc = new ConsultasAdHoc();
-            $listarAnuncio = $consultasAdHoc->ConsultarAnunciosPorUsuario($_SESSION['idusuario']);
+            $listaAnuncio = $consultasAdHoc->ConsultarAnunciosPorUsuario($_SESSION['idusuario']);
+            foreach($listaAnuncio as $anuncio){
+                $imovel = $genericoDAO->consultar(new Imovel(), false, array("id" => $anuncio->getIdImovel()) );
+                $anuncio->setImovel($imovel[0]);
+                $listarAnuncio[]=$anuncio;
+            }
             //visao
             $visao = new Template();
             $visao->setItem($listarAnuncio);
@@ -132,12 +138,18 @@ class AnuncioControle {
     function listarCadastrar() {
         if (Sessao::verificarSessaoUsuario()) {
             $consultasAdHoc = new ConsultasAdHoc();
-            $listarCadastrarAnuncio = $consultasAdHoc->ConsultarImoveisNaoAnunciadosPorUsuario($_SESSION['idusuario']);
-//            var_dump($_SESSION['idusuario']);
-            //echo "<pre>";print_r($listarCadastrarAnuncio);
+            $listaImoveis = $consultasAdHoc->ConsultarImoveisNaoAnunciadosPorUsuario($_SESSION['idusuario']);
+
+            #verificar a melhor forma de tratar o blindado recursivo
+            foreach ($listaImoveis as $selecionarImovel) {
+                $selecionarEndereco = $consultasAdHoc->consultar(new Endereco(), true, array("id" => $selecionarImovel->getIdEndereco()));
+                $selecionarImovel->setEndereco($selecionarEndereco[0]);
+                $listarImovel[] = $selecionarImovel;
+            }
+            
             //visao
             $visao = new Template();
-            $visao->setItem($listarCadastrarAnuncio);
+            $visao->setItem($listarImovel);
             $visao->exibir('AnuncioVisaoListagemCadastrar.php');
         }
     }

@@ -29,16 +29,15 @@
     foreach($data as $imovel){?>
         <tr>        
         <?php
-        echo "<td>" . $imovel->Referencia() . "</td>";
+        echo "<td><span class=\"label label-info\">" . $imovel->Referencia() . "</span></td>";
         echo "<td>" . $imovel->getDescricao() . "</td>";
         echo "<td>" . $imovel->getEndereco()->getLogradouro() . "</td>";
         echo "<td>" . $imovel->getEndereco()->getBairro()->getNome() . "</td>";
         echo "<td>" . $imovel->getDatahoracadastro() . "</td>";
         echo "<td><a href='#' id='popover".$imovel->getId()."'class='btn btn-success'><span class='glyphicon glyphicon-home'></span> Detalhes do Imóvel</a></td>";
         if(count($imovel->getAnuncio())>0){echo"<td><span class='text-primary'><span class='glyphicon glyphicon-bullhorn'></span> Este Imóvel já possui um anúncio publicado</span></td>";}  
-            else {echo"<td><a href='index.php?entidade=Anuncio&acao=form&idImovel=".$imovel->getId()."&token=".$_SESSION['token']."' class='btn btn-primary'>Publicar Anuncio</a></td>";}
-         /*if(count($imovel->getAnuncio())==0){
-             echo"<td><a href='index.php?entidade=Anuncio&acao=form&idImovel=".$imovel->getId()."&token=".$_SESSION['token']."' class='btn btn-primary'>Publicar Anuncio</a></td>";}   */
+            else {echo"<td><a href='index.php?entidade=Anuncio&acao=form&idImovel=".$imovel->getId()."&token=".$_SESSION['token']."' class='btn btn-primary'><span class='glyphicon glyphicon-bullhorn'></span> Publicar Anuncio</a></td>";}
+
     }
     ?>             
         </tr>         
