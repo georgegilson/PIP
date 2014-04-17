@@ -65,11 +65,9 @@ class UsuarioPlano {
     }
     
     public function cadastrar($idplano){
-        $usuarioPlano = new UsuarioPlano();
-        $usuarioPlano->setIdplano($idplano);
-        $usuarioPlano->setIdusuario($_SESSION["idusuario"]);
-        $usuarioPlano->setDatacompra(date('d/m/Y H:i:s'));
-        $usuarioPlano->setStatus("ativo");        
-        return $usuarioPlano;                
+        $this->setIdplano($idplano);
+        $this->setIdusuario($_SESSION["idusuario"]);
+        $this->setDatacompra(date('d/m/Y H:i:s'));
+        $this->setStatus("pagamento pendente");        
     }
 }

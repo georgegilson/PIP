@@ -1,0 +1,16 @@
+{2014/04/17 18:56:33} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest: array (
+  'Reference' => '#050',
+  'SenderEmail' => 'dell@dell.com',
+)) - begin 
+{2014/04/17 18:56:52} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest: array (
+  'Reference' => '#050',
+  'SenderEmail' => 'dell@dell.com',
+)) - end {1}47C4A3451C1C3D7DD41F2FB76F72D4A2 
+{2014/04/17 19:00:47} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest: array (
+  'Reference' => '#051_052',
+  'SenderEmail' => 'dell@dell.com',
+)) - begin 
+{2014/04/17 19:00:50} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest: array (
+  'Reference' => '#051_052',
+  'SenderEmail' => 'dell@dell.com',
+)) - end {1}E961DE824444983554047F9A53E2C8A3 

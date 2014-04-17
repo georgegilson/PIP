@@ -20,12 +20,14 @@
     })
 
     function Total() {
-        var soma = 0.0;
+        var soma = 0;
         $("input[name^='txtPreco']").each(function() {
             var plano = 'spn' + $(this).attr('id');
             soma += parseFloat($(this).val()) * parseFloat($("input[name='" + plano + "']").val());
         })
-        return soma;
+        //var num = new Number(soma);
+//return num.toPrecision();
+        return soma.toFixed(2);
     }
 
 </script>
@@ -129,6 +131,12 @@
                                     <input type="hidden" id="hdnToken" name="hdnToken" value="<?php echo $_SESSION['token']; ?>" />
                                 </div>
                             </div>                
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-12 text-center">
+                            <img alt='Logotipos de meios de pagamento do PagSeguro' src='https://p.simg.uol.com.br/out/pagseguro/i/banners/pagamento/todos_estatico_550_100.gif' title='Este site aceita pagamentos com Visa, MasterCard, Diners, American Express, Hipercard, Aura, Elo, PLENOCard, PersonalCard, BrasilCard, FORTBRASIL, Cabal, Mais!, Avista, Grandcard, Bradesco, Itaú, Banco do Brasil, Banrisul, Banco HSBC, saldo em conta PagSeguro e boleto.' border='0'>
                         </div>
                     </div>
                 </form>
