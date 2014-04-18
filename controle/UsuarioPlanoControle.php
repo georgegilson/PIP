@@ -52,12 +52,11 @@ class UsuarioPlanoControle {
                         $confirmacao["planos"][$id] = $qtd;
                     }
                 }
-
+                $total = number_format($total, 2, '.', '');
                 if ($total <> $parametros["txtTotal"]) {
                     die("erro no total informado");
                 } else {
-                    $confirmacao["total"] = number_format($total, 2, '.', '');
-                    ;
+                    $confirmacao["total"] = $total;
                     $confirmacao["tokenPlano"] = $parametros["hdnToken"];
                     Sessao::configurarSessaoUsuarioPlanoConfirmacao($confirmacao);
 
@@ -86,7 +85,7 @@ class UsuarioPlanoControle {
                 foreach ($_SESSION["usuarioPlano"]["planos"] as $id => $qtd) {
                     $usuarioPlano = new UsuarioPlano();
                     $usuarioPlano->cadastrar($id);
-                    
+
                     $plano = array_shift($genericoDAO->consultar(new Plano(), false, array("id" => $usuarioPlano->getIdplano())));
                     //$id,$description,$quantity,$amount,$weight,$shippingCost     
                     $paymentRequest->addItem($plano->getId(), $plano->getTitulo() . " - " . $plano->getDescricao(), $qtd, $plano->getPreco());
