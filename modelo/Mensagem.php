@@ -1,7 +1,7 @@
 <?php
 
-class Mensagem{
-    
+class Mensagem {
+
     private $id;
     private $idanuncio;
     private $idusuario;
@@ -14,7 +14,7 @@ class Mensagem{
     protected $usuario;
     protected $anuncio;
     protected $respostamensagem; #Utilizado somente para recuperar a resposta
-    
+
     public function getRespostamensagem() {
         return $this->respostamensagem;
     }
@@ -23,7 +23,7 @@ class Mensagem{
         $this->respostamensagem = $respostamensagem;
     }
 
-            public function getId() {
+    public function getId() {
         return $this->id;
     }
 
@@ -117,12 +117,22 @@ class Mensagem{
         $mensagem->setEmail($parametros['email']);
         $mensagem->setTelefone($parametros['telefone']);
         $mensagem->setMensagem($parametros['mensagem']);
-        $mensagem->setStatus("nova");
+        $mensagem->setStatus("NOVA");
         $mensagem->setDatahora(date('d/m/Y H:i:s'));
         $mensagem->setIdanuncio($parametros['idanuncio']);
         $mensagem->setIdusuario($parametros['idusuario']);
         return $mensagem;
     }
-    
+
+    function editar($parametros, $status, $i = NULL) {
+        $mensagem = new Mensagem();
+        if ($parametros["hdnAcao"] == "lerMensagem") {
+            $mensagem->setId($_SESSION["mensagem"][$parametros["id"]]);
+        } else {
+            $mensagem->setId($_SESSION["mensagem"][$parametros["msgs"][$i]["value"]]);
+        }
+        $mensagem->setStatus($status);
+        return $mensagem;
+    }
 
 }

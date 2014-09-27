@@ -13,7 +13,7 @@ class BairroControle {
        $genericoDAO = new GenericoDAO();
         
        $listarBairros = $genericoDAO->consultar($bairro, true, array("idcidade" => $parametros["idcidade"]));
-        
+       echo "<option value=''>Selecione o Bairro</option>\n ";
        foreach ($listarBairros as $valor){
             echo "<option value='".$valor->getId()."'>".$valor->getNome()."</option>\n ";
        }

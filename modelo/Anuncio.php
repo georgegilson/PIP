@@ -13,6 +13,7 @@ class Anuncio {
     private $datahoraalteracao;
     private $valorvisivel;
     private $publicarmapa;
+    private $publicarcontato;
     private $idusuarioplano;
     protected $imovel;
     protected $imagem;
@@ -39,6 +40,10 @@ class Anuncio {
 
     public function getPublicarmapa() {
         return $this->publicarmapa;
+    }
+    
+    public function getPublicarcontato() {
+        return $this->publicarcontato;
     }
 
     public function getDestaque() {
@@ -124,6 +129,10 @@ class Anuncio {
     public function setPublicarmapa($publicarmapa) {
         $this->publicarmapa = $publicarmapa;
     }
+    
+    public function setPublicarcontato($publicarcontato) {
+        $this->publicarcontato = $publicarcontato;
+    }
 
     public function setIdusuarioplano($idusuarioplano) {
         $this->idusuarioplano = $idusuarioplano;
@@ -141,6 +150,7 @@ class Anuncio {
         $anuncio->setDatahoraalteracao("");
         $anuncio->setStatus('cadastrado');
         $anuncio->setPublicarmapa((isset($parametros['chkMapa'])?"SIM":"NAO"));
+        $anuncio->setPublicarcontato((isset($parametros['chkContato'])?"SIM":"NAO"));
         $anuncio->setIdImovel($_SESSION["anuncio"]["idimovel"]);
         $anuncio->setIdusuarioplano($parametros['sltPlano']);
 

@@ -165,16 +165,51 @@ class UsuarioControle {
         if (Sessao::verificarToken($parametros)) {
             $genericoDAO = new GenericoDAO();
             $genericoDAO->iniciarTransacao();
+            
+                        //consultar existencia de estado, se não existir gravar no banco
+            $estado = new Estado();          
+            $selecionarEstado = $genericoDAO->consultar($estado, false, array("uf" => $parametros['txtEstado']));
+            if (!count($selecionarEstado) > 0) {
+                $entidadeEstado = $estado->cadastrar($parametros);
+                $idEstado = $genericoDAO->cadastrar($entidadeEstado);
+            } else {
+                $idEstado = $selecionarEstado[0]->getId();
+            }
+
+            //consultar existencia de cidade, se não existir gravar no banco e utilizar idestado
+            $cidade = new Cidade();
+            $selecionarCidade = $genericoDAO->consultar($cidade, false, array("nome" => $parametros['txtCidade'], "idestado" => $idEstado));
+            if (!count($selecionarCidade) > 0) {
+                $entidadeCidade = $cidade->cadastrar($parametros, $idEstado);
+                $idCidade = $genericoDAO->cadastrar($entidadeCidade);
+            } else {
+                $idCidade = $selecionarCidade[0]->getId();
+            }
+
+            //consultar existencia de bairro, se não existir gravar no banco e utilizar idcidade
+            $bairro = new Bairro();
+            $selecionarBairro = $genericoDAO->consultar($bairro, false, array("nome" => $parametros['txtBairro'], "idcidade" => $idCidade));
+            if (!count($selecionarBairro) > 0) {
+                $entidadeBairro = $bairro->cadastrar($parametros, $idCidade);
+                $idBairro = $genericoDAO->cadastrar($entidadeBairro);
+            } else {
+                $idBairro = $selecionarBairro[0]->getId();
+            }
+
+            //gravar endereço e utilizar idestado, idcdidade e idbairro
             $endereco = new Endereco();
-            $entidadeEndereco = $endereco->editar($parametros);
+            $entidadeEndereco = $endereco->editar($parametros, $idEstado, $idCidade, $idBairro);
             $idEndereco = $genericoDAO->editar($entidadeEndereco);
+
             $usuario = new Usuario();
             $entidadeUsuario = $usuario->editar($parametros);
             $genericoDAO = new GenericoDAO();
             $resultado = $genericoDAO->editar($entidadeUsuario);
             //visao
             if ($resultado) {
-                echo json_encode(array("resultado" => 1));
+                $genericoDAO->commit();
+                $genericoDAO->fecharConexao();
+                echo json_encode(array("resultado" => 1));                
             } else {
                 $genericoDAO->rollback();
                 $genericoDAO->fecharConexao();

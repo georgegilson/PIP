@@ -2,18 +2,18 @@
     <div class="page-header">
         <h1>Mensagens</h1>
     </div>
-    <button type="submit" class="btn btn-default btn-sm" id="arquivar">Arquivar</button>
+    <div id="alert" class="col-xs-10"></div>
+    <br><br>    
+    <select style="width:300px" id="e1">
+        <optgroup label="Alaskan/Hawaiian Time Zone">
+            <option value="AK">Alaska</option>
+        </optgroup>
+        <optgroup label="Pacific Time Zone">
+            <option value="CA">California</option>
+        </optgroup>
+    </select>
+    &nbsp;&nbsp<button type="button" class="btn btn-default btn-sm" id="btnArquivar">Arquivar</button>
     <br><br>
-    <!--<form>-->   
-<!--        <table class="table table-hover">
-            <thead>
-                <tr>  
-                    <th>Nome</th>
-                    <th>Assunto</th>
-                    <th>Data</th> 
-                </tr>
-            </thead>
-            <tbody>-->
     <div class="panel-group col-lg-11" id="accordion">
         <?php
         $params = array(
@@ -27,111 +27,89 @@
         Sessao::gerarToken();
 
         foreach ($data as $mensagem) {
+            if ($mensagem->getStatus() == "EXCLUIDA")
+                continue;
             ?>
-                <!--        <tr>-->
             <div class="panel panel-default">
-                
+
                 <?php
-                    if ($mensagem->getStatus() == nova){
-                ?>
-                        <div class="panel-heading">
-                <?php
-                    }else{
-                ?>
-                       <div class="panel-body">     
-                <?php            
-                    }
-                ?>
-<!--                    <div class="panel-title">   -->
-                        <input type="checkbox" id="selecoes_<?php echo $mensagem->getId(); ?>" name="selecoes[]" value=<?php echo $mensagem->getId(); ?>> 
-                        <strong>
+                if ($mensagem->getStatus() == "NOVA") {
+                    ?>
+                    <div class="panel-heading">
                         <?php
-                        echo "<a data-toggle=collapse data-parent=#accordion href=#collapse" . $mensagem->getId() . ">";
-                        echo $mensagem->getAnuncio()->getTituloAnuncio();
-                        ?>          
-                        </a>
-                        </strong>
-<!--                        <div class="text-right">-->
-<span class="text-right" >
-    <strong>
-                        <?php
-                            echo $mensagem->getDatahora();
+                    } else {
                         ?>
-<!--                        </div>-->
-                        </strong>
-</span>
-<!--                    </div>-->
-<!--                    <h4 class="panel-title text-right">
-                        <strong>
-                        <?php
-                            echo $mensagem->getDatahora();
+                        <div class="panel-body">     
+                            <?php
+                        }
                         ?>
+                        <input type="checkbox" id="selecoes" name="selecoes[]" value=<?php echo $mensagem->getId(); ?>> 
+                        <strong>
+                            <?php
+                            echo "<a data-toggle=collapse data-parent=#accordion href=#collapse" . $mensagem->getId() . ">";
+                            echo $mensagem->getAnuncio()->getTituloAnuncio();
+                            ?>          
+                            </a>
                         </strong>
-                    </h4>    -->
-                </div>  
-                <?php echo "<div id=collapse" . $mensagem->getId() . " class='panel-collapse collapse'>"; ?>
-                <div class="panel-body">
-                    <?php echo $mensagem->getMensagem(); ?>
-                    <br><br>
-                    <address>
-                        <strong><?php echo $mensagem->getNome(); ?></strong><br>
-                        <abbr title="Telefone">Tel:</abbr> <?php echo $mensagem->getTelefone(); ?><br>
-                        <a href="mailto:#"><?php echo $mensagem->getEmail(); ?></a>
-                    </address>                  
-                    <?php
-                    $listRespostas = $mensagem->getRespostamensagem();
-                    foreach ($listRespostas as $resposta) { ?>
-                        <hr style="border-top: 1px solid #A31616">                         
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><abbr title="Resposta">RES:</abbr></strong>
-                        <br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $resposta->getResposta(); ?><br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Enviado em:<?php echo $resposta->getDatahora(); ?>
-                        <br>
+                        <span class="text-right" >
+                            <strong>
+                                <?php
+                                echo $mensagem->getDatahora();
+                                ?>
+                            </strong>
+                        </span>
+
+                    </div>  
+                    <?php echo "<div id=collapse" . $mensagem->getId() . " class='panel-collapse collapse'>"; ?>
+                    <div class="panel-body">
+                        <?php echo $mensagem->getMensagem(); ?>
+                        <br><br>
+                        <address>
+                            <strong><?php echo $mensagem->getNome(); ?></strong><br>
+                            <abbr title="Telefone">Tel:</abbr> <?php echo $mensagem->getTelefone(); ?><br>
+                            <a href="mailto:#"><?php echo $mensagem->getEmail(); ?></a>
+                        </address>                  
                         <?php
-                    }
-                    ?>                        
-                    <br>               
-                    <button type="button" value=" <?php echo $mensagem->getId(); ?>" id="btnResponder<?php echo $mensagem->getAnuncio()->getImovel()->Referencia(); ?>" class="btn btn-default btn-sm">
-                        Responder
-                    </button>  
-                    <button type="button" id="btnAnuncioModal<?php echo $mensagem->getAnuncio()->getImovel()->Referencia(); ?>" class="btn btn-default btn-sm" data-toggle="modal" data-target="#divAnuncioModal" data-modal="<?php echo $mensagem->getAnuncio()->getId(); ?>" data-title="<?php echo $mensagem->getAnuncio()->getTituloAnuncio(); ?>">
-                        Visualizar Anúncio
-                    </button>   
+                        $listRespostas = $mensagem->getRespostamensagem();
+                        foreach ($listRespostas as $resposta) {
+                            ?>
+                            <hr style="border-top: 1px solid #A31616">                         
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><abbr title="Resposta">RES:</abbr></strong>
+                            <br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $resposta->getResposta(); ?><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Enviado em:<?php echo $resposta->getDatahora(); ?>
+                            <br>
+                            <?php
+                        }
+                        ?>                        
+                        <br>               
+                        <button type="button" value=" <?php echo $mensagem->getId(); ?>" id="btnResponder<?php echo $mensagem->getAnuncio()->getImovel()->Referencia(); ?>" class="btn btn-default btn-sm">
+                            Responder
+                        </button>  
+                        <button type="button" id="btnAnuncioModal<?php echo $mensagem->getAnuncio()->getImovel()->Referencia(); ?>" class="btn btn-default btn-sm" data-toggle="modal" data-target="#divAnuncioModal" data-modal="<?php echo $mensagem->getAnuncio()->getId(); ?>" data-title="<?php echo $mensagem->getAnuncio()->getTituloAnuncio(); ?>">
+                            Visualizar Anúncio
+                        </button>   
+                    </div>
                 </div>
             </div>
-        </div>
-        <?php
-    }
-    ?>             
-    <!--        </tr>         
-                </tbody>
-            </table>
-            &nbsp;-->
+            <?php
+        }
+        ?>             
+    </div>
+    <?php
+    $links = $pager->getLinks();
+    echo ($links['all'] != "" ? "&nbsp;&nbsp;&nbsp;&nbsp;Página: " . $links['all'] : "");
+    ?>
+
 </div>
-<?php
-$links = $pager->getLinks();
-echo ($links['all'] != "" ? "&nbsp;&nbsp;&nbsp;&nbsp;Página: " . $links['all'] : "");
-?>
-
-<!-- Divs ocultas que serao exibidas dentro do popover. -->
-
-<!--</form>-->
-<!--</div>-->
-
 </div>
 
 <!-- Modal -->
 <div class="modal fade" id="divAnuncioModal" tabindex="-1" role="dialog" aria-labelledby="lblAnuncioModal" aria-hidden="true">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <!--            <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            <h2 class="modal-title" id="lblAnuncioModal"></h2>
-                        </div>-->
+        <div class="modal-content">          
             <div id="modal-body" class="modal-body text-center">
             </div>
-<!--            <div class="modal-footer text-right"><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-print"></span> Imprimir</button>
-            </div>-->
         </div>
     </div>
 </div><!-- /.modal -->
@@ -141,13 +119,14 @@ echo ($links['all'] != "" ? "&nbsp;&nbsp;&nbsp;&nbsp;Página: " . $links['all'] 
 
 <script type="text/javascript">
     $(document).ready(function() {
+        $("#e1").select2();      
         $('[id^=txtMensagem]').hide();
         $('[id^=btnEnviar]').hide();
 
         $('[id^=btnAnuncioModal]').click(function() {
             $("#lblAnuncioModal").html("<span class='glyphicon glyphicon-bullhorn'></span> " + $(this).attr('data-title'));
             $("#modal-body").html('<img src="assets/imagens/loading.gif" /><h2>Aguarde... Carregando...</h2>');
-            $("#modal-body").load("index.php", {hdnEntidade: 'Anuncio', hdnAcao: 'modal', hdnToken: '<?php //Sessao::gerarToken(); echo $_SESSION["token"];    ?>', hdnModal: $(this).attr('data-modal')});
+            $("#modal-body").load("index.php", {hdnEntidade: 'Anuncio', hdnAcao: 'modal', hdnToken: '<?php //Sessao::gerarToken(); echo $_SESSION["token"];      ?>', hdnModal: $(this).attr('data-modal')});
         })
         $('[id^=btnResponder]').click(function() {
             $("<textarea maxlength=200 id=txtMensagem name=txtMensagem class=form-control rows=7></textarea>").insertBefore($(this));
@@ -157,20 +136,45 @@ echo ($links['all'] != "" ? "&nbsp;&nbsp;&nbsp;&nbsp;Página: " . $links['all'] 
                 responderMensagem($(this));
             })
         });
-           
+
         $('.collapse').on('hidden.bs.collapse', function() {
             $('[id^=txtMensagem]').remove();
             $('[id^=btnEnviar]').remove();
             $('[id^=btnResponder]').removeAttr("disabled");
         })
-        
-        $("input[id^='selecoes_']").click(function() {
-            $('[id^=arquivar]').insertBefore("<input type=hidden id=itens[] name=itens[] value=" + $(this).val() + ">");
+
+        $('.collapse').on('shown.bs.collapse', function() {
+            if ($(this).parent().children().hasClass("panel-heading")) {
+                lerMensagem($(this).parent().find("input"));
+            }
+        })
+
+        $("#btnArquivar").click(function() {
+            arquivarMensagem();
         });
-        $('#arquivar').click(function() {
-                //arquivarMensagem();
-        });
-    
+
+        function lerMensagem(elemento)
+        {
+            $.ajax({
+                url: "index.php",
+                dataType: "json",
+                type: "POST",
+                data: {
+                    id: $(elemento).attr("value"),
+                    hdnEntidade: "Usuario",
+                    hdnAcao: "lerMensagem"
+                },
+                success: function(resposta) {
+                    if (resposta.resultado == 0) {
+                        //Verificar se é preciso apresentar mensagem de erro na leitura da msg.
+                    } else {
+                        $(elemento).parent().css("color", "red");
+                    }
+
+                }
+            })
+        }
+
         function arquivarMensagem()
         {
             $.ajax({
@@ -178,30 +182,24 @@ echo ($links['all'] != "" ? "&nbsp;&nbsp;&nbsp;&nbsp;Página: " . $links['all'] 
                 dataType: "json",
                 type: "POST",
                 data: {
-                    msg: $('[id^=selecoes_]').val(),
+                    msgs: $('[id^=selecoes]:checked').serializeArray(),
                     hdnEntidade: "Usuario",
                     hdnAcao: "arquivarMensagem"
                 },
-                beforeSend: function() {
-
-                },
                 success: function(resposta) {
-                    $("#msgContato").remove();
-                    var msgContato = $("<div>", {id: "msgContato"});
+                    $("#msg").remove();
+                    var msg = $("<div>", {id: "msg"});
                     if (resposta.resultado == 0) {
-                        msgContato.attr('class', 'alert alert-danger').html("Falha ao enviar mensagem!").append('<button data-dismiss="alert" class="close" type="button">×</button>');
+                        msg.attr('class', 'alert alert-danger').html("Falha excluir a mensagem, por favor tente mais tarde").append('<button data-dismiss="alert" class="close" type="button">×</button>');
                     } else {
-                        $("<p>" + $("[id^=txtMensagem]").val() + "</p>").insertBefore(elemento);
-                        $('[id^=txtMensagem]').remove();
-                        $('[id^=btnEnviar]').remove();
-                        $('[id^=btnResponder]').removeAttr("disabled");
-                        msgContato.attr('class', 'alert alert-success').html("Mensagem enviada com sucesso!").append('<button data-dismiss="alert" class="close" type="button">×</button>');
+                        $('[id^=selecoes]:checked').parent().parent().remove();
+                        msg.attr('class', 'alert alert-success').html("Mensagem excluida com sucesso!").append('<button data-dismiss="alert" class="close" type="button">×</button>');
                     }
-                    $("#alertCEP").append(msgContato);
+                    $("#alert").append(msg);
                 }
             })
         }
-    
+
         function responderMensagem(elemento)
         {
             $.ajax({
@@ -213,9 +211,6 @@ echo ($links['all'] != "" ? "&nbsp;&nbsp;&nbsp;&nbsp;Página: " . $links['all'] 
                     msg: $('[id^=txtMensagem]').val(),
                     hdnEntidade: "Usuario",
                     hdnAcao: "responderMensagem"
-                },
-                beforeSend: function() {
-
                 },
                 success: function(resposta) {
                     $("#msgContato").remove();

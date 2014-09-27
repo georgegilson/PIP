@@ -151,9 +151,15 @@
                                         <span class="col-lg-4 ">(Não informar os centavos)</span>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-lg-6 control-label" for="chkMapa"> Permitir a exibição do mapa?</label>
+                                        <label class="col-lg-6 control-label" for="chkMapa"> Exibir o mapa do endereço?</label>
                                         <div class="col-lg-5">
                                             <input type="checkbox" name="chkMapa" value="SIM" checked="checked">                                             
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-6 control-label" for="chkContato"> Exibir o telefone para contato?</label>
+                                        <div class="col-lg-5">
+                                            <input type="checkbox" name="chkContato" value="SIM" checked="checked">                                             
                                         </div>
                                     </div>
 
@@ -339,6 +345,7 @@
                                         <th>Descrição</th>
                                         <th>Valor</th>
                                         <th>Mapa</th>
+                                        <th>Contato</th>
                                         <th>Informações Exibidas</th>
                                     </tr>
                                 </thead>
@@ -350,6 +357,7 @@
                                         <td id="colDescricao"></td>
                                         <td id="colValor"></td>
                                         <td id="colMapa"></td>
+                                        <td id="colContato"></td>
                                         <td id="colCampos"></td>
                                     </tr>
                                 </tbody>
@@ -461,6 +469,7 @@
                 $("#colDescricao").html($("#txtDescricao").val());
                 $("#colValor").html($("#txtValor").val());
                 $("#colMapa").html((typeof ($("input[name=chkMapa]:checked").val()) === "undefined" ? "Não" : "Sim"));
+                $("#colContato").html((typeof ($("input[name=chkContato]:checked").val()) === "undefined" ? "Não" : "Sim"));
                 var varCampos = new Array();
                 $("input[name='sltCamposVisiveis[]']:checked").each(function() {
                     //if ($(this).val() != "Todas")
@@ -644,6 +653,12 @@
         $('input[name="chkMapa"]').bootstrapSwitch('setOnLabel', 'Sim');
         $('input[name="chkMapa"]').bootstrapSwitch('setOffLabel', 'Não');
         $('input[name="chkMapa"]').bootstrapSwitch('setOffClass', 'danger');
+
+        //SWITCH TELEFONE
+        $('input[name="chkContato"]').bootstrapSwitch();
+        $('input[name="chkContato"]').bootstrapSwitch('setOnLabel', 'Sim');
+        $('input[name="chkContato"]').bootstrapSwitch('setOffLabel', 'Não');
+        $('input[name="chkContato"]').bootstrapSwitch('setOffClass', 'danger');
 
         //MOEDA
         $('#txtValor').priceFormat({
