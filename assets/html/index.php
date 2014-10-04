@@ -520,6 +520,9 @@ $(document).ready(function(){
         </div>
    </div>      
 <div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
+    <p></p><br>
+    <span style="text-decoration: underline; color: #00afea; font-size: 14px;">ÚLTIMOS IMÓVEIS CADASTRADOS</span>
+    <p></p>
     <?php
     $item = $this->getItem();
     $count = 0;
@@ -529,6 +532,9 @@ $(document).ready(function(){
         <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Anuncio"  />
         <input type="hidden" id="hdnAcao" name="hdnAcao" value="comparar" />
         <div class="row">
+            
+            <br />
+            
             <?php
             foreach ($anuncios as $anuncio) {
                 $imovel = $anuncio->getImovel();
@@ -538,19 +544,19 @@ $(document).ready(function(){
                     <?php
                 }
                 ?>
-                <div class="col-lg-4">
+                <div class="col-lg-3">
                     <input type="checkbox" id="selecoes_<?php echo $anuncio->getId(); ?>" name="selecoes[]" value=<?php echo $anuncio->getId(); ?>> 
-                    <h2><span class="glyphicon glyphicon-bullhorn"></span> <?php echo $anuncio->getTituloAnuncio(); ?></h2>
-                    <p><?php echo $anuncio->getDescricaoAnuncio(); ?>
+                    <?php echo '<label>'. $anuncio->getTituloAnuncio().'</label>'; ?>
+                    <p>
                         <?php
                         if (count($anuncio->getImagem()) > 0) {
                             $imagem = $anuncio->getImagem();
                             $imagem = (is_array($imagem) ? $imagem[0] : $imagem);
-                            echo '<img src="' . $imagem->getDiretorio() . '" width="250px" >';
+                            echo '<img src="' . $imagem->getDiretorio() . '" width="180px" height="180px" >';
                         }
                         ?>
                     </p>
-
+                    <?php echo '<b>R$ - '. $anuncio->getValor().'</b>';?> <br/>
                     <button type="button" id="btnAnuncioModal<?php echo $imovel->Referencia(); ?>" class="btn btn-default btn-sm" data-toggle="modal" data-target="#divAnuncioModal" data-modal="<?php echo $anuncio->getId(); ?>" data-title="<?php echo $anuncio->getTituloAnuncio(); ?>">
                         <span class="glyphicon glyphicon-plus-sign"></span> Veja mais detalhes
                     </button>
@@ -562,6 +568,9 @@ $(document).ready(function(){
                           <button type="submit" class="btn btn-link" id="btncomparar">Comparar</button>
         </div>
     </form>
+    <p></p><br>
+    <span style="text-decoration: underline; color: #00afea; font-size: 14px;">IMÓVEIS MAIS CLICADOS</span>
+    <p></p>
 </div>    
 
 <!-- Modal -->
@@ -597,7 +606,7 @@ $(document).ready(function(){
         })
 
         $("#btncomparar").click(function() {
-                if ($("input[id^='selecoes_']").filter(':checked').size( ) === 0)
+                if ($("input[id^='selecoes_']").filter(':checked').size() <= 1)
                 {
                     alert('Selecione no mínimo 2 imóveis para a comparação');
                     return false;
