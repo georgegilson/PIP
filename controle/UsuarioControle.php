@@ -408,6 +408,7 @@ class UsuarioControle {
     }
 
     function alterarsenha($parametros) {
+         $visao = new Template();
         if (Sessao::verificarToken($parametros)) {
             $genericoDAO = new GenericoDAO();
             $genericoDAO->iniciarTransacao();
@@ -420,14 +421,17 @@ class UsuarioControle {
             if ($resultadoUsuario && $resultadoAlterarSenha) {
                 $genericoDAO->commit();
                 $genericoDAO->fecharConexao();
-                echo json_encode(array("resultado" => 0));
+                $visao->setItem("sucessoalterarsenha");
+                $visao->exibir('VisaoErrosGenerico.php');
             } else {
                 $genericoDAO->rollback();
                 $genericoDAO->fecharConexao();
-                echo json_encode(array("resultado" => 1));
+                $visao->setItem("errobanco");
+                $visao->exibir('VisaoErrosGenerico.php');
             }
         } else {
-            echo json_encode(array("resultado" => 2));
+            $visao->setItem("errotoken");
+            $visao->exibir('VisaoErrosGenerico.php');
         }
     }
 
