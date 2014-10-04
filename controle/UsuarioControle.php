@@ -162,6 +162,7 @@ class UsuarioControle {
 
     function alterar($parametros) {
 
+        $visao = new Template();
         if (Sessao::verificarToken($parametros)) {
             $genericoDAO = new GenericoDAO();
             $genericoDAO->iniciarTransacao();
@@ -238,9 +239,9 @@ class UsuarioControle {
                 $genericoDAO->commit();
                 $genericoDAO->fecharConexao();
                 Sessao::desconfigurarVariavelSessao("usuario");
-//                $visao->setItem("sucessoedicaousuario");
-//                $visao->exibir('VisaoErrosGenerico.php');
-                echo json_encode(array("resultado" => 1));
+                $visao->setItem("sucessoedicaousuario");
+                $visao->exibir('VisaoErrosGenerico.php');
+                //echo json_encode(array("resultado" => 1));
             } else {
                 $genericoDAO->rollback();
                 $genericoDAO->fecharConexao();

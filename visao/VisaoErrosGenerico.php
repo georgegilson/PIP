@@ -16,6 +16,7 @@ switch ($item) {
     case "sucessoalterarsenha":
     case "sucessocadastrousuario":
     case "sucessocadastroimovel":
+    case "sucessoedicaousuario":
         ?>
                 $('#diverro').attr('class', 'row text-success');
                 var img = $("<h1>", {class: "glyphicon glyphicon-ok"}, "</h1>");
@@ -28,12 +29,7 @@ switch ($item) {
                 location.href = "index.php?entidade=Imovel&acao=listarEditar";
         <?php
         break;
-    case "sucessoedicaousuario":
-        ?>
-                alert("Usuário Atualizado com Sucesso");
-                location.href = "index.php?entidade=Imovel&acao=listarEditar";
-        <?php
-        break;
+    
 }
 ?>
     });
@@ -83,6 +79,11 @@ switch ($item) {
                 case "sucessoalterarsenha":
                     ?>
                     <h2 class=text-center>A sua senha foi alterada com sucesso!</h2>
+                    <?php
+                    break;
+                case "sucessoedicaousuario":
+                    ?>
+                    <h2 class=text-center>O cadastro foi atualizado com sucesso!</h2>
                     <?php
                     break;
                 case "sucessocadastroimovel":

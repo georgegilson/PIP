@@ -20,6 +20,22 @@
                 location.href = "index.php?entidade=Usuario&acao=meuPIP";
             }
         });
+        
+        $("#btnAlterar").click(function() {
+            if ($("#form").valid()) {
+                if (typeof($("input[name^=hdnTipoTelefone]").val()) == "undefined") {
+                        alert("Você deve cadastrar pelo menos um telefone para contato.");
+                }else
+                if ($("#hdnCEP").val() != "") {                     
+                    $("#form").submit();
+                } else {
+                    $("#msgCEP").remove();
+                    var msgCEP = $("<div>", {id: "msgCEP"});
+                    msgCEP.attr('class', 'alert alert-danger').html("Primeiro faça a busca do CEP").append('<button data-dismiss="alert" class="close" type="button">×</button>');
+                    $("#alertCEP").append(msgCEP);
+                }
+            }
+        });
 
         function buscarCep() {
             var validator = $("#form").validate();
@@ -286,39 +302,8 @@
                 }
             },
             submitHandler: function() {
-                if ($("#hdnCEP").val() != "") {
-                    $.ajax({
-                        url: "index.php",
-                        dataType: "json",
-                        type: "POST",
-                        data: $('#form').serialize(),
-                        beforeSend: function() {
-                            $('.alert').html("...processando...").attr('class', 'alert alert-warning');
-                            $('button[type=submit]').attr('disabled', 'disabled');
-                        },
-                        success: function(resposta) {
-                            $('button[type=submit]').removeAttr('disabled');
-                            if (resposta.resultado == 1) {
-                                $('.alert').html(
-                                        "<p align=center> <h4>A sua conta de usuário foi criada com sucesso!\n\
-                    <br>Confira o seu email, " + $("#txtEmail").val() + ", e confirme seu cadastro\n\
-                    <br>Caso não tenha recebido a confirmação de cadastro, verifique também a sua caixa de SPAM\n\
-                    <br>Lembramos que a ativação de sua conta se dá mediante sua confirmação.</h4> </center>").attr('class', 'alert alert-success');
-                                $('#divlinha1').fadeOut('slow');
-                                $('#divlinha2').fadeOut('slow');
-                                $('#divlinha3').fadeOut('slow');
-                            } else {
-                                $('.alert').html("Erro ao cadastrar").attr('class', 'alert alert-danger');
-                            }
-                        }
-                    })
-                    return false;
-                } else {
-                    $("#msgCEP").remove();
-                    var msgCEP = $("<div>", {id: "msgCEP"});
-                    msgCEP.attr('class', 'alert alert-danger').html("Primeiro faça a busca do CEP").append('<button data-dismiss="alert" class="close" type="button">×</button>');
-                    $("#alertCEP").append(msgCEP);
-                }
+                form.submit();
+                
             }
         });
     })
@@ -342,7 +327,7 @@
             <div class="alert">Preencha os campos abaixo</div>
 
             <!-- form -->
-            <form id="form" class="form-horizontal">
+            <form id="form" class="form-horizontal" action="index.php" method="post">
                 <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Usuario"  />
                 <input type="hidden" id="hdnAcao" name="hdnAcao" value="alterar" />
                 <input type="hidden" id="hdnCEP" name="hdnCEP" value="<?php echo $usuario->getEndereco()->getCep()?>"/>
