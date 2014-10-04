@@ -214,9 +214,9 @@
             $("#txtTel").rules("remove");
             $("#sltOperadora").rules("remove");
             $("#sltTipotelefone").rules("remove");
-            $("#txtTel").val("");
-            $("#sltOperadora").val("");
-            $("#sltTipotelefone").val("");
+//            $("#txtTel").val("");
+//            $("#sltOperadora").val("");
+//            $("#sltTipotelefone").val("");
         });
 
         $("#txtTel").mask("(99)9999-9999");

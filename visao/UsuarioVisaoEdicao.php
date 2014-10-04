@@ -14,6 +14,12 @@
         $("#txtCEP").blur(function() {
             buscarCep()
         });
+        
+        $("#btnCancelar").click(function() {
+            if (confirm("Deseja cancelar o cadastro do usuário?")) {
+                location.href = "index.php?entidade=Usuario&acao=meuPIP";
+            }
+        });
 
         function buscarCep() {
             var validator = $("#form").validate();
@@ -39,6 +45,8 @@
                         $('#txtBairro').val('');
                         $('#txtLogradouro').val('');
                         $('#hdnCEP').val('');
+                        $('#txtNumero').val('');
+                        $('#txtComplemento').val('');
                     },
                     success: function(resposta) {
                         $("#msgCEP").remove();
@@ -292,7 +300,10 @@
                             $('button[type=submit]').removeAttr('disabled');
                             if (resposta.resultado == 1) {
                                 $('.alert').html(
-                                        "<h4>A sua conta de usuário foi atualizada com sucesso!</h4>").attr('class', 'alert alert-success');
+                                        "<p align=center> <h4>A sua conta de usuário foi criada com sucesso!\n\
+                    <br>Confira o seu email, " + $("#txtEmail").val() + ", e confirme seu cadastro\n\
+                    <br>Caso não tenha recebido a confirmação de cadastro, verifique também a sua caixa de SPAM\n\
+                    <br>Lembramos que a ativação de sua conta se dá mediante sua confirmação.</h4> </center>").attr('class', 'alert alert-success');
                                 $('#divlinha1').fadeOut('slow');
                                 $('#divlinha2').fadeOut('slow');
                                 $('#divlinha3').fadeOut('slow');
@@ -315,7 +326,7 @@
 </script> 
 
 <?php
-Sessao::gerarToken();
+    Sessao::gerarToken();  
 ?>
 
 <div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
@@ -334,7 +345,7 @@ Sessao::gerarToken();
             <form id="form" class="form-horizontal">
                 <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Usuario"  />
                 <input type="hidden" id="hdnAcao" name="hdnAcao" value="alterar" />
-                <input type="hidden" id="hdnCEP" name="hdnCEP" value="<?php echo $usuario->getEndereco()->getCep() ?>"/>
+                <input type="hidden" id="hdnCEP" name="hdnCEP" value="<?php echo $usuario->getEndereco()->getCep()?>"/>
                 <input type="hidden" id="hdnToken" name="hdnToken" value="<?php echo $_SESSION['token']; ?>" />
                 <!-- Primeira Linha -->    
                 <div class="row" id="divlinha1">
@@ -344,24 +355,24 @@ Sessao::gerarToken();
                         <div id="forms" class="panel panel-default">
                             <div class="panel-heading">Informações Básicas </div>
                             <br>
-                            <!--                            <div class="form-group">
-                                                            <label class="col-lg-3 control-label" for="sltTipoUsuario">Tipo de Pessoa</label>
-                                                            <div class="col-lg-8">
-                                                                <select class="form-control" id="sltTipoUsuario" name="sltTipoUsuario">
-                                                                    <option value="">Informe o Tipo de Pessoa</option>
-                                                                    <option <?php
-                            if ($usuario->getTipousuario() == "pf") {
-                                print "selected='true'";
-                            }
-                            ?> value="fisica">Física</option>
-                                                                    <option <?php
-                            if ($usuario->getTipousuario() == "pj") {
-                                print "selected='true'";
-                            }
-                            ?> value="juridica">Jurídica</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>-->
+<!--                            <div class="form-group">
+                                <label class="col-lg-3 control-label" for="sltTipoUsuario">Tipo de Pessoa</label>
+                                <div class="col-lg-8">
+                                    <select class="form-control" id="sltTipoUsuario" name="sltTipoUsuario">
+                                        <option value="">Informe o Tipo de Pessoa</option>
+                                        <option <?php
+                                        if ($usuario->getTipousuario() == "pf") {
+                                            print "selected='true'";
+                                        }
+                                        ?> value="fisica">Física</option>
+                                        <option <?php
+                                        if ($usuario->getTipousuario() == "pj") {
+                                            print "selected='true'";
+                                        }
+                                        ?> value="juridica">Jurídica</option>
+                                    </select>
+                                </div>
+                            </div>-->
                             <div class="form-group" id="divnome" <?php
                             if ($usuario->getTipousuario() == "pj") {
                                 print "hidden";
@@ -570,11 +581,11 @@ Sessao::gerarToken();
                                             </tr>
                                         </thead>-->
                                         <tbody id="dadosTelefone">
-                                            <?php
+                                            <?php 
                                             $quantidade = count($usuario->getTelefone());
-                                            if ($quantidade == 1) {
+                                            if($quantidade == 1){
                                                 $array = array($usuario->getTelefone());
-                                            } else {
+                                            }else{
                                                 $array = $usuario->getTelefone();
                                             }
                                             foreach ($array as $telefone) {
@@ -598,8 +609,8 @@ Sessao::gerarToken();
                     <div class="col-lg-12" id="divbotoes">
                         <div class="form-group">
                             <div class="col-lg-offset-2 col-lg-10">
-                                <button type="submit" class="btn btn-primary">Alterar</button>
-                                <button type="button" class="btn btn-warning">Cancelar</button>
+                                <button id="btnAlterar"  type="submit" class="btn btn-primary">Alterar</button>
+                                <button id="btnCancelar" type="button" class="btn btn-warning">Cancelar</button>
                             </div>
                         </div>
                     </div>

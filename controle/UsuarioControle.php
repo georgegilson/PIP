@@ -60,7 +60,7 @@ class UsuarioControle {
             $genericoDAO->iniciarTransacao();
 
             //consultar existencia de estado, se não existir gravar no banco
-            $estado = new Estado();          
+            $estado = new Estado();
             $selecionarEstado = $genericoDAO->consultar($estado, false, array("uf" => $parametros['txtEstado']));
             if (!count($selecionarEstado) > 0) {
                 $entidadeEstado = $estado->cadastrar($parametros);
@@ -166,8 +166,8 @@ class UsuarioControle {
             $genericoDAO = new GenericoDAO();
             $genericoDAO->iniciarTransacao();
             
-                        //consultar existencia de estado, se não existir gravar no banco
-            $estado = new Estado();          
+            //consultar existencia de estado, se não existir gravar no banco
+            $estado = new Estado();
             $selecionarEstado = $genericoDAO->consultar($estado, false, array("uf" => $parametros['txtEstado']));
             if (!count($selecionarEstado) > 0) {
                 $entidadeEstado = $estado->cadastrar($parametros);
@@ -175,9 +175,9 @@ class UsuarioControle {
             } else {
                 $idEstado = $selecionarEstado[0]->getId();
             }
-
             //consultar existencia de cidade, se não existir gravar no banco e utilizar idestado
             $cidade = new Cidade();
+            //$genericoDAO = new GenericoDAO();
             $selecionarCidade = $genericoDAO->consultar($cidade, false, array("nome" => $parametros['txtCidade'], "idestado" => $idEstado));
             if (!count($selecionarCidade) > 0) {
                 $entidadeCidade = $cidade->cadastrar($parametros, $idEstado);
@@ -185,9 +185,9 @@ class UsuarioControle {
             } else {
                 $idCidade = $selecionarCidade[0]->getId();
             }
-
             //consultar existencia de bairro, se não existir gravar no banco e utilizar idcidade
             $bairro = new Bairro();
+            //$genericoDAO = new GenericoDAO();
             $selecionarBairro = $genericoDAO->consultar($bairro, false, array("nome" => $parametros['txtBairro'], "idcidade" => $idCidade));
             if (!count($selecionarBairro) > 0) {
                 $entidadeBairro = $bairro->cadastrar($parametros, $idCidade);
@@ -198,18 +198,49 @@ class UsuarioControle {
 
             //gravar endereço e utilizar idestado, idcdidade e idbairro
             $endereco = new Endereco();
-            $entidadeEndereco = $endereco->editar($parametros, $idEstado, $idCidade, $idBairro);
-            $idEndereco = $genericoDAO->editar($entidadeEndereco);
-
+            $entidadeEndereco = $endereco->editar($parametros, $_SESSION["idendereco"], $idEstado, $idCidade, $idBairro);
+            $editarEndereco = $genericoDAO->editar($entidadeEndereco);
+            
+           
+            //telefone excluir
+            $telefone = new Telefone();
+            $listaTelefone = $genericoDAO->consultar($telefone, false, array("idusuario" => $_SESSION["idusuario"]));
+            $quantidadeTelefoneExcluir = count($listaTelefone);
+            $resultadoTelefoneFinalExcluir = true;
+            for ($indiceTelefone = 0; $indiceTelefone < $quantidadeTelefoneExcluir; $indiceTelefone++) {
+                $resultadoExcluirTelefone = $genericoDAO->excluir($telefone, $listaTelefone[$indiceTelefone]->getId());
+                if (!($resultadoExcluirTelefone)) {
+                    $resultadoTelefoneFinalExcluir = false;
+                    break;
+                }
+            }
+            
+            //Telefone cadastrar
+            $quantidadeTelefone = count($parametros['hdnTipoTelefone']);
+            $resultadoTelefone = true;
+            for ($indiceTelefone = 0; $indiceTelefone < $quantidadeTelefone; $indiceTelefone++) {
+                $telefone = new Telefone();
+                $entidadeTelefone = $telefone->cadastrar($parametros, $_SESSION["idusuario"], $indiceTelefone);
+                $idTelefone = $genericoDAO->cadastrar($entidadeTelefone);
+                if (!($idTelefone)) {
+                    $resultadoTelefone = false;
+                    break;
+                }
+            }
+            
+            
             $usuario = new Usuario();
             $entidadeUsuario = $usuario->editar($parametros);
-            $genericoDAO = new GenericoDAO();
             $resultado = $genericoDAO->editar($entidadeUsuario);
+            
             //visao
-            if ($resultado) {
+            if ($resultado & $editarEndereco & $resultadoTelefoneFinalExcluir & $resultadoTelefone) {
                 $genericoDAO->commit();
                 $genericoDAO->fecharConexao();
-                echo json_encode(array("resultado" => 1));                
+                Sessao::desconfigurarVariavelSessao("usuario");
+//                $visao->setItem("sucessoedicaousuario");
+//                $visao->exibir('VisaoErrosGenerico.php');
+                echo json_encode(array("resultado" => 1));
             } else {
                 $genericoDAO->rollback();
                 $genericoDAO->fecharConexao();
@@ -294,6 +325,7 @@ class UsuarioControle {
         $usuario = new Usuario();
         $genericoDAO = new GenericoDAO();
         $selecionarUsuario = $genericoDAO->consultar($usuario, false, array("login" => $parametros['txtLogin']));
+        
         if ((count($selecionarUsuario) > 0) && ($selecionarUsuario[0]->getSenha() == md5($parametros['txtSenha']))) {
             Sessao::configurarSessaoUsuario($selecionarUsuario);
             $redirecionamento = ConsultaUrl::consulta($_SERVER['HTTP_REFERER']);
@@ -301,7 +333,6 @@ class UsuarioControle {
         } else {
             echo json_encode(array("resultado" => 2)); //usuario ou senha invalido
         }
-
     }
 
     function logout($parametros) {
@@ -415,6 +446,7 @@ class UsuarioControle {
     }
 
     function trocarsenha($parametros) {
+        $visao = new Template();
         if (Sessao::verificarToken($parametros)) {
             $genericoDAO = new GenericoDAO();
             $genericoDAO->iniciarTransacao();
@@ -422,21 +454,30 @@ class UsuarioControle {
             if ($_SESSION["senha"] == md5($parametros['txtSenhaAtual'])) {
                 $entidadeUsuario = $usuario->trocarSenha($parametros);
                 $resultadoUsuario = $genericoDAO->editar($entidadeUsuario);
+                //sucesso
                 if ($resultadoUsuario) {
                     $genericoDAO->commit();
                     $genericoDAO->fecharConexao();
                     $_SESSION["senha"] = md5($parametros['txtSenha']);
-                    echo json_encode(array("resultado" => 0));
+                    $visao->setItem("sucessoalterarsenha");
+                    $visao->exibir('VisaoErrosGenerico.php');
+                    //banco
                 } else {
                     $genericoDAO->rollback();
                     $genericoDAO->fecharConexao();
-                    echo json_encode(array("resultado" => 1));
+                    $visao->setItem("errobanco");
+                    $visao->exibir('VisaoErrosGenerico.php');
                 }
+                //especifico - A Senha atual está incorreta.
             } else {
-                echo json_encode(array("resultado" => 3));
+                $visao->setItem("errotrocasenha");
+                $visao->exibir('VisaoErrosGenerico.php');
+                //echo json_encode(array("resultado" => 3));
             }
+            //token
         } else {
-            echo json_encode(array("resultado" => 2));
+            $visao->setItem("errotoken");
+            $visao->exibir('VisaoErrosGenerico.php');
         }
     }
 
@@ -466,58 +507,96 @@ class UsuarioControle {
         $genericoDAO = new GenericoDAO();
         $listaMensagens = $genericoDAO->consultar($mensagem, true, array("idusuario" => $_SESSION["idusuario"]));
         foreach ($listaMensagens as $selecionarMensagem) {
-                $selecionarAnuncio = $genericoDAO->consultar(new Anuncio(), true, array("id" => $selecionarMensagem->getIdAnuncio()));
-                $selecionarResposta = $genericoDAO->consultar(new RespostaMensagem(), false, array("idmensagem" => $selecionarMensagem->getId()));                 
-                $idMensagem = rand();
-                $_SESSION["mensagem"][$idMensagem] = $selecionarMensagem->getId();
-                $selecionarMensagem->setId($idMensagem);
-                $selecionarMensagem->setRespostamensagem($selecionarResposta); 
-                $selecionarMensagem->setAnuncio($selecionarAnuncio[0]);
-                $listarMensagens[] = $selecionarMensagem;
-            }           
-        if($parametros["type"] == "face"){
-            echo json_encode(array("resultado" => $listarMensagens));
-        }else{            
-        if (count($listaMensagens) > 0) {
-            $visao = new Template();
-            $visao->setItem($listarMensagens);
-        } else {
-            $visao = new Template();
-            $visao->setItem(false);
+            $selecionarAnuncio = $genericoDAO->consultar(new Anuncio(), true, array("id" => $selecionarMensagem->getIdAnuncio()));
+            $selecionarResposta = $genericoDAO->consultar(new RespostaMensagem(), false, array("idmensagem" => $selecionarMensagem->getId()));
+            $idMensagem = rand();
+            $_SESSION["mensagem"][$idMensagem] = $selecionarMensagem->getId();
+            $selecionarMensagem->setId($idMensagem);
+            $selecionarMensagem->setRespostamensagem($selecionarResposta);
+            $selecionarMensagem->setAnuncio($selecionarAnuncio[0]);
+            $listarMensagens[] = $selecionarMensagem;
         }
-        $visao->exibir('UsuarioVisaoMinhasMensagens.php');
+        if ($parametros["type"] == "face") {
+            echo json_encode(array("resultado" => $listarMensagens));
+        } else {
+            if (count($listaMensagens) > 0) {
+                $visao = new Template();
+                $visao->setItem($listarMensagens);
+            } else {
+                $visao = new Template();
+                $visao->setItem(false);
+            }
+            $visao->exibir('UsuarioVisaoMinhasMensagens.php');
         }
     }
-    
-    public function responderMensagem($parametros){
-           $genericoDAO = new GenericoDAO();
-           $genericoDAO->iniciarTransacao();
-           $respostaMensagem = new RespostaMensagem();
-           $entidadeRespostaMensagem = $respostaMensagem->cadastrar($parametros);
-           $resultadoRespostaMensagem = $genericoDAO->cadastrar($entidadeRespostaMensagem);
-           if ($resultadoRespostaMensagem) {
-                //Enviar email para o usuário
-                $selecionarMensagem = $genericoDAO->consultar(new Mensagem(), false, array("id" => $_SESSION["mensagem"][$parametros["id"]]));
-                $selecionarAnuncio = $genericoDAO->consultar(new Anuncio(), false, array("id" => $selecionarMensagem[0]->getIdAnuncio()));
-                $dadosEmail['destino'] = $selecionarMensagem[0]->getEmail();//$parametros["email"];  
-                $dadosEmail['nome'] = $selecionarMensagem[0]->getNome();//$parametros["nome"]; 
-                $dadosEmail['msg'] = $parametros["msg"];  
-                $dadosEmail['contato'] = $_SESSION["nome"];
-                $dadosEmail['assunto'] = $selecionarAnuncio[0]->getTituloAnuncio();
-                if(Email::enviarEmail($dadosEmail)){
-                    $genericoDAO->commit();
-                    $genericoDAO->fecharConexao();
-                    echo json_encode(array("resultado" => 1));
-                }else{
-                   $genericoDAO->rollback();
-                    $genericoDAO->fecharConexao();
-                    echo json_encode(array("resultado" => 0));   
-                }
+
+    public function responderMensagem($parametros) {
+        $genericoDAO = new GenericoDAO();
+        $genericoDAO->iniciarTransacao();
+        $respostaMensagem = new RespostaMensagem();
+        $entidadeRespostaMensagem = $respostaMensagem->cadastrar($parametros);
+        $resultadoRespostaMensagem = $genericoDAO->cadastrar($entidadeRespostaMensagem);
+        if ($resultadoRespostaMensagem) {
+            //Enviar email para o usuário
+            $selecionarMensagem = $genericoDAO->consultar(new Mensagem(), false, array("id" => $_SESSION["mensagem"][$parametros["id"]]));
+            $selecionarAnuncio = $genericoDAO->consultar(new Anuncio(), false, array("id" => $selecionarMensagem[0]->getIdAnuncio()));
+            $dadosEmail['destino'] = $selecionarMensagem[0]->getEmail(); //$parametros["email"];  
+            $dadosEmail['nome'] = $selecionarMensagem[0]->getNome(); //$parametros["nome"]; 
+            $dadosEmail['msg'] = $parametros["msg"];
+            $dadosEmail['contato'] = $_SESSION["nome"];
+            $dadosEmail['assunto'] = $selecionarAnuncio[0]->getTituloAnuncio();
+            if (Email::enviarEmail($dadosEmail)) {
+                $genericoDAO->commit();
+                $genericoDAO->fecharConexao();
+                echo json_encode(array("resultado" => 1));
             } else {
                 $genericoDAO->rollback();
                 $genericoDAO->fecharConexao();
                 echo json_encode(array("resultado" => 0));
             }
+        } else {
+            $genericoDAO->rollback();
+            $genericoDAO->fecharConexao();
+            echo json_encode(array("resultado" => 0));
+        }
+    }
+
+    public function arquivarMensagem($parametros) {
+        $genericoDAO = new GenericoDAO();
+        $genericoDAO->iniciarTransacao();
+        for ($i = 0; $i < sizeof($parametros["msgs"]); $i++) {
+            $mensagem = new Mensagem();
+            $entidadeMensagem = $mensagem->editar($parametros, "EXCLUIDA", $i);
+            $resultado = $genericoDAO->editar($entidadeMensagem);
+            if (!$resultado) {
+                $genericoDAO->rollback();
+                $genericoDAO->fecharConexao();
+                echo json_encode(array("resultado" => 0));
+                break;
+            }
+        }
+        $genericoDAO->commit();
+        $genericoDAO->fecharConexao();
+        echo json_encode(array("resultado" => 1));
+
+//     var_dump(sizeof($parametros["msgs"]));
+//     die();
+    }
+
+    public function lerMensagem($parametros) {
+        $genericoDAO = new GenericoDAO();
+        $genericoDAO->iniciarTransacao();
+        $mensagem = new Mensagem();
+        $entidadeMensagem = $mensagem->editar($parametros, "LIDA");
+        $resultado = $genericoDAO->editar($entidadeMensagem);
+        if (!$resultado) {
+            $genericoDAO->rollback();
+            $genericoDAO->fecharConexao();
+            echo json_encode(array("resultado" => 0));
+        }
+        $genericoDAO->commit();
+        $genericoDAO->fecharConexao();
+        echo json_encode(array("resultado" => 1));
     }
 
 }

@@ -121,6 +121,7 @@ class Mensagem {
         $mensagem->setDatahora(date('d/m/Y H:i:s'));
         $mensagem->setIdanuncio($parametros['idanuncio']);
         $mensagem->setIdusuario($parametros['idusuario']);
+        //$mensagem->setArquivada("NÃO");
         return $mensagem;
     }
 
