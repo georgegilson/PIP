@@ -559,7 +559,7 @@ $(document).ready(function(){
                 $count++;
             }
             ?>
-                          <button type="submit" class="btn btn-link" id="comparar">Comparar</button>
+                          <button type="submit" class="btn btn-link" id="btncomparar">Comparar</button>
         </div>
     </form>
 </div>    
@@ -596,13 +596,12 @@ $(document).ready(function(){
             }
         })
 
-        $("input[type='submit']").click(function() {
-                alert('teste');
-    //            if ($("input[type='checkbox']").filter(':checked').size( ) == 0)
-    //            {
-    //                alert('Selecione no mínimo 2 imóveis para a comparação');
-    //                return false;
-    //            }
+        $("#btncomparar").click(function() {
+                if ($("input[id^='selecoes_']").filter(':checked').size( ) === 0)
+                {
+                    alert('Selecione no mínimo 2 imóveis para a comparação');
+                    return false;
+                }
         })
         
     })
