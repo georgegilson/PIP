@@ -43,7 +43,8 @@ class CEP {
                 $tabela = $tabela[0];
                 //echo "<pre>";            print_r($tabela);            echo "</pre>";
                 if (is_array($tabela) && !empty($tabela)) {
-                    $resultado['logradouro'] = strip_tags($tabela[0]);
+                    $trata_endereco = explode("-",strip_tags($tabela[0]));
+                    $resultado['logradouro'] = $trata_endereco[0];
                     $resultado['bairro'] = strip_tags($tabela[1]);
                     $resultado['cidade'] = strip_tags($tabela[2]);
                     $resultado['uf'] = strip_tags($tabela[3]);

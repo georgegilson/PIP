@@ -524,10 +524,6 @@ $(document).ready(function(){
     $item = $this->getItem();
     $count = 0;
     $anuncios = $item['anuncios'];
-    if (count($anuncios) % 3 != 0) {
-        //Append 1 or 2 items from start of array if needed
-        $anuncios = array_merge($anuncios, array_slice($anuncios, 0, 3 - count($anuncios) % 3));
-    }
     ?>
     <form id="form" class="form-horizontal" action="index.php" method="post">
         <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Anuncio"  />
