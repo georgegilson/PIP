@@ -169,7 +169,7 @@ class Usuario {
     function trocarSenha($parametros) {
         $usuario = new Usuario();
         $usuario->setId($_SESSION["idusuario"]);
-        $senha = md5($parametros['txtSenha']);
+        $senha = md5($parametros['txtSenhaNova']);
         $usuario->setSenha($senha);
         return $usuario;
     }

@@ -124,6 +124,8 @@ class Endereco {
         $endereco->setLogradouro($parametros['txtLogradouro']);
         $endereco->setNumero($parametros['txtNumero']);
         $endereco->setComplemento($parametros['txtComplemento']);
+//        print_r($endereco);        
+//        die();
         return $endereco;
     }
     

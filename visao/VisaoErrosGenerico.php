@@ -4,6 +4,7 @@
 $item = $this->getItem();
 switch ($item) {
     case "errobanco":
+    case "errotrocasenha":
     case "errolink":
     case "errotoken":
         ?>
@@ -12,6 +13,7 @@ switch ($item) {
                 $('#divimg').append(img);
         <?php
         break;
+    case "sucessoalterarsenha":
     case "sucessocadastrousuario":
     case "sucessocadastroimovel":
         ?>
@@ -23,6 +25,12 @@ switch ($item) {
     case "sucessoedicaoimovel":
         ?>
                 alert("Imóvel Atualizado com Sucesso");
+                location.href = "index.php?entidade=Imovel&acao=listarEditar";
+        <?php
+        break;
+    case "sucessoedicaousuario":
+        ?>
+                alert("Usuário Atualizado com Sucesso");
                 location.href = "index.php?entidade=Imovel&acao=listarEditar";
         <?php
         break;
@@ -48,6 +56,12 @@ switch ($item) {
                     <h4 class=text-center>Tente novamente em alguns minutos.</h4>
                     <?php
                     break;
+                case "errotrocasenha":
+                    ?>
+                    <h2 class=text-center>Desculpe, não foi possível realizar a operação!</h2>\n\
+                    <h4 class=text-center>A Senha atual está incorreta.</h4>
+                    <?php
+                    break;
                 case "errolink":
                     ?>
                     <h2 class=text-center>Esse link é inválido ou já foi utilizado para troca de senha.</h2>
@@ -64,6 +78,11 @@ switch ($item) {
                     <p class=text-center>Em breve você receberá um e-mail para confirmação do cadastro. </p>
                     <p class=text-center>Caso não tenha recebido a confirmação de cadastro, verifique também a sua caixa de SPAM. </p>
                     <p class=text-center>Lembramos que a ativação de sua conta se dá mediante sua confirmação. </p>
+                    <?php
+                    break;
+                case "sucessoalterarsenha":
+                    ?>
+                    <h2 class=text-center>A sua senha foi alterada com sucesso!</h2>
                     <?php
                     break;
                 case "sucessocadastroimovel":

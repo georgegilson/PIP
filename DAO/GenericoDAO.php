@@ -163,8 +163,6 @@ class GenericoDAO {
             $statement->bindValue($parametro, $resultado);
             }
         }
-//        print_r($sql);
-//        die();
         if ($statement->execute()) {
             return true;
         } else

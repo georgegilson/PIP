@@ -276,6 +276,9 @@ $imagens = $item["imagem"];
                     email: true,
                     required: true
                 },
+                txtMensagem: {
+                    required: true
+                }
             },
             messages: {
                 txtNome: {
@@ -284,6 +287,9 @@ $imagens = $item["imagem"];
                 txtEmail: {
                     required: "Campo obrigatório",
                     email: "Informe um email válido"
+                },
+                txtMensagem: {
+                    required: "Campo obrigatório"
                 },
             },
             highlight: function(element) {

@@ -11,6 +11,11 @@ Sessao::gerarToken();
             $('.alert').fadeOut();
         });
         $('#divalert').hide();
+        $("#btnCancelar").click(function() {
+            if (confirm("Deseja cancelar a alteração da senha?")) {
+                location.href = "index.php?entidade=Usuario&acao=meuPIP";
+            }
+        });
         "use strict";
         var options = {
             bootstrap3: true,
@@ -29,7 +34,15 @@ Sessao::gerarToken();
             }
         };
         $('#txtSenha').pwstrength(options);
-
+        $("#btnAlterar").click(function() {
+            if ($("#form").valid()) {
+                if (($("input[name^=txtSenhaAtual]").val()) === ($("input[name^=txtSenhaNova]").val())) {
+                       alert("A nova senha não pode ser igual a senha atual.");
+                }else{
+                $("#form").submit();
+            }
+            }
+        });
         $('#form').validate({
             rules: {
                 txtSenha: {
@@ -67,46 +80,7 @@ Sessao::gerarToken();
                 }
             },
             submitHandler: function() {
-                $.ajax({
-                    url: "index.php",
-                    dataType: "json",
-                    type: "POST",
-                    data: $('#form').serialize(),
-                    success: function(resposta) {
-                        if (resposta.resultado == 0) {
-                            $(".alert").hide();
-                            $("#form").hide();
-                            $('.page-header').hide();
-                            $('#divalert').attr('class', 'row text-success');
-                            var img = $("<h1>", {class: "glyphicon glyphicon-ok"}, "</h1>");
-                            $('#divimg').append(img);
-                            $("#divmsg").html("<h2 class=text-center>Sua senha foi alterada com sucesso!</h2>");                               
-                            $("#divalert").fadeIn();
-                        }else if (resposta.resultado == 1) {
-                            $(".alert").hide();
-                            $("#form").hide();
-                            $('.page-header').hide();
-                            $('#divalert').attr('class', 'row text-danger');
-                            var img = $("<h1>", {class: "glyphicon glyphicon-exclamation-sign"}, "</h1>");
-                            $('#divimg').append(img);
-                            $("#divmsg").html("<h2 class=text-center>Desculpe, não foi possível realizar a operação!</h2>\n\
-                                                    <h4 class=text-center>Tente novamente em alguns minutos.</h4>");
-                            $("#divalert").fadeIn();
-                        }else if (resposta.resultado == 2) {
-                            $(".alert").hide();
-                            $("#form").hide();
-                            $('.page-header').hide();
-                            $('#divalert').attr('class', 'row text-danger');
-                            var img = $("<h1>", {class: "glyphicon glyphicon-exclamation-sign"}, "</h1>");
-                            $('#divimg').append(img);
-                            $("#divmsg").html("<h2 class=text-center>Ops! Não podemos processar sua requisição. <br>Tente novamente.</h2>");
-                            $("#divalert").fadeIn();
-                        }else if (resposta.resultado == 3) {
-                            $(".alert").fadeIn();
-                            $('.alert').html("A Senha atual está incorreta.").attr('class', 'alert alert-danger');
-                        }
-                    }
-                })
+                form.submit();
             }
         });
     });
@@ -125,7 +99,7 @@ Sessao::gerarToken();
         </div>
     </div>
     <div class="alert"></div>
-    <form id="form" class="form-horizontal">
+    <form id="form" class="form-horizontal" action="index.php" method="post">
         <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Usuario"  />
         <input type="hidden" id="hdnAcao" name="hdnAcao" value="trocarsenha" />
         <input type="hidden" id="hdnToken" name="hdnToken" value="<?php echo $_SESSION['token']; ?>" />
@@ -140,7 +114,7 @@ Sessao::gerarToken();
         <div class="form-group" id="divlinha1">
             <label class="col-lg-3 control-label" for="txtSenha">Nova Senha</label>
             <div class="col-lg-9">
-                <input type="password" id="txtSenha" name="txtSenha" class="form-control" placeholder="Informe a nova senha">
+                <input type="password" id="txtSenha" name="txtSenhaNova" class="form-control" placeholder="Informe a nova senha">
             </div>
         </div>
 
@@ -155,8 +129,8 @@ Sessao::gerarToken();
             <div class="col-lg-12">
                 <div class="form-group">
                     <div class="col-lg-offset-2 col-lg-10">
-                        <button type="submit" class="btn btn-primary">Alterar</button>
-                        <button type="button" class="btn btn-warning">Cancelar</button>
+                        <button id="btnAlterar" type="button" class="btn btn-primary">Alterar</button>
+                        <button id="btnCancelar" type="button" class="btn btn-warning">Cancelar</button>
                     </div>
                 </div>                
             </div>
