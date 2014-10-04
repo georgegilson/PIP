@@ -7,6 +7,7 @@ switch ($item) {
     case "errotrocasenha":
     case "errolink":
     case "errotoken":
+    case "erroemail"
         ?>
                 $('#diverro').attr('class', 'row text-danger');
                 var img = $("<h1>", {class: "glyphicon glyphicon-exclamation-sign"}, "</h1>");
@@ -17,6 +18,7 @@ switch ($item) {
     case "sucessocadastrousuario":
     case "sucessocadastroimovel":
     case "sucessoedicaousuario":
+    case "sucessoenvioemail":
         ?>
                 $('#diverro').attr('class', 'row text-success');
                 var img = $("<h1>", {class: "glyphicon glyphicon-ok"}, "</h1>");
@@ -52,6 +54,12 @@ switch ($item) {
                     <h4 class=text-center>Tente novamente em alguns minutos.</h4>
                     <?php
                     break;
+                case "erroemail":
+                    ?>
+                    <h2 class=text-center>Desculpe, não foi possível realizar a operação!</h2>\n\
+                    <h4 class=text-center>Falha no envio de e-mail.</h4>
+                    <?php
+                    break;
                 case "errotrocasenha":
                     ?>
                     <h2 class=text-center>Desculpe, não foi possível realizar a operação!</h2>\n\
@@ -84,6 +92,12 @@ switch ($item) {
                 case "sucessoedicaousuario":
                     ?>
                     <h2 class=text-center>O cadastro foi atualizado com sucesso!</h2>
+                    <?php
+                    break;
+                case "sucessoenvioemail":
+                    ?>
+                    <h2 class=text-center>Em breve você receberá um e-mail para realizar a alteração de sua senha!</h2>
+                    <h4 class=text-center>Caso não tenha recebido o e-mail, verifique também a sua caixa de SPAM.</h4>
                     <?php
                     break;
                 case "sucessocadastroimovel":

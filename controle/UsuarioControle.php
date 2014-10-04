@@ -344,6 +344,7 @@ class UsuarioControle {
     }
 
     function esquecersenha($parametros) {
+        $visao = new Template();
         if (Sessao::verificarToken($parametros)) {
             $usuario = new Usuario();
             $recuperaSenha = new RecuperaSenha();
@@ -386,24 +387,27 @@ class UsuarioControle {
                     if (Email::enviarEmail($dadosEmail)) {
                         $genericoDAO->commit();
                         $genericoDAO->fecharConexao();
-                        echo json_encode(array("resultado" => 0));
+                         $visao->setItem("sucessoenvioemail");
+                         $visao->exibir('VisaoErrosGenerico.php');
                     } else {
                         $genericoDAO->rollback();
                         $genericoDAO->fecharConexao();
-                        echo json_encode(array("resultado" => 1));
+                        $visao->setItem("erroemail");
+                        $visao->exibir('VisaoErrosGenerico.php');
                     }
                 } else {
                     $genericoDAO->rollback();
                     $genericoDAO->fecharConexao();
-                    echo json_encode(array("resultado" => 3));
+                     $visao->setItem("errobanco");
+                     $visao->exibir('VisaoErrosGenerico.php');
                 }
             } else {
-                echo json_encode(array("resultado" => 2));
+                $visao->setItem("errobanco");
+                $visao->exibir('VisaoErrosGenerico.php');
             }
         } else {
-            $visao = new Template();
             $visao->setItem("errotoken");
-            echo json_encode(array("resultado" => 4));
+            $visao->exibir('VisaoErrosGenerico.php');
         }
     }
 
