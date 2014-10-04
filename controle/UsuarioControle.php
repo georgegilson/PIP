@@ -166,7 +166,7 @@ class UsuarioControle {
         if (Sessao::verificarToken($parametros)) {
             $genericoDAO = new GenericoDAO();
             $genericoDAO->iniciarTransacao();
-            
+
             //consultar existencia de estado, se não existir gravar no banco
             $estado = new Estado();
             $selecionarEstado = $genericoDAO->consultar($estado, false, array("uf" => $parametros['txtEstado']));
@@ -201,8 +201,7 @@ class UsuarioControle {
             $endereco = new Endereco();
             $entidadeEndereco = $endereco->editar($parametros, $_SESSION["idendereco"], $idEstado, $idCidade, $idBairro);
             $editarEndereco = $genericoDAO->editar($entidadeEndereco);
-            
-           
+
             //telefone excluir
             $telefone = new Telefone();
             $listaTelefone = $genericoDAO->consultar($telefone, false, array("idusuario" => $_SESSION["idusuario"]));
@@ -215,7 +214,7 @@ class UsuarioControle {
                     break;
                 }
             }
-            
+
             //Telefone cadastrar
             $quantidadeTelefone = count($parametros['hdnTipoTelefone']);
             $resultadoTelefone = true;
@@ -228,12 +227,12 @@ class UsuarioControle {
                     break;
                 }
             }
-            
-            
+
+
             $usuario = new Usuario();
             $entidadeUsuario = $usuario->editar($parametros);
             $resultado = $genericoDAO->editar($entidadeUsuario);
-            
+
             //visao
             if ($resultado & $editarEndereco & $resultadoTelefoneFinalExcluir & $resultadoTelefone) {
                 $genericoDAO->commit();
@@ -326,7 +325,7 @@ class UsuarioControle {
         $usuario = new Usuario();
         $genericoDAO = new GenericoDAO();
         $selecionarUsuario = $genericoDAO->consultar($usuario, false, array("login" => $parametros['txtLogin']));
-        
+
         if ((count($selecionarUsuario) > 0) && ($selecionarUsuario[0]->getSenha() == md5($parametros['txtSenha']))) {
             Sessao::configurarSessaoUsuario($selecionarUsuario);
             $redirecionamento = ConsultaUrl::consulta($_SERVER['HTTP_REFERER']);
@@ -370,41 +369,27 @@ class UsuarioControle {
                 $idResuperaSenha = $genericoDAO->cadastrar($entidadeRecuperaSenha);
                 if ($idResuperaSenha) {
                     //enviar email
-                    $mail = new PHPMailer();
-
-                    $mail->Charset = 'UTF-8';
-
-                    $mail->From = 'emailfrom@email.com';
-                    $mail->FromName = 'Nome de quem enviou';
-
-                    $mail->IsHTML(true);
-                    $mail->Subject = 'Assunto do e-mail';
+                    $dadosEmail['destino'] = $selecionarUsuario[0]->getEmail(); //$parametros["email"];  
+                    $dadosEmail['nome'] = $selecionarUsuario[0]->getNome(); //$parametros["nome"];
                     if ($avisoRecuperaSenha) {
-                        $mail->Body = "&lt;h1&gt;Teste de envio de e-mail&lt;/h1&gt; &lt;p&gt;Isso é um teste&lt;/p&gt;
+                        $dadosEmail['msg'] = "&lt;h1&gt;Teste de envio de e-mail&lt;/h1&gt; &lt;p&gt;Isso é um teste&lt;/p&gt;
                         <br> 
                         &lt;h1&gt;Você já solicitou uma troca de senha. Desconsidere o email já enviado e clique no link abaixo para processar a troca&lt;/h1&gt; 
                         <a href=http://localhost/PIP/index.php?entidade=Usuario&acao=form&tipo=alterarsenha&id=" . $entidadeRecuperaSenha->getHash() . ">http://localhost/PIP/index.php?entidade=Usuario&acao=form&tipo=alterarsenha&id=" . $entidadeRecuperaSenha->getHash() . "</a>";
-                        $mail->AltBody = 'Conteudo sem HTML para editores que não suportam, sim, existem alguns';
                     } else {
-                        $mail->Body = "&lt;h1&gt;Teste de envio de e-mail&lt;/h1&gt; &lt;p&gt;Isso é um teste&lt;/p&gt;
+                        $dadosEmail['msg'] = "&lt;h1&gt;Teste de envio de e-mail&lt;/h1&gt; &lt;p&gt;Isso é um teste&lt;/p&gt;
                         <br> 
                         <a href=http://localhost/PIP/index.php?entidade=Usuario&acao=form&tipo=alterarsenha&id=" . $entidadeRecuperaSenha->getHash() . ">http://localhost/PIP/index.php?entidade=Usuario&acao=form&tipo=alterarsenha&id=" . $entidadeRecuperaSenha->getHash() . "</a>";
-                        $mail->AltBody = 'Conteudo sem HTML para editores que não suportam, sim, existem alguns';
                     }
-                    $mail->IsSMTP();
-                    $mail->SMTPAuth = true;
-                    $mail->Host = "ssl://smtp.googlemail.com";
-                    $mail->Port = 465;
-                    $mail->Username = 'pipcontato@gmail.com';
-                    $mail->Password = 'osestudantes1';
-
-                    $mail->AddAddress($selecionarUsuario[0]->getEmail(), $selecionarUsuario[0]->getNome());
-
-                    if ($mail->Send()) {
+                    $dadosEmail['contato'] = $_SESSION["nome"];
+                    $dadosEmail['assunto'] = "Recuperação de Senha - PIP";
+                    if (Email::enviarEmail($dadosEmail)) {
                         $genericoDAO->commit();
                         $genericoDAO->fecharConexao();
                         echo json_encode(array("resultado" => 0));
                     } else {
+                        $genericoDAO->rollback();
+                        $genericoDAO->fecharConexao();
                         echo json_encode(array("resultado" => 1));
                     }
                 } else {
