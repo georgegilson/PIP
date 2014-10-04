@@ -80,7 +80,7 @@
                         <li data-target="#step5"><span class="badge">5</span>Publicado!<span class="chevron"></span></li>
                     </ul>
                     <div class="actions">
-                        <button data-toggle="modal" data-target="#myModal" class="btn btn-success btn-sm"> <span class="glyphicon glyphicon-home"> </span> Imóvel #<?php echo $referencia ?></button>
+                        <span data-toggle="modal" data-target="#myModal" class="btn btn-success btn-sm"> <span class="glyphicon glyphicon-home"> </span> Imóvel #<?php echo $referencia ?></span>
                         <button type="button" class="btn btn-warning btn-xs btn-prev"> <span class="glyphicon glyphicon-chevron-left"></span> Anterior </button>
                         <button type="button" class="btn btn-primary btn-xs btn-next" data-last="Fim"> Próximo <span class="glyphicon glyphicon-chevron-right"></span></button>
                     </div>
