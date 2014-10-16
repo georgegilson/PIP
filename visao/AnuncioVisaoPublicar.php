@@ -168,18 +168,18 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <div class="col-sm-offset-1 col-sm-3">
+                                        <div class="col-sm-offset-1 col-sm-4">
                                             <div class="panel panel-default">
                                                 <div class="panel-heading">Básicas</div>
                                                 <div class="panel-body">
                                                     <label class="checkbox">
-                                                        <input type="checkbox" name="sltCamposVisiveis[]" value="quarto"> Quarto
+                                                        <input type="checkbox" name="sltCamposVisiveis[]" value="quarto"> Quarto - <?php echo $imovel->getQuarto(); ?>
                                                     </label>
                                                     <label class="checkbox">
-                                                        <input type="checkbox" name="sltCamposVisiveis[]" value="banheiro"> Banheiro
+                                                        <input type="checkbox" name="sltCamposVisiveis[]" value="banheiro"> Banheiro - <?php echo $imovel->getBanheiro(); ?>
                                                     </label>
                                                     <label class="checkbox">
-                                                        <input type="checkbox" name="sltCamposVisiveis[]" value="garagem"> Garagem
+                                                        <input type="checkbox" name="sltCamposVisiveis[]" value="garagem"> Garagem - <?php echo $imovel->getGaragem(); ?>
                                                     </label>
                                                 </div>
                                             </div>
@@ -220,12 +220,12 @@
                                                     <?php } ?>
                                                     <?php if ($imovel->getArea() != "") { ?>
                                                         <label class="checkbox">
-                                                            <input type="checkbox" name="sltCamposVisiveis[]" value="area"> Área m<sup>2</sup>
+                                                            <input type="checkbox" name="sltCamposVisiveis[]" value="area"> Área m<sup>2</sup> - <?php echo $imovel->getArea(); ?>
                                                         </label>
                                                     <?php } ?>
                                                     <?php if ($imovel->getSuite() != "") { ?>
                                                         <label class="checkbox">
-                                                            <input type="checkbox" name="sltCamposVisiveis[]" value="suite"> Suíte
+                                                            <input type="checkbox" name="sltCamposVisiveis[]" value="suite"> Suíte - <?php echo $imovel->getSuite(); ?>
                                                         </label>
                                                     <?php } ?>
                                                 </div>
@@ -238,12 +238,12 @@
                                                     <?php if ($tipoImovel == "apartamento") { ?>
                                                         <?php if ($imovel->getAndar() != "") { ?>
                                                             <label class="checkbox">
-                                                                <input type="checkbox" name="sltCamposVisiveis[]" value="andar"> Andar
+                                                                <input type="checkbox" name="sltCamposVisiveis[]" value="andar"> Andar - <?php echo $imovel->getAndar();?>
                                                             </label>
                                                         <?php } ?>                                                
                                                         <?php if ($imovel->getCondominio() != "") { ?>
                                                             <label class="checkbox">
-                                                                <input type="checkbox" name="sltCamposVisiveis[]" value=condominio> Condomínio
+                                                                <input type="checkbox" name="sltCamposVisiveis[]" value=condominio> Condomínio - <?php echo $imovel->getCondominio();?>
                                                             </label>
                                                         <?php } ?>                                                                                                    
                                                         <?php if ($imovel->getCobertura() == "SIM") { ?>
@@ -308,9 +308,12 @@
                                 <button type="button" class="btn btn-danger delete">
                                     <i class="glyphicon glyphicon-trash"></i>
                                     <span>Excluir fotos selecionadas</span>
-                                </button>
+                                </button>                                
+                                
+                                
                                 <!-- The global file processing state -->
                                 <span class="fileupload-process"></span>
+                                
                             </div>
                             <!-- The global progress state -->
                             <div class="col-lg-5 fileupload-progress fade">
@@ -322,6 +325,7 @@
                                 <div class="progress-extended">&nbsp;</div>
                             </div>
                         </div>
+                        Adicione nessa etapa as fotos para o anúncio
                         <!-- The table listing the files available for upload/download -->
                         <div class="row">
                             <div class="col-lg-9">
