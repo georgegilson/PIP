@@ -281,7 +281,7 @@ $(document).ready(function(){
         <div class="tab-pane fade" id="profile">
             <form id="form" class="form-horizontal" action="index.php" method="post">
                 <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Anuncio"  />
-                <input type="hidden" id="hdnAcao" name="hdnAcao" value="buscarAvancado" />    
+                <input type="hidden" id="hdnAcao" name="hdnAcao" value="buscarAvancado" />   
                 
                 <div class="row">
                     <div id="divFinalidadeAvancado">
@@ -524,22 +524,24 @@ $(document).ready(function(){
         </div>
    </div>      
 
+<form class="grid-form" id="form" action="index.php" method="post">
+    <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Anuncio"  />
+    <input type="hidden" id="hdnAcao" name="hdnAcao" value="comparar" />
+    <style type="text/css">
+<!-- div#btncomparar {position:fixed;top:330px;right:80px} →</style>
+
+<div id="btncomparar">
+    <button type="submit" class="btn" id="btncomparar" value="Comparar">Comparar</button>
+</div>
 
 
 <div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
      <script src="assets/js/gridforms.js"></script>
-     <form class="grid-form">
     <!-- Example row of columns -->
     
         <table class="table table-hover">
             <thead>
-                <!--<tr>
-                    <th>Valor</th>
-                    <th>Titulo</th>
-                    <th>Descrição</th> 
-                    <th>Banheiro(s)</th>
-                    <th>Data da Publicação</th>
-                </tr>-->
+
             </thead>
             <tbody>
 
@@ -547,17 +549,6 @@ $(document).ready(function(){
 
             <?php
             $item = $this->getItem();
-//                $_POST = array_slice($_POST, 2);
-//                print "Sua Busca: ";
-//                
-//                foreach ($_POST as $post)
-//                    
-//                    if(!empty($post)){    
-//
-//                    print "<span class='label label-primary'>".$post."</span>, ";
-//
-//                    }
-//                print "<br/>";
             ?>
 
             <script>
@@ -671,10 +662,7 @@ $(document).ready(function(){
 				</div>
                                 
 			</div>
-                            
-                 
-            
-            
+
         </fieldset>
             <br/>
             <fieldset class="col-md-2">
@@ -697,49 +685,17 @@ $(document).ready(function(){
                 
             </fieldset>    
            
-            <!-- Modal -->
+            <!-- Modal Para Abrir a Div do Veja Mais Detalhes -->
 <div class="modal fade" id="divAnuncioModal" tabindex="-1" role="dialog" aria-labelledby="lblAnuncioModal" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-<!--            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h2 class="modal-title" id="lblAnuncioModal"></h2>
-            </div>-->
             <div id="modal-body" class="modal-body text-center">
             </div>
-<!--            <div class="modal-footer text-right"><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-print"></span> Imprimir</button>
-            </div>-->
         </div>
     </div>
-</div><!-- /.modal -->
+</div>
 
-<script>
-    $(document).ready(function() {
-        $('[id^=btnAnuncioModal]').click(function() {
-            $("#lblAnuncioModal").html("<span class='glyphicon glyphicon-bullhorn'></span> " + $(this).attr('data-title'));
-            $("#modal-body").html('<img src="assets/imagens/loading.gif" /><h2>Aguarde... Carregando...</h2>');
-            $("#modal-body").load("index.php", {hdnEntidade:'Anuncio', hdnAcao:'modal', hdnToken:'<?php //Sessao::gerarToken(); echo $_SESSION["token"]; ?>', hdnModal:$(this).attr('data-modal')});
-        })
 
-        var NumeroMaximo = 10;
-        $("input[id^='selecoes_']").click(function() {
-            if ($("input[id^='selecoes_']").filter(':checked').size() > NumeroMaximo) {
-                alert('Selecione no máximo '+ NumeroMaximo +' imóveis para a comparação');
-                return false;
-            }
-        })
-
-        $("input[type='submit']").click(function() {
-                alert('teste');
-    //            if ($("input[type='checkbox']").filter(':checked').size( ) == 0)
-    //            {
-    //                alert('Selecione no mínimo 2 imóveis para a comparação');
-    //                return false;
-    //            }
-        })
-        
-    })
-</script>
 
             
         </div>
@@ -755,57 +711,34 @@ $(document).ready(function(){
             </tbody>
         </table>
        
-        <!-- Divs ocultas que serao exibidas dentro do popover. -->
-        <?php
-        $item = $this->getItem();
-        if ($item) {
-            foreach ($item as $imovel) {
-                ?>   
-                <div id="popover<?php echo $imovel->id; ?>-content" class="hide">
-                    <?php
-                    echo "Tipo: " . $imovel->getTipo() . "<br />";
-                    echo "Condição: " . $imovel->getCondicao() . "<br />";
-                    echo "Quartos: " . $imovel->getQuarto() . "<br />";
-                    echo "Garagen(s): " . $imovel->getGaragem() . "<br />";
-                    echo "Banheiro(s): " . $imovel->getBanheiro() . "<br />";
-                    echo "Área: " . $imovel->getArea() . " m<sup>2</sup><br />";
-                    echo "Suite(s): " . (($imovel->getSuite() != "nenhuma") ? '<span class="text-primary">' . $imovel->getSuite() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
-                    echo "Piscina: " . (($imovel->getPiscina() == "SIM") ? '<span class="text-primary">' . $imovel->getPiscina() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
-                    echo "Quadra: " . (($imovel->getQuadra() == "SIM") ? '<span class="text-primary">' . $imovel->getQuadra() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
-                    echo "Academia: " . (($imovel->getAcademia() == "SIM") ? '<span class="text-primary">' . $imovel->getAcademia() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
-                    echo "Área Serviço: " . (($imovel->getAreaServico() == "SIM") ? '<span class="text-primary">' . $imovel->getAreaServico() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
-                    echo "Dependencia: " . (($imovel->getDependenciaEmpregada() == "SIM") ? '<span class="text-primary">' . $imovel->getDependenciaEmpregada() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
+</form>
+     
+     <script>
+    $(document).ready(function() {
+        $('[id^=btnAnuncioModal]').click(function() {
+            $("#lblAnuncioModal").html("<span class='glyphicon glyphicon-bullhorn'></span> " + $(this).attr('data-title'));
+            $("#modal-body").html('<img src="assets/imagens/loading.gif" /><h2>Aguarde... Carregando...</h2>');
+            $("#modal-body").load("index.php", {hdnEntidade:'Anuncio', hdnAcao:'modal', hdnToken:'<?php //Sessao::gerarToken(); echo $_SESSION["token"]; ?>', hdnModal:$(this).attr('data-modal')});
+        })
 
-                    if ($imovel->getTipo() == "apartamento") {
-                        echo "Sacada: " . (($imovel->getSacada() == "SIM") ? '<span class="text-primary">' . $imovel->getSacada() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
-                        echo "Cobertura: " . (($imovel->getCobertura() == "SIM") ? '<span class="text-primary">' . $imovel->getCobertura() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
-                        echo "Condomínio: " . (($imovel->getCondominio() != "") ? '<span class="text-primary">' . $imovel->getCondominio() . '</span>' : '<span class="text-danger">Não Informado</span>') . '<br />';
-                        echo "Andar: " . (($imovel->getAndar() != "") ? '<span class="text-primary">' . $imovel->getAndar() . '</span>' : '<span class="text-danger">Não Informado</span>') . '<br />';
-                    }
-                    ?>
-                </div>
-                <?php
+        var NumeroMaximo = 10;
+        $("input[id^='selecoes_']").click(function() {
+            if ($("input[id^='selecoes_']").filter(':checked').size() > NumeroMaximo) {
+                alert('Selecione no máximo '+ NumeroMaximo +' imóveis para a comparação');
+                return false;
             }
-        }
-        ?>
+        })
 
-        <script type="text/javascript">
-            $(document).ready(function() {
-                // Associa o evento do popover ao clicar no link.
-                $("a[id^='popover']").popover({
-                    trigger: 'hover',
-                    html: true,
-                    title: 'Detalhes do Imóvel',
-                    content: function() {
-                        var div = '#' + $(this).attr('id') + '-content';
-                        return $(div).html();
-                    }
-                }).click(function(e) {
-                    e.preventDefault();
-                    // Exibe o popover.
-                    $(this).popover('show');
-                });
-            });
-        </script>
-    </form>
+        $("#btncomparar").click(function() {
+                //alert('teste');
+                if ($("input[id^='selecoes_']").filter(':checked').size() <= 1)
+                {
+                    alert('Selecione no mínimo 2 imóveis para a comparação');
+                    return false;
+                }
+        })
+        
+    })
+</script>
+     
 </div>
