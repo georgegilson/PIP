@@ -12,7 +12,7 @@
         .gallery li h5 { margin: 0 0 0.4em; cursor: move; }
         .gallery li img { width: 100%; cursor: move; }
 
-        #trash { float: right; width: 32%; min-height: 18em; padding: 1%;}
+        #trash { float: right; width: 8%; min-height: 35em; padding: 1%;}
         #trash .gallery table { display: none; }
         #trash .gallery h5 { display: none; }
         #trash li img { height: 36px; width: 48px; cursor: move; }
@@ -170,7 +170,7 @@
         </ul>
 
         <div id="trash" class="ui-widget-content ui-state-default">
-            <h4 class="ui-widget-header">Anúncios</h4>
+            <h6 class="ui-widget-shadow">Anúncios</h6>
             <ul id="trashul" class="gallery ui-helper-reset">
                 <?php
                 $item = $this->getItem();

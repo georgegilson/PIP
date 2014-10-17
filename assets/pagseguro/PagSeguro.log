@@ -42,3 +42,19 @@
   'Reference' => '#059',
   'SenderEmail' => 'georgegilson@gmail.com',
 )) - end {1}33E55F6FFDFD25388427DF89B378E416 
+{2014/10/03 21:58:47} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest: array (
+  'Reference' => '#060',
+  'SenderEmail' => 'georgegilson@gmail.com',
+)) - begin 
+{2014/10/03 21:58:48} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest: array (
+  'Reference' => '#060',
+  'SenderEmail' => 'georgegilson@gmail.com',
+)) - end {1}9D5268833131A4FDD4D89F88F78096B9 
+{2014/10/03 23:42:34} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest: array (
+  'Reference' => '#061',
+  'SenderEmail' => 'georgegilson@gmail.com',
+)) - begin 
+{2014/10/03 23:42:36} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest: array (
+  'Reference' => '#061',
+  'SenderEmail' => 'georgegilson@gmail.com',
+)) - end {1}A3714F046464E29EE41CFFAB0CCA73EB 

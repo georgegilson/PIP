@@ -24,6 +24,19 @@ Sessao::gerarToken();
                 $(evt.target).pwstrength("outputErrorList");
             }
         };
+
+        $("#btnCancelar").click(function() {
+            if (confirm("Deseja cancelar a alteração da senha?")) {
+                location.href = "index.php?entidade=Usuario&acao=meuPIP";
+            }
+        });
+
+        $("#btnAlterar").click(function() {
+            if ($("#form").valid()) {
+                $("#form").submit();
+            }
+        });
+
         $('#txtSenha').pwstrength(options);
 
         $('#form').validate({
@@ -63,40 +76,7 @@ Sessao::gerarToken();
                 }
             },
             submitHandler: function() {
-                $.ajax({
-                    url: "index.php",
-                    dataType: "json",
-                    type: "POST",
-                    data: $('#form').serialize(),
-                    success: function(resposta) {
-                        if (resposta.resultado == 0) {
-                            $("#form").hide();
-                            $('.page-header').hide();
-                            $('#divalert').attr('class', 'row text-success');
-                            var img = $("<h1>", {class: "glyphicon glyphicon-ok"}, "</h1>");
-                            $('#divimg').append(img);
-                            $("#divmsg").html("<h2 class=text-center>Sua senha foi alterada com sucesso!</h2>");                               
-                            $("#divalert").fadeIn();
-                        }else if (resposta.resultado == 1) {
-                            $("#form").hide();
-                            $('.page-header').hide();
-                            $('#divalert').attr('class', 'row text-danger');
-                            var img = $("<h1>", {class: "glyphicon glyphicon-exclamation-sign"}, "</h1>");
-                            $('#divimg').append(img);
-                            $("#divmsg").html("<h2 class=text-center>Desculpe, não foi possível realizar a operação!</h2>\n\
-                                                    <h4 class=text-center>Tente novamente em alguns minutos.</h4>");
-                            $("#divalert").fadeIn();
-                        }else if (resposta.resultado == 2) {
-                            $("#form").hide();
-                            $('.page-header').hide();
-                            $('#divalert').attr('class', 'row text-danger');
-                            var img = $("<h1>", {class: "glyphicon glyphicon-exclamation-sign"}, "</h1>");
-                            $('#divimg').append(img);
-                            $("#divmsg").html("<h2 class=text-center>Ops! Não podemos processar sua requisição. <br>Tente novamente.</h2>");
-                            $("#divalert").fadeIn();
-                        }
-                    }
-                })
+                form.submit();
             }
         });
     });
@@ -114,7 +94,7 @@ Sessao::gerarToken();
         <div class="col-lg-8" id="divmsg">
         </div>
     </div>
-    <form id="form" class="form-horizontal">
+    <form id="form" class="form-horizontal" action="index.php" method="post">
         <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Usuario"  />
         <input type="hidden" id="hdnAcao" name="hdnAcao" value="alterarsenha" />
         <input type="hidden" id="hdnToken" name="hdnToken" value="<?php echo $_SESSION['token']; ?>" />
@@ -137,8 +117,8 @@ Sessao::gerarToken();
             <div class="col-lg-12">
                 <div class="form-group">
                     <div class="col-lg-offset-2 col-lg-10">
-                        <button type="submit" class="btn btn-primary">Alterar</button>
-                        <button type="button" class="btn btn-warning">Cancelar</button>
+                        <button id="btnAlterar" type="button" class="btn btn-primary">Alterar</button>
+                        <button id="btnCancelar" type="button" class="btn btn-warning">Cancelar</button>
                     </div>
                 </div>                
             </div>

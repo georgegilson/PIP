@@ -60,7 +60,8 @@ Sessao::gerarToken();
                         <input type="hidden" id="hdnAcao" name="hdnAcao" value="comprar" />
                         <input type="hidden" id="hdnPlano" name="hdnPlano" value="<?php echo $item["confirmacao"]["tokenPlano"]; ?>" />
                         <input type="hidden" id="hdnToken" name="hdnToken" value="<?php echo $_SESSION['token']; ?>" />
-                    <button type="submit" class="btn btn-success">Confirmar o Pagamento</button> 
+                    <button type="submit" class="btn btn-success">Confirmar</button> 
+                     <button id="btnCancelar" type="button" class="btn btn-danger">Cancelar</button>
                     </form>                            
                     
                     <?php 
@@ -78,7 +79,7 @@ Sessao::gerarToken();
                      */
                     ?>
                         
-                        <button id="btnCancelar" type="button" class="btn btn-danger">Cancelar Operação</button>
+                       
                 </div>    
             </div>    
         </div>    

@@ -11,6 +11,18 @@ Sessao::gerarToken();
             $('.alert').fadeOut();
         });
         $('#divalert').hide();
+        $("#btnCancelar").click(function() {
+            if (confirm("Deseja cancelar a alteração da senha?")) {
+                location.href = "index.php?entidade=Usuario&acao=meuPIP";
+            }
+        });
+
+        $("#btnEnviar").click(function() {
+            if ($("#form").valid()) {
+                $("#form").submit();
+            }
+        });
+
         $('#form').validate({
             rules: {
                 txtEmail: {
@@ -39,53 +51,7 @@ Sessao::gerarToken();
                 }
             },
             submitHandler: function() {
-                $.ajax({
-                    url: "index.php",
-                    dataType: "json",
-                    type: "POST",
-                    data: $('#form').serialize(),
-                    success: function(resposta) {
-                        $('button[type=submit]').removeAttr('disabled');
-                        if (resposta.resultado == 0) {
-                            $(".alert").hide();
-                            $("#form").hide();
-                            $('.page-header').hide();
-                            $('#divalert').attr('class', 'row text-success');
-                            var img = $("<h1>", {class: "glyphicon glyphicon-ok"}, "</h1>");
-                            $('#divimg').append(img);
-                            $("#divmsg").html("<h2 class=text-center>Em breve você receberá um e-mail para realizar a alteração de sua senha!</h2>\n\
-                                 <p class=text-center>Caso não tenha recebido o e-mail, verifique também a sua caixa de SPAM. </p>");
-                            $("#divalert").fadeIn();
-                        } else if (resposta.resultado == 1) {
-                            $(".alert").fadeIn();
-                            $('.alert').html("Falha no envio do email").attr('class', 'alert alert-danger');
-                        } else if (resposta.resultado == 2) {
-                            $(".alert").fadeIn();
-                            $('#mensagem').html("Não há cadastro para o email informado").attr('class', 'text-danger');
-                            $('.alert').html("Não há cadastro para o email informado").attr('class', 'alert alert-danger');
-                        }
-                        else if (resposta.resultado == 3) {
-                            $(".alert").hide();
-                            $("#form").hide();
-                            $('.page-header').hide();
-                            $('#divalert').attr('class', 'row text-danger');
-                            var img = $("<h1>", {class: "glyphicon glyphicon-exclamation-sign"}, "</h1>");
-                            $('#divimg').append(img);
-                            $("#divmsg").html("<h2 class=text-center>Desculpe, não foi possível realizar a operação!</h2>\n\
-                                                    <h4 class=text-center>Tente novamente em alguns minutos.</h4>");
-                            $("#divalert").fadeIn();
-                        } else if (resposta.resultado == 4) {
-                            $(".alert").hide();
-                            $("#form").hide();
-                            $('.page-header').hide();
-                            $('#divalert').attr('class', 'row text-danger');
-                            var img = $("<h1>", {class: "glyphicon glyphicon-exclamation-sign"}, "</h1>");
-                            $('#divimg').append(img);
-                            $("#divmsg").html("<h2 class=text-center>Ops! Não podemos processar sua requisição. <br>Tente novamente.</h2>");
-                            $("#divalert").fadeIn();
-                        }
-                    }
-                })
+                form.submit();
             }
         });
     });
@@ -95,7 +61,7 @@ Sessao::gerarToken();
     <div class="page-header">
         <h1>Identificação de Usuário</h1>
     </div>
-    
+
     <div id="divalert">
         <div class="col-lg-2">
             <div class="text-right" id="divimg">
@@ -106,7 +72,7 @@ Sessao::gerarToken();
     </div>
 
     <div class="alert"></div>
-    <form id="form" class="form-horizontal">
+    <form id="form" class="form-horizontal" action="index.php" method="post">
         <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Usuario"  />
         <input type="hidden" id="hdnAcao" name="hdnAcao" value="esquecersenha" />
         <input type="hidden" id="hdnToken" name="hdnToken" value="<?php echo $_SESSION['token']; ?>" />
@@ -121,8 +87,8 @@ Sessao::gerarToken();
             <div class="col-lg-12">
                 <div class="form-group">
                     <div class="col-lg-offset-2 col-lg-10">
-                        <button type="submit" class="btn btn-primary">Enviar</button>
-                        <button type="button" class="btn btn-warning">Cancelar</button>
+                        <button id="btnEnviar" type="button" class="btn btn-primary">Enviar</button>
+                        <button id="btnCancelar" type="button" class="btn btn-warning">Cancelar</button>
                     </div>
                 </div>                
             </div>

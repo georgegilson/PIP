@@ -19,8 +19,8 @@ $imagens = $item["imagem"];
     <?php if ($anuncio->getPublicarmapa() == "SIM") { ?>
         <li><a href="#vernomapa" data-toggle="tab">Ver no Mapa</a></li>
     <?php } ?>
-    <li><a href="#contato" data-toggle="tab">Contato</a></li>
-    <li><a href="#diferenciais" data-toggle="tab">Diferenciais</a></li>
+        <li><a href="#diferenciais" data-toggle="tab">Diferenciais</a></li>
+    <li><a href="#contato" data-toggle="tab">Fale com o Vendedor</a></li>
     <li class="navbar-right">
         <h4><?php echo $anuncio->getTituloAnuncio(); ?> <span class="label label-info"><?php echo $imovel->Referencia() ?></span></h4></li>
 </ul>
@@ -248,6 +248,100 @@ $imagens = $item["imagem"];
 
         </div>
     </div>
+        <div class="tab-pane fade" id="diferenciais">
+           <div class="row">
+               
+               <div class="col-xs-5">
+                   <table class="table">
+<!--      <thead>
+        <tr>
+          <th>#</th>
+          <th>Column heading</th>
+          <th>Column heading</th>
+          <th>Column heading</th>
+        </tr>
+      </thead>-->
+                       <br>
+      <tbody>
+        <tr  <?php
+                            if ($imovel->getAcademia() == "SIM") {
+                                print "class=success";
+                            }else {print "class=danger";}
+                            ?>>
+          <td>Academia</td>
+          <td><?php
+                            if ($imovel->getAcademia() == "SIM") {
+                                print '<span class="glyphicon glyphicon-ok"></span>';
+                            }else {print '<span class="glyphicon glyphicon-remove"></span>';}
+                            ?></td>
+        </tr>
+        <tr <?php
+                            if ($imovel->getAreaServico() == "SIM") {
+                                print "class=success";
+                            }else {print "class=danger";}
+                            ?>>
+          <td>Área de serviço</td>
+          <td><?php
+                            if ($imovel->getAreaServico() == "SIM") {
+                                print '<span class="glyphicon glyphicon-ok"></span>';
+                            }else {print '<span class="glyphicon glyphicon-remove"></span>';}
+                            ?></td>
+        </tr>
+        <tr <?php
+                            if ($imovel->getDependenciaEmpregada() == "SIM") {
+                                print "class=success";
+                            }else {print "class=danger";}
+                            ?>>
+          <td>Dependencia de empregada</td>
+          <td><?php
+                            if ($imovel->getDependenciaEmpregada() == "SIM") {
+                                print '<span class="glyphicon glyphicon-ok"></span>';
+                            }else {print '<span class="glyphicon glyphicon-remove"></span>';}
+                            ?></td>
+        </tr>
+        <tr <?php
+                            if ($imovel->getElevador() == "SIM") {
+                                print "class=success";
+                            }else {print "class=danger";}
+                            ?>>
+          <td>Elevador</td>
+          <td><?php
+                            if ($imovel->getElevador() == "SIM") {
+                                print '<span class="glyphicon glyphicon-ok"></span>';
+                            }else {print '<span class="glyphicon glyphicon-remove"></span>';}
+                            ?></td>
+        </tr>
+        <tr <?php
+                            if ($imovel->getPiscina() == "SIM") {
+                                print "class=success";
+                            }else {print "class=danger";}
+                            ?>>
+          <td>Piscina</td>
+          <td><?php
+                            if ($imovel->getPiscina() == "SIM") {
+                                print '<span class="glyphicon glyphicon-ok"></span>';
+                            }else {print '<span class="glyphicon glyphicon-remove"></span>';}
+                            ?></td>
+        </tr>
+        <tr <?php
+                            if ($imovel->getQuadra() == "SIM") {
+                                print "class=success";
+                            }else {print "class=danger";}
+                            ?> >
+          <td>Quadra</td>
+          <td><?php
+                            if ($imovel->getQuadra() == "SIM") {
+                                print '<span class="glyphicon glyphicon-ok"></span>';
+                            }else {print '<span class="glyphicon glyphicon-remove"></span>';}
+                            ?></td>
+        </tr>
+        
+      </tbody>
+    </table>
+               </div>
+               </div> 
+            
+        </div>
         
 </div>
 
