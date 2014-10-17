@@ -29,7 +29,6 @@ class ConsultasAdHoc extends GenericoDAO {
                 . " JOIN usuarioplano up ON up.id = a.idusuarioplano"
                 . " JOIN usuario u ON up.idusuario = u.id"
                 . " WHERE u.status = 'ativo'"
-                . " AND a.status = 'cadastrado'"
                 . " AND u.id = :idUsuario ";
         $statement = $this->conexao->prepare($sql);
         $statement->bindParam(':idUsuario', $idUsuario);

@@ -4,17 +4,19 @@ class Controle {
 
     public function __construct($parametros) {
         //checa tamanho da requisição
-        $cabecalho = $_SERVER['CONTENT_LENGTH'];
-        $tamanho = ($cabecalho / 1024) / 1024;
-        if ($tamanho > 10) {
-            if ($_SERVER['REQUEST_METHOD'] === "GET") {
-                $visao = new Template();
-                $visao->setItem("errotoken");
-                $visao->exibir("VisaoErrosGenerico.php");
-            } else {
-                echo json_decode(array("resposta" => 0));
+        if (isset($_SERVER["CONTENT_LENGTH"]) ){
+            $cabecalho = $_SERVER['CONTENT_LENGTH'];
+            $tamanho = ($cabecalho / 1024) / 1024;
+            if ($tamanho > 10) {
+                if ($_SERVER['REQUEST_METHOD'] === "GET") {
+                    $visao = new Template();
+                    $visao->setItem("errotoken");
+                    $visao->exibir("VisaoErrosGenerico.php");
+                } else {
+                    echo json_decode(array("resposta" => 0));
+                }
+                die();
             }
-            die();
         }
         //vem do menu
         if ($_SERVER['REQUEST_METHOD'] === "GET") {
@@ -37,11 +39,13 @@ class Controle {
         if ($_SERVER['REQUEST_METHOD'] === "POST") {
             $entidade = $parametros['hdnEntidade'];
             $acao = $parametros['hdnAcao'];
-            if (is_file(PIPROOT . '/controle/' . $entidade . "Controle.php")) {
-                include_once ($entidade . "Controle.php");
-                $classe = $entidade . "Controle";
-                $controle = new $classe;
-                $controle->$acao($parametros);
+            if($entidade!="" && $acao!=""){
+                if (is_file(PIPROOT . '/controle/' . $entidade . "Controle.php")) {
+                    include_once ($entidade . "Controle.php");
+                    $classe = $entidade . "Controle";
+                    $controle = new $classe;
+                    $controle->$acao($parametros);
+                }
             }
         }
         //vem do upload e somente do upload

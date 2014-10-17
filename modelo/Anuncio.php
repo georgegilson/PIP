@@ -139,7 +139,6 @@ class Anuncio {
     }
 
     function cadastrar($parametros) {
-
         $anuncio = new Anuncio();
 
         $anuncio->setTituloAnuncio($parametros['txtTitulo']);

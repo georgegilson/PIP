@@ -5,6 +5,7 @@ include_once 'modelo/Endereco.php';
 include_once 'modelo/Imovel.php';
 include_once 'modelo/Plano.php';
 include_once 'modelo/Imagem.php';
+include_once 'modelo/HistoricoAluguelVenda.php';
 include_once 'modelo/UsuarioPlano.php';
 include_once 'modelo/Usuario.php';
 include_once 'modelo/Telefone.php';
@@ -16,7 +17,6 @@ include_once 'DAO/GenericoDAO.php';
 include_once 'DAO/ConsultasAdHoc.php';
 include_once 'assets/pager/Pager.php';
 include_once 'modelo/Mensagem.php';
-
 
 class AnuncioControle {
 
@@ -123,10 +123,10 @@ class AnuncioControle {
             $genericoDAO = new GenericoDAO();
             $consultasAdHoc = new ConsultasAdHoc();
             $listaAnuncio = $consultasAdHoc->ConsultarAnunciosPorUsuario($_SESSION['idusuario']);
-            foreach($listaAnuncio as $anuncio){
-                $imovel = $genericoDAO->consultar(new Imovel(), false, array("id" => $anuncio->getIdImovel()) );
+            foreach ($listaAnuncio as $anuncio) {
+                $imovel = $genericoDAO->consultar(new Imovel(), false, array("id" => $anuncio->getIdImovel()));
                 $anuncio->setImovel($imovel[0]);
-                $listarAnuncio[]=$anuncio;
+                $listarAnuncio[] = $anuncio;
             }
             //visao
             $visao = new Template();
@@ -146,11 +146,35 @@ class AnuncioControle {
                 $selecionarImovel->setEndereco($selecionarEndereco[0]);
                 $listarImovel[] = $selecionarImovel;
             }
-            
+
             //visao
             $visao = new Template();
             $visao->setItem($listarImovel);
             $visao->exibir('AnuncioVisaoListagemCadastrar.php');
+        }
+    }
+
+    function finalizarNegocio($parametros) {
+        if (Sessao::verificarSessaoUsuario()) {
+            if (Sessao::verificarToken($parametros)) {
+                $genericoDAO = new GenericoDAO();
+                $entidadeAnuncio = new Anuncio();
+                $selecionarAnuncio = $genericoDAO->consultar($entidadeAnuncio, false, array("id" => $parametros["hdnAnuncio"]));
+                $entidadeAnuncio = $selecionarAnuncio[0];
+                $entidadeAnuncio->setStatus('finalizado');
+                $entidadeAnuncio->setDatahoraalteracao(date('d/m/Y H:i:s'));
+                $genericoDAO->editar($entidadeAnuncio);
+                
+                $historicoAluguelVenda = new HistoricoAluguelVenda();
+                $entidadeHistoricoAluguelVenda = $historicoAluguelVenda->cadastrar($parametros);
+                $resultadoFinalizarNegocio = $genericoDAO->cadastrar($entidadeHistoricoAluguelVenda);
+                
+                if ($resultadoFinalizarNegocio) {
+                    echo json_encode(array("resultado" => 1));
+                } else {
+                    echo json_encode(array("resultado" => 0));
+                }
+            }
         }
     }
 
@@ -239,12 +263,11 @@ class AnuncioControle {
             $dadosEmail['contato'] = $parametros['nome'];
             $dadosEmail['msg'] = "Você recebeu uma mensagem nova! Acesse a sua caixa de mensagens do PIP";
             $dadosEmail['assunto'] = $selecionarAnuncio[0]->getTituloAnuncio();
-            if(Email::enviarEmail($dadosEmail))
-            {
+            if (Email::enviarEmail($dadosEmail)) {
                 $genericoDAO->commit();
                 $genericoDAO->fecharConexao();
                 echo json_encode(array("resultado" => 0));
-            }else{
+            } else {
                 $genericoDAO->rollback();
                 $genericoDAO->fecharConexao();
                 echo json_encode(array("resultado" => 1));
