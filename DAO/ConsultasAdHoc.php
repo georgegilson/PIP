@@ -14,6 +14,7 @@ class ConsultasAdHoc extends GenericoDAO {
                         )
                 )
         );
+        $sql = $sql . " ORDER BY ID DESC";
         $statement = $this->conexao->prepare($sql);
         foreach ($allow as $k => $v) {
             $statement->bindValue('allow_' . $k, $v);
@@ -30,6 +31,7 @@ class ConsultasAdHoc extends GenericoDAO {
                 . " JOIN usuario u ON up.idusuario = u.id"
                 . " WHERE u.status = 'ativo'"
                 . " AND u.id = :idUsuario ";
+        $sql = $sql . " ORDER BY a.ID DESC";
         $statement = $this->conexao->prepare($sql);
         $statement->bindParam(':idUsuario', $idUsuario);
         $statement->execute();
@@ -50,6 +52,7 @@ class ConsultasAdHoc extends GenericoDAO {
                 . " AND a.idimovel = i.id"
                 . " AND u.id = :idUsuario "
                 . " ) ";
+        $sql = $sql . " ORDER BY i.ID DESC";
         $statement = $this->conexao->prepare($sql);
         $statement->bindParam(':idUsuario', $idUsuario);
         $statement->execute();

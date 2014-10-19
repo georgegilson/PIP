@@ -62,7 +62,6 @@
 
         function carregaDadosModal($div) {
             $div.html("");
-            $div.append("Finalidade: " + $("#sltFinalidade").val() + "<br />");
             $div.append("Tipo: " + $("#sltTipo").val() + "<br />");
             $div.append("Condição: " + $("#sltCondicao").val() + "<br />");
             $div.append("Descrição: " + $("#txtDescricao").val() + "<br />");
@@ -186,9 +185,6 @@
                     maxlength: 15,
                     required: true
                 },
-                sltFinalidade: {
-                    required: true
-                },
                 sltQuarto: {
                     required: true
                 },
@@ -252,16 +248,6 @@ Sessao::gerarToken();
             <div class="col-lg-6">
                 <div id="forms" class="panel panel-default">
                     <div class="panel-heading">Informações Básicas </div>
-                    <div class="form-group">
-                        <label class="col-lg-3 control-label" for="sltFinalidade">Finalidade</label>
-                        <div class="col-lg-8">
-                            <select class="form-control" id="sltFinalidade" name="sltFinalidade">
-                                <option value="">Informe a Finalidade</option>
-                                <option value="venda">Venda</option>
-                                <option value="aluguel">Aluguel</option>
-                            </select></div>
-                    </div>
-
                     <div class="form-group">
                         <label  class="col-lg-3 control-label" for="sltTipo">Tipo de Imóvel</label>
                         <div class="col-lg-8">
@@ -420,12 +406,12 @@ Sessao::gerarToken();
 
                             <div class="checkbox">
                                 <label class="col-sm-offset-3 col-sm-9" for="chkCobertura">
-                                <input type="checkbox" id="chkCobertura" name="chkCobertura"> Está na Cobertura      </label>                      
+                                    <input type="checkbox" id="chkCobertura" name="chkCobertura"> Está na Cobertura      </label>                      
                             </div> 
 
                             <div class="checkbox">
                                 <label class="col-sm-offset-3 col-sm-9" for="chkSacada">
-                                <input type="checkbox" id="chkSacada" name="chkSacada"> Possui Sacada     </label>                       
+                                    <input type="checkbox" id="chkSacada" name="chkSacada"> Possui Sacada     </label>                       
                             </div>
 
                             <br />  

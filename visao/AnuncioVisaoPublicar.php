@@ -41,7 +41,6 @@
                     </div>
                     <div class="modal-body">
                         <?php
-                        echo "Finalidade: " . $imovel->getFinalidade() . "<br />";
                         echo "Tipo: " . $imovel->getTipo() . "<br />";
                         echo "Condição: " . $imovel->getCondicao() . "<br />";
                         echo "Descrição: " . $imovel->getDescricao() . "<br />";
@@ -80,7 +79,7 @@
                         <li data-target="#step5"><span class="badge">5</span>Publicado!<span class="chevron"></span></li>
                     </ul>
                     <div class="actions">
-                        <span data-toggle="modal" data-target="#myModal" class="btn btn-success btn-sm"> <span class="glyphicon glyphicon-home"> </span> Imóvel #<?php echo $referencia ?></span>
+                        <span id="btnModalImovel" data-toggle="modal" data-target="#myModal" class="btn btn-success btn-sm"> <span class="glyphicon glyphicon-home"> </span> Imóvel #<?php echo $referencia ?></span>
                         <button type="button" class="btn btn-warning btn-xs btn-prev"> <span class="glyphicon glyphicon-chevron-left"></span> Anterior </button>
                         <button type="button" class="btn btn-primary btn-xs btn-next" data-last="Fim"> Próximo <span class="glyphicon glyphicon-chevron-right"></span></button>
                     </div>
@@ -130,7 +129,15 @@
                         <div class="row">
                             <div class="col-lg-7">
                                 <div id="forms" class="panel panel-default">
-
+                                    <div class="form-group">
+                                        <label class="col-lg-3 control-label" for="sltFinalidade">Finalidade</label>
+                                        <div class="col-lg-8">
+                                            <select class="form-control" id="sltFinalidade" name="sltFinalidade">
+                                                <option value="">Informe a Finalidade</option>
+                                                <option value="venda">Venda</option>
+                                                <option value="aluguel">Aluguel</option>
+                                            </select></div>
+                                    </div>
                                     <div class="form-group">
                                         <label class="col-lg-3 control-label" for="txtTitulo">Título</label>
                                         <div class="col-lg-8">
@@ -238,12 +245,12 @@
                                                     <?php if ($tipoImovel == "apartamento") { ?>
                                                         <?php if ($imovel->getAndar() != "") { ?>
                                                             <label class="checkbox">
-                                                                <input type="checkbox" name="sltCamposVisiveis[]" value="andar"> Andar - <?php echo $imovel->getAndar();?>
+                                                                <input type="checkbox" name="sltCamposVisiveis[]" value="andar"> Andar - <?php echo $imovel->getAndar(); ?>
                                                             </label>
                                                         <?php } ?>                                                
                                                         <?php if ($imovel->getCondominio() != "") { ?>
                                                             <label class="checkbox">
-                                                                <input type="checkbox" name="sltCamposVisiveis[]" value=condominio> Condomínio - <?php echo $imovel->getCondominio();?>
+                                                                <input type="checkbox" name="sltCamposVisiveis[]" value=condominio> Condomínio - <?php echo $imovel->getCondominio(); ?>
                                                             </label>
                                                         <?php } ?>                                                                                                    
                                                         <?php if ($imovel->getCobertura() == "SIM") { ?>
@@ -309,11 +316,11 @@
                                     <i class="glyphicon glyphicon-trash"></i>
                                     <span>Excluir fotos selecionadas</span>
                                 </button>                                
-                                
-                                
+
+
                                 <!-- The global file processing state -->
                                 <span class="fileupload-process"></span>
-                                
+
                             </div>
                             <!-- The global progress state -->
                             <div class="col-lg-5 fileupload-progress fade">
@@ -343,7 +350,7 @@
                             <table class="table table-bordered table-condensed table-hover table-responsive">
                                 <thead>
                                     <tr>
-                                        <th>Imóvel</th>
+                                        <th id="colImovelFinalidade">Imóvel</th>
                                         <th>Plano</th>
                                         <th>Título</th>
                                         <th>Descrição</th>
@@ -355,7 +362,7 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td id="colReferencia"><?php echo $referencia; ?></td>
+                                        <td id="colReferencia"><span class="label label-info"><?php echo $referencia; ?></span></td>
                                         <td id="colPlano"></td>
                                         <td id="colTitulo"></td>
                                         <td id="colDescricao"></td>
@@ -390,6 +397,7 @@
     $(document).ready(function() {
 
         $('.alert').hide();
+        $('#btnWizardPrev').hide();
 
         // Associa o evento do popover ao clicar no link.
         $("#popover").popover({
@@ -416,7 +424,7 @@
                         return e.preventDefault();
                 }
                 if (data.step === 2) {
-                    if (!($("#txtTitulo").valid() & $("#txtDescricao").valid() & $("#txtValor").valid()))
+                    if (!($("#sltFinalidade").valid() & $("#txtTitulo").valid() & $("#txtDescricao").valid() & $("#txtValor").valid()))
                         return e.preventDefault();
                 }
                 if (data.step === 3) {
@@ -440,6 +448,13 @@
         });
         $('#MyWizard').on('changed', function(e, data) {
             var item = $('#MyWizard').wizard('selectedItem');
+            
+            if (item.step === 1) {
+                $('#btnWizardPrev').hide();
+            }else{
+                $('#btnWizardPrev').show();
+            }
+            
             if (item.step === 2) {
                 var endereco = "<?php echo $endereco; ?>";
                 //######### INICIO DO CEP ########
@@ -467,7 +482,7 @@
                 $("#colReferencia").click(function() {
                     $('#myModal').modal('show');
                 })
-
+                $("#colImovelFinalidade").html('<span class="label label-primary">' + $("#sltFinalidade :selected").text() + '</span>' );
                 $("#colPlano").html($("#sltPlano :selected").text());
                 $("#colTitulo").html($("#txtTitulo").val());
                 $("#colDescricao").html($("#txtDescricao").val());
@@ -514,6 +529,9 @@
         $('#fileupload').validate({
             rules: {
                 sltPlano: {
+                    required: true
+                },
+                sltFinalidade: {
                     required: true
                 },
                 txtTitulo: {
@@ -567,10 +585,13 @@
                             $("#step5").html('<div class="row text-success">\n\
 <h2 class="text-center">Obrigado!</h2>\n\
 <p class="text-center">O cadastro de seu anúncio foi concluído com sucesso. </p>\n\
-<p class="text-center">Em breve você receberá um e-mail confirmando a publicação do mesmo. </p>\n\
-<p class="text-center">Não perca tempo clique aqui e compre mais anúncios! </p>\n\
-<p class="text-center">Divulgue esse anuncio no Facebook </p>\n\
+<p class="text-center">Em breve você receberá um e-mail confirmando a publicação do mesmo. </p>\n\n\
+<p class="text-center"><a href="index.php?entidade=Anuncio&acao=listarCadastrar">Cadastrar outro Anúncio?</a> </p>\n\n\
+<p class="text-center">Não perca tempo <a href="index.php?entidade=UsuarioPlano&acao=listar">clique aqui</a> e compre mais anúncios! </p>\n\
+<p class="text-center">Divulgue esse anuncio no Facebook <img src="assets/imagens/facebook.png"></p>\n\
 </div>');
+                            $('#btnModalImovel').attr('disabled', 'disabled');
+                            $('button').attr('disabled', 'disabled');
                         } else {
                             $("#step5").html('<div class="row text-danger">\n\
 <h2 class="text-center">Tente novamente mais tarde!</h2>\n\

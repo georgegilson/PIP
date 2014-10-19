@@ -1,6 +1,6 @@
 <div class="container">    
     <div class="page-header">
-        <h1>Cadastrar Anúncios</h1>
+        <h1>Anúncios</h1>
     </div>
     <form>   
         <table class="table table-hover table-responsive table-condensed">
@@ -29,14 +29,14 @@
                     ?>
                     <tr>        
                         <?php
-                        echo "<td>" . $imovel->Referencia() . "</td>";
+                        echo "<td><span class=\"label label-info\">" . $imovel->Referencia() . "</span></td>";
                         echo "<td>" . $imovel->getDescricao() . "</td>";
                         echo "<td>" . $imovel->getEndereco()->getLogradouro() . "</td>";
                         echo "<td>" . $imovel->getEndereco()->getBairro()->getNome() . "</td>";
                         echo "<td>" . $imovel->getDatahoracadastro() . "</td>";
                         echo "<td><a href='#' id='popover" . $imovel->getId() . "'class='btn btn-success'><span class='glyphicon glyphicon-home'></span> Detalhes do Imóvel</a></td>";
                         if (count($imovel->getAnuncio()) == 0) {
-                            echo"<td><a href='index.php?entidade=Anuncio&acao=form&idImovel=" . $imovel->getId() . "&token=" . $_SESSION['token'] . "' class='btn btn-info'><span class='glyphicon glyphicon-bullhorn'></span> Publicar Anuncio</a></td>";
+                            echo"<td><a href='index.php?entidade=Anuncio&acao=form&idImovel=" . $imovel->getId() . "&token=" . $_SESSION['token'] . "' class='btn btn-info'><span class='glyphicon glyphicon-bullhorn'></span> Publicar Anúncio</a></td>";
                         }
                     }
                     ?>             
@@ -48,9 +48,6 @@
         $links = $pager->getLinks();
         echo ($links['all'] != "" ? "&nbsp;&nbsp;&nbsp;&nbsp;Página: " . $links['all'] : "");
         ?>
-
-        <!-- Divs ocultas que serao exibidas dentro do popover. -->
-
     </form>
 </div>
 <?php
