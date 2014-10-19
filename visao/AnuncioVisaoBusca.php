@@ -528,11 +528,22 @@ $(document).ready(function(){
     <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Anuncio"  />
     <input type="hidden" id="hdnAcao" name="hdnAcao" value="comparar" />
     <style type="text/css">
-<!-- div#btncomparar {position:fixed;top:330px;right:80px} →</style>
+<!-- div#btncomparar {position:fixed;top:370px;right:80px} →</style>
+    <style type="text/css">
+<!-- div#btnEnviarEmail {position:fixed;top:330px;right:80px} →</style>
 
 <div id="btncomparar">
     <button type="submit" class="btn" id="btncomparar" value="Comparar">Comparar</button>
 </div>
+    <br>
+
+    <div id="btnEnviarEmail">
+<button type="button" id="btnEnviarEmail" class="btn btn-default btn-sm" style="margin-left: 60px" 
+        data-toggle="modal" data-target="#divEmailModal" data-modal="<?php echo $anuncio->id; ?>" 
+        data-title="<?php echo $anuncio->tituloanuncio; ?>">
+    <span class="glyphicon glyphicon-plus-sign"></span> Enviar Email
+</button>
+    </div>
 
 
 <div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
@@ -683,13 +694,30 @@ $(document).ready(function(){
                     
                 </div>
                 
-            </fieldset>    
-           
+            </fieldset>
+            
+            
             <!-- Modal Para Abrir a Div do Veja Mais Detalhes -->
 <div class="modal fade" id="divAnuncioModal" tabindex="-1" role="dialog" aria-labelledby="lblAnuncioModal" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div id="modal-body" class="modal-body text-center">
+            </div>
+        </div>
+    </div>
+</div>
+            
+             <!-- Modal Para Abrir a Div do Enviar Anuncios por Email -->
+<div class="modal fade" id="divEmailModal" tabindex="-1" role="dialog" aria-labelledby="lblAnuncioModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div id="modal-body" class="modal-body text-center">
+                <div class="form-group">
+                        <label class="col-lg-3 control-label" for="txtEmail">Email</label>
+                        <div class="col-lg-8">
+                            <input type="text" id="txtEmail" name="txtEmail" class="form-control" placeholder="Informe o seu email">
+                        </div>
+                    </div>
             </div>
         </div>
     </div>
