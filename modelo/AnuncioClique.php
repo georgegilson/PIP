@@ -45,7 +45,7 @@ class AnuncioClique {
         
         if(isset($_SESSION)){
             $anuncioClique->setTipoUsuario($_SESSION["idusuario"]);
-        } else setTipoUsuario("0"); 
+        } else $anuncioClique->setTipoUsuariosetTipoUsuario("0"); 
         $anuncioClique->setData(date('d/m/Y H:i:s'));
        
         $anuncioClique->setIdanuncio($parametros["hdnModal"]);
