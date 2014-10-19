@@ -43,7 +43,7 @@ class AnuncioClique {
         
         $anuncioClique = new AnuncioClique();
         
-        if(isset($_SESSION)){
+        if(isset($_SESSION["idusuario"])){
             $anuncioClique->setTipoUsuario($_SESSION["idusuario"]);
         } else $anuncioClique->setTipoUsuario("0"); 
         $anuncioClique->setData(date('d/m/Y H:i:s'));
