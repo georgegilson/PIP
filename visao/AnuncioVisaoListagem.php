@@ -119,7 +119,7 @@
                         data: $('#form').serialize(),
                         beforeSend: function() {
                             $('.alert').show();
-                            $('button').attr('disabled', 'disabled');
+                            $('#btnConfirmar').attr('disabled', 'disabled');
                         },
                         success: function(resposta) {
                             $(".alert").hide();

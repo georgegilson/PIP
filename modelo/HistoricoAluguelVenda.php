@@ -4,7 +4,7 @@ class HistoricoAluguelVenda {
 
     private $id;
     private $descricao;
-    protected $idAnuncio;
+    private $idanuncio;
     private $datahora;
 
     public function getId() {
@@ -23,12 +23,12 @@ class HistoricoAluguelVenda {
         $this->descricao = $descricao;
     }
 
-    public function getIdAnuncio() {
-        return $this->idAnuncio;
+    public function getIdanuncio() {
+        return $this->idanuncio;
     }
 
-    public function setIdAnuncio($idAnuncio) {
-        $this->idAnuncio = $idAnuncio;
+    public function setIdanuncio($idanuncio) {
+        $this->idanuncio = $idanuncio;
     }
 
     public function getDatahora() {
@@ -42,7 +42,7 @@ class HistoricoAluguelVenda {
     function cadastrar($parametros) {
         $historicoAluguelVenda = new HistoricoAluguelVenda();
         $historicoAluguelVenda->setDescricao($parametros['txtDescricao']);
-        $historicoAluguelVenda->setIdAnuncio($parametros['hdnAnuncio']);
+        $historicoAluguelVenda->setIdanuncio($parametros['hdnAnuncio']);
         $historicoAluguelVenda->setDatahora(date('d/m/Y H:i:s'));
         return $historicoAluguelVenda;
     }
