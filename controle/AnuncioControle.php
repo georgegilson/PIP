@@ -17,6 +17,7 @@ include_once 'DAO/GenericoDAO.php';
 include_once 'DAO/ConsultasAdHoc.php';
 include_once 'assets/pager/Pager.php';
 include_once 'modelo/Mensagem.php';
+include_once 'modelo/AnuncioClique.php';
 
 class AnuncioControle {
 
@@ -244,6 +245,17 @@ class AnuncioControle {
         $item["imovel"] = $genericoDAO->consultar(new Imovel(), false, array("id" => $item["anuncio"][0]->getIdimovel()));
         $item["endereco"] = $genericoDAO->consultar(new Endereco(), true, array("id" => $item["imovel"][0]->getIdendereco()));
         $item["usuario"] = $genericoDAO->consultar(new Usuario(), true, array("id" => $item["imovel"][0]->getIdusuario()));
+        
+        $genericoDAO->iniciarTransacao();
+        
+        $anuncioClique = new AnuncioClique();
+        
+        $anuncios = $anuncioClique->Cadastrar($parametros);
+        
+        $cliqueAnuncio = $genericoDAO->cadastrar($anuncios);
+
+        $genericoDAO->commit();
+ 
         $visao->setItem($item);
         $visao->exibir('AnuncioVisaoModal.php');
     }
@@ -279,32 +291,4 @@ class AnuncioControle {
         }
     }
 
-    /*
-      function selecionar($parametro) {
-      //modelo
-      $anuncio = new Anuncio();
-      $genericoDAO = new GenericoDAO();
-      $selecionarImovel = $genericoDAO->selecionar($anuncio, $parametro['id']);
-      //visao
-      $visao = new Template();
-      $visao->setItem($selecionarImovel);
-      $visao->exibir('AnuncioVisaoPublicar.php');
-      }
-
-
-
-      function editar($parametros) {
-      //modelo
-      $imovel = new Imovel();
-      $entidadeImovel = $imovel->editar($parametros);
-      $genericoDAO = new GenericoDAO();
-      $resultado = $genericoDAO->editar($entidadeImovel);
-      //visao
-      if ($resultado)
-      echo json_encode(array("resultado" => 1));
-      else
-      echo json_encode(array("resultado" => 0));
-      }
-
-     */
 }
