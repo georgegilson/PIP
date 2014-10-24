@@ -21,7 +21,7 @@ include_once 'modelo/AnuncioClique.php';
 
 class AnuncioControle {
 
-    function form($parametros) {
+    function form($parametros,$opcao=NULL) {
         if (Sessao::verificarSessaoUsuario() & Sessao::verificarToken(array("hdnToken" => $parametros["token"]))) {
             //modelo
             $imovel = new Imovel();
@@ -127,6 +127,8 @@ class AnuncioControle {
             foreach ($listaAnuncio as $anuncio) {
                 $imovel = $genericoDAO->consultar(new Imovel(), false, array("id" => $anuncio->getIdImovel()));
                 $anuncio->setImovel($imovel[0]);
+                $historicoAluguelVenda = $genericoDAO->consultar(new HistoricoAluguelVenda(), false, array("idAnuncio" => $anuncio->getId()));
+                $anuncio->setHistoricoAluguelVenda($historicoAluguelVenda[0]);
                 $listarAnuncio[] = $anuncio;
             }
             //visao
@@ -165,17 +167,33 @@ class AnuncioControle {
                 $entidadeAnuncio->setStatus('finalizado');
                 $entidadeAnuncio->setDatahoraalteracao(date('d/m/Y H:i:s'));
                 $genericoDAO->editar($entidadeAnuncio);
-                
+
                 $historicoAluguelVenda = new HistoricoAluguelVenda();
                 $entidadeHistoricoAluguelVenda = $historicoAluguelVenda->cadastrar($parametros);
                 $resultadoFinalizarNegocio = $genericoDAO->cadastrar($entidadeHistoricoAluguelVenda);
-                
+
                 if ($resultadoFinalizarNegocio) {
                     echo json_encode(array("resultado" => 1));
                 } else {
                     echo json_encode(array("resultado" => 0));
                 }
             }
+        }
+    }
+
+    function reativarAnuncio($parametros) {
+        if (Sessao::verificarSessaoUsuario() & Sessao::verificarToken($parametros)) {
+            $this->form($parametros,"reativar");
+            //TODO:regra para o cadastro do anuncio
+            //reativar anuncio se for um aluguel
+            //verificar se tem plano
+            //vai pra primeira tela do anuncio
+        } else {
+            $item = "errotoken";
+            $pagina = "VisaoErrosGenerico.php";
+            $visao = new Template();
+            $visao->setItem($item);
+            $visao->exibir($pagina);
         }
     }
 
@@ -245,17 +263,17 @@ class AnuncioControle {
         $item["imovel"] = $genericoDAO->consultar(new Imovel(), false, array("id" => $item["anuncio"][0]->getIdimovel()));
         $item["endereco"] = $genericoDAO->consultar(new Endereco(), true, array("id" => $item["imovel"][0]->getIdendereco()));
         $item["usuario"] = $genericoDAO->consultar(new Usuario(), true, array("id" => $item["imovel"][0]->getIdusuario()));
-        
+
         $genericoDAO->iniciarTransacao();
-        
+
         $anuncioClique = new AnuncioClique();
-        
+
         $anuncios = $anuncioClique->Cadastrar($parametros);
-        
+
         $cliqueAnuncio = $genericoDAO->cadastrar($anuncios);
 
         $genericoDAO->commit();
- 
+
         $visao->setItem($item);
         $visao->exibir('AnuncioVisaoModal.php');
     }

@@ -71,12 +71,14 @@ class GenericoDAO {
                 $criterios[] = $chave . "=:" . $chave;
             }
             $sql = $sql . " WHERE " . implode(" and ", $criterios);
+            $sql = $sql . " ORDER BY ID DESC";
             $statement = $this->conexao->prepare($sql);
             foreach ($parametros as $chave => $valor) {
                 $parametro = ":" . $chave;
                 $statement->bindValue($parametro, $valor);
             }          
         }else{
+            $sql = $sql . " ORDER BY ID DESC";
             $statement = $this->conexao->prepare($sql);
         }
         $statement->execute();
@@ -115,7 +117,7 @@ class GenericoDAO {
     }
 
     function selecionarBlindado($entidadeBlindada, $chaveEstrangeira, $idChaveEstrangeira) {
-        $sql = "SELECT * FROM " . strtolower($entidadeBlindada) . " WHERE " . $chaveEstrangeira . " =:idChaveEstrangeira";
+        $sql = "SELECT * FROM " . strtolower($entidadeBlindada) . " WHERE " . $chaveEstrangeira . " =:idChaveEstrangeira ORDER BY ID DESC";
         $statement = $this->conexao->prepare($sql);
         $statement->bindParam(':idChaveEstrangeira', $idChaveEstrangeira);
         $statement->execute();

@@ -29,7 +29,7 @@
     foreach($data as $imovel){?>
         <tr>        
         <?php
-        echo "<td>" . $imovel->Referencia() . "</td>";
+        echo "<td><span class=\"label label-info\">" . $imovel->Referencia() . "</span></td>";
         echo "<td>" . $imovel->getDescricao() . "</td>";
         echo "<td>" . $imovel->getEndereco()->getLogradouro() . "</td>";
         echo "<td>" . $imovel->getEndereco()->getBairro()->getNome() . "</td>";

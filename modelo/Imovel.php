@@ -3,7 +3,6 @@
 class Imovel {
 
     private $id;
-    private $finalidade;
     private $quarto;
     private $tipo;
     private $datahoracadastro;
@@ -75,10 +74,6 @@ class Imovel {
 
     public function getId() {
         return $this->id;
-    }
-
-    public function getFinalidade() {
-        return $this->finalidade;
     }
 
     public function getQuarto() {
@@ -155,10 +150,6 @@ class Imovel {
 
     public function setId($id) {
         $this->id = $id;
-    }
-
-    public function setFinalidade($finalidade) {
-        $this->finalidade = $finalidade;
     }
 
     public function setQuarto($quarto) {
@@ -246,7 +237,6 @@ class Imovel {
         $imovel = new Imovel();
 
         $imovel->setIdendereco($idendereco);
-        $imovel->setFinalidade($parametros['sltFinalidade']);
         $imovel->setCondicao($parametros['sltCondicao']);
         $imovel->setTipo($parametros['sltTipo']);
         $imovel->setQuarto($parametros['sltQuarto']);
@@ -315,10 +305,8 @@ class Imovel {
     function editar($parametros) {
 
         $imovel = new Imovel();
-
         $imovel->setIdendereco($_SESSION["imovel"]["idendereco"]);
         $imovel->setId($_SESSION["imovel"]["id"]);
-        $imovel->setFinalidade($parametros['sltFinalidade']);
         $imovel->setCondicao($parametros['sltCondicao']);
         $imovel->setTipo($parametros['sltTipo']);
         $imovel->setQuarto($parametros['sltQuarto']);

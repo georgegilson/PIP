@@ -47,7 +47,7 @@ $imagens = $item["imagem"];
                     <div data-row-span="2">
                         <div data-field-span="1">
                             <label>Finalidade</label>
-                            <span class="label label-primary"> <?php echo $imovel->getFinalidade(); ?> </span>
+                            <span class="label label-primary"> <?php echo $anuncio->getFinalidade(); ?> </span>
                         </div>
                         <div data-field-span="1">
                             <label>Tipo</label>

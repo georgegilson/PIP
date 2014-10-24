@@ -1,13 +1,14 @@
 <script src="assets/js/bootstrap-maxlength.js"></script>
 <div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
     <div class="page-header">
-        <h1>Meus Anúncios</h1>
+        <h1>Anúncios</h1>
     </div>
     <!-- Example row of columns -->
     <table class="table table-hover">
         <thead>
             <tr>
-                <th>Imóvel Referência</th>
+                <th>Imóvel</th>
+                <th>Finalidade</th>
                 <th>Titulo</th>
                 <th>Descrição</th> 
                 <th>Valor</th>
@@ -23,6 +24,7 @@
                     ?>
                     <tr>
                         <td><span class="label label-info"><?php echo $anuncio->getImovel()->Referencia() ?></span></td>
+                        <td><?php echo $anuncio->getFinalidade(); ?></td>
                         <td><?php echo $anuncio->getTituloAnuncio(); ?></td>
                         <td><?php echo $anuncio->getDescricaoAnuncio(); ?></td>
                         <td><?php echo "R$ " . $anuncio->getValor(); ?></td>
@@ -39,6 +41,16 @@
                                     <span class="glyphicon glyphicon-bullhorn"></span> 
                                     <span class="glyphicon glyphicon-thumbs-up"></span> Finalizar Negócio 
                                 </button>
+                            </td>
+                        <?php } ?>
+                        <?php if ($anuncio->getStatus() == "finalizado") { ?>
+                            <td>
+                                Finalizado em: <?php echo $anuncio->getHistoricoAluguelVenda()->getDatahora(); ?> <br>
+                                <?php if ($anuncio->getFinalidade() == "aluguel") { ?>
+                                <a href="index.php?entidade=Anuncio&acao=reativarAnuncio&idImovel=<?php echo $anuncio->getImovel()->getId(); ?>&token=<?php echo $_SESSION['token']; ?>" class="btn btn-success">
+                                    <span class='glyphicon glyphicon-refresh'></span> Reativar Anúncio
+                                </a>    
+                                <?php } ?>
                             </td>
                         <?php } ?>
                     </tr>
@@ -134,16 +146,16 @@
                                                                 <h2 class="text-center">Tente novamente mais tarde!</h2>\n\
                                                                 <p class="text-center">Houve um erro no processamento. </p>\n\
                                                                 </div>');
-                               $('#btnConfirmar').removeAttr("disable");
+                                $('#btnConfirmar').removeAttr("disable");
                             }
                         }
                     })
                     return false;
                 }
             })
-            $('#divNegocioModal').on('hidden.bs.modal', function (e) {
+            $('#divNegocioModal').on('hidden.bs.modal', function(e) {
                 window.location.reload();
-              })
+            })
         });
     </script>
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
