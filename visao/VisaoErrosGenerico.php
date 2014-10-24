@@ -7,7 +7,9 @@ switch ($item) {
     case "errotrocasenha":
     case "errolink":
     case "errotoken":
-    case "erroemail"
+    case "erroemail":
+    case "errohashemail":
+    case "erroanuncioinativo":
         ?>
                 $('#diverro').attr('class', 'row text-danger');
                 var img = $("<h1>", {class: "glyphicon glyphicon-exclamation-sign"}, "</h1>");
@@ -74,6 +76,16 @@ switch ($item) {
                 case "errotoken":
                     ?>
                     <h2 class=text-center>Ops! Não podemos processar sua requisição. <br>Tente novamente.</h2>
+                    <?php
+                    break;
+                case "errohashemail":
+                    ?>
+                    <h2 class=text-center>Ops! O link desse anuncio não é válido. <br>Tente novamente.</h2>
+                    <?php
+                    break;
+                case "erroanuncioinativo":
+                    ?>
+                    <h2 class=text-center>Ops! Esse anuncio não é mais válido. <br>Obrigado pelo acesso</h2>
                     <?php
                     break;
                 case "sucessocadastrousuario":
