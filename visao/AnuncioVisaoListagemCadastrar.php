@@ -11,10 +11,10 @@
                     <th>Logradouro</th> 
                     <th>Bairro</th>
                     <th>Data Cadastro</th>
+                    <th class="text-center" colspan="2">Opções</th>
                 </tr>
             </thead>
             <tbody>
-
                 <?php
                 $params = array(
                     'mode' => 'Sliding',

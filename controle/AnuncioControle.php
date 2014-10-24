@@ -21,25 +21,26 @@ include_once 'modelo/AnuncioClique.php';
 
 class AnuncioControle {
 
-    function form($parametros,$opcao=NULL) {
+    function form($parametros) {
         if (Sessao::verificarSessaoUsuario() & Sessao::verificarToken(array("hdnToken" => $parametros["token"]))) {
             //modelo
             $imovel = new Imovel();
             $genericoDAO = new GenericoDAO();
             $selecionarImovel = $genericoDAO->consultar($imovel, true, array("id" => $parametros['idImovel'], "idUsuario" => $_SESSION['idusuario']));
-
             #verificar a melhor forma de tratar o blindado recursivo
             $selecionarEndereco = $genericoDAO->consultar(new Endereco(), true, array("id" => $selecionarImovel[0]->getIdEndereco()));
             $selecionarImovel[0]->setEndereco($selecionarEndereco[0]);
-
             //verifica se existe o imovel selecionado
             if ($selecionarImovel) {
                 //verificar se o anuncio ja foi publicado e redirecionar para a tela de consulta
-                if (count($selecionarImovel[0]->getAnuncio()) > 0) {
-                    $redirecionamento = $this;
-                    $redirecionamento->listarCadastrar();
-                    return;
-                } else {
+                $anuncios = $selecionarImovel[0]->getAnuncio();
+                if (count($anuncios) > 0) {
+                    if ($anuncios->getStatus() == "cadastrar") {
+                        $redirecionamento = $this;
+                        $redirecionamento->listarCadastrar();
+                        return;
+                    }
+                } 
                     $usuarioPlano = new UsuarioPlano();
                     $condicoes["idusuario"] = $_SESSION["idusuario"];
                     $condicoes["status"] = 'ativo';
@@ -50,14 +51,21 @@ class AnuncioControle {
                     $formAnuncio = array();
                     $formAnuncio["usuarioPlano"] = $listarUsuarioPlano;
                     $formAnuncio["imovel"] = $selecionarImovel;
+                    $formAnuncio["anuncio"] = ($anuncios!=NULL?$anuncios:new Anuncio());
                     $item = $formAnuncio;
                     $pagina = "AnuncioVisaoPublicar.php";
-                }
+                
             } else {
                 $item = "errotoken";
                 $pagina = "VisaoErrosGenerico.php";
             }
             //visao
+            $visao = new Template();
+            $visao->setItem($item);
+            $visao->exibir($pagina);
+        } else {
+            $item = "errotoken";
+            $pagina = "VisaoErrosGenerico.php";
             $visao = new Template();
             $visao->setItem($item);
             $visao->exibir($pagina);
@@ -181,21 +189,21 @@ class AnuncioControle {
         }
     }
 
-    function reativarAnuncio($parametros) {
-        if (Sessao::verificarSessaoUsuario() & Sessao::verificarToken($parametros)) {
-            $this->form($parametros,"reativar");
-            //TODO:regra para o cadastro do anuncio
-            //reativar anuncio se for um aluguel
-            //verificar se tem plano
-            //vai pra primeira tela do anuncio
-        } else {
-            $item = "errotoken";
-            $pagina = "VisaoErrosGenerico.php";
-            $visao = new Template();
-            $visao->setItem($item);
-            $visao->exibir($pagina);
-        }
-    }
+    /* function reativarAnuncio($parametros) {
+      if (Sessao::verificarSessaoUsuario() & Sessao::verificarToken($parametros)) {
+      $this->form($parametros,"reativar");
+      //TODO:regra para o cadastro do anuncio
+      //reativar anuncio se for um aluguel
+      //verificar se tem plano
+      //vai pra primeira tela do anuncio
+      } else {
+      $item = "errotoken";
+      $pagina = "VisaoErrosGenerico.php";
+      $visao = new Template();
+      $visao->setItem($item);
+      $visao->exibir($pagina);
+      }
+      } */
 
     function comparar($parametros) {
         $consultasAdHoc = new ConsultasAdHoc();

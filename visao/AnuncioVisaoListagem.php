@@ -13,11 +13,13 @@
                 <th>Descrição</th> 
                 <th>Valor</th>
                 <th>Status</th>
-                <th>Data da Publicação</th>
+                <th>Publicado em:</th>
+                <th class="text-center" colspan="2">Opções</th>
             </tr>
         </thead>
         <tbody>
             <?php
+            Sessao::gerarToken();
             $item = $this->getItem();
             if ($item) {
                 foreach ($item as $anuncio) {
@@ -28,31 +30,36 @@
                         <td><?php echo $anuncio->getTituloAnuncio(); ?></td>
                         <td><?php echo $anuncio->getDescricaoAnuncio(); ?></td>
                         <td><?php echo "R$ " . $anuncio->getValor(); ?></td>
-                        <td><?php echo $anuncio->getStatus(); ?></td>
+                        <td> <?php
+                            if ($anuncio->getStatus() == "cadastrado") {
+                                echo '<span class="text-success">' . $anuncio->getStatus() . ' </span>';
+                            } elseif ($anuncio->getStatus() == "finalizado") {
+                                echo '<span class="text-danger" data-toggle="tooltip" data-placement="bottom" data-html="true" title="Finalizado em: <br> ' . $anuncio->getHistoricoAluguelVenda()->getDatahora() . '">' . $anuncio->getStatus() . ' </span>';
+                            }
+                            ?>
+                        </td>
                         <td><?php echo $anuncio->getDatahoracadastro(); ?></td>
                         <td><button type="button" id="btnAnuncioModal<?php echo $anuncio->getId(); ?>" class="btn btn-info btn-sm" data-toggle="modal" data-target="#divAnuncioModal" data-modal="<?php echo $anuncio->getId(); ?>" data-title="<?php echo $anuncio->getTituloAnuncio(); ?>">
                                 <span class="glyphicon glyphicon-bullhorn"></span> 
                                 <span class="glyphicon glyphicon-eye-open"></span> Visualizar 
                             </button>
                         </td>    
-                        <?php if ($anuncio->getStatus() == "cadastrado") { ?>
-                            <td>
+                        <td>
+                            <?php if ($anuncio->getStatus() == "cadastrado") { ?>
                                 <button type="button" id="btnNegocioModal<?php echo $anuncio->getId(); ?>" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#divNegocioModal" data-modal="<?php echo $anuncio->getId(); ?>" data-title="<?php echo $anuncio->getTituloAnuncio(); ?>">
                                     <span class="glyphicon glyphicon-bullhorn"></span> 
                                     <span class="glyphicon glyphicon-thumbs-up"></span> Finalizar Negócio 
                                 </button>
-                            </td>
-                        <?php } ?>
-                        <?php if ($anuncio->getStatus() == "finalizado") { ?>
-                            <td>
-                                Finalizado em: <?php echo $anuncio->getHistoricoAluguelVenda()->getDatahora(); ?> <br>
+                            <?php } ?>
+                            <?php if ($anuncio->getStatus() == "finalizado") { ?>
                                 <?php if ($anuncio->getFinalidade() == "aluguel") { ?>
-                                <a href="index.php?entidade=Anuncio&acao=reativarAnuncio&idImovel=<?php echo $anuncio->getImovel()->getId(); ?>&token=<?php echo $_SESSION['token']; ?>" class="btn btn-success">
-                                    <span class='glyphicon glyphicon-refresh'></span> Reativar Anúncio
-                                </a>    
+                                    <a href="index.php?entidade=Anuncio&acao=form&idImovel=<?php echo $anuncio->getImovel()->getId(); ?>&token=<?php echo $_SESSION['token']; ?>" class="btn btn-success btn-sm">
+                                        <span class="glyphicon glyphicon-bullhorn"></span> 
+                                        <span class='glyphicon glyphicon-refresh'></span> Reativar Anúncio
+                                    </a>    
                                 <?php } ?>
-                            </td>
-                        <?php } ?>
+                            <?php } ?>
+                        </td>
                     </tr>
                     <?php
                 }
@@ -85,12 +92,8 @@
                         <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Anuncio"  />
                         <input type="hidden" id="hdnAcao" name="hdnAcao" value="finalizarNegocio" />
                         <input type="hidden" id="hdnAnuncio" name="hdnAnuncio"/>
-                        <input type="hidden" id="hdnToken" name="hdnToken" value="<?php
-                        Sessao::gerarToken();
-                        echo $_SESSION["token"];
-                        ?>" />
+                        <input type="hidden" id="hdnToken" name="hdnToken" value="<?php echo $_SESSION["token"]; ?>" />
                         <textarea maxlength="200" id="txtDescricao" name="txtDescricao" rows="3" class="form-control" placeholder="Informe uma Descrição do Imóvel"> </textarea><br />
-
                     </div>
                     <div class="modal-footer text-right">
                         <button type="submit" name="btnConfirmar" id="btnConfirmar" class="btn btn-primary">Confirmar!</button>
@@ -103,6 +106,8 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
+            $("span[data-toggle='tooltip']").tooltip();
+
             $('[id^=btnAnuncioModal]').click(function() {
                 $("#lblAnuncioModal").html("<span class='glyphicon glyphicon-bullhorn'></span> " + $(this).attr('data-title'));
                 $("#modal-body").html('<img src="assets/imagens/loading.gif" /><h2>Aguarde... Carregando...</h2>');

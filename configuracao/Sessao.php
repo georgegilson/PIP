@@ -26,7 +26,7 @@ class Sessao {
     }
 
     public static function desconfigurarVariavelSessao($variavel) {
-        if(isset($_SESSION[$variavel]))
+        if (isset($_SESSION[$variavel]))
             unset($_SESSION[$variavel]);
     }
 
@@ -37,11 +37,8 @@ class Sessao {
     }
 
     public static function verificarToken($parametros) {
-        if (isset($_SESSION['token']) &&
-                $parametros['hdnToken'] == $_SESSION['token']) {
-
+        if (isset($_SESSION['token']) && $parametros['hdnToken'] == $_SESSION['token']) {
             $token_age = time() - $_SESSION['token_time'];
-
             if ($token_age <= TEMPOTOKEN) {//10 minutos de sessão
                 return true;
             } else {
@@ -74,17 +71,17 @@ class Sessao {
         $_SESSION["imagem"] = NULL;
     }
 
-    public static function configurarSessaoImagem($acao,$nome,$dados=NULL) {
-        if($acao=="inserir"){
+    public static function configurarSessaoImagem($acao, $nome, $dados = NULL) {
+        if ($acao == "inserir") {
             $_SESSION["imagem"][$nome] = $dados;
         }
-        
-        if($acao=="excluir"){
+
+        if ($acao == "excluir") {
             unset($_SESSION["imagem"][$nome]);
         }
     }
-    
-    public static function configurarSessaoImovel($imovel){
+
+    public static function configurarSessaoImovel($imovel) {
         $_SESSION["imovel"]["id"] = $imovel["id"];
         $_SESSION["imovel"]["idendereco"] = $imovel["idendereco"];
     }

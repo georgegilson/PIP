@@ -48,7 +48,7 @@ class ConsultasAdHoc extends GenericoDAO {
                 . " JOIN usuarioplano up ON up.id = a.idusuarioplano"
                 . " JOIN usuario u ON up.idusuario = u.id"
                 . " WHERE u.status = 'ativo'"
-                . " AND a.status = 'cadastrado'"
+                //. " AND a.status = 'cadastrado'"
                 . " AND a.idimovel = i.id"
                 . " AND u.id = :idUsuario "
                 . " ) ";
