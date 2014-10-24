@@ -3,49 +3,45 @@ include_once 'modelo/Imovel.php';
 
 $imovel = new Imovel();
 ?>
-       <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
-       <script src="assets/js/gmaps.js"></script>
-       <script src="assets/js/bootstrap-multiselect.js"></script>
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+<script src="assets/js/gmaps.js"></script>
+<script src="assets/js/bootstrap-multiselect.js"></script>
 <script>
-     
-$(document).ready(function(){
-           $('#sltDiferencial').multiselect({
+
+    $(document).ready(function() {
+        $('#sltDiferencial').multiselect({
             buttonClass: 'btn btn-default btn-sm',
             includeSelectAllOption: true
         });
-    $("select[name=sltCidade]").change(function(){
-    $('select[name=sltBairro]').html('<option value="">Procurando...</option>');
-            $.post('index.php?hdnEntidade=Bairro&hdnAcao=selecionarBairro&idcidade='+$('#sltCidade').val(),
-                    function(resposta){
-                    $('select[name=sltBairro]').html(resposta);
+        $("select[name=sltCidade]").change(function() {
+            $('select[name=sltBairro]').html('<option value="">Procurando...</option>');
+            $.post('index.php?hdnEntidade=Bairro&hdnAcao=selecionarBairro&idcidade=' + $('#sltCidade').val(),
+                    function(resposta) {
+                        $('select[name=sltBairro]').html(resposta);
                     }
 
             );
-            });
-});
-
-</script>
+        });
+    });</script>
 
 <script>
-     
-$(document).ready(function(){
-    $("select[name=sltCidadeAvancado]").change(function(){
-    $('select[name=sltBairroAvancado]').html('<option value="">Procurando...</option>');
-            $.post('index.php?hdnEntidade=Bairro&hdnAcao=selecionarBairro&idcidade='+$('#sltCidadeAvancado').val(),
-                    function(resposta){
-                    $('select[name=sltBairroAvancado]').html(resposta);
+
+    $(document).ready(function() {
+        $("select[name=sltCidadeAvancado]").change(function() {
+            $('select[name=sltBairroAvancado]').html('<option value="">Procurando...</option>');
+            $.post('index.php?hdnEntidade=Bairro&hdnAcao=selecionarBairro&idcidade=' + $('#sltCidadeAvancado').val(),
+                    function(resposta) {
+                        $('select[name=sltBairroAvancado]').html(resposta);
                     }
 
             );
-            });
-});
-
-</script>
+        });
+    });</script>
 
 <script>
-$(document).ready(function(){
-    $("#divValorVenda").hide(); //oculta a div dos valores de venda 
-    $("#divValorAluguel").hide(); //oculta a div dos valores de aluguel
+    $(document).ready(function() {
+        $("#divValorVenda").hide(); //oculta a div dos valores de venda 
+        $("#divValorAluguel").hide(); //oculta a div dos valores de aluguel
 
         $("#sltFinalidade").change(function() {
             if ($(this).val() == "venda") {
@@ -61,22 +57,21 @@ $(document).ready(function(){
                 $("#divValorAluguel").fadeIn(); //oculta campos exclusivos do apartamento 
                 //             $("#lblCpfCnpj").html("CNPJ");
                 //             $("#txtCpfCnpj").attr("placeholder", "Informe o CNPJ");
-            } 
-            
-            if ($(this).val() == ""){
+            }
+
+            if ($(this).val() == "") {
                 $("#divValorVenda").fadeOut(); //oculta campos exclusivos do apartamento 
                 $("#divValorAluguel").fadeOut(); //oculta campos exclusivos do apartamento 
                 $("#divValorInicial").fadeIn(); //oculta campos exclusivos do apartamento 
             }
-            
+
         })
-    });         
-</script>
+    });</script>
 
 <script>
-$(document).ready(function(){
-    $("#divValorVendaAvancado").hide(); //oculta a div dos valores de venda 
-    $("#divValorAluguelAvancado").hide(); //oculta a div dos valores de aluguel
+    $(document).ready(function() {
+        $("#divValorVendaAvancado").hide(); //oculta a div dos valores de venda 
+        $("#divValorAluguelAvancado").hide(); //oculta a div dos valores de aluguel
 
         $("#sltFinalidadeAvancado").change(function() {
             if ($(this).val() == "venda") {
@@ -92,19 +87,19 @@ $(document).ready(function(){
                 $("#divValorAluguelAvancado").fadeIn(); //oculta campos exclusivos do apartamento 
                 //             $("#lblCpfCnpj").html("CNPJ");
                 //             $("#txtCpfCnpj").attr("placeholder", "Informe o CNPJ");
-            } 
-            
-            if ($(this).val() == ""){
+            }
+
+            if ($(this).val() == "") {
                 $("#divValorVendaAvancado").fadeOut(); //oculta campos exclusivos do apartamento 
                 $("#divValorAluguelAvancado").fadeOut(); //oculta campos exclusivos do apartamento 
                 $("#divValorInicialAvancado").fadeIn(); //oculta campos exclusivos do apartamento 
             }
-            
+
         })
-    });         
-</script>
-    
-   <div class="container divBusca"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) -->         
+    });</script>
+
+
+<div class="container divBusca"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) -->         
     <!-- Example row of columns -->
     <!--    <div class="alert">Todos</div> -->
 
@@ -121,7 +116,7 @@ $(document).ready(function(){
             <form id="form" class="form-horizontal" action="index.php" method="post">
                 <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Anuncio"  />
                 <input type="hidden" id="hdnAcao" name="hdnAcao" value="buscar" />    
-                
+
                 <div class="row">
                     <div id="divFinalidade">
                         <p />
@@ -134,7 +129,7 @@ $(document).ready(function(){
                             </select>
                         </div>
                     </div>
-                    
+
                     <div id="divValorInicial">
                         <div class="col-lg-3">
                             <label  for="sltValor">Valor do Imóvel</label>
@@ -143,7 +138,7 @@ $(document).ready(function(){
                             </select>
                         </div>
                     </div>
-                    
+
                     <div id="divValorVenda">
                         <div class="col-lg-3">
                             <label  for="sltValorVenda">Valor do Imóvel</label>
@@ -177,8 +172,8 @@ $(document).ready(function(){
                             </select>
                         </div>
                     </div>
-                    
-                     <div id="divValorAluguel">
+
+                    <div id="divValorAluguel">
                         <div class="col-lg-3">
                             <label  for="sltValorAluguel">Valor do Aluguel</label>
                             <select class="form-control" id="sltValorAluguel" name="sltValorAluguel">
@@ -207,7 +202,7 @@ $(document).ready(function(){
                             </select>
                         </div>
                     </div>
-                    
+
                     <div class="col-lg-3">
                         <label  for="sltTipo">Tipo de Imóvel</label>
                         <select class="form-control" id="sltTipo" name="sltTipo">
@@ -230,7 +225,7 @@ $(document).ready(function(){
                             <option value="06">Mais de 05</option>
                         </select>
                     </div>
-                    
+
                 </div>
 
                 <br />
@@ -253,7 +248,7 @@ $(document).ready(function(){
                             <option value="">Selecione a Cidade</option>
                         </select>
                     </div>
-                    
+
                     <div class="col-lg-3">
                         <label  for="sltBanheiro">Banheiro(s)</label>
                         <select class="form-control" id="sltBanheiro" name="sltBanheiro">
@@ -282,7 +277,7 @@ $(document).ready(function(){
             <form id="form" class="form-horizontal" action="index.php" method="post">
                 <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Anuncio"  />
                 <input type="hidden" id="hdnAcao" name="hdnAcao" value="buscarAvancado" />   
-                
+
                 <div class="row">
                     <div id="divFinalidadeAvancado">
                         <p />
@@ -295,7 +290,7 @@ $(document).ready(function(){
                             </select>
                         </div>
                     </div>
-                    
+
                     <div id="divValorInicialAvancado">
                         <div class="col-lg-3">
                             <label for="sltValorAvancado">Valor do Imóvel</label>
@@ -304,7 +299,7 @@ $(document).ready(function(){
                             </select>
                         </div>
                     </div>
-                    
+
                     <div id="divValorVendaAvancado">
                         <div class="col-lg-3">
                             <label  for="sltValorVendaAvancado">Valor do Imóvel</label>
@@ -338,8 +333,8 @@ $(document).ready(function(){
                             </select>
                         </div>
                     </div>
-                    
-                     <div id="divValorAluguelAvancado">
+
+                    <div id="divValorAluguelAvancado">
                         <div class="col-lg-3">
                             <label  for="sltValorAluguelAvancado">Valor do Aluguel</label>
                             <select class="form-control" id="sltValorAluguelAvancado" name="sltValorAluguelAvancado">
@@ -368,7 +363,7 @@ $(document).ready(function(){
                             </select>
                         </div>
                     </div>
-                    
+
                     <div class="col-lg-2">
                         <label  for="sltTipo">Tipo de Imóvel</label>
                         <select class="form-control" id="sltTipo" name="sltTipo">
@@ -391,7 +386,7 @@ $(document).ready(function(){
                             <option value="06">Mais de 05</option>
                         </select>
                     </div>
-                    
+
                     <div class="col-lg-2">
                         <label  for="sltBanheiro">Banheiro(s)</label>
                         <select class="form-control" id="sltBanheiro" name="sltBanheiro">
@@ -404,13 +399,13 @@ $(document).ready(function(){
                             <option value="06">Mais de 05</option>
                         </select>
                     </div>
-                    
+
                 </div>    
-                    
+
                 <br />
-                
+
                 <div class="row">
-                    
+
                     <div class="col-lg-3">
                         <label  for="sltCidadeAvancado">Cidade</label>
                         <select class="form-control" id="sltCidadeAvancado" name="sltCidadeAvancado">
@@ -429,7 +424,7 @@ $(document).ready(function(){
                     </div>
 
                     <div class="col-lg-2">
-                       <label  for="sltGaragem">Garagem(ns)</label>
+                        <label  for="sltGaragem">Garagem(ns)</label>
                         <select class="form-control" id="sltGaragem" name="sltGaragem">
                             <option value="">Garagem(ns)</option>
                             <option value="nenhuma">Nenhuma</option>
@@ -441,7 +436,7 @@ $(document).ready(function(){
                             <option value="06">Mais de 05</option>
                         </select> 
                     </div>
-                    
+
                     <div class="col-lg-2">
                         <label  for="sltSuite">Suite(s)</label>
                         <select class="form-control" id="sltGaragem" name="sltSuite">
@@ -454,7 +449,7 @@ $(document).ready(function(){
                             <option value="06">Mais de 05</option>
                         </select>
                     </div> 
-                    
+
                     <div class="col-lg-2">
                         <label  for="sltM2">Área (m²)</label>
                         <select class="form-control" id="sltM2" name="sltM2">
@@ -471,13 +466,13 @@ $(document).ready(function(){
                             <option value="200">Mais de 200</option>
                         </select>
                     </div> 
-                    
+
                 </div>
 
                 <br />
 
                 <div class="row">            
-                    
+
                     <div class="col-lg-3">
                         <label  for="sltCondicao">Condição do Imóvel</label>
                         <select class="form-control" id="sltCondicao" name="sltCondicao">
@@ -487,12 +482,12 @@ $(document).ready(function(){
                             <option value="usado">Usado</option>
                         </select>
                     </div>
-                    
+
                     <div class="col-lg-2">
                         <label  for="txtReferencia">Referência do Imóvel</label>
-                         <input type="text" id="txtReferencia" name="txtReferencia" class="form-control" placeholder="Ex: 20130000001">
+                        <input type="text" id="txtReferencia" name="txtReferencia" class="form-control" placeholder="Ex: 20130000001">
                     </div>
-                    
+
                     <div class="col-lg-3">
                         <label  for="sltDiferencial">Diferencial</label>
                         <div class="form-group">
@@ -505,51 +500,51 @@ $(document).ready(function(){
                                 <option value="quadra">Quadra</option>
                             </select>
                         </div>
-                    
+
                     </div>
-                    
+
                     <br />
                     <div class="col-lg-2">
                         <button type="submit" class="btn btn-primary">Buscar Imóvel</button>
                     </div> 
-                    
+
                 </div>    
- 
-             </div>    
-                
-            </form>
-            
-            <p/>
-            
-        </div>
-   </div>      
+        </form>
+
+        </div>    
+
+
+        <p/>
+
+    </div>
+</div>      
 
 <form class="grid-form" id="form" action="index.php" method="post">
     <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Anuncio"  />
     <input type="hidden" id="hdnAcao" name="hdnAcao" value="comparar" />
     <style type="text/css">
-<!-- div#btncomparar {position:fixed;top:370px;right:80px} →</style>
+        <!-- div#btncomparar {position:fixed;top:370px;right:80px} →</style>
     <style type="text/css">
-<!-- div#btnEnviarEmail {position:fixed;top:330px;right:80px} →</style>
+        <!-- div#btnEnviarEmail {position:fixed;top:330px;right:80px} →</style>
 
-<div id="btncomparar">
-    <button type="submit" class="btn" id="btncomparar" value="Comparar">Comparar</button>
-</div>
+    <div id="btncomparar">
+        <button type="submit" class="btn" id="btncomparar" value="Comparar">Comparar</button>
+    </div>
     <br>
 
+
     <div id="btnEnviarEmail">
-<button type="button" id="btnEnviarEmail" class="btn btn-default btn-sm" style="margin-left: 60px" 
-        data-toggle="modal" data-target="#divEmailModal" data-modal="<?php echo $anuncio->id; ?>" 
-        data-title="<?php echo $anuncio->tituloanuncio; ?>">
-    <span class="glyphicon glyphicon-plus-sign"></span> Enviar Email
-</button>
+        <button type="button" id="btnEnviarEmail" class="btn btn-default btn-sm" style="margin-left: 60px" 
+                data-toggle="modal" data-target="#divEmailModal" data-modal="<?php echo $anuncio->id; ?>" 
+                data-title="<?php echo $anuncio->tituloanuncio; ?>">
+            <span class="glyphicon glyphicon-plus-sign"></span> Enviar Email
+        </button>
     </div>
 
+    <div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
+        <script src="assets/js/gridforms.js"></script>
+        <!-- Example row of columns -->
 
-<div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
-     <script src="assets/js/gridforms.js"></script>
-    <!-- Example row of columns -->
-    
         <table class="table table-hover">
             <thead>
 
@@ -563,21 +558,77 @@ $(document).ready(function(){
             ?>
 
             <script>
-                $(document).ready(function() {
-                    var NumeroMaximo = 10;
-                    $("input[id^='selecoes_']").click(function() {
-                        if ($("input[id^='selecoes_']").filter(':checked').size() > NumeroMaximo) {
-                            alert('Selecione no máximo ' + NumeroMaximo + ' imóveis para a comparação');
-                            return false;
-                        } else {
-                            if ($(this).filter(':checked').size() > 0) {
-                                $(this).parent().parent().parent().css('border', '3px dotted orange');
-                            } else {
-                                $(this).parent().parent().parent().css('border', '0px');
+    $(document).ready(function() {
+        var NumeroMaximo = 10;
+        $("input[id^='selecoes_']").click(function() {
+            if ($("input[id^='selecoes_']").filter(':checked').size() > NumeroMaximo) {
+                alert('Selecione no máximo ' + NumeroMaximo + ' imóveis para a comparação');
+                return false;
+            } else {
+                if ($(this).filter(':checked').size() > 0) {
+                    $(this).parent().parent().parent().css('border', '3px dotted orange');
+                } else {
+                    $(this).parent().parent().parent().css('border', '0px');
+                }
+            }
+        });
+        $("#btnEnviar").click(function() {
+            $("#formEmail").valid();
+        });
+        $('#formEmail').validate({
+                rules: {
+                    txtEmail: {
+                        required: true,
+                        email: true,
+                    },
+                },
+                highlight: function(element) {
+                    $(element).closest('.form-group').addClass('has-error');
+                },
+                unhighlight: function(element) {
+                    $(element).closest('.form-group').removeClass('has-error');
+                },
+                errorElement: 'span',
+                errorClass: 'help-block',
+                errorPlacement: function(error, element) {
+                    if (element.parent('.input-group').length) {
+                        error.insertAfter(element.parent());
+                    } else {
+                        error.insertAfter(element);
+                    }
+                },
+                submitHandler: function() {
+                        $.ajax({
+                            url: "index.php",
+                            dataType: "json",
+                            type: "POST",
+                            data: {
+                                hdnEntidade: "Anuncio",
+                                hdnAcao: "enviarEmail",
+                                selecoes: $("input[id^='selecoes_']").serializeArray(),
+                                email: $("#txtEmail").val(),
+                            },
+                            beforeSend: function() {
+//                                $('.alert').html("...processando...").attr('class', 'alert alert-warning');
+//                                $('button[type=submit]').attr('disabled', 'disabled');
+                            },
+                            success: function(resposta) {
+//                                $('button[type=submit]').removeAttr('disabled');
+//                                if (resposta.resultado == 1) {
+//                                    $('.alert').html(
+//                                            "<h4>A sua conta de usuário foi atualizada com sucesso!</h4>").attr('class', 'alert alert-success');
+//                                    $('#divlinha1').fadeOut('slow');
+//                                    $('#divlinha2').fadeOut('slow');
+//                                    $('#divlinha3').fadeOut('slow');
+//                                } else {
+//                                    $('.alert').html("Erro ao cadastrar").attr('class', 'alert alert-danger');
+//                                }
                             }
-                        }
-                    })
-                });
+                        });
+//                        return false;
+                }
+            });
+    });
             </script>
 
             <?php
@@ -586,187 +637,196 @@ $(document).ready(function(){
             if ($item) {
                 foreach ($item as $anuncio) {
                     ?>
-        <link rel="stylesheet" type="text/css" href="assets/css/gridforms.css">            
-        
-        <div class="panel panel-warning col-md-11"  id="<?php echo $anuncio->id; ?>" >
+                    <link rel="stylesheet" type="text/css" href="assets/css/gridforms.css">            
 
-        <div class="panel-body">
-        
-        <fieldset class="col-md-9">
-                        
-                        <div data-row-span="1">
-                         <input type="checkbox" id="selecoes_<?php echo $anuncio->id; ?>" class="option" name="selecoes[]" value=<?php echo $anuncio->id; ?>> Selecionar Imóvel         
-                        </div>
-            
-                        <div data-row-span="7">
-				<div data-field-span="2">
-                                    <label style="text-align: center">Título</label>
-					<?php echo "<span class='label label-info'>" . strtoupper($anuncio->tituloanuncio) . "</span>"; ?>
-				</div>
+                    <div class="panel panel-warning col-md-11"  id="<?php echo $anuncio->id; ?>" >
+
+                        <div class="panel-body">
+
+                            <fieldset class="col-md-9">
+
+                                <div data-row-span="1">
+                                    <input type="checkbox" id="selecoes_<?php echo $anuncio->id; ?>" class="option" name="selecoes[]" value=<?php echo $anuncio->id; ?>> Selecionar Imóvel         
+                                </div>
+
+                                <div data-row-span="7">
+                                    <div data-field-span="2">
+                                        <label style="text-align: center">Título</label>
+                                        <?php echo "<span class='label label-info'>" . strtoupper($anuncio->tituloanuncio) . "</span>"; ?>
+                                    </div>
+
+                                    <div data-field-span="1">
+                                        <label style="text-align: center">Tipo</label>
+                                        <?php echo "<span class='label label-warning'>" . strtoupper($anuncio->tipo) . "</span>"; ?>
+                                    </div>
+
+                                    <div data-field-span="1">
+                                        <label style="text-align: center">Finalidade</label>
+                                        <?php echo "<span class='label label-primary'>" . strtoupper($anuncio->finalidade) . "</span>"; ?>
+                                    </div>
+                                    <div data-field-span="1">
+                                        <label style="text-align: center">Quarto(s)</label>
+                                        <?php echo $anuncio->quarto; ?>
+                                    </div>
+                                    <div data-field-span="1">
+                                        <label style="text-align: center">Área (em m<sup>2</sup>)</label>
+                                        <?php echo $anuncio->area; ?>
+                                    </div>
+                                    <div data-field-span="1">
+                                        <label style="text-align: center">Condição</label>
+                                        <?php echo $anuncio->condicao; ?>
+                                    </div>
+                                </div>
+
+                                <div data-row-span="7">
+                                    <div data-field-span="3">
+                                        <label style="text-align: center">Descrição</label>
+                                        <?php echo $anuncio->descricao; ?>
+                                    </div>
+                                    <div data-field-span="1">
+                                        <label style="text-align: center">Valor</label>
+                                        R$ <?php echo $anuncio->valor; ?>
+                                    </div>
+                                    <div data-field-span="1">
+                                        <label style="text-align: center">Banheiro(s)</label>
+                                        <?php echo $anuncio->banheiro; ?>
+                                    </div>
+                                    <div data-field-span="1">
+                                        <label style="text-align: center">Garagem(ns)</label>
+                                        <?php echo $anuncio->garagem; ?>
+                                    </div>
+                                    <div data-field-span="1">
+                                        <label style="text-align: center">Referência</label>
+                                        <?php echo "<span class='label label-info'>" . substr($anuncio->datahoracadastro, 6, -9) . substr($anuncio->datahoracadastro, 3, -14) . str_pad($anuncio->idimovel, 5, "0", STR_PAD_LEFT) . "</span>"; ?>
+                                    </div>
+                                </div>
+
+                                <div data-row-span="7">
+                                    <div data-field-span="3" style="background-color: #e4fcff">
+                                        <label style="text-align: center;">Endereço</label>
+                                        <?php echo $anuncio->logradouro . ", Nº " . $anuncio->numero; ?>
+                                    </div>
+                                    <div data-field-span="1">
+                                        <label style="text-align: center">Cidade</label>
+                                        <?php echo $anuncio->cidade; ?>
+                                    </div>
+                                    <div data-field-span="1">
+                                        <label style="text-align: center">Bairro</label>
+                                        <?php echo $anuncio->bairro; ?>
+                                    </div>
+                                    <div data-field-span="1">
+                                        <label style="text-align: center">Suite(s)</label>
+                                        <?php echo $anuncio->suite; ?>
+                                    </div>
+                                    <div data-field-span="1">
+                                        <label style="text-align: center">Condição</label>
+                                        <?php echo $anuncio->condicao; ?>
+                                    </div>
+
+                                </div>
+
+                            </fieldset>
+                            <br/>
+                            <fieldset class="col-md-2">
+
+                                <div>
+
+                                    <img src="<?php echo $anuncio->diretorio ?>" height="160" width="160" class="img-thumbnail" style="margin-left: 60px">
+
+                                </div>
+
+                                <br/>
+
+                                <div>
+
+                                    <button type="button" id="btnAnuncioModal<?php echo substr($anuncio->datahoracadastro, 6, -9) . substr($anuncio->datahoracadastro, 3, -14) . str_pad($anuncio->idimovel, 5, "0", STR_PAD_LEFT); ?>" class="btn btn-default btn-sm" style="margin-left: 60px" data-toggle="modal" data-target="#divAnuncioModal" data-modal="<?php echo $anuncio->id; ?>" data-title="<?php echo $anuncio->tituloanuncio; ?>">
+                                        <span class="glyphicon glyphicon-plus-sign"></span> Veja mais detalhes
+                                    </button>
+
+                                </div>
+
+                            </fieldset>
+
+
+                            <!-- Modal Para Abrir a Div do Veja Mais Detalhes -->
+                            <div class="modal fade" id="divAnuncioModal" tabindex="-1" role="dialog" aria-labelledby="lblAnuncioModal" aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div id="modal-body" class="modal-body text-center">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             
-                                <div data-field-span="1">
-					<label style="text-align: center">Tipo</label>
-					<?php echo "<span class='label label-warning'>" . strtoupper($anuncio->tipo) . "</span>"; ?>
-				</div>
                             
-				<div data-field-span="1">
-					<label style="text-align: center">Finalidade</label>
-					<?php echo "<span class='label label-primary'>" . strtoupper($anuncio->finalidade) . "</span>"; ?>
-				</div>
-                                <div data-field-span="1">
-					<label style="text-align: center">Quarto(s)</label>
-					<?php echo $anuncio->quarto; ?>
-				</div>
-                                <div data-field-span="1">
-                                    <label style="text-align: center">Área (em m<sup>2</sup>)</label>
-					<?php echo $anuncio->area; ?>
-				</div>
-                                <div data-field-span="1">
-					<label style="text-align: center">Condição</label>
-					<?php echo $anuncio->condicao; ?>
-				</div>
-			</div>
-            
-			<div data-row-span="7">
-				<div data-field-span="3">
-					<label style="text-align: center">Descrição</label>
-					<?php echo $anuncio->descricao; ?>
-				</div>
-				<div data-field-span="1">
-					<label style="text-align: center">Valor</label>
-					 R$ <?php echo $anuncio->valor; ?>
-				</div>
-                                <div data-field-span="1">
-					<label style="text-align: center">Banheiro(s)</label>
-					<?php echo $anuncio->banheiro; ?>
-				</div>
-                                 <div data-field-span="1">
-					<label style="text-align: center">Garagem(ns)</label>
-					<?php echo $anuncio->garagem; ?>
-				</div>
-                                <div data-field-span="1">
-					<label style="text-align: center">Referência</label>
-					<?php echo "<span class='label label-info'>" . substr($anuncio->datahoracadastro, 6, -9) . substr($anuncio->datahoracadastro, 3, -14) . str_pad($anuncio->idimovel, 5, "0", STR_PAD_LEFT) . "</span>"; ?>
-				</div>
-			</div>
-            
-                        <div data-row-span="7">
-                            <div data-field-span="3" style="background-color: #e4fcff">
-					<label style="text-align: center;">Endereço</label>
-					<?php echo $anuncio->logradouro . ", Nº " . $anuncio->numero;?>
-				</div>
-                                <div data-field-span="1">
-					<label style="text-align: center">Cidade</label>
-					<?php echo $anuncio->cidade ;?>
-				</div>
-				<div data-field-span="1">
-					<label style="text-align: center">Bairro</label>
-					<?php echo $anuncio->bairro; ?>
-				</div>
-                                <div data-field-span="1">
-					<label style="text-align: center">Suite(s)</label>
-					<?php echo $anuncio->suite; ?>
-				</div>
-                                 <div data-field-span="1">
-					<label style="text-align: center">Condição</label>
-					<?php echo $anuncio->condicao; ?>
-				</div>
-                                
-			</div>
 
-        </fieldset>
-            <br/>
-            <fieldset class="col-md-2">
-                
-                <div>
-                    
-                    <img src="<?php echo $anuncio->diretorio ?>" height="160" width="160" class="img-thumbnail" style="margin-left: 60px">
-                    
-                </div>
-                
-                <br/>
-                
-                <div>
-
-                    <button type="button" id="btnAnuncioModal<?php echo substr($anuncio->datahoracadastro, 6, -9) . substr($anuncio->datahoracadastro, 3, -14) . str_pad($anuncio->idimovel, 5, "0", STR_PAD_LEFT); ?>" class="btn btn-default btn-sm" style="margin-left: 60px" data-toggle="modal" data-target="#divAnuncioModal" data-modal="<?php echo $anuncio->id; ?>" data-title="<?php echo $anuncio->tituloanuncio; ?>">
-                        <span class="glyphicon glyphicon-plus-sign"></span> Veja mais detalhes
-                    </button>
-                    
-                </div>
-                
-            </fieldset>
-            
-            
-            <!-- Modal Para Abrir a Div do Veja Mais Detalhes -->
-<div class="modal fade" id="divAnuncioModal" tabindex="-1" role="dialog" aria-labelledby="lblAnuncioModal" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div id="modal-body" class="modal-body text-center">
-            </div>
-        </div>
-    </div>
-</div>
-            
-             <!-- Modal Para Abrir a Div do Enviar Anuncios por Email -->
-<div class="modal fade" id="divEmailModal" tabindex="-1" role="dialog" aria-labelledby="lblAnuncioModal" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div id="modal-body" class="modal-body text-center">
-                <div class="form-group">
-                        <label class="col-lg-3 control-label" for="txtEmail">Email</label>
-                        <div class="col-lg-8">
-                            <input type="text" id="txtEmail" name="txtEmail" class="form-control" placeholder="Informe o seu email">
                         </div>
-                    </div>
-            </div>
-        </div>
-    </div>
-</div>
 
+                    </div>    
 
+                    <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
 
-            
-        </div>
-            
-        </div>    
-            
-        <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-        
-            <?php
+                    <?php
                 }
             }
             ?>
             </tbody>
         </table>
-       
+</div>
 </form>
-     
-     <script>
+
+<!-- Modal Para Abrir a Div do Enviar Anuncios por Email -->
+                            <div class="modal fade" id="divEmailModal" tabindex="-1" role="dialog" aria-labelledby="lblAnuncioModal" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div id="modal-body" class="modal-body text-center">
+<form id="formEmail" class="form-horizontal">
+                                            
+                                                <div class="row">
+                                                    <div class="form-group">
+                                                        <label class="col-lg-1 control-label" for="txtEmail">Email:</label>
+                                                        <div class="col-lg-8">
+                                                            <input type="text" id="txtEmail" name="txtEmail" class="form-control" placeholder="Informe o email">
+                                                        </div>
+                                                        <button id="btnEnviar"  type="submit" class="btn btn-primary">Enviar</button>
+                                                    </div>
+                                                </div>
+</form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+    
+    
+    
+    
+    <script>
     $(document).ready(function() {
         $('[id^=btnAnuncioModal]').click(function() {
             $("#lblAnuncioModal").html("<span class='glyphicon glyphicon-bullhorn'></span> " + $(this).attr('data-title'));
             $("#modal-body").html('<img src="assets/imagens/loading.gif" /><h2>Aguarde... Carregando...</h2>');
-            $("#modal-body").load("index.php", {hdnEntidade:'Anuncio', hdnAcao:'modal', hdnToken:'<?php //Sessao::gerarToken(); echo $_SESSION["token"]; ?>', hdnModal:$(this).attr('data-modal')});
+            $("#modal-body").load("index.php", {hdnEntidade: 'Anuncio', hdnAcao: 'modal', hdnToken: '<?php //Sessao::gerarToken(); echo $_SESSION["token"];       ?>', hdnModal: $(this).attr('data-modal')});
         })
 
         var NumeroMaximo = 10;
         $("input[id^='selecoes_']").click(function() {
             if ($("input[id^='selecoes_']").filter(':checked').size() > NumeroMaximo) {
-                alert('Selecione no máximo '+ NumeroMaximo +' imóveis para a comparação');
+                alert('Selecione no máximo ' + NumeroMaximo + ' imóveis para a comparação');
                 return false;
             }
         })
 
         $("#btncomparar").click(function() {
-                //alert('teste');
-                if ($("input[id^='selecoes_']").filter(':checked').size() <= 1)
-                {
-                    alert('Selecione no mínimo 2 imóveis para a comparação');
-                    return false;
-                }
+            //alert('teste');
+            if ($("input[id^='selecoes_']").filter(':checked').size() <= 1)
+            {
+                alert('Selecione no mínimo 2 imóveis para a comparação');
+                return false;
+            }
         })
-        
+
     })
 </script>
-     
-</div>

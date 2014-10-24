@@ -18,6 +18,7 @@ include_once 'DAO/ConsultasAdHoc.php';
 include_once 'assets/pager/Pager.php';
 include_once 'modelo/Mensagem.php';
 include_once 'modelo/AnuncioClique.php';
+include_once 'modelo/EmailAnuncio';
 
 class AnuncioControle {
 
@@ -27,20 +28,19 @@ class AnuncioControle {
             $imovel = new Imovel();
             $genericoDAO = new GenericoDAO();
             $selecionarImovel = $genericoDAO->consultar($imovel, true, array("id" => $parametros['idImovel'], "idUsuario" => $_SESSION['idusuario']));
+
             #verificar a melhor forma de tratar o blindado recursivo
             $selecionarEndereco = $genericoDAO->consultar(new Endereco(), true, array("id" => $selecionarImovel[0]->getIdEndereco()));
             $selecionarImovel[0]->setEndereco($selecionarEndereco[0]);
+
             //verifica se existe o imovel selecionado
             if ($selecionarImovel) {
                 //verificar se o anuncio ja foi publicado e redirecionar para a tela de consulta
-                $anuncios = $selecionarImovel[0]->getAnuncio();
-                if (count($anuncios) > 0) {
-                    if ($anuncios->getStatus() == "cadastrar") {
-                        $redirecionamento = $this;
-                        $redirecionamento->listarCadastrar();
-                        return;
-                    }
-                } 
+                if (count($selecionarImovel[0]->getAnuncio()) > 0) {
+                    $redirecionamento = $this;
+                    $redirecionamento->listarCadastrar();
+                    return;
+                } else {
                     $usuarioPlano = new UsuarioPlano();
                     $condicoes["idusuario"] = $_SESSION["idusuario"];
                     $condicoes["status"] = 'ativo';
@@ -51,21 +51,14 @@ class AnuncioControle {
                     $formAnuncio = array();
                     $formAnuncio["usuarioPlano"] = $listarUsuarioPlano;
                     $formAnuncio["imovel"] = $selecionarImovel;
-                    $formAnuncio["anuncio"] = ($anuncios!=NULL?$anuncios:new Anuncio());
                     $item = $formAnuncio;
                     $pagina = "AnuncioVisaoPublicar.php";
-                
+                }
             } else {
                 $item = "errotoken";
                 $pagina = "VisaoErrosGenerico.php";
             }
             //visao
-            $visao = new Template();
-            $visao->setItem($item);
-            $visao->exibir($pagina);
-        } else {
-            $item = "errotoken";
-            $pagina = "VisaoErrosGenerico.php";
             $visao = new Template();
             $visao->setItem($item);
             $visao->exibir($pagina);
@@ -134,8 +127,8 @@ class AnuncioControle {
             $listaAnuncio = $consultasAdHoc->ConsultarAnunciosPorUsuario($_SESSION['idusuario']);
             foreach ($listaAnuncio as $anuncio) {
                 $imovel = $genericoDAO->consultar(new Imovel(), false, array("id" => $anuncio->getIdImovel()));
-                $anuncio->setImovel($imovel[0]);
-                $historicoAluguelVenda = $genericoDAO->consultar(new HistoricoAluguelVenda(), false, array("idAnuncio" => $anuncio->getId()));
+               	$anuncio->setImovel($imovel[0]);
+		$historicoAluguelVenda = $genericoDAO->consultar(new HistoricoAluguelVenda(), false, array("idAnuncio" => $anuncio->getId()));
                 $anuncio->setHistoricoAluguelVenda($historicoAluguelVenda[0]);
                 $listarAnuncio[] = $anuncio;
             }
@@ -188,22 +181,6 @@ class AnuncioControle {
             }
         }
     }
-
-    /* function reativarAnuncio($parametros) {
-      if (Sessao::verificarSessaoUsuario() & Sessao::verificarToken($parametros)) {
-      $this->form($parametros,"reativar");
-      //TODO:regra para o cadastro do anuncio
-      //reativar anuncio se for um aluguel
-      //verificar se tem plano
-      //vai pra primeira tela do anuncio
-      } else {
-      $item = "errotoken";
-      $pagina = "VisaoErrosGenerico.php";
-      $visao = new Template();
-      $visao->setItem($item);
-      $visao->exibir($pagina);
-      }
-      } */
 
     function comparar($parametros) {
         $consultasAdHoc = new ConsultasAdHoc();
@@ -314,6 +291,53 @@ class AnuncioControle {
             $genericoDAO->rollback();
             $genericoDAO->fecharConexao();
             echo json_encode(array("resultado" => 1));
+        }
+    }
+
+    function enviarEmail($parametros) {
+//            var_dump($parametros['email']);
+//        print_r($parametros['selecoes']);
+        $genericoDAO = new GenericoDAO();
+        $genericoDAO->iniciarTransacao();
+        $dadosEmail['destino'] = $parametros['email'];
+        $dadosEmail['contato'] = "PIP-Online";
+        $dadosEmail['assunto'] = "Fulano de tal selecionou este(s) immóvel(is) para você!";
+        foreach ($parametros['selecoes'] as $idanuncio) {
+            $emailanuncio = new EmailAnuncio();
+            $selecionaremailanuncio = $emailanuncio->cadastrar($idanuncio);
+            $idemailanuncio = $genericoDAO->cadastrar($selecionaremailanuncio);
+//            $selecionarAnuncio = $genericoDAO->consultar(new Anuncio(), false, array("id" => $idanuncio['value']));
+            $dadosEmail['msg'] += "Acesse agora esse imóvel <br>
+                <a href=http://localhost/PIP/index.php?entidade=Anuncio&acao=verficahashemail&id=" . $selecionaremailanuncio->getHash() . ">http://localhost/PIP/index.php?entidade=Anuncio&acao=verficahashemail&id=" . $selecionaremailanuncio->getHash() . "</a><br>";
+        }
+        if (Email::enviarEmail($dadosEmail)) {
+            $genericoDAO->commit();
+            $genericoDAO->fecharConexao();
+        } else {
+            $genericoDAO->rollback();
+            $genericoDAO->fecharConexao();
+        }
+        //       die();
+    }
+
+    function verficahashemail($parametros) {
+        $visao = new Template();
+        $emailanuncio = new EmailAnuncio();
+        $anuncio = new Anuncio();
+        $genericoDAO = new GenericoDAO();
+        $selecionaremailanuncio = $genericoDAO->consultar($emailanuncio, false, array("hash" => $parametros["id"]));
+        if ($selecionaremailanuncio) {
+            $selecionaranuncio = $genericoDAO->consultar($anuncio, true, array("id" => $selecionaremailanuncio->getIdanuncio()));
+            if ($selecionaranuncio->getStatus() == "cadastrado") {
+                $visao->setItem($selecionaranuncio);
+                $visao->exibir('AnuncioVisaoEmail.php');
+            } else {
+                $visao->setItem("erroanuncioinativo");
+                $visao->exibir('VisaoErrosGenerico.php');
+            }
+        } else {
+            $visao->setItem("errohashemail");
+            $visao->exibir('VisaoErrosGenerico.php');
         }
     }
 
