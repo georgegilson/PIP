@@ -18,7 +18,7 @@ include_once 'DAO/ConsultasAdHoc.php';
 include_once 'assets/pager/Pager.php';
 include_once 'modelo/Mensagem.php';
 include_once 'modelo/AnuncioClique.php';
-include_once 'modelo/EmailAnuncio';
+include_once 'modelo/EmailAnuncio.php';
 
 class AnuncioControle {
 
@@ -304,10 +304,10 @@ class AnuncioControle {
         $dadosEmail['assunto'] = "Fulano de tal selecionou este(s) immóvel(is) para você!";
         foreach ($parametros['selecoes'] as $idanuncio) {
             $emailanuncio = new EmailAnuncio();
-            $selecionaremailanuncio = $emailanuncio->cadastrar($idanuncio);
+            $selecionaremailanuncio = $emailanuncio->cadastrar($idanuncio['value']);
             $idemailanuncio = $genericoDAO->cadastrar($selecionaremailanuncio);
 //            $selecionarAnuncio = $genericoDAO->consultar(new Anuncio(), false, array("id" => $idanuncio['value']));
-            $dadosEmail['msg'] += "Acesse agora esse imóvel <br>
+            $dadosEmail['msg'] .= "Acesse agora esse imóvel <br>
                 <a href=http://localhost/PIP/index.php?entidade=Anuncio&acao=verficahashemail&id=" . $selecionaremailanuncio->getHash() . ">http://localhost/PIP/index.php?entidade=Anuncio&acao=verficahashemail&id=" . $selecionaremailanuncio->getHash() . "</a><br>";
         }
         if (Email::enviarEmail($dadosEmail)) {
@@ -326,9 +326,11 @@ class AnuncioControle {
         $anuncio = new Anuncio();
         $genericoDAO = new GenericoDAO();
         $selecionaremailanuncio = $genericoDAO->consultar($emailanuncio, false, array("hash" => $parametros["id"]));
+        
         if ($selecionaremailanuncio) {
-            $selecionaranuncio = $genericoDAO->consultar($anuncio, true, array("id" => $selecionaremailanuncio->getIdanuncio()));
-            if ($selecionaranuncio->getStatus() == "cadastrado") {
+            $selecionaranuncio = $genericoDAO->consultar($anuncio, true, array("id" => $selecionaremailanuncio[0]->getIdanuncio()));
+            
+            if ($selecionaranuncio[0]->getStatus() == "cadastrado") {
                 $visao->setItem($selecionaranuncio);
                 $visao->exibir('AnuncioVisaoEmail.php');
             } else {
