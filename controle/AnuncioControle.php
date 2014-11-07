@@ -28,37 +28,43 @@ class AnuncioControle {
             $imovel = new Imovel();
             $genericoDAO = new GenericoDAO();
             $selecionarImovel = $genericoDAO->consultar($imovel, true, array("id" => $parametros['idImovel'], "idUsuario" => $_SESSION['idusuario']));
-
             #verificar a melhor forma de tratar o blindado recursivo
             $selecionarEndereco = $genericoDAO->consultar(new Endereco(), true, array("id" => $selecionarImovel[0]->getIdEndereco()));
             $selecionarImovel[0]->setEndereco($selecionarEndereco[0]);
-
             //verifica se existe o imovel selecionado
             if ($selecionarImovel) {
                 //verificar se o anuncio ja foi publicado e redirecionar para a tela de consulta
-                if (count($selecionarImovel[0]->getAnuncio()) > 0) {
-                    $redirecionamento = $this;
-                    $redirecionamento->listarCadastrar();
-                    return;
-                } else {
-                    $usuarioPlano = new UsuarioPlano();
-                    $condicoes["idusuario"] = $_SESSION["idusuario"];
-                    $condicoes["status"] = 'ativo';
-                    $listarUsuarioPlano = $genericoDAO->consultar($usuarioPlano, true, $condicoes);
-
-                    $sessao["idimovel"] = $parametros['idImovel'];
-                    Sessao::configurarSessaoAnuncio($sessao);
-                    $formAnuncio = array();
-                    $formAnuncio["usuarioPlano"] = $listarUsuarioPlano;
-                    $formAnuncio["imovel"] = $selecionarImovel;
-                    $item = $formAnuncio;
-                    $pagina = "AnuncioVisaoPublicar.php";
+                $anuncios = $selecionarImovel[0]->getAnuncio();
+                if (count($anuncios) > 0) {
+                    if ($anuncios->getStatus() == "cadastrar") {
+                        $redirecionamento = $this;
+                        $redirecionamento->listarCadastrar();
+                        return;
+                    }
                 }
+                $usuarioPlano = new UsuarioPlano();
+                $condicoes["idusuario"] = $_SESSION["idusuario"];
+                $condicoes["status"] = 'ativo';
+                $listarUsuarioPlano = $genericoDAO->consultar($usuarioPlano, true, $condicoes);
+                $sessao["idimovel"] = $parametros['idImovel'];
+                Sessao::configurarSessaoAnuncio($sessao);
+                $formAnuncio = array();
+                $formAnuncio["usuarioPlano"] = $listarUsuarioPlano;
+                $formAnuncio["imovel"] = $selecionarImovel;
+                $formAnuncio["anuncio"] = ($anuncios != NULL ? $anuncios : new Anuncio());
+                $item = $formAnuncio;
+                $pagina = "AnuncioVisaoPublicar.php";
             } else {
                 $item = "errotoken";
                 $pagina = "VisaoErrosGenerico.php";
             }
             //visao
+            $visao = new Template();
+            $visao->setItem($item);
+            $visao->exibir($pagina);
+        } else {
+            $item = "errotoken";
+            $pagina = "VisaoErrosGenerico.php";
             $visao = new Template();
             $visao->setItem($item);
             $visao->exibir($pagina);
@@ -127,8 +133,8 @@ class AnuncioControle {
             $listaAnuncio = $consultasAdHoc->ConsultarAnunciosPorUsuario($_SESSION['idusuario']);
             foreach ($listaAnuncio as $anuncio) {
                 $imovel = $genericoDAO->consultar(new Imovel(), false, array("id" => $anuncio->getIdImovel()));
-               	$anuncio->setImovel($imovel[0]);
-		$historicoAluguelVenda = $genericoDAO->consultar(new HistoricoAluguelVenda(), false, array("idAnuncio" => $anuncio->getId()));
+                $anuncio->setImovel($imovel[0]);
+                $historicoAluguelVenda = $genericoDAO->consultar(new HistoricoAluguelVenda(), false, array("idAnuncio" => $anuncio->getId()));
                 $anuncio->setHistoricoAluguelVenda($historicoAluguelVenda[0]);
                 $listarAnuncio[] = $anuncio;
             }
@@ -303,12 +309,124 @@ class AnuncioControle {
         $dadosEmail['contato'] = "PIP-Online";
         $dadosEmail['assunto'] = "Fulano de tal selecionou este(s) immóvel(is) para você!";
         foreach ($parametros['selecoes'] as $idanuncio) {
+            $item["anuncio"] = $genericoDAO->consultar(new Anuncio(), false, array("id" => $idanuncio['value']));
+            $item["imagem"] = $genericoDAO->consultar(new Imagem(), false, array("idanuncio" => $item["anuncio"][0]->getId()));
+            $item["imovel"] = $genericoDAO->consultar(new Imovel(), false, array("id" => $item["anuncio"][0]->getIdimovel()));
+            $item["endereco"] = $genericoDAO->consultar(new Endereco(), true, array("id" => $item["imovel"][0]->getIdendereco()));
+//            $item["usuario"] = $genericoDAO->consultar(new Usuario(), true, array("id" => $item["imovel"][0]->getIdusuario()));
+            $anuncio = $item["anuncio"][0];
+            $imovel = $item["imovel"][0];
+            $endereco = $item["endereco"][0];
+//            $usuario = $item["usuario"][0];
+            $imagens = $item["imagem"][0];
+
+//            var_dump($imagens);
+//            die();
             $emailanuncio = new EmailAnuncio();
             $selecionaremailanuncio = $emailanuncio->cadastrar($idanuncio['value']);
             $idemailanuncio = $genericoDAO->cadastrar($selecionaremailanuncio);
-//            $selecionarAnuncio = $genericoDAO->consultar(new Anuncio(), false, array("id" => $idanuncio['value']));
-            $dadosEmail['msg'] .= "Acesse agora esse imóvel <br>
-                <a href=http://localhost/PIP/index.php?entidade=Anuncio&acao=verficahashemail&id=" . $selecionaremailanuncio->getHash() . ">http://localhost/PIP/index.php?entidade=Anuncio&acao=verficahashemail&id=" . $selecionaremailanuncio->getHash() . "</a><br>";
+
+            $dadosEmail['msg'] .=
+                    '<!DOCTYPE html>
+                <html>
+                <body>
+                <!-- Latest compiled and minified CSS -->
+                <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+
+                <!-- Optional theme -->
+                <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
+
+                <!-- Latest compiled and minified JavaScript -->
+                <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>                
+                
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>				
+                <div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
+                <script src="http://kumailht.com/gridforms/gridforms/gridforms.js"></script>
+                                <link rel="stylesheet" type="text/css" href="http://kumailht.com/gridforms/gridforms/gridforms.css">            
+				<form class="grid-form">
+
+                <div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
+                    <table class="table table-hover">
+                        <thead>
+                        </thead>
+                        <tbody>
+                <br/>
+
+
+                    <div class="panel panel-warning col-md-11"  id="' . $anuncio->getId() . '">
+
+                        <div class="panel-body">
+
+                            <fieldset class="col-md-9">
+
+                                <div data-row-span="7">
+                                    <div data-field-span="1">
+                                        <label style="text-align: center">Tipo</label>
+                                        <span class="label label-warning">' . strtoupper($imovel->getTipo()) . '</span>
+                                    </div>
+
+                                    <div data-field-span="1">
+                                        <label style="text-align: center">Finalidade</label>
+                                        <span class="label label-primary">' . strtoupper($anuncio->getFinalidade()) . '</span>
+                                    </div>                                    
+                                    <div data-field-span="1">
+                                        <label style="text-align: center">Condição</label>' .
+                    $imovel->getCondicao() .
+                    '</div>
+                                </div>                                
+                                    <div data-field-span="1">
+                                        <label style="text-align: center">Valor</label>
+                                        R$' . $anuncio->getValor() .
+                    '</div>                                                                       
+                                </div>
+                                <div data-row-span="7">
+                                    <div data-field-span="3" style="background-color: #e4fcff">
+                                        <label style="text-align: center">Endereço</label>'
+                    . $endereco->getLogradouro() . ', Nº ' . $endereco->getNumero() .
+                    '</div>
+                                    <div data-field-span="1">
+                                        <label style="text-align: center">Cidade</label>
+                    ' . $endereco->getCidade()->getNome() .
+                    '</div>
+                                    <div data-field-span="1">
+                                        <label style="text-align: center">Bairro</label>
+                    ' . $endereco->getBairro()->getNome() .
+                    '</div>
+                                                                        
+                                </div>
+
+                            </fieldset>
+                            <br/>
+                            <fieldset class="col-md-2">
+
+                                <div>
+
+                                    <img src=" ' . $imagens->getDiretorio() . '" height="160" width="160" class="img-thumbnail" style="margin-left: 60px">
+
+                                </div>
+
+                                <br/>
+
+                                <div>
+
+                                </div>
+
+                            </fieldset>
+
+                        </div>
+
+                    </div> 
+                    
+                    Acesse agora esse imóvel <br>
+                <a href="http://localhost/PIP/index.php?entidade=Anuncio&acao=verficahashemail&id=' . $selecionaremailanuncio->getHash() . '">http://localhost/PIP/index.php?entidade=Anuncio&acao=verficahashemail&id=' . $selecionaremailanuncio->getHash() . '</a><br>
+                    <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                    </tbody>
+               </table>
+            </div></form>
+            </body>
+            </html>';
+//            print_r($dadosEmail);
+//            die();
         }
         if (Email::enviarEmail($dadosEmail)) {
             $genericoDAO->commit();
@@ -326,12 +444,18 @@ class AnuncioControle {
         $anuncio = new Anuncio();
         $genericoDAO = new GenericoDAO();
         $selecionaremailanuncio = $genericoDAO->consultar($emailanuncio, false, array("hash" => $parametros["id"]));
-        
+        //echo "<pre>";var_dump($selecionaremailanuncio); echo "</pre>"; die();
+        $anuncio->buscarDestaqueImagem($parametros);
         if ($selecionaremailanuncio) {
-            $selecionaranuncio = $genericoDAO->consultar($anuncio, true, array("id" => $selecionaremailanuncio[0]->getIdanuncio()));
-            
-            if ($selecionaranuncio[0]->getStatus() == "cadastrado") {
-                $visao->setItem($selecionaranuncio);
+            $item["anuncio"] = $genericoDAO->consultar(new Anuncio(), false, array("id" => $selecionaremailanuncio[0]->getIdanuncio()));
+            $item["imagem"] = $genericoDAO->consultar(new Imagem(), false, array("idanuncio" => $item["anuncio"][0]->getId(), "destaque" => "SIM"));
+            $item["imovel"] = $genericoDAO->consultar(new Imovel(), false, array("id" => $item["anuncio"][0]->getIdimovel()));
+            $item["endereco"] = $genericoDAO->consultar(new Endereco(), true, array("id" => $item["imovel"][0]->getIdendereco()));
+            $item["usuario"] = $genericoDAO->consultar(new Usuario(), true, array("id" => $item["imovel"][0]->getIdusuario()));
+            $cadastrado = $anuncio = $item["anuncio"] = $genericoDAO->consultar(new Anuncio(), false, array("id" => $selecionaremailanuncio[0]->getIdanuncio()));
+            $verificarStatus = $cadastrado[0];
+            if ($verificarStatus->getStatus() == "cadastrado") {
+                $visao->setItem($item);
                 $visao->exibir('AnuncioVisaoEmail.php');
             } else {
                 $visao->setItem("erroanuncioinativo");

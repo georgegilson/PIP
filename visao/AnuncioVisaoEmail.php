@@ -525,7 +525,7 @@ $(document).ready(function(){
         </div>
    </div>      
 
-   
+<form class="grid-form" id="form">  
 <div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
      <script src="assets/js/gridforms.js"></script>
     <!-- Example row of columns -->
@@ -540,92 +540,98 @@ $(document).ready(function(){
 
             <?php
             $item = $this->getItem();
+            $anuncio = $item["anuncio"][0];
+            $imovel = $item["imovel"][0];
+            $endereco = $item["endereco"][0];
+            $usuario = $item["usuario"][0];
+            $imagens = $item["imagem"][0];
+            
             ?>
-
+            
         <link rel="stylesheet" type="text/css" href="assets/css/gridforms.css">            
         
-        <div class="panel panel-warning col-md-11"  id="<?php echo $anuncio->id; ?>" >
+        <div class="panel panel-warning col-md-11"  id="<?php echo $anuncio->getId();?>" >
 
         <div class="panel-body">
         
         <fieldset class="col-md-9">
                         
                         <div data-row-span="1">
-                         <input type="checkbox" id="selecoes_<?php echo $anuncio->id; ?>" class="option" name="selecoes[]" value=<?php echo $anuncio->id; ?>> Selecionar Imóvel         
+                         <!--<input type="checkbox" id="selecoes_<?php //echo $anuncio->getId(); ?>" class="option" name="selecoes[]" value=<?php //echo $anuncio->getId(); ?>> Selecionar Imóvel -->        
                         </div>
             
                         <div data-row-span="7">
 				<div data-field-span="2">
                                     <label style="text-align: center">Título</label>
-					<?php echo "<span class='label label-info'>" . strtoupper($anuncio->tituloanuncio) . "</span>"; ?>
+					<?php echo "<span class='label label-info'>" . strtoupper($anuncio->getTituloAnuncio()) . "</span>"; ?>
 				</div>
                             
                                 <div data-field-span="1">
 					<label style="text-align: center">Tipo</label>
-					<?php echo "<span class='label label-warning'>" . strtoupper($anuncio->tipo) . "</span>"; ?>
+					<?php echo "<span class='label label-warning'>" . strtoupper($imovel->getTipo()) . "</span>"; ?>
 				</div>
                             
 				<div data-field-span="1">
 					<label style="text-align: center">Finalidade</label>
-					<?php echo "<span class='label label-primary'>" . strtoupper($anuncio->finalidade) . "</span>"; ?>
+					<?php echo "<span class='label label-primary'>" . strtoupper($anuncio->getFinalidade()) . "</span>"; ?>
 				</div>
                                 <div data-field-span="1">
 					<label style="text-align: center">Quarto(s)</label>
-					<?php echo $anuncio->quarto; ?>
+					<?php echo $imovel->getQuarto(); ?>
 				</div>
                                 <div data-field-span="1">
                                     <label style="text-align: center">Área (em m<sup>2</sup>)</label>
-					<?php echo $anuncio->area; ?>
+					<?php echo $imovel->getArea(); ?>
 				</div>
                                 <div data-field-span="1">
 					<label style="text-align: center">Condição</label>
-					<?php echo $anuncio->condicao; ?>
+					<?php echo $imovel->getCondicao();?>
 				</div>
 			</div>
             
 			<div data-row-span="7">
 				<div data-field-span="3">
 					<label style="text-align: center">Descrição</label>
-					<?php echo $anuncio->descricao; ?>
+					<?php echo $imovel->getDescricao(); ?>
 				</div>
 				<div data-field-span="1">
 					<label style="text-align: center">Valor</label>
-					 R$ <?php echo $anuncio->valor; ?>
+					 R$ <?php echo $anuncio->getValor(); ?>
 				</div>
                                 <div data-field-span="1">
 					<label style="text-align: center">Banheiro(s)</label>
-					<?php echo $anuncio->banheiro; ?>
+					<?php echo $imovel->getBanheiro(); ?>
 				</div>
                                  <div data-field-span="1">
 					<label style="text-align: center">Garagem(ns)</label>
-					<?php echo $anuncio->garagem; ?>
+					<?php echo $imovel->getGaragem(); ?>
 				</div>
                                 <div data-field-span="1">
 					<label style="text-align: center">Referência</label>
-					<?php echo "<span class='label label-info'>" . substr($anuncio->datahoracadastro, 6, -9) . substr($anuncio->datahoracadastro, 3, -14) . str_pad($anuncio->idimovel, 5, "0", STR_PAD_LEFT) . "</span>"; ?>
+					<?php echo "<span class='label label-info'>" . substr($anuncio->getDatahoracadastro(), 6, -9) . substr($anuncio->getDatahoracadastro(), 3, -14) . str_pad($anuncio->getId(), 5, "0", STR_PAD_LEFT) . "</span>"; ?>
 				</div>
 			</div>
             
                         <div data-row-span="7">
                             <div data-field-span="3" style="background-color: #e4fcff">
 					<label style="text-align: center;">Endereço</label>
-					<?php echo $anuncio->logradouro . ", Nº " . $anuncio->numero;?>
+					<?php echo $endereco->getLogradouro() . ", Nº " . $endereco->getNumero();?>
 				</div>
                                 <div data-field-span="1">
 					<label style="text-align: center">Cidade</label>
-					<?php echo $anuncio->cidade ;?>
+					<?php echo $endereco->getCidade()->getNome() ;?>
 				</div>
 				<div data-field-span="1">
 					<label style="text-align: center">Bairro</label>
-					<?php echo $anuncio->bairro; ?>
+					<?php echo $endereco->getBairro()->getNome(); ?>
 				</div>
                                 <div data-field-span="1">
 					<label style="text-align: center">Suite(s)</label>
-					<?php echo $anuncio->suite; ?>
+					<?php echo $imovel->getSuite(); ?>
 				</div>
                                  <div data-field-span="1">
 					<label style="text-align: center">Condição</label>
-					<?php echo $anuncio->condicao; ?>
+					<?php echo $imovel->getCondicao(); ?>
 				</div>
                                 
 			</div>
@@ -635,8 +641,7 @@ $(document).ready(function(){
             <fieldset class="col-md-2">
                 
                 <div>
-                    
-                    <img src="<?php echo $anuncio->diretorio ?>" height="160" width="160" class="img-thumbnail" style="margin-left: 60px">
+                    <img src="<?php echo $imagens->getDiretorio(); ?>" height="160" width="160" class="img-thumbnail" style="margin-left: 60px">
                     
                 </div>
                 
@@ -644,7 +649,7 @@ $(document).ready(function(){
                 
                 <div>
 
-                    <button type="button" id="btnAnuncioModal<?php echo substr($anuncio->datahoracadastro, 6, -9) . substr($anuncio->datahoracadastro, 3, -14) . str_pad($anuncio->idimovel, 5, "0", STR_PAD_LEFT); ?>" class="btn btn-default btn-sm" style="margin-left: 60px" data-toggle="modal" data-target="#divAnuncioModal" data-modal="<?php echo $anuncio->id; ?>" data-title="<?php echo $anuncio->tituloanuncio; ?>">
+                    <button type="button" id="btnAnuncioModal" class="btn btn-default btn-sm" data-toggle="modal" data-target="#divAnuncioModal" data-modal="<?php echo $anuncio->getId(); ?>" data-title="<?php echo $anuncio->getTituloAnuncio(); ?>" style="margin-left: 60px">
                         <span class="glyphicon glyphicon-plus-sign"></span> Veja mais detalhes
                     </button>
                   
@@ -665,4 +670,23 @@ $(document).ready(function(){
      
 </div>
     
-    </form> 
+
+
+<div class="modal fade" id="divAnuncioModal" tabindex="-1" role="dialog" aria-labelledby="lblAnuncioModal" data-modal="" aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div id="modal-body" class="modal-body text-center">
+                                        </div>
+                                    </div>
+                                </div>
+</div>
+    </form>
+<script>
+    $(document).ready(function() {
+    $('[id^=btnAnuncioModal]').click(function() {
+            $("#lblAnuncioModal").html("<span class='glyphicon glyphicon-bullhorn'></span> " + $(this).attr('data-title'));
+            $("#modal-body").html('<img src="assets/imagens/loading.gif" /><h2>Aguarde... Carregando...</h2>');
+            $("#modal-body").load("index.php", {hdnEntidade:'Anuncio', hdnAcao:'modal', hdnToken:'<?php //Sessao::gerarToken(); echo $_SESSION["token"]; ?>', hdnModal:$(this).attr('data-modal')});
+        })
+     });
+</script>

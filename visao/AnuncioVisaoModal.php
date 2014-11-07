@@ -27,7 +27,7 @@ $imagens = $item["imagem"];
 
 <div id="myTabContent" class="tab-content">
     <div class="tab-pane fade in active" id="detalhes">
-        <script src="assets/js/gridforms.js"></script>
+        
         <form class="grid-form">
             <div class="row">
                 <div class="col-xs-8">

@@ -26,6 +26,7 @@
         <script src="assets/js/select2.js"></script> 
         <noscript><link rel="stylesheet" href="assets/css/jquery.fileupload-noscript.css"></noscript>
         <noscript><link rel="stylesheet" href="assets/css/jquery.fileupload-ui-noscript.css"></noscript>
+        <script src="assets/js/gridforms.js"></script>
     </head>
     <body>
         <div class="container cabecalho">

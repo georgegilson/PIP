@@ -171,5 +171,12 @@ class Anuncio {
         $valor = trim($valor);
         return $valor;
     }
-
+    
+    function buscarDestaqueImagem($parametros){
+        $anuncio = new Anuncio();
+        //var_dump($parametros); die();
+        $anuncio->setId($parametros);
+        var_dump($anuncio->getId()); die();
+    }
+    
 }

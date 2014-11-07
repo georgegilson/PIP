@@ -542,7 +542,7 @@ $imovel = new Imovel();
     </div>
 
     <div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
-        <script src="assets/js/gridforms.js"></script>
+       
         <!-- Example row of columns -->
 
         <table class="table table-hover">
@@ -637,7 +637,7 @@ $imovel = new Imovel();
             if ($item) {
                 foreach ($item as $anuncio) {
                     ?>
-                    <link rel="stylesheet" type="text/css" href="assets/css/gridforms.css">            
+                            
 
                     <div class="panel panel-warning col-md-11"  id="<?php echo $anuncio->id; ?>" >
 
