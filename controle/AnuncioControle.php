@@ -255,17 +255,25 @@ class AnuncioControle {
         $item["endereco"] = $genericoDAO->consultar(new Endereco(), true, array("id" => $item["imovel"][0]->getIdendereco()));
         $item["usuario"] = $genericoDAO->consultar(new Usuario(), true, array("id" => $item["imovel"][0]->getIdusuario()));
 
+        $exibeAnuncio = false;
+        $statusAnuncio = $item["anuncio"][0]->getStatus();
+
+        if ($statusAnuncio == "finalizado") {
+            $consultasAdHoc = new ConsultasAdHoc();
+            $anuncio = $consultasAdHoc->ConsultarAnunciosPorUsuario($_SESSION['idusuario'], $item["anuncio"][0]->getId(), $statusAnuncio);
+            if ($anuncio[0] != null) {
+                $exibeAnuncio = true;
+            }
+        } elseif ($statusAnuncio == "cadastrado") {
+            $exibeAnuncio = true;
+        }
         $genericoDAO->iniciarTransacao();
-
         $anuncioClique = new AnuncioClique();
-
         $anuncios = $anuncioClique->Cadastrar($parametros);
-
         $cliqueAnuncio = $genericoDAO->cadastrar($anuncios);
-
         $genericoDAO->commit();
 
-        $visao->setItem($item);
+        $visao->setItem(($exibeAnuncio) ? $item : null);
         $visao->exibir('AnuncioVisaoModal.php');
     }
 
@@ -342,7 +350,7 @@ class AnuncioControle {
             $idemailanuncio = $genericoDAO->cadastrar($selecionaremailanuncio);
 
             $dadosEmail['msg'] .=
-                   '
+                    '
     <table class="container" style="border-spacing: 0; border-collapse: collapse; vertical-align: top; text-align: inherit; width: 580px; margin: 0 auto; padding: 0;"><tr style="vertical-align: top; text-align: left; padding: 0;" align="left"><td style="word-break: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto; border-collapse: collapse !important; vertical-align: top; text-align: left; color: #222222; font-family: "Helvetica","Arial",sans-serif; font-weight: normal; line-height: 19px; font-size: 14px; margin: 0; padding: 0;" align="left" valign="top">
     <table class="row" style="border-spacing: 0; border-collapse: collapse; vertical-align: top; text-align: left; width: 100%; position: relative; display: block; padding: 0px;"><tr style="vertical-align: top; text-align: left; padding: 0;" align="left"><td class="wrapper last" style="word-break: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto; border-collapse: collapse !important; vertical-align: top; text-align: left; position: relative; color: #222222; font-family: "Helvetica","Arial",sans-serif; font-weight: normal; line-height: 19px; font-size: 14px; margin: 0; padding: 10px 0px 0px;" align="left" valign="top">
     <!--<table class="twelve columns">
@@ -388,7 +396,7 @@ class AnuncioControle {
     </tr></tbody></table><br /><table class="block-grid five-up" style="border-spacing: 0; border-collapse: collapse; vertical-align: top; text-align: left; width: 100%; max-width: 580px; padding: 0;"><tbody><tr style="vertical-align: top; text-align: left; padding: 0;" align="left"><td style="word-break: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto; border-collapse: collapse !important; vertical-align: top; text-align: left; display: inline-block; width: 96px; color: #222222; font-family: "Helvetica","Arial",sans-serif; font-weight: normal; line-height: 19px; font-size: 14px; background: #F1EDCA; margin: 0; padding: 0px 0px 10px;" align="left" bgcolor="#F1EDCA" valign="top">
     <span>Endereço</span>
     </td><td style="word-break: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto; border-collapse: collapse !important; vertical-align: top; text-align: left; display: inline-block; width: 96px; color: #222222; font-family: "Helvetica","Arial",sans-serif; font-weight: normal; line-height: 19px; font-size: 14px; background: #28A9C5; margin: 0; padding: 0px 0px 10px;" align="left" bgcolor="#28A9C5" valign="top">
-    <span>'. $endereco->getLogradouro() . ', Nº ' . $endereco->getNumero() .' , ' . $endereco->getBairro()->getNome() . ' , ' . $endereco->getCidade()->getNome() . '</span>
+    <span>' . $endereco->getLogradouro() . ', Nº ' . $endereco->getNumero() . ' , ' . $endereco->getBairro()->getNome() . ' , ' . $endereco->getCidade()->getNome() . '</span>
     </td>
     </tr></tbody></table></td>
               <td class="expander" style="word-break: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto; border-collapse: collapse !important; vertical-align: top; text-align: left; visibility: hidden; width: 0px; color: #222222; font-family: "Helvetica","Arial",sans-serif; font-weight: normal; line-height: 19px; font-size: 14px; margin: 0; padding: 0;" align="left" valign="top"></td>
@@ -404,7 +412,7 @@ class AnuncioControle {
 //            print_r($dadosEmail);
 //            die();
         }
-        
+
         $dadosEmail['msg'] .= '<table class="row footer" style="border-spacing: 0; border-collapse: collapse; vertical-align: top; text-align: left; width: 100%; position: relative; display: block; padding: 0px;"><tr style="vertical-align: top; text-align: left; padding: 0;" align="left"><td class="wrapper" style="word-break: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto; border-collapse: collapse !important; vertical-align: top; text-align: left; position: relative; color: #222222; font-family: "Helvetica","Arial",sans-serif; font-weight: normal; line-height: 19px; font-size: 14px; background: #ebebeb; margin: 0; padding: 10px 20px 0px 0px;" align="left" bgcolor="#ebebeb" valign="top">
     <table class="six columns" style="border-spacing: 0; border-collapse: collapse; vertical-align: top; text-align: left; width: 280px; margin: 0 auto; padding: 0;"><tr style="vertical-align: top; text-align: left; padding: 0;" align="left"><td class="left-text-pad" style="word-break: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto; border-collapse: collapse !important; vertical-align: top; text-align: left; color: #222222; font-family: "Helvetica","Arial",sans-serif; font-weight: normal; line-height: 19px; font-size: 14px; margin: 0; padding: 0px 0px 10px 10px;" align="left" valign="top">
     <h5 style="color: #222222; font-family: "Helvetica","Arial",sans-serif; font-weight: normal; text-align: left; line-height: 1.3; word-break: normal; font-size: 24px; margin: 0; padding: 0 0 10px;" align="left">Connect With Us:</h5>
@@ -440,7 +448,7 @@ class AnuncioControle {
     </tr></table></center>
     </td>
     </tr></table>';
-        
+
         if (Email::enviarEmail($dadosEmail)) {
             $genericoDAO->commit();
             $genericoDAO->fecharConexao();
@@ -481,43 +489,94 @@ class AnuncioControle {
             $visao->exibir('VisaoErrosGenerico.php');
         }
     }
-  function buscarAnuncioCorretor($parametros){
+
+    function buscarAnuncioCorretor($parametros) {
         //var_dump($parametros); die();
         $visao = new Template();
         $emailanuncio = new EmailAnuncio();
         $usuario = new Usuario();
         $genericoDAO = new GenericoDAO();
         $selecionarAnuncioUsuario = $genericoDAO->consultar($usuario, true, array("login" => $parametros["login"]));
-        if(!$selecionarAnuncioUsuario){
+        if (!$selecionarAnuncioUsuario) {
             //verifica se o usuario existe na base ou se está inativo
             $visao->setItem("errousuarioinativo");
             $visao->exibir('VisaoErrosGenerico.php');
-        }else{ 
+        } else {
             $item["usuario"] = $genericoDAO->consultar(new Usuario(), false, array("id" => $selecionarAnuncioUsuario[0]->getId()));
             $statusUsuario = $item["usuario"] = $genericoDAO->consultar(new Usuario(), false, array("id" => $selecionarAnuncioUsuario[0]->getId()));
             $verificarStatus = $statusUsuario[0]->getStatus();
             $id = $statusUsuario[0]->getId();
 
-            if($verificarStatus == 'ativo'){
+            if ($verificarStatus == 'ativo') {
                 //trazer todos os anuncios cadastrados para o usuário
                 $adHoc = new ConsultasAdHoc();
-                $itensAnuncio = $adHoc->ConsultarAnunciosPorUsuario($id, null, 'cadastrado');    
-                              // echo count($itensAnuncio); die();
+                $itensAnuncio = $adHoc->ConsultarAnunciosPorUsuario($id, null, 'cadastrado');
+                // echo count($itensAnuncio); die();
                 foreach ($itensAnuncio as $anuncio) {
-                $imovel = $genericoDAO->consultar(new Imovel(), false, array("id" => $anuncio->getIdImovel()));
-                $anuncio->setImovel($imovel[0]);
-                $endereco = $genericoDAO->consultar(new Endereco(), true, array("id" => $anuncio->getImovel()->getIdEndereco()));
-                $anuncio->getImovel()->setEndereco($endereco[0]);
-                $imagens = $genericoDAO->consultar(new Imagem(), false, array("id" => $anuncio->getIdImovel()));
-                $anuncio->setImagem($imagens[0]);
-                //$anuncio->getImovel()->setImagens($imagens);
-                $itensAnuncios[] = $anuncio;
- 
-            }  
+                    $imovel = $genericoDAO->consultar(new Imovel(), false, array("id" => $anuncio->getIdImovel()));
+                    $anuncio->setImovel($imovel[0]);
+                    $endereco = $genericoDAO->consultar(new Endereco(), true, array("id" => $anuncio->getImovel()->getIdEndereco()));
+                    $anuncio->getImovel()->setEndereco($endereco[0]);
+                    $imagens = $genericoDAO->consultar(new Imagem(), false, array("id" => $anuncio->getIdImovel()));
+                    $anuncio->setImagem($imagens[0]);
+                    //$anuncio->getImovel()->setImagens($imagens);
+                    $itensAnuncios[] = $anuncio;
+                }
                 $visao = new Template();
                 $visao->setItem($itensAnuncios);
                 $visao->exibir('AnuncioVisaoUsuario.php');
-            } 
+            }
         }
     }
+
+    public function reativarAnuncioImagem($parametros) {
+        $files["files"];
+        $genericoDAO = new GenericoDAO();
+        $imagens = $genericoDAO->consultar(new Imagem(), false, array("idanuncio" => $parametros["anuncio"]));
+        if (count($imagens) > 0) {
+            foreach ($imagens as $imagem) {
+                var_dump($imagens);
+/*
+
+                ["diretorio":"Imagem":private] =>
+                string(53) "http://localhost:8000\/assets/imagens/foto_padrao.png"
+                ["legenda":"Imagem":private] =>
+                NULL
+                ["destaque":"Imagem":private] =>
+                string(3) "SIM"
+
+
+
+  */              $imgUpload = new stdClass();
+                $imgUpload->name = "Desert.jpg";
+                $imgUpload->size = "845941";
+                $imgUpload->type = "image\/jpeg";
+                $imgUpload->legenda = $imagem->getLegenda();
+                $imgUpload->idImagem = "null";
+                $imgUpload->url = $imagem->getDiretorio();
+                $imgUpload->thumbnailUrl = "http:\/\/localhost:8000\/fotos\/msihdmcvavb5mkmam4ijmu30l3\/Desert.jpg";
+                $imgUpload->deleteUrl = "http:\/\/localhost:8000\/?file=Desert.jpg";
+                $imgUpload->deleteType = "DELETE";
+                $imgUpload->id = $imagem->getId();
+
+
+                $files["files"][] = (array) $imgUpload;
+            }
+        }
+        echo json_encode($files);
+
+        /*
+          echo '{
+
+          "files":
+          [
+          {"name":"Desert.jpg","size":845941,"type":"image\/jpeg","legenda":"","idImagem":null,"url":"http:\/\/localhost:8000\/fotos\/msihdmcvavb5mkmam4ijmu30l3\/Desert.jpg","thumbnailUrl":"http:\/\/localhost:8000\/fotos\/msihdmcvavb5mkmam4ijmu30l3\/thumbnail\/Desert.jpg",
+          "deleteUrl":"http:\/\/localhost:8000\/?file=Desert.jpg","deleteType":"DELETE","id":null
+          }
+          ]
+          }';
+         * 
+         */
+    }
+
 }
