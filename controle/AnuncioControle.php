@@ -481,5 +481,43 @@ class AnuncioControle {
             $visao->exibir('VisaoErrosGenerico.php');
         }
     }
+  function buscarAnuncioCorretor($parametros){
+        //var_dump($parametros); die();
+        $visao = new Template();
+        $emailanuncio = new EmailAnuncio();
+        $usuario = new Usuario();
+        $genericoDAO = new GenericoDAO();
+        $selecionarAnuncioUsuario = $genericoDAO->consultar($usuario, true, array("login" => $parametros["login"]));
+        if(!$selecionarAnuncioUsuario){
+            //verifica se o usuario existe na base ou se está inativo
+            $visao->setItem("errousuarioinativo");
+            $visao->exibir('VisaoErrosGenerico.php');
+        }else{ 
+            $item["usuario"] = $genericoDAO->consultar(new Usuario(), false, array("id" => $selecionarAnuncioUsuario[0]->getId()));
+            $statusUsuario = $item["usuario"] = $genericoDAO->consultar(new Usuario(), false, array("id" => $selecionarAnuncioUsuario[0]->getId()));
+            $verificarStatus = $statusUsuario[0]->getStatus();
+            $id = $statusUsuario[0]->getId();
 
+            if($verificarStatus == 'ativo'){
+                //trazer todos os anuncios cadastrados para o usuário
+                $adHoc = new ConsultasAdHoc();
+                $itensAnuncio = $adHoc->ConsultarAnunciosPorUsuario($id, null, 'cadastrado');    
+                              // echo count($itensAnuncio); die();
+                foreach ($itensAnuncio as $anuncio) {
+                $imovel = $genericoDAO->consultar(new Imovel(), false, array("id" => $anuncio->getIdImovel()));
+                $anuncio->setImovel($imovel[0]);
+                $endereco = $genericoDAO->consultar(new Endereco(), true, array("id" => $anuncio->getImovel()->getIdEndereco()));
+                $anuncio->getImovel()->setEndereco($endereco[0]);
+                $imagens = $genericoDAO->consultar(new Imagem(), false, array("id" => $anuncio->getIdImovel()));
+                $anuncio->setImagem($imagens[0]);
+                //$anuncio->getImovel()->setImagens($imagens);
+                $itensAnuncios[] = $anuncio;
+ 
+            }  
+                $visao = new Template();
+                $visao->setItem($itensAnuncios);
+                $visao->exibir('AnuncioVisaoUsuario.php');
+            } 
+        }
+    }
 }
