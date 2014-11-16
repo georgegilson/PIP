@@ -573,7 +573,7 @@ $imovel = new Imovel();
                             }
                         }
                     });
-                    $("#btnEnviar").click(function() {
+                    $("#btnEnviarEmail").click(function() {
                         $("#formEmail").valid();
                     });
                     $('#formEmail').validate({
@@ -610,20 +610,21 @@ $imovel = new Imovel();
                                     email: $("#txtEmail").val(),
                                 },
                                 beforeSend: function() {
-//                                $('.alert').html("...processando...").attr('class', 'alert alert-warning');
-//                                $('button[type=submit]').attr('disabled', 'disabled');
+                                $('.alert').html(" ");
+                                $('.alert').html("...processando...").attr('class', 'alert alert-warning');
+                                $('#btnEnviarEmail').attr('disabled', 'disabled');
                                 },
                                 success: function(resposta) {
-//                                $('button[type=submit]').removeAttr('disabled');
-//                                if (resposta.resultado == 1) {
-//                                    $('.alert').html(
-//                                            "<h4>A sua conta de usuário foi atualizada com sucesso!</h4>").attr('class', 'alert alert-success');
+                                $('#btnEnviarEmail').removeAttr('disabled');
+                                if (resposta.resultado == 1) {
+                                    $('.alert').html(
+                                            "Email enviado com sucesso!").attr('class', 'alert alert-success');
 //                                    $('#divlinha1').fadeOut('slow');
 //                                    $('#divlinha2').fadeOut('slow');
 //                                    $('#divlinha3').fadeOut('slow');
-//                                } else {
-//                                    $('.alert').html("Erro ao cadastrar").attr('class', 'alert alert-danger');
-//                                }
+                                } else {
+                                    $('.alert').html("Erro ao enviar e-mail. Tente novamente em alguns minutos.").attr('class', 'alert alert-danger');
+                                }
                                 }
                             });
 //                        return false;
@@ -782,17 +783,32 @@ $imovel = new Imovel();
     <div class="modal-dialog">
         <div class="modal-content">
             <div id="modal-body" class="modal-body text-center">
+                <div id="alert" role="alert" class="alert alert-warning">
+                      Preencha os dados abaixo para realizar o envio, por e-mail, dos anúncios selecionados. 
+                    </div>
+                <br>
                 <form id="formEmail" class="form-horizontal">
-
+                    
                     <div class="row">
-                        <div class="form-group">
+                        <div class="form-group">    
+                            <label class="col-lg-1 control-label" for="txtNome">Nome:</label>
+                            <div class="col-lg-8">
+                                <input type="text" id="txtNome" name="txtNome" class="form-control" placeholder="Informe o seu nome">
+                            </div>
+                        </div>
+                     <div class="form-group">    
                             <label class="col-lg-1 control-label" for="txtEmail">Email:</label>
                             <div class="col-lg-8">
                                 <input type="text" id="txtEmail" name="txtEmail" class="form-control" placeholder="Informe o email">
                             </div>
-                            <button id="btnEnviar"  type="submit" class="btn btn-primary">Enviar</button>
+                     </div> 
+                     <div class="form-group">
+                                <label class="col-lg-3 control-label" for="txtMensagem">Mensagem</label>
+                                <div class="col-lg-5">
+                                    <textarea maxlength="200" id="txtMensagem" name="txtMensagem" class="form-control" placeholder="Informe a mensagem" rows="7"> </textarea><br />            </div>
+                     </div>   
+                        <button id="btnEnviarEmail" type="submit" class="btn btn-primary">Enviar</button>
                         </div>
-                    </div>
                 </form>
             </div>
         </div>
@@ -828,6 +844,16 @@ $imovel = new Imovel();
                 return false;
             }
         })
+        
+        $("#btnEnviarEmail").click(function() {
+            //alert('teste');
+            if ($("input[id^='selecoes_']").filter(':checked').size() <= 0)
+            {
+                alert('Selecione no mínimo 1 imóvel para envio');
+                return false;
+            }
+        })
+        
         $("span[id^='spanValor']").priceFormat({
             prefix: 'R$ ',
             centsSeparator: ',',

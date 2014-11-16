@@ -4,14 +4,14 @@
     </div>
     <div id="alert" class="col-xs-10"></div>
     <br><br>    
-    <select style="width:300px" id="e1">
+<!--    <select style="width:300px" id="e1">
         <optgroup label="Alaskan/Hawaiian Time Zone">
             <option value="AK">Alaska</option>
         </optgroup>
         <optgroup label="Pacific Time Zone">
             <option value="CA">California</option>
         </optgroup>
-    </select>
+    </select>-->
     &nbsp;&nbsp<button type="button" class="btn btn-default btn-sm" id="btnArquivar">Arquivar</button>
     <br><br>
     <div class="panel-group col-lg-11" id="accordion">
