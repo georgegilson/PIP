@@ -18,6 +18,7 @@ include_once 'assets/pager/Pager.php';
 include_once 'modelo/Imovel.php';
 include_once 'modelo/Imagem.php';
 include_once 'modelo/RespostaMensagem.php';
+include_once 'modelo/HistoricoAluguelVenda.php';
 
 class UsuarioControle {
 
