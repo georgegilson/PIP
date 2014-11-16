@@ -1,4 +1,5 @@
 <script src="assets/js/bootstrap-maxlength.js"></script>
+<script src="assets/js/jquery.price_format.min.js"></script>
 <div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
     <div class="page-header">
         <h1>Anúncios</h1>
@@ -29,7 +30,7 @@
                         <td><?php echo $anuncio->getFinalidade(); ?></td>
                         <td><?php echo $anuncio->getTituloAnuncio(); ?></td>
                         <td><?php echo $anuncio->getDescricaoAnuncio(); ?></td>
-                        <td><?php echo "R$ " . $anuncio->getValor(); ?></td>
+                        <td id="tdValor<?php echo $anuncio->getId(); ?>"><?php echo $anuncio->getValor(); ?></td>
                         <td> <?php
                             if ($anuncio->getStatus() == "cadastrado") {
                                 echo '<span class="text-success">' . $anuncio->getStatus() . ' </span>';
@@ -160,6 +161,13 @@
             })
             $('#divNegocioModal').on('hidden.bs.modal', function(e) {
                 window.location.reload();
+            })
+            $("td[id^='tdValor']").priceFormat({
+                prefix: 'R$ ',
+                centsSeparator: ',',
+                centsLimit: 0,
+                limit: 8,
+                thousandsSeparator: '.'
             })
         });
     </script>

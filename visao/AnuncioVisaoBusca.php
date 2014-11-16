@@ -6,6 +6,7 @@ $imovel = new Imovel();
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
 <script src="assets/js/gmaps.js"></script>
 <script src="assets/js/bootstrap-multiselect.js"></script>
+<script src="assets/js/jquery.price_format.min.js"></script>
 <script>
 
     $(document).ready(function() {
@@ -509,7 +510,7 @@ $imovel = new Imovel();
                     </div> 
 
                 </div>    
-        </form>
+            </form>
 
         </div>    
 
@@ -542,7 +543,7 @@ $imovel = new Imovel();
     </div>
 
     <div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
-       
+
         <!-- Example row of columns -->
 
         <table class="table table-hover">
@@ -558,61 +559,61 @@ $imovel = new Imovel();
             ?>
 
             <script>
-    $(document).ready(function() {
-        var NumeroMaximo = 10;
-        $("input[id^='selecoes_']").click(function() {
-            if ($("input[id^='selecoes_']").filter(':checked').size() > NumeroMaximo) {
-                alert('Selecione no máximo ' + NumeroMaximo + ' imóveis para a comparação');
-                return false;
-            } else {
-                if ($(this).filter(':checked').size() > 0) {
-                    $(this).parent().parent().parent().css('border', '3px dotted orange');
-                } else {
-                    $(this).parent().parent().parent().css('border', '0px');
-                }
-            }
-        });
-        $("#btnEnviar").click(function() {
-            $("#formEmail").valid();
-        });
-        $('#formEmail').validate({
-                rules: {
-                    txtEmail: {
-                        required: true,
-                        email: true,
-                    },
-                },
-                highlight: function(element) {
-                    $(element).closest('.form-group').addClass('has-error');
-                },
-                unhighlight: function(element) {
-                    $(element).closest('.form-group').removeClass('has-error');
-                },
-                errorElement: 'span',
-                errorClass: 'help-block',
-                errorPlacement: function(error, element) {
-                    if (element.parent('.input-group').length) {
-                        error.insertAfter(element.parent());
-                    } else {
-                        error.insertAfter(element);
-                    }
-                },
-                submitHandler: function() {
-                        $.ajax({
-                            url: "index.php",
-                            dataType: "json",
-                            type: "POST",
-                            data: {
-                                hdnEntidade: "Anuncio",
-                                hdnAcao: "enviarEmail",
-                                selecoes: $("input[id^='selecoes_']").serializeArray(),
-                                email: $("#txtEmail").val(),
+                $(document).ready(function() {
+                    var NumeroMaximo = 10;
+                    $("input[id^='selecoes_']").click(function() {
+                        if ($("input[id^='selecoes_']").filter(':checked').size() > NumeroMaximo) {
+                            alert('Selecione no máximo ' + NumeroMaximo + ' imóveis para a comparação');
+                            return false;
+                        } else {
+                            if ($(this).filter(':checked').size() > 0) {
+                                $(this).parent().parent().parent().css('border', '3px dotted orange');
+                            } else {
+                                $(this).parent().parent().parent().css('border', '0px');
+                            }
+                        }
+                    });
+                    $("#btnEnviar").click(function() {
+                        $("#formEmail").valid();
+                    });
+                    $('#formEmail').validate({
+                        rules: {
+                            txtEmail: {
+                                required: true,
+                                email: true,
                             },
-                            beforeSend: function() {
+                        },
+                        highlight: function(element) {
+                            $(element).closest('.form-group').addClass('has-error');
+                        },
+                        unhighlight: function(element) {
+                            $(element).closest('.form-group').removeClass('has-error');
+                        },
+                        errorElement: 'span',
+                        errorClass: 'help-block',
+                        errorPlacement: function(error, element) {
+                            if (element.parent('.input-group').length) {
+                                error.insertAfter(element.parent());
+                            } else {
+                                error.insertAfter(element);
+                            }
+                        },
+                        submitHandler: function() {
+                            $.ajax({
+                                url: "index.php",
+                                dataType: "json",
+                                type: "POST",
+                                data: {
+                                    hdnEntidade: "Anuncio",
+                                    hdnAcao: "enviarEmail",
+                                    selecoes: $("input[id^='selecoes_']").serializeArray(),
+                                    email: $("#txtEmail").val(),
+                                },
+                                beforeSend: function() {
 //                                $('.alert').html("...processando...").attr('class', 'alert alert-warning');
 //                                $('button[type=submit]').attr('disabled', 'disabled');
-                            },
-                            success: function(resposta) {
+                                },
+                                success: function(resposta) {
 //                                $('button[type=submit]').removeAttr('disabled');
 //                                if (resposta.resultado == 1) {
 //                                    $('.alert').html(
@@ -623,12 +624,12 @@ $imovel = new Imovel();
 //                                } else {
 //                                    $('.alert').html("Erro ao cadastrar").attr('class', 'alert alert-danger');
 //                                }
-                            }
-                        });
+                                }
+                            });
 //                        return false;
-                }
-            });
-    });
+                        }
+                    });
+                });
             </script>
 
             <?php
@@ -637,7 +638,7 @@ $imovel = new Imovel();
             if ($item) {
                 foreach ($item as $anuncio) {
                     ?>
-                            
+
 
                     <div class="panel panel-warning col-md-11"  id="<?php echo $anuncio->id; ?>" >
 
@@ -685,7 +686,7 @@ $imovel = new Imovel();
                                     </div>
                                     <div data-field-span="1">
                                         <label style="text-align: center">Valor</label>
-                                        R$ <?php echo $anuncio->valor; ?>
+                                        <span id="spanValor<?php echo $anuncio->id; ?>"> <?php echo $anuncio->valor; ?> </span>
                                     </div>
                                     <div data-field-span="1">
                                         <label style="text-align: center">Banheiro(s)</label>
@@ -758,8 +759,8 @@ $imovel = new Imovel();
                                 </div>
                             </div>
 
-                            
-                            
+
+
 
                         </div>
 
@@ -773,42 +774,42 @@ $imovel = new Imovel();
             ?>
             </tbody>
         </table>
-</div>
+    </div>
 </form>
 
 <!-- Modal Para Abrir a Div do Enviar Anuncios por Email -->
-                            <div class="modal fade" id="divEmailModal" tabindex="-1" role="dialog" aria-labelledby="lblAnuncioModal" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div id="modal-body" class="modal-body text-center">
-<form id="formEmail" class="form-horizontal">
-                                            
-                                                <div class="row">
-                                                    <div class="form-group">
-                                                        <label class="col-lg-1 control-label" for="txtEmail">Email:</label>
-                                                        <div class="col-lg-8">
-                                                            <input type="text" id="txtEmail" name="txtEmail" class="form-control" placeholder="Informe o email">
-                                                        </div>
-                                                        <button id="btnEnviar"  type="submit" class="btn btn-primary">Enviar</button>
-                                                    </div>
-                                                </div>
-</form>
-                                        </div>
-                                    </div>
-                                </div>
+<div class="modal fade" id="divEmailModal" tabindex="-1" role="dialog" aria-labelledby="lblAnuncioModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id="modal-body" class="modal-body text-center">
+                <form id="formEmail" class="form-horizontal">
+
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="col-lg-1 control-label" for="txtEmail">Email:</label>
+                            <div class="col-lg-8">
+                                <input type="text" id="txtEmail" name="txtEmail" class="form-control" placeholder="Informe o email">
                             </div>
+                            <button id="btnEnviar"  type="submit" class="btn btn-primary">Enviar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 
-    
-    
-    
-    
-    <script>
+
+
+
+
+<script>
     $(document).ready(function() {
         $('[id^=btnAnuncioModal]').click(function() {
             $("#lblAnuncioModal").html("<span class='glyphicon glyphicon-bullhorn'></span> " + $(this).attr('data-title'));
             $("#modal-body").html('<img src="assets/imagens/loading.gif" /><h2>Aguarde... Carregando...</h2>');
-            $("#modal-body").load("index.php", {hdnEntidade: 'Anuncio', hdnAcao: 'modal', hdnToken: '<?php //Sessao::gerarToken(); echo $_SESSION["token"];       ?>', hdnModal: $(this).attr('data-modal')});
+            $("#modal-body").load("index.php", {hdnEntidade: 'Anuncio', hdnAcao: 'modal', hdnToken: '<?php //Sessao::gerarToken(); echo $_SESSION["token"];         ?>', hdnModal: $(this).attr('data-modal')});
         })
 
         var NumeroMaximo = 10;
@@ -827,6 +828,12 @@ $imovel = new Imovel();
                 return false;
             }
         })
-
+        $("span[id^='spanValor']").priceFormat({
+            prefix: 'R$ ',
+            centsSeparator: ',',
+            centsLimit: 0,
+            limit: 8,
+            thousandsSeparator: '.'
+        })
     })
 </script>
