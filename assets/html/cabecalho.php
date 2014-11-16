@@ -4,34 +4,32 @@
         <meta charset="UTF-8">
         <title>PIP - Procure Im&oacute;veis Pai D'Egua</title> 
         <!-- TWITTER BOOTSTRAP CSS --> 
-        <link href="assets/css/bootstrap.css" rel="stylesheet" type="text/css" /> 
+        <link href="<?php echo PIPURL;?>/assets/css/bootstrap.css" rel="stylesheet" type="text/css" /> 
         <!-- Bootstrap theme -->
-        <link href="assets/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css" /> 
+        <link href="<?php echo PIPURL;?>/assets/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css" /> 
         <!-- Template PIP -->
-        <link href="assets/css/template-pip.css" rel="stylesheet" type="text/css" /> 		
-        <!-- Carrossel -->
-        <link href="assets/css/carousel.css" rel="stylesheet" type="text/css" />
+        <link href="<?php echo PIPURL;?>/assets/css/template-pip.css" rel="stylesheet" type="text/css" /> 		
         <!-- Grid Form -->
-        <link href="assets/css/gridforms.css" rel="stylesheet" type="text/css" />
+        <link href="<?php echo PIPURL;?>/assets/css/gridforms.css" rel="stylesheet" type="text/css" />
         <!-- Switch Button -->
-        <link href="assets/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css" />
-        <link href="assets/css/select2.css" rel="stylesheet" type="text/css" />
+        <link href="<?php echo PIPURL;?>/assets/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css" />
+        <link href="<?php echo PIPURL;?>/assets/css/select2.css" rel="stylesheet" type="text/css" />
         <!-- JQUERY --> 
-        <script src="assets/js/jquery-2.0.2.min.js"></script> 
+        <script src="<?php echo PIPURL;?>/assets/js/jquery-2.0.2.min.js"></script> 
         <!-- TWITTER BOOTSTRAP JS --> 
-        <script src="assets/js/bootstrap.min.js"></script> 
+        <script src="<?php echo PIPURL;?>/assets/js/bootstrap.min.js"></script> 
         <!-- JQUERY VALIDATE JS --> 
-        <script src="assets/js/jquery.validate.min.js"></script> 
+        <script src="<?php echo PIPURL;?>/assets/js/jquery.validate.min.js"></script> 
         <!-- CSS adjustments for browsers with JavaScript disabled -->
-        <script src="assets/js/select2.js"></script> 
-        <noscript><link rel="stylesheet" href="assets/css/jquery.fileupload-noscript.css"></noscript>
-        <noscript><link rel="stylesheet" href="assets/css/jquery.fileupload-ui-noscript.css"></noscript>
-        <script src="assets/js/gridforms.js"></script>
+        <script src="<?php echo PIPURL;?>/assets/js/select2.js"></script> 
+        <noscript><link rel="stylesheet" href="<?php echo PIPURL;?>/assets/css/jquery.fileupload-noscript.css"></noscript>
+        <noscript><link rel="stylesheet" href="<?php echo PIPURL;?>/assets/css/jquery.fileupload-ui-noscript.css"></noscript>
+        <script src="<?php echo PIPURL;?>/assets/js/gridforms.js"></script>
     </head>
     <body>
         <div class="container cabecalho">
             <div class="row">
-                <div class="col-lg-2"><a href="index.php"> <img src="assets/imagens/logo.png" width="120px" /> </a> </div>
+                <div class="col-lg-2"><a href="<?php echo PIPURL;?>/index.php"> <img src="<?php echo PIPURL;?>/assets/imagens/logo.png" width="120px" /> </a> </div>
                 <div class="col-lg-6">
                     <h4> Temos a Ferramenta Tecnológica de busca do seu imóvel desejado <br /> Procure aqui!</h4>
                 </div>
@@ -49,8 +47,8 @@
                                 </tr>
                                 <tr>
                                     <td height="30" colspan="3">
-                                        <a href="index.php?entidade=Usuario&acao=form&tipo=cadastro" class="text text-success">Ainda não é cadastrado?</a>
-                                        <a href="index.php?entidade=Usuario&acao=form&tipo=esquecisenha" class="text text-danger">Não lembra a senha?</a>
+                                        <a href="<?php echo PIPURL;?>/index.php?entidade=Usuario&acao=form&tipo=cadastro" class="text text-success">Ainda não é cadastrado?</a>
+                                        <a href="<?php echo PIPURL;?>/index.php?entidade=Usuario&acao=form&tipo=esquecisenha" class="text text-danger">Não lembra a senha?</a>
                                     </td>
                                 </tr>
                             </tbody>
@@ -61,7 +59,7 @@
                         <form class="navbar-form navbar-right">
                             <div id="divNome"></div>
                             <div id="divBotoes">  
-                                <a href="index.php?entidade=Usuario&acao=meuPIP" class="btn btn-primary"><span class="glyphicon glyphicon-th-large"></span> Meu Pip</a>
+                                <a href="<?php echo PIPURL;?>/index.php?entidade=Usuario&acao=meuPIP" class="btn btn-primary"><span class="glyphicon glyphicon-th-large"></span> Meu Pip</a>
                                 <a id="btnLogout" href="#" class="btn btn-danger"><span class="glyphicon glyphicon-log-out"></span> Sair</a>
                             </div>
                         </form>            

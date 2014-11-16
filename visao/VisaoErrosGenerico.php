@@ -88,6 +88,11 @@ switch ($item) {
                     <h2 class=text-center>Ops! Esse anuncio não é mais válido. <br>Obrigado pelo acesso</h2>
                     <?php
                     break;
+                case "errousuarioinativo":
+                    ?>
+                    <h2 class=text-center>Ops! Esse Usuário não existe. <br>Obrigado pelo acesso</h2>
+                    <?php
+                    break;
                 case "sucessocadastrousuario":
                     ?>
                     <h2 class=text-center>A sua conta de usuário foi criada com sucesso!</h2>
