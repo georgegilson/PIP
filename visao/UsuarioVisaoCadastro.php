@@ -317,7 +317,6 @@
                 txtNumero: {
                     required: true
                 }
-
             },
             messages: {
                 txtCpf: {
@@ -398,7 +397,7 @@ Sessao::gerarToken();
     <div class="alert">Preencha os campos abaixo</div>
     <div class="row text-success" id="divmsg" hidden="true"></div>
     <!-- form -->
-    <form id="form" class="form-horizontal" action="index.php" method="post">
+    <form id="form" class="form-horizontal" action="index.php" method="post" enctype="multipart/form-data">
         <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Usuario"  />
         <input type="hidden" id="hdnAcao" name="hdnAcao" value="cadastrar" />
         <input type="hidden" id="hdnCEP" name="hdnCEP" />
@@ -600,6 +599,26 @@ Sessao::gerarToken();
                 </div>
             </div>
         </div>
+        
+
+        <!-- upload da foto-->
+        </div>
+        <!-- Segunda Linha -->    
+        <div class="row" id="divlinha3">
+            <div class="col-lg-6" id="divfoto">
+                <div id="forms" class="panel panel-default">
+                    <div class="panel-heading"> Foto </div>
+                    <br>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label" for="sltFoto">Selecione a foto</label>
+                        <div class="col-lg-2">
+                            <input name="arquivo" type="file" /> <br />
+                        </div>             
+                    </div>
+                </div>
+            </div>
+        </div>      
+            
         <!-- Terceira Linha -->    
         <div class="row" id="divlinha3">
             <div class="col-lg-12" id="divbotoes">

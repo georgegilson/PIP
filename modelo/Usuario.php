@@ -13,6 +13,7 @@ class Usuario {
     private $datahoraalteracao;
     private $email;
     private $idendereco;
+    private $foto;
     protected $endereco;
     protected $telefone;
     protected $empresa;
@@ -88,6 +89,10 @@ class Usuario {
     public function getIdendereco() {
         return $this->idendereco;
     }
+    
+    public function getFoto() {
+        return $this->foto;
+    }
 
     public function setId($id) {
         $this->id = $id;
@@ -129,6 +134,10 @@ class Usuario {
         $this->idendereco = $idendereco;
     }
 
+    public function setFoto($foto) {
+        $this->foto = $foto;
+    }
+   
     function cadastrar($parametros, $idendereco) {
         $usuario = new Usuario();
         $usuario->setTipousuario($parametros['sltTipoUsuario']);
@@ -157,6 +166,27 @@ class Usuario {
         $usuario->setDatahoracadastro(date('d/m/Y H:i:s'));
         $usuario->setDatahoraalteracao("");
         $usuario->setIdendereco($idendereco);
+        
+        $arquivo_tmp = $_FILES['arquivo']['tmp_name'];
+        echo "Passo 1 <br>";
+        var_dump($arquivo_tmp). " Passo 1 <br>";
+        $nome = $_FILES['arquivo']['name'];
+        echo "Passo 2 <br>";
+        var_dump($_FILES);
+        $extensao = strrchr($nome, '.');
+        echo "Passo 3 <br>";
+        $extensao = strtolower($extensao);
+        echo "Passo 4 <br>";
+        $novoNome = md5(microtime()) . $extensao;
+        echo "Passo 5 <br>";
+        $destino = PIPROOT . '/modelo/fotos/' . $novoNome; 
+        echo "Passo 6 <br>";
+        echo $destino."<br>";
+        if(move_uploaded_file($arquivo_tmp, $novoNome)){
+        echo "Arquivo Criado <br>";} else echo "Erro";
+        die();
+        $usuario->setFoto($novoNome);
+        
         return $usuario;
     }
 
