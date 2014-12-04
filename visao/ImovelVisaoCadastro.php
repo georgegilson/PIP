@@ -10,20 +10,42 @@
     $(document).ready(function() {
 
         $("#divApartamento").hide(); //oculta campos exclusivos do apartamento 
-
+        $("#txtArea").attr("maxlength", 0);
         $("#sltTipo").change(function() {
-            if ($(this).val() == "casa" || $(this).val() == "terreno") {
+            $("#txtArea").val("");
+            if ($(this).val() == "casa") {
                 $("#divApartamento").fadeOut('slow'); //oculta campos exclusivos do apartamento 
+                $("#txtArea").attr("maxlength", 4);
+            } else if ($(this).val() == "terreno") {
+                $("#divApartamento").fadeOut('slow'); //oculta campos exclusivos do apartamento 
+                $("#txtArea").attr("maxlength", 5);
             } else {
                 $("#divApartamento").fadeIn('slow'); //mostra campos exclusivos do apartamento
+                $("#txtArea").attr("maxlength", 3);
+                condicaoEmConstrucao();
             }
         })
+        $("#sltCondicao").change(function() {
+            condicaoEmConstrucao();
+        })
+
+        function condicaoEmConstrucao() {
+            if ($("#sltCondicao").val() == "construcao") {
+                $("#divAndar").fadeOut('slow'); //oculta campo andar
+                $("#divCondominio").fadeOut('slow'); //oculta campo condominio
+                $("#divCobertura").fadeOut('slow'); //oculta campo cobertura
+            } else {
+                $("#divAndar").fadeIn('slow'); //mostra campo andar
+                $("#divCondominio").fadeIn('slow'); //mostra campo condominio
+                $("#divCobertura").fadeIn('slow'); //mostra campo cobertura
+            }
+        }
 
         $("#map").hide(); //oculta campos do mapa
         $("#txtCEP").mask("99.999-999"); //mascara
         $("#divCEP").hide(); //oculta campos do DIVCEP
         $("#btnCEP").click(function() {
-            buscarCep()
+            buscarCep();
         });
         //MOEDA
         $('#txtCondominio').priceFormat({
@@ -361,65 +383,67 @@ Sessao::gerarToken();
                         </div>
 
                         <div id="divApartamento">
-
-                            <label class="col-lg-3 control-label" for="sltAndar">Andar</label>
-                            <div class="col-lg-8">
-                                <select class="form-control" id="sltAndar" name="sltAndar">
-                                    <option value="">Informe o Andar</option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                    <option value="6">6</option>
-                                    <option value="7">7</option>
-                                    <option value="8">8</option>
-                                    <option value="9">9</option>
-                                    <option value="10">10</option>
-                                    <option value="11">11</option>
-                                    <option value="12">12</option>
-                                    <option value="13">13</option>
-                                    <option value="14">14</option>
-                                    <option value="15">15</option>
-                                    <option value="16">16</option>
-                                    <option value="17">17</option>
-                                    <option value="18">18</option>
-                                    <option value="19">19</option>
-                                    <option value="20">20</option>
-                                    <option value="21">21</option>
-                                    <option value="22">22</option>
-                                    <option value="23">23</option>
-                                    <option value="24">24</option>
-                                    <option value="25">25</option>
-                                    <option value="26">26</option>
-                                    <option value="27">27</option>
-                                    <option value="28">28</option>
-                                    <option value="29">29</option>
-                                    <option value="30">30</option>
-                                    <option value="31">31</option>
-                                    <option value="32">32</option>
-                                    <option value="33">33</option>
-                                    <option value="34">34</option>
-                                    <option value="35">35</option>                   
-                                </select><br />
-                            </div>    
-
-                            <div class="checkbox">
-                                <label class="col-sm-offset-3 col-sm-9" for="chkCobertura">
-                                    <input type="checkbox" id="chkCobertura" name="chkCobertura"> Está na Cobertura      </label>                      
-                            </div> 
-
+                            <div id="divAndar">
+                                <label class="col-lg-3 control-label" for="sltAndar">Andar</label>
+                                <div class="col-lg-8">
+                                    <select class="form-control" id="sltAndar" name="sltAndar">
+                                        <option value="">Informe o Andar</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+                                        <option value="13">13</option>
+                                        <option value="14">14</option>
+                                        <option value="15">15</option>
+                                        <option value="16">16</option>
+                                        <option value="17">17</option>
+                                        <option value="18">18</option>
+                                        <option value="19">19</option>
+                                        <option value="20">20</option>
+                                        <option value="21">21</option>
+                                        <option value="22">22</option>
+                                        <option value="23">23</option>
+                                        <option value="24">24</option>
+                                        <option value="25">25</option>
+                                        <option value="26">26</option>
+                                        <option value="27">27</option>
+                                        <option value="28">28</option>
+                                        <option value="29">29</option>
+                                        <option value="30">30</option>
+                                        <option value="31">31</option>
+                                        <option value="32">32</option>
+                                        <option value="33">33</option>
+                                        <option value="34">34</option>
+                                        <option value="35">35</option>                   
+                                    </select><br />
+                                </div>
+                            </div>
+                            <div id="divCobertura">
+                                <div class="checkbox">
+                                    <label class="col-sm-offset-3 col-sm-9" for="chkCobertura">
+                                        <input type="checkbox" id="chkCobertura" name="chkCobertura"> Está na Cobertura      </label>                      
+                                </div> 
+                            </div>
                             <div class="checkbox">
                                 <label class="col-sm-offset-3 col-sm-9" for="chkSacada">
                                     <input type="checkbox" id="chkSacada" name="chkSacada"> Possui Sacada     </label>                       
                             </div>
 
                             <br />  
-
-                            <label class="col-lg-3 control-label" for="txtArea">Valor do Condomínio</label>
-                            <div class="col-lg-8">
-                                <input type="text" id="txtCondominio" name="txtCondominio" class="form-control" placeholder="Informe o Valor do Condominio">
-                            </div> 
+                            <div id="divCondominio">
+                                <label class="col-lg-3 control-label" for="txtArea">Valor do Condomínio</label>
+                                <div class="col-lg-8">
+                                    <input type="text" id="txtCondominio" name="txtCondominio" class="form-control" placeholder="Informe o Valor do Condominio">
+                                </div> 
+                            </div>
 
                         </div>    
 
