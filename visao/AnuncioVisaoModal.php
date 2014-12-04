@@ -206,8 +206,6 @@ if ($item == null) {
                     <div id="alert" class="col-xs-10"></div>
 
                     <form id="formContato" class="form-horizontal">
-                        <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Anuncio"  />
-                        <input type="hidden" id="hdnAcao" name="hdnAcao" value="enviarContato" />
                         <input type="hidden" id="hdnIdAnuncio" name="hdnIdAnuncio" value= "<?php echo $anuncio->getId() ?> "/>
                         <input type="hidden" id="hdnIdUsuario" name="hdnIdUsuario" value= "<?php echo $usuario->getId() ?>" />
                         <div id="forms" class="panel panel-default">
@@ -244,7 +242,7 @@ if ($item == null) {
                             <div class="col-lg-12">
                                 <div class="form-group">
                                     <div class="col-lg-offset-2 col-lg-10">
-                                        <button type="submit" id="btnAnuncioModal" class="btn btn-primary">Enviar</button>
+                                        <button type="submit" id="btnEnviarContato" class="btn btn-primary">Enviar</button>
                                     </div>
                                 </div>                
                             </div>
@@ -438,9 +436,10 @@ if ($item == null) {
                     }
                 }
             });
-
             $("#formContato").submit(function(e) {
                 e.preventDefault();
+                if($("#formContato").valid())
+                    {
                 //$form = $(this);
                 //           $post(document.location.url, $(this).serialize(), function(data){
                 $.ajax({
@@ -457,22 +456,31 @@ if ($item == null) {
                         idusuario: $('#hdnIdUsuario').val(),
                         idanuncio: $('#hdnIdAnuncio').val()
                     },
+                    beforeSend: function() {
+                                $("#alert").html(" ");
+                                $("#alert").html("...processando...").attr('class', 'alert alert-warning');
+                                $('#btnEnviarContato').attr('disabled', 'disabled');
+                                },
                     success: function(resposta) {
-                        $("#msg").remove();
-                        var msg = $("<div>", {id: "msg"});
+                        $('#btnEnviarContato').removeAttr('disabled');
+//                        $("#msg").remove();
+//                        var msg = $("<div>", {id: "msg"});
                         if (resposta.resultado == 0) {
-                            msg.attr('class', 'alert alert-success').html("Mensagem enviada com sucesso").append('<button data-dismiss="alert" class="close" type="button">×</button>');
+                            $("#alert").html(
+                                            "Email enviado com sucesso!").attr('class', 'alert alert-success');
+//                            msg.attr('class', 'alert alert-success').html("Mensagem enviada com sucesso").append('<button data-dismiss="alert" class="close" type="button">×</button>');
                         } else {
-                            msg.attr('class', 'alert alert-danger').html("Falha no envio da mensagem, por favor tente mais tarde").append('<button data-dismiss="alert" class="close" type="button">×</button>');
+//                            msg.attr('class', 'alert alert-danger').html("Falha no envio da mensagem, por favor tente mais tarde").append('<button data-dismiss="alert" class="close" type="button">×</button>');
+                                            $('.alert').html("Erro ao enviar e-mail. Tente novamente em alguns minutos.").attr('class', 'alert alert-danger');                
                         }
-                        $("#alert").append(msg);
+//                        $("#alert").append(msg);
                         $('#txtNome').val('');
                         $('#txtEmail').val('');
                         $('#txtTelefone').val('');
                         $('#txtMensagem').val('');
                     }
                 });
-
+            }
             });
         });
     </script>

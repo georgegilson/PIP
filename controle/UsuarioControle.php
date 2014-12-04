@@ -327,7 +327,7 @@ class UsuarioControle {
         $genericoDAO = new GenericoDAO();
         $selecionarUsuario = $genericoDAO->consultar($usuario, false, array("login" => $parametros['txtLogin']));
 
-        if ((count($selecionarUsuario) > 0) && ($selecionarUsuario[0]->getSenha() == md5($parametros['txtSenha']))) {
+        if ((count($selecionarUsuario) > 0) && (password_verify($parametros['txtSenha'], $selecionarUsuario[0]->getSenha()))) {
             Sessao::configurarSessaoUsuario($selecionarUsuario);
             $redirecionamento = ConsultaUrl::consulta($_SERVER['HTTP_REFERER']);
             echo json_encode(array("resultado" => 1, "nome" => $_SESSION['nome'], "redirecionamento" => $redirecionamento));

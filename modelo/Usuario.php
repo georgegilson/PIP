@@ -134,8 +134,19 @@ class Usuario {
         $usuario->setTipousuario($parametros['sltTipoUsuario']);
         $usuario->setNome($parametros['txtNome']);
         $usuario->setLogin($parametros['txtLogin']);
-        $senha = md5($parametros['txtSenha']);
-        $usuario->setSenha($senha);
+        $timeTarget = 0.2; 
+        $cost = 9;
+        do {
+            $cost++;
+            $start = microtime(true);
+            password_hash("test", PASSWORD_BCRYPT, ["cost" => $cost]);
+            $end = microtime(true);
+        } while (($end - $start) < $timeTarget);
+        $options = [
+            'cost' => $cost,
+        ];
+        $usuario->setSenha(password_hash($parametros['txtSenha'], PASSWORD_BCRYPT, $options));
+       
         if ($usuario->getTipousuario() == "pf") {
             $usuario->setCpfcnpj($parametros['txtCpf']);
         } else {

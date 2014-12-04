@@ -304,7 +304,8 @@
                 },
                 txtSenha: {
                     required: true,
-                    minlength: 4
+                    minlength: 8,
+                    maxlength: 12
                 },
                 txtConfirmSenha: {
                     required: true,
