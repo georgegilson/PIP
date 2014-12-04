@@ -481,14 +481,16 @@ class UsuarioControle {
             //modelo
             $usuarioPlano = new UsuarioPlano();
             $genericoDAO = new GenericoDAO();
-
+            $consultasAdHoc = new ConsultasAdHoc();
+            
             $listarUsuarioPlano = $genericoDAO->consultar($usuarioPlano, true, array("idusuario" => $_SESSION["idusuario"]));
-
-            $formUsuarioPlano = array();
-            $formUsuarioPlano["usuarioPlano"] = $listarUsuarioPlano;
+            $itemMeuPIP = array();
+            $itemMeuPIP["usuarioPlano"] = $listarUsuarioPlano;
+            $itemMeuPIP["imovel"] =  is_array($genericoDAO->consultar(new Imovel(), true, array("idusuario" => $_SESSION['idusuario'])));
+            $itemMeuPIP["anuncio"] = count($consultasAdHoc->ConsultarAnunciosPorUsuario($_SESSION['idusuario'])>0);
             //visao
             $visao = new Template();
-            $visao->setItem($formUsuarioPlano);
+            $visao->setItem($itemMeuPIP);
             $visao->exibir('UsuarioVisaoMeuPIP.php');
         } else {
             $visao = new Template();
