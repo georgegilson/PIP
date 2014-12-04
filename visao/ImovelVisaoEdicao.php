@@ -10,14 +10,35 @@
     $(document).ready(function() {
 
         $("#divApartamento").hide(); //oculta campos exclusivos do apartamento 
-
         $("#sltTipo").change(function() {
-            if ($(this).val() == "casa" || $(this).val() == "terreno") {
+            $("#txtArea").val("");
+            if ($(this).val() == "casa") {
                 $("#divApartamento").fadeOut('slow'); //oculta campos exclusivos do apartamento 
+                $("#txtArea").attr("maxlength", 4);
+            } else if ($(this).val() == "terreno") {
+                $("#divApartamento").fadeOut('slow'); //oculta campos exclusivos do apartamento 
+                $("#txtArea").attr("maxlength", 5);
             } else {
                 $("#divApartamento").fadeIn('slow'); //mostra campos exclusivos do apartamento
+                $("#txtArea").attr("maxlength", 3);
+                condicaoEmConstrucao();
             }
         })
+        $("#sltCondicao").change(function() {
+            condicaoEmConstrucao();
+        })
+
+        function condicaoEmConstrucao() {
+            if ($("#sltCondicao").val() == "construcao") {
+                $("#divAndar").fadeOut('slow'); //oculta campo andar
+                $("#divCondominio").fadeOut('slow'); //oculta campo condominio
+                $("#divCobertura").fadeOut('slow'); //oculta campo cobertura
+            } else {
+                $("#divAndar").fadeIn('slow'); //mostra campo andar
+                $("#divCondominio").fadeIn('slow'); //mostra campo condominio
+                $("#divCobertura").fadeIn('slow'); //mostra campo cobertura
+            }
+        }
 
         //MOEDA
         $('#txtCondominio').priceFormat({
@@ -31,13 +52,13 @@
         $("#txtCEP").mask("99.999-999"); //mascara
 
         $("#divCEP").load(function() {
-            buscarCep()
+            buscarCep();
         });
         $("#btnCEP").click(function() {
-            buscarCep()
+            buscarCep();
         });
         $("#txtCEP").blur(function() {
-            buscarCep()
+            buscarCep();
         });
 
         function buscarCep() {
@@ -216,6 +237,13 @@
                 <script>
                     $(document).ready(function() {
         <?php if ($imovel->getTipo() == "apartamento") echo '$("#divApartamento").show();'; ?>
+        <?php
+        if ($imovel->getTipo() == "construcao") {
+            echo '$("#divAndar").fadeOut("slow");$("#divCondominio").fadeOut("slow");$("#divCobertura").fadeOut("slow");';
+        } else {
+            echo '$("#divAndar").fadeIn("slow");$("#divCondominio").fadeIn("slow);$("#divCobertura").fadeIn("slow);';
+        }
+        ?>
                         var endereco = "<?php echo $endereco; ?>";
                         //######### INICIO DO CEP ########
                         map = new GMaps({
@@ -271,10 +299,10 @@
                                         }
                                         ?> value="casa">Casa</option>
                                         <option <?php
-                                    if ($imovel->getTipo() == "terreno") {
-                                        print "selected='true'";
-                                    }
-                                    ?> value="terreno">Terreno</option>
+                                        if ($imovel->getTipo() == "terreno") {
+                                            print "selected='true'";
+                                        }
+                                        ?> value="terreno">Terreno</option>
                                     </select></div>
                             </div>
 
@@ -322,10 +350,10 @@
                                         }
                                         ?>value="03">03</option>
                                         <option <?php
-                                            if ($imovel->getQuarto() == "04") {
-                                                print "selected='true'";
-                                            }
-                                            ?>value="04">04</option>
+                                        if ($imovel->getQuarto() == "04") {
+                                            print "selected='true'";
+                                        }
+                                        ?>value="04">04</option>
                                         <option <?php
                                         if ($imovel->getQuarto() == "05") {
                                             print "selected='true'";
@@ -345,10 +373,10 @@
                                     <select class="form-control" id="sltGaragem" name="sltGaragem">
                                         <option value="">Informe a Quantidade de Garagem(ns)</option>
                                         <option <?php
-                                    if ($imovel->getGaragem() == "nenhuma") {
-                                        print "selected='true'";
-                                    }
-                                    ?> value="nenhuma">Nenhuma</option>
+                                        if ($imovel->getGaragem() == "nenhuma") {
+                                            print "selected='true'";
+                                        }
+                                        ?> value="nenhuma">Nenhuma</option>
                                         <option <?php
                                         if ($imovel->getGaragem() == "01") {
                                             print "selected='true'";
@@ -360,10 +388,10 @@
                                         }
                                         ?> value="02">02</option>
                                         <option <?php
-                                            if ($imovel->getGaragem() == "03") {
-                                                print "selected='true'";
-                                            }
-                                            ?> value="03">03</option>
+                                        if ($imovel->getGaragem() == "03") {
+                                            print "selected='true'";
+                                        }
+                                        ?> value="03">03</option>
                                         <option <?php
                                         if ($imovel->getGaragem() == "04") {
                                             print "selected='true'";
@@ -388,10 +416,10 @@
                                     <select class="form-control" id="sltBanheiro" name="sltBanheiro">
                                         <option value="">Informe a Quantidade de Banheiro</option>
                                         <option <?php
-                                            if ($imovel->getBanheiro() == "01") {
-                                                print "selected='true'";
-                                            }
-                                            ?> value="01">01</option>
+                                        if ($imovel->getBanheiro() == "01") {
+                                            print "selected='true'";
+                                        }
+                                        ?> value="01">01</option>
                                         <option <?php
                                         if ($imovel->getBanheiro() == "02") {
                                             print "selected='true'";
@@ -431,42 +459,44 @@
                                 <div class="col-lg-8">
                                     <select id="sltDiferencial" multiple="multiple" name="sltDiferencial[]">
                                         <option <?php
-                                    if ($imovel->getAcademia() == "SIM") {
-                                        print "selected='true'";
-                                    }
+                                        if ($imovel->getAcademia() == "SIM") {
+                                            print "selected='true'";
+                                        }
                                         ?> value="Academia">Academia</option>
                                         <option <?php
-                                    if ($imovel->getAreaServico() == "SIM") {
-                                        print "selected='true'";
-                                    }
-                                    ?> value="AreaServico" >Área de Serviço</option>
+                                        if ($imovel->getAreaServico() == "SIM") {
+                                            print "selected='true'";
+                                        }
+                                        ?> value="AreaServico" >Área de Serviço</option>
                                         <option <?php
-                                    if ($imovel->getDependenciaEmpregada() == "SIM") {
-                                        print "selected='true'";
-                                    }
-                                    ?> value="DependenciaEmpregada">Dependência de Empregada</option>
+                                        if ($imovel->getDependenciaEmpregada() == "SIM") {
+                                            print "selected='true'";
+                                        }
+                                        ?> value="DependenciaEmpregada">Dependência de Empregada</option>
                                         <option <?php
-                                    if ($imovel->getElevador() == "SIM") {
-                                        print "selected='true'";
-                                    }
-                                    ?>value="Elevador">Elevador</option>
+                                        if ($imovel->getElevador() == "SIM") {
+                                            print "selected='true'";
+                                        }
+                                        ?>value="Elevador">Elevador</option>
                                         <option <?php
-                                                if ($imovel->getPiscina() == "SIM") {
-                                                    print "selected='true'";
-                                                }
-                                                ?> value="Piscina">Piscina</option>
+                                        if ($imovel->getPiscina() == "SIM") {
+                                            print "selected='true'";
+                                        }
+                                        ?> value="Piscina">Piscina</option>
                                         <option <?php
-                                            if ($imovel->getQuadra() == "SIM") {
-                                                print "selected='true'";
-                                            }
-                                            ?> value="Quadra">Quadra</option>
+                                        if ($imovel->getQuadra() == "SIM") {
+                                            print "selected='true'";
+                                        }
+                                        ?> value="Quadra">Quadra</option>
                                     </select>
                                 </div>
                             </div>                      
                             <div class="form-group">
                                 <label class="col-lg-3 control-label" for="txtArea">Área (M<sup>2</sup>)</label>
                                 <div class="col-lg-8">
-                                    <input type="text" id="txtArea" name="txtArea" class="form-control" placeholder="Informe a Área" value="<?php print $imovel->getArea() ?>">
+                                    <input type="text" id="txtArea" name="txtArea" class="form-control" placeholder="Informe a Área"
+                                           maxlength="<?php echo ($imovel->getTipo() == "apartamento") ? "3" : (($imovel->getTipo() == "casa") ? "4" : "5" ) ?>"
+                                           value="<?php print $imovel->getArea() ?>">
                                 </div>
                             </div>
 
@@ -479,37 +509,37 @@
                                         if ($imovel->getSuite() == "nenhuma") {
                                             print "selected='true'";
                                         }
-                                            ?> value="nenhuma">Nenhuma</option>
+                                        ?> value="nenhuma">Nenhuma</option>
                                         <option <?php
-                                                if ($imovel->getSuite() == "01") {
-                                                    print "selected='true'";
-                                                }
-                                                ?> value="01">01</option>
+                                        if ($imovel->getSuite() == "01") {
+                                            print "selected='true'";
+                                        }
+                                        ?> value="01">01</option>
                                         <option <?php
-                                            if ($imovel->getSuite() == "02") {
-                                                print "selected='true'";
-                                            }
-                                            ?> value="02">02</option>
+                                        if ($imovel->getSuite() == "02") {
+                                            print "selected='true'";
+                                        }
+                                        ?> value="02">02</option>
                                         <option <?php
-                                            if ($imovel->getSuite() == "03") {
-                                                print "selected='true'";
-                                            }
-                                            ?> value="03">03</option>
+                                        if ($imovel->getSuite() == "03") {
+                                            print "selected='true'";
+                                        }
+                                        ?> value="03">03</option>
                                         <option <?php
-                                                if ($imovel->getSuite() == "04") {
-                                                    print "selected='true'";
-                                                }
-                                                ?> value="04">04</option>
+                                        if ($imovel->getSuite() == "04") {
+                                            print "selected='true'";
+                                        }
+                                        ?> value="04">04</option>
                                         <option <?php
-                                            if ($imovel->getSuite() == "05") {
-                                                print "selected='true'";
-                                            }
-                                            ?> value="05">05</option>
+                                        if ($imovel->getSuite() == "05") {
+                                            print "selected='true'";
+                                        }
+                                        ?> value="05">05</option>
                                         <option <?php
-                                            if ($imovel->getSuite() == "06") {
-                                                print "selected='true'";
-                                            }
-                                            ?> value="06">+ de 05</option>
+                                        if ($imovel->getSuite() == "06") {
+                                            print "selected='true'";
+                                        }
+                                        ?> value="06">+ de 05</option>
                                     </select></div>
                             </div>                      
 
@@ -520,214 +550,216 @@
                                 </div>
 
                                 <div id="divApartamento">
-
-                                    <label class="col-lg-3 control-label" for="sltAndar">Andar</label>
-                                    <div class="col-lg-8">
-                                        <select class="form-control" id="sltAndar" name="sltAndar">
-                                            <option value="">Informe o Andar</option>
-                                            <option <?php
+                                    <div id="divAndar">
+                                        <label class="col-lg-3 control-label" for="sltAndar">Andar</label>
+                                        <div class="col-lg-8">
+                                            <select class="form-control" id="sltAndar" name="sltAndar">
+                                                <option value="">Informe o Andar</option>
+                                                <option <?php
                                                 if ($imovel->getAndar() == "1") {
                                                     print "selected='true'";
                                                 }
                                                 ?> value="1">1</option>
-                                            <option <?php
-                                            if ($imovel->getAndar() == "2") {
-                                                print "selected='true'";
-                                            }
-                                            ?> value="2">2</option>
-                                            <option <?php
-                                            if ($imovel->getAndar() == "3") {
-                                                print "selected='true'";
-                                            }
-                                            ?> value="3">3</option>
-                                            <option <?php
+                                                <option <?php
+                                                if ($imovel->getAndar() == "2") {
+                                                    print "selected='true'";
+                                                }
+                                                ?> value="2">2</option>
+                                                <option <?php
+                                                if ($imovel->getAndar() == "3") {
+                                                    print "selected='true'";
+                                                }
+                                                ?> value="3">3</option>
+                                                <option <?php
                                                 if ($imovel->getAndar() == "4") {
                                                     print "selected='true'";
                                                 }
                                                 ?> value="4">4</option>
-                                            <option <?php
-                                            if ($imovel->getAndar() == "5") {
-                                                print "selected='true'";
-                                            }
-                                            ?>value="5">5</option>
-                                            <option <?php
-                                            if ($imovel->getAndar() == "6") {
-                                                print "selected='true'";
-                                            }
-                                            ?>value="6">6</option>
-                                            <option <?php
-                                        if ($imovel->getAndar() == "7") {
-                                            print "selected='true'";
-                                        }
-                                        ?>value="7">7</option>
-                                            <option <?php
-                                                   if ($imovel->getAndar() == "8") {
-                                                       print "selected='true'";
-                                                   }
-                                                   ?>value="8">8</option>
-                                            <option <?php
-                                                   if ($imovel->getAndar() == "9") {
-                                                       print "selected='true'";
-                                                   }
-                                                   ?>value="9">9</option>
-                                            <option <?php
-                                           if ($imovel->getAndar() == "10") {
-                                               print "selected='true'";
-                                           }
-                                           ?>value="10">10</option>
-                                            <option <?php
-                                           if ($imovel->getAndar() == "11") {
-                                               print "selected='true'";
-                                           }
-                                           ?>value="11">11</option>
-                                            <option <?php
-                                           if ($imovel->getAndar() == "12") {
-                                               print "selected='true'";
-                                           }
-                                           ?>value="12">12</option>
-                                            <option <?php
-                                           if ($imovel->getAndar() == "13") {
-                                               print "selected='true'";
-                                           }
-                                           ?>value="13">13</option>
-                                            <option <?php
-                                           if ($imovel->getAndar() == "14") {
-                                               print "selected='true'";
-                                           }
-                                           ?>value="14">14</option>
-                                            <option <?php
-                                           if ($imovel->getAndar() == "15") {
-                                               print "selected='true'";
-                                           }
-                                           ?>value="15">15</option>
-                                            <option <?php
-                                           if ($imovel->getAndar() == "16") {
-                                               print "selected='true'";
-                                           }
-                                           ?>value="16">16</option>
-                                            <option <?php
-                                           if ($imovel->getAndar() == "17") {
-                                               print "selected='true'";
-                                           }
-                                           ?>value="17">17</option>
-                                            <option <?php
-                                           if ($imovel->getAndar() == "18") {
-                                               print "selected='true'";
-                                           }
-                                           ?>value="18">18</option>
-                                            <option <?php
-                                           if ($imovel->getAndar() == "19") {
-                                               print "selected='true'";
-                                           }
-                                           ?>value="19">19</option>
-                                            <option <?php
-                                           if ($imovel->getAndar() == "20") {
-                                               print "selected='true'";
-                                           }
-                                           ?>value="20">20</option>
-                                            <option <?php
-                                           if ($imovel->getAndar() == "21") {
-                                               print "selected='true'";
-                                           }
-                                           ?>value="21">21</option>
-                                            <option <?php
-                                           if ($imovel->getAndar() == "22") {
-                                               print "selected='true'";
-                                           }
-                                           ?>value="22">22</option>
-                                            <option <?php
-                                           if ($imovel->getAndar() == "23") {
-                                               print "selected='true'";
-                                           }
-                                           ?>value="23">23</option>
-                                            <option <?php
-                                           if ($imovel->getAndar() == "24") {
-                                               print "selected='true'";
-                                           }
-                                           ?>value="24">24</option>
-                                            <option <?php
-                                           if ($imovel->getAndar() == "25") {
-                                               print "selected='true'";
-                                           }
-                                           ?>value="25">25</option>
-                                            <option <?php
-                                           if ($imovel->getAndar() == "26") {
-                                               print "selected='true'";
-                                           }
-                                           ?>value="26">26</option>
-                                            <option <?php
-                if ($imovel->getAndar() == "27") {
-                    print "selected='true'";
-                }
-                ?>value="27">27</option>
-                                            <option <?php
-                if ($imovel->getAndar() == "28") {
-                    print "selected='true'";
-                }
-                ?>value="28">28</option>
-                                            <option <?php
-                if ($imovel->getAndar() == "29") {
-                    print "selected='true'";
-                }
-                ?>value="29">29</option>
-                                            <option <?php
-                if ($imovel->getAndar() == "30") {
-                    print "selected='true'";
-                }
-                ?>value="30">30</option>
-                                            <option <?php
-                if ($imovel->getAndar() == "31") {
-                    print "selected='true'";
-                }
-                ?>value="31">31</option>
-                                            <option <?php
-                if ($imovel->getAndar() == "32") {
-                    print "selected='true'";
-                }
-                ?>value="32">32</option>
-                                            <option <?php
-                if ($imovel->getAndar() == "33") {
-                    print "selected='true'";
-                }
-                ?>value="33">33</option>
-                                            <option <?php
-                if ($imovel->getAndar() == "34") {
-                    print "selected='true'";
-                }
-                ?>value="34">34</option>
-                                            <option <?php
-                if ($imovel->getAndar() == "35") {
-                    print "selected='true'";
-                }
-                ?>value="35">35</option>                   
-                                        </select><br />
-                                    </div>    
-
-                                    <div class="checkbox">
-                                        <label class="col-sm-offset-3 col-sm-9" for="chkCobertura">
-                                            <input type="checkbox" id="chkCobertura" name="chkCobertura" <?php
-                if ($imovel->getCobertura() == "SIM") {
-                    print "checked='true'";
-                }
-                ?>> Está na Cobertura                        </label>    
+                                                <option <?php
+                                                if ($imovel->getAndar() == "5") {
+                                                    print "selected='true'";
+                                                }
+                                                ?>value="5">5</option>
+                                                <option <?php
+                                                if ($imovel->getAndar() == "6") {
+                                                    print "selected='true'";
+                                                }
+                                                ?>value="6">6</option>
+                                                <option <?php
+                                                if ($imovel->getAndar() == "7") {
+                                                    print "selected='true'";
+                                                }
+                                                ?>value="7">7</option>
+                                                <option <?php
+                                                if ($imovel->getAndar() == "8") {
+                                                    print "selected='true'";
+                                                }
+                                                ?>value="8">8</option>
+                                                <option <?php
+                                                if ($imovel->getAndar() == "9") {
+                                                    print "selected='true'";
+                                                }
+                                                ?>value="9">9</option>
+                                                <option <?php
+                                                if ($imovel->getAndar() == "10") {
+                                                    print "selected='true'";
+                                                }
+                                                ?>value="10">10</option>
+                                                <option <?php
+                                                if ($imovel->getAndar() == "11") {
+                                                    print "selected='true'";
+                                                }
+                                                ?>value="11">11</option>
+                                                <option <?php
+                                                if ($imovel->getAndar() == "12") {
+                                                    print "selected='true'";
+                                                }
+                                                ?>value="12">12</option>
+                                                <option <?php
+                                                if ($imovel->getAndar() == "13") {
+                                                    print "selected='true'";
+                                                }
+                                                ?>value="13">13</option>
+                                                <option <?php
+                                                if ($imovel->getAndar() == "14") {
+                                                    print "selected='true'";
+                                                }
+                                                ?>value="14">14</option>
+                                                <option <?php
+                                                if ($imovel->getAndar() == "15") {
+                                                    print "selected='true'";
+                                                }
+                                                ?>value="15">15</option>
+                                                <option <?php
+                                                if ($imovel->getAndar() == "16") {
+                                                    print "selected='true'";
+                                                }
+                                                ?>value="16">16</option>
+                                                <option <?php
+                                                if ($imovel->getAndar() == "17") {
+                                                    print "selected='true'";
+                                                }
+                                                ?>value="17">17</option>
+                                                <option <?php
+                                                if ($imovel->getAndar() == "18") {
+                                                    print "selected='true'";
+                                                }
+                                                ?>value="18">18</option>
+                                                <option <?php
+                                                if ($imovel->getAndar() == "19") {
+                                                    print "selected='true'";
+                                                }
+                                                ?>value="19">19</option>
+                                                <option <?php
+                                                if ($imovel->getAndar() == "20") {
+                                                    print "selected='true'";
+                                                }
+                                                ?>value="20">20</option>
+                                                <option <?php
+                                                if ($imovel->getAndar() == "21") {
+                                                    print "selected='true'";
+                                                }
+                                                ?>value="21">21</option>
+                                                <option <?php
+                                                if ($imovel->getAndar() == "22") {
+                                                    print "selected='true'";
+                                                }
+                                                ?>value="22">22</option>
+                                                <option <?php
+                                                if ($imovel->getAndar() == "23") {
+                                                    print "selected='true'";
+                                                }
+                                                ?>value="23">23</option>
+                                                <option <?php
+                                                if ($imovel->getAndar() == "24") {
+                                                    print "selected='true'";
+                                                }
+                                                ?>value="24">24</option>
+                                                <option <?php
+                                                if ($imovel->getAndar() == "25") {
+                                                    print "selected='true'";
+                                                }
+                                                ?>value="25">25</option>
+                                                <option <?php
+                                                if ($imovel->getAndar() == "26") {
+                                                    print "selected='true'";
+                                                }
+                                                ?>value="26">26</option>
+                                                <option <?php
+                                                if ($imovel->getAndar() == "27") {
+                                                    print "selected='true'";
+                                                }
+                                                ?>value="27">27</option>
+                                                <option <?php
+                                                if ($imovel->getAndar() == "28") {
+                                                    print "selected='true'";
+                                                }
+                                                ?>value="28">28</option>
+                                                <option <?php
+                                                if ($imovel->getAndar() == "29") {
+                                                    print "selected='true'";
+                                                }
+                                                ?>value="29">29</option>
+                                                <option <?php
+                                                if ($imovel->getAndar() == "30") {
+                                                    print "selected='true'";
+                                                }
+                                                ?>value="30">30</option>
+                                                <option <?php
+                                                if ($imovel->getAndar() == "31") {
+                                                    print "selected='true'";
+                                                }
+                                                ?>value="31">31</option>
+                                                <option <?php
+                                                if ($imovel->getAndar() == "32") {
+                                                    print "selected='true'";
+                                                }
+                                                ?>value="32">32</option>
+                                                <option <?php
+                                                if ($imovel->getAndar() == "33") {
+                                                    print "selected='true'";
+                                                }
+                                                ?>value="33">33</option>
+                                                <option <?php
+                                                if ($imovel->getAndar() == "34") {
+                                                    print "selected='true'";
+                                                }
+                                                ?>value="34">34</option>
+                                                <option <?php
+                                                if ($imovel->getAndar() == "35") {
+                                                    print "selected='true'";
+                                                }
+                                                ?>value="35">35</option>                   
+                                            </select><br />
+                                        </div>    
+                                    </div>
+                                    <div id="divCobertura">
+                                        <div class="checkbox">
+                                            <label class="col-sm-offset-3 col-sm-9" for="chkCobertura">
+                                                <input type="checkbox" id="chkCobertura" name="chkCobertura" <?php
+                                                if ($imovel->getCobertura() == "SIM") {
+                                                    print "checked='true'";
+                                                }
+                                                ?>> Está na Cobertura                        </label>    
+                                        </div> 
                                     </div> 
 
                                     <div class="checkbox">
                                         <label class="col-sm-offset-3 col-sm-9" for="chkSacada">
                                             <input type="checkbox" id="chkSacada" name="chkSacada" <?php
-                if ($imovel->getSacada() == "SIM") {
-                    print "checked='true'";
-                }
-                ?>> Possui Sacada                            </label>
+                                            if ($imovel->getSacada() == "SIM") {
+                                                print "checked='true'";
+                                            }
+                                            ?>> Possui Sacada                            </label>
                                     </div>
 
                                     <br />  
-
-                                    <label class="col-lg-3 control-label" for="txtArea">Valor do Condomínio</label>
-                                    <div class="col-lg-8">
-                                        <input type="text" id="txtCondominio" name="txtCondominio" class="form-control" placeholder="Informe o Valor do Condominio" value="<?php print $imovel->getCondominio() ?>">
-                                    </div> 
-
+                                    <div id="divCondominio">
+                                        <label class="col-lg-3 control-label" for="txtArea">Valor do Condomínio</label>
+                                        <div class="col-lg-8">
+                                            <input type="text" id="txtCondominio" name="txtCondominio" class="form-control" placeholder="Informe o Valor do Condominio" value="<?php print $imovel->getCondominio() ?>">
+                                        </div> 
+                                    </div>
                                 </div>    
 
                             </div>
@@ -805,9 +837,10 @@
                     </div>
                 </div>
 
-    <?php }
-}
-?>
+                <?php
+            }
+        }
+        ?>
 
         <div class="row">
             <div class="col-lg-12">
