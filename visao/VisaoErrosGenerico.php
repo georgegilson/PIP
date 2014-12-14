@@ -52,19 +52,19 @@ switch ($item) {
             switch ($item) {
                 case "errobanco":
                     ?>
-                    <h2 class=text-center>Desculpe, não foi possível realizar a operação!</h2>\n\
+                    <h2 class=text-center>Desculpe, não foi possível realizar a operação!</h2><br>
                     <h4 class=text-center>Tente novamente em alguns minutos.</h4>
                     <?php
                     break;
                 case "erroemail":
                     ?>
-                    <h2 class=text-center>Desculpe, não foi possível realizar a operação!</h2>\n\
+                    <h2 class=text-center>Desculpe, não foi possível realizar a operação!</h2><br>
                     <h4 class=text-center>Falha no envio de e-mail.</h4>
                     <?php
                     break;
                 case "errotrocasenha":
                     ?>
-                    <h2 class=text-center>Desculpe, não foi possível realizar a operação!</h2>\n\
+                    <h2 class=text-center>Desculpe, não foi possível realizar a operação!</h2><br>
                     <h4 class=text-center>A Senha atual está incorreta.</h4>
                     <?php
                     break;
@@ -96,9 +96,7 @@ switch ($item) {
                 case "sucessocadastrousuario":
                     ?>
                     <h2 class=text-center>A sua conta de usuário foi criada com sucesso!</h2>
-                    <p class=text-center>Em breve você receberá um e-mail para confirmação do cadastro. </p>
-                    <p class=text-center>Caso não tenha recebido a confirmação de cadastro, verifique também a sua caixa de SPAM. </p>
-                    <p class=text-center>Lembramos que a ativação de sua conta se dá mediante sua confirmação. </p>
+                    <p class=text-center>Digite seu login e sua senha para logar no site. </p>
                     <?php
                     break;
                 case "sucessoalterarsenha":

@@ -2,8 +2,10 @@
     <div class="page-header">
         <h1>Mensagens</h1>
     </div>
-    <div id="alert" class="col-xs-10"></div>
-    <br><br>    
+    <div id="alert" class="col-xs-10" role="alert">
+         
+    </div>
+    <br>   
 <!--    <select style="width:300px" id="e1">
         <optgroup label="Alaskan/Hawaiian Time Zone">
             <option value="AK">Alaska</option>
@@ -46,7 +48,7 @@
                         <input type="checkbox" id="selecoes" name="selecoes[]" value=<?php echo $mensagem->getId(); ?>> 
                         <strong>
                             <?php
-                            echo "<a data-toggle=collapse data-parent=#accordion href=#collapse" . $mensagem->getId() . ">";
+                            echo "<a class=collapsed data-toggle=collapse data-parent=#accordion href=#collapse" . $mensagem->getId() . ">";
                             echo $mensagem->getAnuncio()->getTituloAnuncio();
                             ?>          
                             </a>
@@ -122,16 +124,17 @@
         $("#e1").select2();      
         $('[id^=txtMensagem]').hide();
         $('[id^=btnEnviar]').hide();
-
+        
         $('[id^=btnAnuncioModal]').click(function() {
             $("#lblAnuncioModal").html("<span class='glyphicon glyphicon-bullhorn'></span> " + $(this).attr('data-title'));
             $("#modal-body").html('<img src="assets/imagens/loading.gif" /><h2>Aguarde... Carregando...</h2>');
             $("#modal-body").load("index.php", {hdnEntidade: 'Anuncio', hdnAcao: 'modal', hdnToken: '<?php //Sessao::gerarToken(); echo $_SESSION["token"];      ?>', hdnModal: $(this).attr('data-modal')});
         })
         $('[id^=btnResponder]').click(function() {
-            $("<textarea maxlength=200 id=txtMensagem name=txtMensagem class=form-control rows=7></textarea>").insertBefore($(this));
-            $("<button id=btnEnviar class=btn btn-primary value=" + $(this).attr("value") + ">Enviar</button>").insertBefore($(this)); //this
-            $('[id^=btnResponder]').attr("disabled", "disabled");
+            $("<textarea maxlength=200 id=txtMensagem name=txtMensagem class=form-control rows=7></textarea><br>").insertBefore($(this));
+            $("<button id=btnEnviar class=btn btn-default btn-sm value=" + $(this).attr("value") + ">Enviar</button>").insertBefore($(this)); //this
+//            $('[id^=btnResponder]').attr("disabled", "disabled");
+            $('[id^=btnResponder]').hide();
             $('[id^=btnEnviar]').click(function() {
                 responderMensagem($(this));
             })
@@ -140,7 +143,8 @@
         $('.collapse').on('hidden.bs.collapse', function() {
             $('[id^=txtMensagem]').remove();
             $('[id^=btnEnviar]').remove();
-            $('[id^=btnResponder]').removeAttr("disabled");
+//            $('[id^=btnResponder]').removeAttr("disabled");
+            $('[id^=btnResponder]').show();
         })
 
         $('.collapse').on('shown.bs.collapse', function() {
@@ -212,17 +216,26 @@
                     hdnEntidade: "Usuario",
                     hdnAcao: "responderMensagem"
                 },
+                beforeSend: function() {
+                                
+                                $("#alert").html(" ");
+                                $("#alert").html("...processando...").attr('class', 'alert alert-warning');
+                                $('#btnEnviar').attr('disabled', 'disabled');
+                                },
                 success: function(resposta) {
-                    $("#msgContato").remove();
-                    var msgContato = $("<div>", {id: "msgContato"});
+//                    $("#msgContato").remove();
+//                    var msgContato = $("<div>", {id: "msgContato"});
                     if (resposta.resultado == 0) {
-                        msgContato.attr('class', 'alert alert-danger').html("Falha ao enviar mensagem!").append('<button data-dismiss="alert" class="close" type="button">×</button>');
+                         $("#alert").html("Falha ao enviar mensagem! Tente novamente em alguns minutos.").attr('class', 'alert alert-danger');
                     } else {
-                        $("<p>" + $("[id^=txtMensagem]").val() + "</p>").insertBefore(elemento);
+                        var a = $(elemento).attr("value");
+                        $('[id^=collapse' + a + ']').collapse('hide');
+//                        $("<p>" + $("[id^=txtMensagem]").val() + "</p>").insertBefore(elemento);
                         $('[id^=txtMensagem]').remove();
                         $('[id^=btnEnviar]').remove();
-                        $('[id^=btnResponder]').removeAttr("disabled");
-                        msgContato.attr('class', 'alert alert-success').html("Mensagem enviada com sucesso!").append('<button data-dismiss="alert" class="close" type="button">×</button>');
+//                        $('[id^=btnResponder]').removeAttr("disabled");
+                         $("#alert").html(                                 
+                                            "Mensagem enviada com sucesso!").attr('class', 'alert alert-success alert-dismissible');
                     }
                     $("#alertCEP").append(msgContato);
                 }

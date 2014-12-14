@@ -573,7 +573,7 @@ $imovel = new Imovel();
                             }
                         }
                     });
-                    $("#btnEnviarEmail").click(function() {
+                    $("#btnEnviarEmailAnuncio").click(function() {
                         $("#formEmail").valid();
                     });
                     $('#formEmail').validate({
@@ -608,20 +608,22 @@ $imovel = new Imovel();
                                     hdnAcao: "enviarEmail",
                                     selecoes: $("input[id^='selecoes_']").serializeArray(),
                                     email: $("#txtEmail").val(),
+                                    nome: $("#txtNome").val(),
+                                    mensagem: $("#txtMensagem").val()
                                 },
                                 beforeSend: function() {
                                 $('.alert').html(" ");
                                 $('.alert').html("...processando...").attr('class', 'alert alert-warning');
-                                $('#btnEnviarEmail').attr('disabled', 'disabled');
+                                $('#btnEnviarEmailAnuncio').attr('disabled', 'disabled');
                                 },
                                 success: function(resposta) {
-                                $('#btnEnviarEmail').removeAttr('disabled');
+                                $('#btnEnviarEmailAnuncio').removeAttr('disabled');
                                 if (resposta.resultado == 1) {
                                     $('.alert').html(
                                             "Email enviado com sucesso!").attr('class', 'alert alert-success');
-//                                    $('#divlinha1').fadeOut('slow');
-//                                    $('#divlinha2').fadeOut('slow');
-//                                    $('#divlinha3').fadeOut('slow');
+                                    $('#txtNome').val(" ");
+                                    $('#txtEmail').val(" ");
+                                    $('#txtMensagem').val(" ");                                    
                                 } else {
                                     $('.alert').html("Erro ao enviar e-mail. Tente novamente em alguns minutos.").attr('class', 'alert alert-danger');
                                 }
@@ -780,41 +782,41 @@ $imovel = new Imovel();
 
 <!-- Modal Para Abrir a Div do Enviar Anuncios por Email -->
 <div class="modal fade" id="divEmailModal" tabindex="-1" role="dialog" aria-labelledby="lblAnuncioModal" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div id="modal-body" class="modal-body text-center">
-                <div id="alert" role="alert" class="alert alert-warning">
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <form role="form" id="formEmail">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="exampleModalLabel">Enviar Anúncio</h4>
+      </div>
+      <div class="modal-body">
+          <div id="alert" role="alert" class="alert alert-warning">
                       Preencha os dados abaixo para realizar o envio, por e-mail, dos anúncios selecionados. 
                     </div>
                 <br>
-                <form id="formEmail" class="form-horizontal">
-                    
-                    <div class="row">
-                        <div class="form-group">    
-                            <label class="col-lg-1 control-label" for="txtNome">Nome:</label>
-                            <div class="col-lg-8">
-                                <input type="text" id="txtNome" name="txtNome" class="form-control" placeholder="Informe o seu nome">
-                            </div>
-                        </div>
-                     <div class="form-group">    
-                            <label class="col-lg-1 control-label" for="txtEmail">Email:</label>
-                            <div class="col-lg-8">
-                                <input type="text" id="txtEmail" name="txtEmail" class="form-control" placeholder="Informe o email">
-                            </div>
-                     </div> 
-                     <div class="form-group">
-                                <label class="col-lg-3 control-label" for="txtMensagem">Mensagem</label>
-                                <div class="col-lg-5">
-                                    <textarea maxlength="200" id="txtMensagem" name="txtMensagem" class="form-control" placeholder="Informe a mensagem" rows="7"> </textarea><br />            </div>
-                     </div>   
-                        <button id="btnEnviarEmail" type="submit" class="btn btn-primary">Enviar</button>
-                        </div>
-                </form>
-            </div>
-        </div>
+<!--        <form role="form" id="formEmail">-->
+           <div class="form-group">
+            <label for="recipient-name" class="control-label">Nome:</label>
+            <input type="text" class="form-control" id="txtNome">
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="control-label">E-mail:</label>
+            <input type="text" class="form-control" id="txtEmail" name="txtEmail">
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="control-label">Mensagem:</label>
+            <textarea maxlength="200" class="form-control" id="txtMensagem"></textarea>
+          </div>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+        <button type="submit" id="btnEnviarEmailAnuncio" class="btn btn-primary">Enviar</button>
+      </div>
+            </form>
     </div>
+  </div>
 </div>
-
 
 
 
