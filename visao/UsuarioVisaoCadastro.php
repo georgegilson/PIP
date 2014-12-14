@@ -302,6 +302,10 @@
                 txtRazaoSocial: {
                     required: true
                 },
+                arquivo: {
+                    required: true
+                  //accept: "jpeg|png|gif"
+                },
                 txtSenha: {
                     required: true,
                     minlength: 8,
@@ -317,6 +321,7 @@
                 txtNumero: {
                     required: true
                 }
+                
             },
             messages: {
                 txtCpf: {
@@ -360,6 +365,10 @@
                 },
                 txtCpfResponsavel: {
                     required: "Campo obrigatório"
+                },
+                arquivo: {
+                    required: "Campo obrigatório"
+                    //accept: "Extensão de Arquivo Inválida"
                 }
             },
             highlight: function(element) {
@@ -600,24 +609,24 @@ Sessao::gerarToken();
             </div>
         </div>
         
-
+        
         <!-- upload da foto-->
-        </div>
-        <!-- Segunda Linha -->    
-        <div class="row" id="divlinha3">
-            <div class="col-lg-6" id="divfoto">
+        <div class="col-lg-6" id="divinformacoesbasicas">
                 <div id="forms" class="panel panel-default">
-                    <div class="panel-heading"> Foto </div>
+                    <div class="panel-heading">Sua Imagem </div>
                     <br>
                     <div class="form-group">
-                        <label class="col-lg-3 control-label" for="sltFoto">Selecione a foto</label>
+                        <label class="col-lg-3 control-label" for="sltArquivo">Selecione a foto</label>
                         <div class="col-lg-2">
-                            <input name="arquivo" type="file" /> <br />
+                            <input  id="arquivo" name="arquivo" type="file"/> <br />
                         </div>             
                     </div>
+                    
                 </div>
             </div>
-        </div>      
+
+        </div>
+           
             
         <!-- Terceira Linha -->    
         <div class="row" id="divlinha3">
