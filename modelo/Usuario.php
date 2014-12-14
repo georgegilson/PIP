@@ -13,6 +13,7 @@ class Usuario {
     private $datahoraalteracao;
     private $email;
     private $idendereco;
+    private $foto;
     protected $endereco;
     protected $telefone;
     protected $empresa;
@@ -89,6 +90,10 @@ class Usuario {
         return $this->idendereco;
     }
 
+    public function getFoto() {
+        return $this->foto;
+    }
+
     public function setId($id) {
         $this->id = $id;
     }
@@ -129,12 +134,12 @@ class Usuario {
         $this->idendereco = $idendereco;
     }
 
-    function cadastrar($parametros, $idendereco) {
-        $usuario = new Usuario();
-        $usuario->setTipousuario($parametros['sltTipoUsuario']);
-        $usuario->setNome($parametros['txtNome']);
-        $usuario->setLogin($parametros['txtLogin']);
-        $timeTarget = 0.2; 
+    public function setFoto($foto) {
+        $this->foto = $foto;
+    }
+
+    function criptografarSenha($senha) {
+        $timeTarget = 0.2;
         $cost = 9;
         do {
             $cost++;
@@ -145,8 +150,16 @@ class Usuario {
         $options = [
             'cost' => $cost,
         ];
-        $usuario->setSenha(password_hash($parametros['txtSenha'], PASSWORD_BCRYPT, $options));
-       
+        return password_hash($senha, PASSWORD_BCRYPT, $options);
+    }
+
+    function cadastrar($parametros, $idendereco) {
+        $usuario = new Usuario();
+        $usuario->setTipousuario($parametros['sltTipoUsuario']);
+        $usuario->setNome($parametros['txtNome']);
+        $usuario->setLogin($parametros['txtLogin']);
+        $usuario->setSenha($this->criptografarSenha($parametros['txtSenha']));
+
         if ($usuario->getTipousuario() == "pf") {
             $usuario->setCpfcnpj($parametros['txtCpf']);
         } else {
@@ -157,6 +170,28 @@ class Usuario {
         $usuario->setDatahoracadastro(date('d/m/Y H:i:s'));
         $usuario->setDatahoraalteracao("");
         $usuario->setIdendereco($idendereco);
+        $usuario->setFoto("");
+        
+        $arquivo_tmp = $_FILES['arquivo']['tmp_name'];
+        //echo "Passo 1 <br>";
+        var_dump($arquivo_tmp) . " Passo 1 <br>";
+        $nome = $_FILES['arquivo']['name'];
+        //echo "Passo 2 <br>";
+        var_dump($_FILES);
+        $extensao = strrchr($nome, '.');
+        //echo "Passo 3 <br>";
+        $extensao = strtolower($extensao);
+        //echo "Passo 4 <br>";
+        $novoNome = md5(microtime()) . $extensao;
+        //echo "Passo 5 <br>";
+        $destino = PIPROOT . '/modelo/fotos/' . $novoNome;
+        //echo "Passo 6 <br>";
+        //echo $destino."<br>";
+        if (move_uploaded_file($_FILES['arquivo']['tmp_name'], $destino . $_FILES['arquivo']['name'])) {
+            //echo "Arquivo Criado <br>";} else echo "Erro";
+            $usuario->setFoto($novoNome);
+            //die();
+        }
         return $usuario;
     }
 
@@ -172,16 +207,14 @@ class Usuario {
     function alterarSenha($parametros) {
         $usuario = new Usuario();
         $usuario->setId($_SESSION["idRecuperaSenhaUsuario"]);
-        $senha = md5($parametros['txtSenha']);
-        $usuario->setSenha($senha);
+        $usuario->setSenha($this->criptografarSenha($parametros['txtSenha']));
         return $usuario;
     }
 
     function trocarSenha($parametros) {
         $usuario = new Usuario();
         $usuario->setId($_SESSION["idusuario"]);
-        $senha = md5($parametros['txtSenhaNova']);
-        $usuario->setSenha($senha);
+        $usuario->setSenha($this->criptografarSenha($parametros['txtSenhaNova']));
         return $usuario;
     }
 

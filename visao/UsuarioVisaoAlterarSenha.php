@@ -101,14 +101,14 @@ Sessao::gerarToken();
 
         <div class="form-group" id="divlinha1">
             <label class="col-lg-3 control-label" for="txtSenha">Nova Senha</label>
-            <div class="col-lg-9">
-                <input type="password" id="txtSenha" name="txtSenha" class="form-control" placeholder="Informe a nova senha">
+            <div class="col-lg-3">
+                <input type="password" id="txtSenha" name="txtSenha" class="form-control" placeholder="Informe a nova senha" >
             </div>
         </div>
 
         <div class="form-group" id="divlinha2">
             <label class="col-lg-3 control-label" for="txtSenhaConfirmacao">Repita a Nova Senha</label>
-            <div class="col-lg-9">
+            <div class="col-lg-3">
                 <input type="password" id="txtSenha" name="txtSenhaConfirmacao" class="form-control" placeholder="Informe a nova senha">
             </div>
         </div>

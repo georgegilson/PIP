@@ -22,6 +22,11 @@ $item = $this->getItem();
                         <span class="glyphicon glyphicon-user"></span> 
                         <span class="glyphicon glyphicon-lock"></span> Alterar Senha 
                     </button></a>    
+                <a href="index.php?entidade=Usuario&acao=form&tipo=trocarimagem"> 
+                    <button type="button" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-user"></span> 
+                        <span class="glyphicon glyphicon-picture"></span> Alterar <?php echo ($_SESSION["tipopessoa"] == "pf"?"Imagem":"Sua Logomarca"); ?>
+                    </button></a>    
             </div>
         </div>
         <div class="panel panel-success">

@@ -1,32 +1,32 @@
 <script src="assets/js/jquery.maskedinput.min.js"></script>
 <script src="assets/js/util.validate.js"></script>
 <script src="assets/js/pwstrength.js"></script>
+<script src="assets/js/additional-methods.min.js"></script>
 <script>
 
 //Inicio CEP
-    $(document).ready(function() {
+    $(document).ready(function () {
         $("#txtCEP").mask("99.999-999"); //mascara
         $("#divCEP").hide(); //oculta campos do DIVCEP
-        $("#btnCEP").click(function() {
+        $("#btnCEP").click(function () {
             buscarCep()
         });
-        $("#txtCEP").blur(function() {
+        $("#txtCEP").blur(function () {
             buscarCep()
         });
-
-        $("#btnCadastrar").click(function() {
+        $("#btnCadastrar").click(function () {
             $("#form").submit();
         });
-        $("#btnCancelar").click(function() {
+        $("#btnCancelar").click(function () {
             if (confirm("Deseja cancelar o cadastro do usuário?")) {
                 location.href = "index.php?entidade=Usuario&acao=meuPIP";
             }
         });
-        $("#btnConfirmar").click(function() {
+        $("#btnConfirmar").click(function () {
             if ($("#form").valid()) {
-                if (typeof($("input[name^=hdnTipoTelefone]").val()) == "undefined") {
-                        alert("Você deve cadastrar pelo menos um telefone para contato.");
-                }else
+                if (typeof ($("input[name^=hdnTipoTelefone]").val()) == "undefined") {
+                    alert("Você deve cadastrar pelo menos um telefone para contato.");
+                } else
                 if ($("#hdnCEP").val() != "") {
                     //chama modal de confirmacao    
                     carregaDadosModal($("div[class='modal-body']"));
@@ -39,7 +39,6 @@
                 }
             }
         });
-
         function carregaDadosModal($div) {
             $div.html("");
             if ($("#sltTipoUsuario").val() === "pf")
@@ -56,7 +55,6 @@
                 $div.append("Cidade: " + $("#txtCidade").val() + "<br />");
                 $div.append("Estado: " + $("#txtEstado").val() + "<br />");
                 $div.append("CEP: " + $("#txtCEP").val() + "<br />");
-
             } else {
                 $div.append("Tipo de Pessoa: " + "Jurídica" + "<br />");
                 $div.append("Nome: " + $("#txtNome").val() + "<br />");
@@ -77,6 +75,20 @@
 
         }
 
+        $(document).ready(function () {
+            $("#divLogo").hide();
+            $("#sltTipoUsuario").change(function () {
+                if ($(this).val() == "pj") {
+                    $("#divLogo").fadeIn();
+                    $("#divImagem").hide();
+                } else {
+                    $("#divLogo").fadeOut();
+                    $("#divImagem").fadeIn();
+                }
+
+            })
+        })
+
         function buscarCep() {
             var validator = $("#form").validate();
             if (validator.element("#txtCEP")) {
@@ -89,7 +101,7 @@
                         hdnEntidade: "Endereco",
                         hdnAcao: "buscarCEP"
                     },
-                    beforeSend: function() {
+                    beforeSend: function () {
                         $("#msgCEP").remove();
                         var msgCEP = $("<div>", {id: "msgCEP", class: "alert alert-warning"}).html("...aguarde buscando CEP...");
                         $("#divCEP").fadeOut('slow'); //oculta campos do DIVCEP
@@ -102,7 +114,7 @@
                         $('#txtLogradouro').val('');
                         $('#hdnCEP').val('');
                     },
-                    success: function(resposta) {
+                    success: function (resposta) {
                         $("#msgCEP").remove();
                         var msgCEP = $("<div>", {id: "msgCEP"});
                         if (resposta.resultado == 0) {
@@ -114,9 +126,7 @@
                             $('#txtBairro').val(resposta.bairro);
                             $('#txtLogradouro').val(resposta.logradouro);
                             $('#hdnCEP').val($('#txtCEP').val());
-
                             var endereco = 'Brazil, ' + resposta.uf + ', ' + resposta.cidade + ', ' + resposta.bairro + ', ' + resposta.logradouro;
-
                         }
                         $("#alertCEP").append(msgCEP); //mostra resultado de busca cep
                         $('#txtCEP').removeAttr('disabled');
@@ -125,11 +135,19 @@
                 })
             }
         }
-
+        
         //######### FIM DO CEP ########
 
 //       Inicio Informações Básicas
-
+        $.validator.addMethod('filesize', function(value, element, param) {
+    // param = size (en bytes) 
+    // element = element to validate (<input>)
+    // value = value of the element (file name)
+            return this.optional(element) || (element.files[0].size <= param) 
+        });
+        
+        
+        
         $("#divEmpresa").hide(); //oculta campos do DIVEMPRESA 
         $("#divnome").hide();
         $("#divCpf").hide();
@@ -137,7 +155,7 @@
         $("#txtCpf").mask("999.999.999-99");
         $("#txtCnpj").mask("99.999.999/9999-99");
         $("#txtCpfResponsavel").mask("999.999.999-99");
-        $("#sltTipoUsuario").change(function() {
+        $("#sltTipoUsuario").change(function () {
             if ($(this).val() == "pf") {
                 $("#divnome").fadeIn('slow');
                 $("#divEmpresa").fadeOut('slow'); //oculta campos do DIVEMPRESA 
@@ -151,7 +169,6 @@
                 $("#divCpf").hide();
                 $("#lblNome").html("Nome da Empresa");
                 $("#txtNome").attr("placeholder", "Informe o nome da empresa");
-
             } else {
                 $("#divnome").fadeOut('slow');
                 $("#divEmpresa").fadeOut('slow'); //mostra campos do DIVEMPRESA
@@ -159,7 +176,6 @@
                 $("#divCpf").fadeOut('slow');
             }
         });
-
         "use strict";
         var options = {
             bootstrap3: true,
@@ -170,19 +186,18 @@
             },
             verdicts: ["Fraca", "Normal", "Média", "Forte", "Muito Forte"],
             usernameField: "#txtLogin",
-            onLoad: function() {
+            onLoad: function () {
                 $('#messages').text('Start typing password');
             },
-            onKeyUp: function(evt) {
+            onKeyUp: function (evt) {
                 $(evt.target).pwstrength("outputErrorList");
             }
         };
         $('#txtSenha').pwstrength(options);
-
 //        Fim Informações Básicas
 
 //        Inicio Telefone
-        $("#btnTelefone").click(function() {
+        $("#btnTelefone").click(function () {
             $("#txtTel").rules("add", {
                 required: true,
                 messages: {
@@ -218,9 +233,7 @@
 //            $("#sltOperadora").val("");
 //            $("#sltTipotelefone").val("");
         });
-
         $("#txtTel").mask("(99)9999-9999");
-
 //        Fim do Telefone
 
         //######### VALIDACAO DO FORMULARIO ########
@@ -302,6 +315,11 @@
                 txtRazaoSocial: {
                     required: true
                 },
+                arquivo: {
+                    //required: true,
+                    filesize: 2097152,
+                    accept: "jpeg|png|gif"
+                },
                 txtSenha: {
                     required: true,
                     minlength: 8,
@@ -361,24 +379,29 @@
                 },
                 txtCpfResponsavel: {
                     required: "Campo obrigatório"
+                },
+                arquivo: {
+                    //required: "Campo obrigatório"
+                    filesize: "A imagem deve ser menor que 2MB",
+                    accept: "Extensão de Arquivo Inválida"
                 }
             },
-            highlight: function(element) {
+            highlight: function (element) {
                 $(element).closest('.form-group').addClass('has-error');
             },
-            unhighlight: function(element) {
+            unhighlight: function (element) {
                 $(element).closest('.form-group').removeClass('has-error');
             },
             errorElement: 'span',
             errorClass: 'help-block',
-            errorPlacement: function(error, element) {
+            errorPlacement: function (error, element) {
                 if (element.parent('.input-group').length) {
                     error.insertAfter(element.parent());
                 } else {
                     error.insertAfter(element);
                 }
             },
-            submitHandler: function() {
+            submitHandler: function () {
                 form.submit();
             }
         });
@@ -398,7 +421,7 @@ Sessao::gerarToken();
     <div class="alert">Preencha os campos abaixo</div>
     <div class="row text-success" id="divmsg" hidden="true"></div>
     <!-- form -->
-    <form id="form" class="form-horizontal" action="index.php" method="post">
+    <form id="form" class="form-horizontal" action="index.php" method="post" enctype="multipart/form-data">
         <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Usuario"  />
         <input type="hidden" id="hdnAcao" name="hdnAcao" value="cadastrar" />
         <input type="hidden" id="hdnCEP" name="hdnCEP" />
@@ -600,6 +623,29 @@ Sessao::gerarToken();
                 </div>
             </div>
         </div>
+
+
+        <!-- upload da foto-->
+        <div class="row">
+        <div class="col-lg-8" id="divFotoImagem">
+            <div id="forms" class="panel panel-default">
+                <div class="panel-heading" id="divImagem">Sua Imagem </div>
+                <div class="panel-heading" id="divLogo">Logomarca </div>
+                <br>
+                <div class="form-group">
+                    <label class="col-lg-3 control-label" for="sltArquivo">Selecione a imagem</label>
+                    <div class="col-lg-2">
+                        <input  id="arquivo" name="arquivo" type="file"/> <br />
+                    </div>             
+                </div>
+
+            </div>
+        </div>
+        </div>
+
+
+
+
         <!-- Terceira Linha -->    
         <div class="row" id="divlinha3">
             <div class="col-lg-12" id="divbotoes">
