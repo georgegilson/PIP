@@ -446,14 +446,14 @@ class UsuarioControle {
             $genericoDAO = new GenericoDAO();
             $genericoDAO->iniciarTransacao();
             $usuario = new Usuario();
-            if ($_SESSION["senha"] == md5($parametros['txtSenhaAtual'])) {
+            $selecionarUsuario = $genericoDAO->consultar($usuario, false, array("id" => $_SESSION["idusuario"]));
+            if (password_verify($parametros['txtSenhaAtual'], $selecionarUsuario[0]->getSenha())) {
                 $entidadeUsuario = $usuario->trocarSenha($parametros);
                 $resultadoUsuario = $genericoDAO->editar($entidadeUsuario);
                 //sucesso
                 if ($resultadoUsuario) {
                     $genericoDAO->commit();
                     $genericoDAO->fecharConexao();
-                    $_SESSION["senha"] = md5($parametros['txtSenha']);
                     $visao->setItem("sucessoalterarsenha");
                     $visao->exibir('VisaoErrosGenerico.php');
                     //banco
@@ -594,6 +594,10 @@ class UsuarioControle {
         $genericoDAO->commit();
         $genericoDAO->fecharConexao();
         echo json_encode(array("resultado" => 1));
+    }
+    
+    public function trocarImagem($parametros){
+        
     }
 
 }

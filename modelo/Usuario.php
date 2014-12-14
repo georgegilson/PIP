@@ -89,7 +89,7 @@ class Usuario {
     public function getIdendereco() {
         return $this->idendereco;
     }
-    
+
     public function getFoto() {
         return $this->foto;
     }
@@ -137,12 +137,8 @@ class Usuario {
     public function setFoto($foto) {
         $this->foto = $foto;
     }
-   
-    function cadastrar($parametros, $idendereco) {
-        $usuario = new Usuario();
-        $usuario->setTipousuario($parametros['sltTipoUsuario']);
-        $usuario->setNome($parametros['txtNome']);
-        $usuario->setLogin($parametros['txtLogin']);
+
+    function criptografarSenha($senha) {
         $timeTarget = 0.2;
         $cost = 9;
         do {
@@ -154,7 +150,15 @@ class Usuario {
         $options = [
             'cost' => $cost,
         ];
-        $usuario->setSenha(password_hash($parametros['txtSenha'], PASSWORD_BCRYPT, $options));
+        return password_hash($senha, PASSWORD_BCRYPT, $options);
+    }
+
+    function cadastrar($parametros, $idendereco) {
+        $usuario = new Usuario();
+        $usuario->setTipousuario($parametros['sltTipoUsuario']);
+        $usuario->setNome($parametros['txtNome']);
+        $usuario->setLogin($parametros['txtLogin']);
+        $usuario->setSenha($this->criptografarSenha($parametros['txtSenha']));
 
         if ($usuario->getTipousuario() == "pf") {
             $usuario->setCpfcnpj($parametros['txtCpf']);
@@ -166,7 +170,8 @@ class Usuario {
         $usuario->setDatahoracadastro(date('d/m/Y H:i:s'));
         $usuario->setDatahoraalteracao("");
         $usuario->setIdendereco($idendereco);
-
+        $usuario->setFoto("");
+        
         $arquivo_tmp = $_FILES['arquivo']['tmp_name'];
         //echo "Passo 1 <br>";
         var_dump($arquivo_tmp) . " Passo 1 <br>";
@@ -186,8 +191,8 @@ class Usuario {
             //echo "Arquivo Criado <br>";} else echo "Erro";
             $usuario->setFoto($novoNome);
             //die();
-            return $usuario;
         }
+        return $usuario;
     }
 
     function editar($parametros) {
@@ -202,16 +207,14 @@ class Usuario {
     function alterarSenha($parametros) {
         $usuario = new Usuario();
         $usuario->setId($_SESSION["idRecuperaSenhaUsuario"]);
-        $senha = md5($parametros['txtSenha']);
-        $usuario->setSenha($senha);
+        $usuario->setSenha($this->criptografarSenha($parametros['txtSenha']));
         return $usuario;
     }
 
     function trocarSenha($parametros) {
         $usuario = new Usuario();
         $usuario->setId($_SESSION["idusuario"]);
-        $senha = md5($parametros['txtSenhaNova']);
-        $usuario->setSenha($senha);
+        $usuario->setSenha($this->criptografarSenha($parametros['txtSenhaNova']));
         return $usuario;
     }
 

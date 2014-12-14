@@ -56,7 +56,6 @@ class Sessao {
         $_SESSION["idendereco"] = $usuario[0]->getIdendereco();
         $_SESSION["nome"] = $usuario[0]->getNome();
         $_SESSION["tipopessoa"] = $usuario[0]->getTipousuario();
-        $_SESSION["senha"] = $usuario[0]->getSenha();
     }
 
     public static function configurarSessaoUsuarioPlanoConfirmacao($confirmacao) {
