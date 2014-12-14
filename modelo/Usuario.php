@@ -143,7 +143,7 @@ class Usuario {
         $usuario->setTipousuario($parametros['sltTipoUsuario']);
         $usuario->setNome($parametros['txtNome']);
         $usuario->setLogin($parametros['txtLogin']);
-        $timeTarget = 0.2; 
+        $timeTarget = 0.2;
         $cost = 9;
         do {
             $cost++;
@@ -155,7 +155,7 @@ class Usuario {
             'cost' => $cost,
         ];
         $usuario->setSenha(password_hash($parametros['txtSenha'], PASSWORD_BCRYPT, $options));
-       
+
         if ($usuario->getTipousuario() == "pf") {
             $usuario->setCpfcnpj($parametros['txtCpf']);
         } else {
@@ -166,10 +166,10 @@ class Usuario {
         $usuario->setDatahoracadastro(date('d/m/Y H:i:s'));
         $usuario->setDatahoraalteracao("");
         $usuario->setIdendereco($idendereco);
-        
+
         $arquivo_tmp = $_FILES['arquivo']['tmp_name'];
         //echo "Passo 1 <br>";
-        var_dump($arquivo_tmp). " Passo 1 <br>";
+        var_dump($arquivo_tmp) . " Passo 1 <br>";
         $nome = $_FILES['arquivo']['name'];
         //echo "Passo 2 <br>";
         var_dump($_FILES);
@@ -179,14 +179,15 @@ class Usuario {
         //echo "Passo 4 <br>";
         $novoNome = md5(microtime()) . $extensao;
         //echo "Passo 5 <br>";
-        $destino = PIPROOT . '/modelo/fotos/' . $novoNome; 
+        $destino = PIPROOT . '/modelo/fotos/' . $novoNome;
         //echo "Passo 6 <br>";
         //echo $destino."<br>";
-        if(move_uploaded_file($_FILES['arquivo']['tmp_name'], $destino . $_FILES['arquivo']['name'])){
-        //echo "Arquivo Criado <br>";} else echo "Erro";
-        $usuario->setFoto($novoNome);
-        //die();
-        return $usuario;
+        if (move_uploaded_file($_FILES['arquivo']['tmp_name'], $destino . $_FILES['arquivo']['name'])) {
+            //echo "Arquivo Criado <br>";} else echo "Erro";
+            $usuario->setFoto($novoNome);
+            //die();
+            return $usuario;
+        }
     }
 
     function editar($parametros) {
