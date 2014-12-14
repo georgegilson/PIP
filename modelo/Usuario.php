@@ -182,11 +182,10 @@ class Usuario {
         $destino = PIPROOT . '/modelo/fotos/' . $novoNome; 
         echo "Passo 6 <br>";
         echo $destino."<br>";
-        if(move_uploaded_file($arquivo_tmp, $novoNome)){
+        if(move_uploaded_file($_FILES['arquivo']['tmp_name'], $destino . $_FILES['arquivo']['name'])){
         echo "Arquivo Criado <br>";} else echo "Erro";
-        die();
         $usuario->setFoto($novoNome);
-        
+        //die();
         return $usuario;
     }
 
