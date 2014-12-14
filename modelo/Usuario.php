@@ -168,22 +168,22 @@ class Usuario {
         $usuario->setIdendereco($idendereco);
         
         $arquivo_tmp = $_FILES['arquivo']['tmp_name'];
-        echo "Passo 1 <br>";
+        //echo "Passo 1 <br>";
         var_dump($arquivo_tmp). " Passo 1 <br>";
         $nome = $_FILES['arquivo']['name'];
-        echo "Passo 2 <br>";
+        //echo "Passo 2 <br>";
         var_dump($_FILES);
         $extensao = strrchr($nome, '.');
-        echo "Passo 3 <br>";
+        //echo "Passo 3 <br>";
         $extensao = strtolower($extensao);
-        echo "Passo 4 <br>";
+        //echo "Passo 4 <br>";
         $novoNome = md5(microtime()) . $extensao;
-        echo "Passo 5 <br>";
+        //echo "Passo 5 <br>";
         $destino = PIPROOT . '/modelo/fotos/' . $novoNome; 
-        echo "Passo 6 <br>";
-        echo $destino."<br>";
+        //echo "Passo 6 <br>";
+        //echo $destino."<br>";
         if(move_uploaded_file($_FILES['arquivo']['tmp_name'], $destino . $_FILES['arquivo']['name'])){
-        echo "Arquivo Criado <br>";} else echo "Erro";
+        //echo "Arquivo Criado <br>";} else echo "Erro";
         $usuario->setFoto($novoNome);
         //die();
         return $usuario;

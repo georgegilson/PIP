@@ -374,12 +374,12 @@ class UsuarioControle {
                     $dadosEmail['destino'] = $selecionarUsuario[0]->getEmail(); //$parametros["email"];  
                     $dadosEmail['nome'] = $selecionarUsuario[0]->getNome(); //$parametros["nome"];
                     if ($avisoRecuperaSenha) {
-                        $dadosEmail['msg'] = "&lt;h1&gt;Teste de envio de e-mail&lt;/h1&gt; &lt;p&gt;Isso é um teste&lt;/p&gt;
+                        $dadosEmail['msg'] = "
                         <br> 
                         &lt;h1&gt;Você já solicitou uma troca de senha. Desconsidere o email já enviado e clique no link abaixo para processar a troca&lt;/h1&gt; 
                         <a href=http://localhost/PIP/index.php?entidade=Usuario&acao=form&tipo=alterarsenha&id=" . $entidadeRecuperaSenha->getHash() . ">http://localhost/PIP/index.php?entidade=Usuario&acao=form&tipo=alterarsenha&id=" . $entidadeRecuperaSenha->getHash() . "</a>";
                     } else {
-                        $dadosEmail['msg'] = "&lt;h1&gt;Teste de envio de e-mail&lt;/h1&gt; &lt;p&gt;Isso é um teste&lt;/p&gt;
+                        $dadosEmail['msg'] = "PIP OnLINE - Clique abaixo para recuperar sua senha. Este é um email automático. Não responda;
                         <br> 
                         <a href=http://localhost/PIP/index.php?entidade=Usuario&acao=form&tipo=alterarsenha&id=" . $entidadeRecuperaSenha->getHash() . ">http://localhost/PIP/index.php?entidade=Usuario&acao=form&tipo=alterarsenha&id=" . $entidadeRecuperaSenha->getHash() . "</a>";
                     }
