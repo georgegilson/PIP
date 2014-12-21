@@ -527,6 +527,67 @@ $(document).ready(function(){
 
 <form class="grid-form" id="form">  
 <div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
+    <?php 
+    
+    //$itensAnuncio = $this->getItem();
+    
+    $item = $this->getItem();
+    
+    //var_dump($item); die();
+    
+    $usuario = $item["usuario"][0];
+    $cidadeEstado = $item["cidadeEstado"][0];
+    $anuncios = $item["anuncio"];
+    
+            ?>
+    <div class="row">
+        <div class="col-lg-8" id="divFotoImagem">
+            <div id="forms" class="panel panel-default">
+                <?php if ($usuario->getFoto() != "") { ?>
+                                    <img src="<?php echo PIPURL ?>/fotos/usuarios/<?php echo $usuario->getFoto() ?>" class="img-circle" width="120" height="120">
+
+                                <?php } else { ?>
+                                    <img src="<?php echo PIPURL . "/assets/imagens/foto_padrao.png" ?>" class="img-circle" width="120" height="120">
+                                <?php } ?>
+
+            </div>
+        </div>
+        
+        <div data-row-span="7">
+				<div data-field-span="3">
+                                    <label style="text-align: left">Nome</label>
+					<?php echo "<span class='label label-info'>" . strtoupper($usuario->getNome()) . "</span>"; ?>
+				</div>
+                            
+                                <div data-field-span="3">
+					<label style="text-align: center">Endereço</label>
+					<?php echo "<span class='label label-warning'>" . strtoupper($usuario->getEndereco()->getLogradouro()) . ", Nº " . strtoupper($usuario->getEndereco()->getNumero()) ."</span>"; ?>
+				</div>
+                            
+				<div data-field-span="1">
+					<label style="text-align: center">CEP</label>
+					<?php echo "<span class='label label-primary'>" . strtoupper($usuario->getEndereco()->getCep()) . "</span>"; ?>
+				</div>
+                                <div data-field-span="2">
+					<label style="text-align: center">E-Mail</label>
+					<?php echo "<span class='label label-primary'>" . $usuario->getEmail() . "</span>"; ?>
+				</div>
+                                <div data-field-span="1">
+                                    <label style="text-align: center">Tipo Pessoa</label>
+					<?php echo "<span class='label label-primary'>" . strtoupper($usuario->getTipoUsuario()) . "</span>"; ?>
+				</div>
+                                <div data-field-span="1">
+					<label style="text-align: center">Cidade</label>
+					<?php echo "<span class='label label-primary'>" . strtoupper($cidadeEstado->getCidade()->getNome()) . "</span>"; ?>
+				</div>
+                                <div data-field-span="1">
+					<label style="text-align: center">Estado</label>
+					<?php echo "<span class='label label-primary'>" . strtoupper($cidadeEstado->getEstado()->getUf()) . "</span>"; ?>
+				</div>
+			</div>
+        
+    </div>
+
      <script src="assets/js/gridforms.js"></script>
     <!-- Example row of columns -->
     
@@ -539,9 +600,9 @@ $(document).ready(function(){
             <br/>
 
             <?php
-            $itensAnuncio = $this->getItem();
-            if ($itensAnuncio) {
-                foreach ($itensAnuncio as $anuncio) {   
+            //$itensAnuncio = $this->getItem();
+            if ($anuncios) {
+                foreach ($anuncios as $anuncio) {   
         ?>
             <?php //echo "Finalidade: ". $anuncio->getFinalidade();?>
                 

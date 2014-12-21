@@ -27,6 +27,7 @@ class Imovel {
     private $condicao;
     protected $endereco;
     protected $anuncio;
+    protected $usuario;
 
     public function getIdendereco() {
         return $this->idendereco;
@@ -143,7 +144,11 @@ class Imovel {
     public function getAnuncio() {
         return $this->anuncio;
     }
-
+    
+    function getUsuario() {
+        return $this->usuario;
+    }
+  
     public function getCondicao() {
         return $this->condicao;
     }
@@ -222,6 +227,10 @@ class Imovel {
 
     public function setAnuncio($anuncio) {
         $this->anuncio = $anuncio;
+    }
+    
+    function setUsuario($usuario) {
+        $this->usuario = $usuario;
     }
 
     public function setCondicao($condicao) {
