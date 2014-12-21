@@ -596,7 +596,7 @@ $(document).ready(function(){
             $("#modal-body").load("index.php", {hdnEntidade:'Anuncio', hdnAcao:'modal', hdnToken:'<?php //Sessao::gerarToken(); echo $_SESSION["token"]; ?>', hdnModal:$(this).attr('data-modal')});
         })
 
-        var NumeroMaximo = 10;
+        var NumeroMaximo = 3;
         $("input[id^='selecoes_']").click(function() {
             if ($("input[id^='selecoes_']").filter(':checked').size() > NumeroMaximo) {
                 alert('Selecione no máximo '+ NumeroMaximo +' imóveis para a comparação');
