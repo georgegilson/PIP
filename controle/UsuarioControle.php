@@ -50,6 +50,12 @@ class UsuarioControle {
             case "trocarsenha":
                 $visao->exibir('UsuarioVisaoTrocarSenha.php');
                 break;
+            case "trocarimagem":
+                $genericoDAO = new GenericoDAO();
+                $selecionarUsuario = $genericoDAO->consultar(new Usuario(), false, array("id" => $_SESSION["idusuario"]));
+                $visao->setItem($selecionarUsuario[0]);
+                $visao->exibir('UsuarioVisaoTrocarImagem.php');
+                break;
         }
     }
 
@@ -388,8 +394,8 @@ class UsuarioControle {
                     if (Email::enviarEmail($dadosEmail)) {
                         $genericoDAO->commit();
                         $genericoDAO->fecharConexao();
-                         $visao->setItem("sucessoenvioemail");
-                         $visao->exibir('VisaoErrosGenerico.php');
+                        $visao->setItem("sucessoenvioemail");
+                        $visao->exibir('VisaoErrosGenerico.php');
                     } else {
                         $genericoDAO->rollback();
                         $genericoDAO->fecharConexao();
@@ -399,8 +405,8 @@ class UsuarioControle {
                 } else {
                     $genericoDAO->rollback();
                     $genericoDAO->fecharConexao();
-                     $visao->setItem("errobanco");
-                     $visao->exibir('VisaoErrosGenerico.php');
+                    $visao->setItem("errobanco");
+                    $visao->exibir('VisaoErrosGenerico.php');
                 }
             } else {
                 $visao->setItem("errobanco");
@@ -413,7 +419,7 @@ class UsuarioControle {
     }
 
     function alterarsenha($parametros) {
-         $visao = new Template();
+        $visao = new Template();
         if (Sessao::verificarToken($parametros)) {
             $genericoDAO = new GenericoDAO();
             $genericoDAO->iniciarTransacao();
@@ -482,12 +488,12 @@ class UsuarioControle {
             $usuarioPlano = new UsuarioPlano();
             $genericoDAO = new GenericoDAO();
             $consultasAdHoc = new ConsultasAdHoc();
-            
+
             $listarUsuarioPlano = $genericoDAO->consultar($usuarioPlano, true, array("idusuario" => $_SESSION["idusuario"]));
             $itemMeuPIP = array();
             $itemMeuPIP["usuarioPlano"] = $listarUsuarioPlano;
-            $itemMeuPIP["imovel"] =  is_array($genericoDAO->consultar(new Imovel(), true, array("idusuario" => $_SESSION['idusuario'])));
-            $itemMeuPIP["anuncio"] = count($consultasAdHoc->ConsultarAnunciosPorUsuario($_SESSION['idusuario'])>0);
+            $itemMeuPIP["imovel"] = is_array($genericoDAO->consultar(new Imovel(), true, array("idusuario" => $_SESSION['idusuario'])));
+            $itemMeuPIP["anuncio"] = count($consultasAdHoc->ConsultarAnunciosPorUsuario($_SESSION['idusuario']) > 0);
             //visao
             $visao = new Template();
             $visao->setItem($itemMeuPIP);
@@ -595,9 +601,54 @@ class UsuarioControle {
         $genericoDAO->fecharConexao();
         echo json_encode(array("resultado" => 1));
     }
-    
-    public function trocarImagem($parametros){
-        
+
+    public function trocarImagem($parametros) {
+        $visao = new Template();
+        if (Sessao::verificarSessaoUsuario() & Sessao::verificarToken($parametros)) {
+            $genericoDAO = new GenericoDAO();
+            $genericoDAO->iniciarTransacao();
+            $selecionarUsuario = $genericoDAO->consultar(new Usuario, false, array("id" => $_SESSION["idusuario"]));
+            $usuario = $selecionarUsuario[0];
+            //excluir foto antiga se houver
+            if ($usuario->getFoto() != "") {
+                $fotoAntiga = PIPROOT . '/fotos/usuarios/' . $usuario->getFoto();
+                if (is_file($fotoAntiga)) {
+                    $deletar = unlink($fotoAntiga);
+                }
+            } else {
+                $deletar = true;
+            }
+            $usuario->setFoto("");
+
+            //se nao for exclusao de foto
+            if ($parametros["hdnExcluir"] == 0) {
+                $arquivo_tmp = $_FILES['arquivo']['tmp_name'];
+                $nome = $_FILES['arquivo']['name'];
+                $extensao = strrchr($nome, '.');
+                $extensao = strtolower($extensao);
+                $novoNome = md5(microtime()) . $extensao;
+                $destino = PIPROOT . '/fotos/usuarios/' . $novoNome;
+                if (move_uploaded_file($_FILES['arquivo']['tmp_name'], $destino)) {
+                    $usuario->setFoto($novoNome);
+                }
+            }
+            
+            $resultado = $genericoDAO->editar($usuario);
+            if ($deletar & $resultado) {
+                $genericoDAO->commit();
+                $genericoDAO->fecharConexao();
+                $visao->setItem("sucessotrocarimagem");
+                $visao->exibir('VisaoErrosGenerico.php');
+            } else {
+                $genericoDAO->rollback();
+                $genericoDAO->fecharConexao();
+                $visao->setItem("errobanco");
+                $visao->exibir('VisaoErrosGenerico.php');
+            }
+        } else {
+            $visao->setItem("errotoken");
+            $visao->exibir('VisaoErrosGenerico.php');
+        }
     }
 
 }

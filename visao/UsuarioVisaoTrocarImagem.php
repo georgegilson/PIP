@@ -1,0 +1,126 @@
+<?php
+Sessao::gerarToken();
+$tipoImagem = ($_SESSION["tipopessoa"] == "pf" ? "Imagem" : "Logomarca");
+$nomeUsuario = $this->getItem()->getNome();
+$enderecoImagem = PIPURL . "/fotos/usuarios/" . $this->getItem()->getFoto();
+?>
+<script>
+
+    $(document).ready(function() {
+    $("#btnCancelar").click(function() {
+    if (confirm("Deseja cancelar a alteração da senha?")) {
+    location.href = "index.php?entidade=Usuario&acao=meuPIP";
+    }
+    });
+
+    $("#btnAlterar").click(function() {
+    if ($("#form").valid()) {
+    $("#form").submit();
+    }
+    });
+
+    $("#btnExcluir").click(function() {
+    if (confirm("Deseja realmente excluir?")) {
+    $("#hdnExcluir").val(1);
+    $("#arquivo").rules("remove");
+    $("#form").submit();
+    }
+    });
+
+    $('#form').validate({
+    rules: {
+    arquivo: {
+    required: true
+    }
+    },
+    messages: {
+    arquivo: {
+    required: "Campo obrigatório"
+    }
+    },
+    highlight: function(element) {
+    $(element).closest('.form-group').addClass('has-error');
+    },
+    unhighlight: function(element) {
+    $(element).closest('.form-group').removeClass('has-error');
+    },
+    errorElement: 'span',
+    errorClass: 'help-block',
+    errorPlacement: function(error, element) {
+    if (element.parent('.input-group').length) {
+    error.insertAfter(element.parent());
+    } else {
+    error.insertAfter(element);
+    }
+    },
+    submitHandler: function() {
+    form.submit();
+    }
+    });
+    });
+</script>
+
+<div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
+    <div class="page-header">
+        <h1>Alterar Imagem</h1>
+    </div>
+    <div id="divalert">
+        <div class="col-lg-2">
+            <div class="text-right" id="divimg">
+            </div>
+        </div>
+        <div class="col-lg-8" id="divmsg">
+        </div>
+    </div>
+    <form id="form" class="form-horizontal" action="index.php" method="post" enctype="multipart/form-data">
+        <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Usuario"  />
+        <input type="hidden" id="hdnAcao" name="hdnAcao" value="trocarimagem" />
+        <input type="hidden" id="hdnToken" name="hdnToken" value="<?php echo $_SESSION['token']; ?>" />
+        <input type="hidden" id="hdnExcluir" name="hdnExcluir" value="0" />
+
+        <div class="row">
+            <div class="col-lg-9">
+                <table class="table table-striped table-condensed table-bordered">
+                    <thead>
+                        <tr>
+                            <th><?php echo $tipoImagem; ?> Atual</th>
+                            <th><?php echo $tipoImagem; ?> Nova</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <?php if ($this->getItem()->getFoto() != "") { ?>
+                                    <img src="<?php echo $enderecoImagem; ?>" alt="<?php echo $nomeUsuario; ?>" class="img-circle" width="300" height="300">
+
+                                <?php } else { ?>
+                                    <img src="<?php echo PIPURL . "/assets/imagens/foto_padrao.png" ?>" alt="<?php echo $nomeUsuario; ?>" class="img-circle" width="300" height="300">
+                                <?php } ?>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <label class="col-lg-3 control-label" for="sltArquivo">Selecione:</label>
+                                    <div class="col-lg-2">
+                                        <input  id="arquivo" name="arquivo" type="file"/> <br />
+                                    </div>             
+                                </div>
+                                <br /><br /><br /><br /><br /><br /><br />
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <div class="col-lg-offset-2 col-lg-10">
+                                                <button id="btnAlterar" type="button" class="btn btn-primary">Alterar</button>
+                                                <button id="btnCancelar" type="button" class="btn btn-warning">Cancelar</button>
+                                                <button id="btnExcluir" type="button" class="btn btn-danger">Excluir</button>
+                                            </div>
+                                        </div>                
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </form>
+</div>

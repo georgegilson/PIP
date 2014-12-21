@@ -1,6 +1,7 @@
        <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
        <script src="assets/js/gmaps.js"></script>
        <script src="assets/js/bootstrap-multiselect.js"></script>
+       <script src="assets/js/jquery.price_format.min.js"></script>
 <script>
      
 $(document).ready(function(){
@@ -550,13 +551,11 @@ $(document).ready(function(){
                     <p>
                         <?php
                         if (count($anuncio->getImagem()) > 0) {
-                            $imagem = $anuncio->getImagem();
-                            $imagem = (is_array($imagem) ? $imagem[0] : $imagem);
-                            echo '<img src="' . $imagem->getDiretorio() . '" width="180px" height="180px" >';
+                            echo '<img src="' . $anuncio->buscarDestaqueImagemMiniatura() . '" width="180" height="180" style="width: 180px; height: 180px;">';
                         }
                         ?>
                     </p>
-                    <?php echo '<b>R$ - '. $anuncio->getValor().'</b>';?> <br/>
+                    <strong><span id="spanValor_<?php echo $imovel->Referencia(); ?>"> <?php echo $anuncio->getValor(); ?> </span></strong> <br/>
                     <button type="button" id="btnAnuncioModal<?php echo $imovel->Referencia(); ?>" class="btn btn-default btn-sm" data-toggle="modal" data-target="#divAnuncioModal" data-modal="<?php echo $anuncio->getId(); ?>" data-title="<?php echo $anuncio->getTituloAnuncio(); ?>">
                         <span class="glyphicon glyphicon-plus-sign"></span> Veja mais detalhes
                     </button>
@@ -604,7 +603,15 @@ $(document).ready(function(){
                 return false;
             }
         })
-
+        
+            $("span[id^='spanValor_']").priceFormat({
+                prefix: 'R$ ',
+                centsSeparator: ',',
+                centsLimit: 0,
+                limit: 8,
+                thousandsSeparator: '.'
+            })
+            
         $("#btncomparar").click(function() {
                 if ($("input[id^='selecoes_']").filter(':checked').size() <= 1)
                 {

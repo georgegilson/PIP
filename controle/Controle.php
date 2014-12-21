@@ -59,9 +59,9 @@ class Controle {
     public static function index() {
         //modelo
         include_once 'DAO/GenericoDAO.php';
+        include_once 'modelo/Imagem.php';
         include_once 'modelo/Anuncio.php';
         include_once 'modelo/Imovel.php';
-        include_once 'modelo/Imagem.php';
         include_once 'modelo/HistoricoAluguelVenda.php';
         $genericoDAO = new GenericoDAO();
         $anuncios = $genericoDAO->consultar(new Anuncio(), true, array("status" => "cadastrado"));

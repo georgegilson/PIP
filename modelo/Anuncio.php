@@ -171,12 +171,23 @@ class Anuncio {
         $valor = trim($valor);
         return $valor;
     }
-    
-    function buscarDestaqueImagem($parametros){
-        /*$anuncio = new Anuncio();
-        //var_dump($parametros); die();
-        $anuncio->setId($parametros);
-        var_dump($anuncio->getId()); die();*/
+
+    function buscarDestaqueImagemMiniatura() {
+        $imagens = $this->getImagem();
+//        var_dump($imagens);
+        if (count($imagens) > 0) {
+            foreach ($imagens as $imagem) {
+                /*$objeto = new Imagem();var_dump($imagem);
+                foreach ($imagem as $key => $value) {
+                    $objeto->$key = $value;
+                }*/
+                if($imagem->getDestaque() == "SIM"){
+                    
+                    return $imagem->miniatura ();
+                }
+            }
+        }
+        return null;
     }
-    
+
 }

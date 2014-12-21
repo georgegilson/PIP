@@ -16,6 +16,7 @@ switch ($item) {
                 $('#divimg').append(img);
         <?php
         break;
+    case "sucessotrocarimagem":
     case "sucessoalterarsenha":
     case "sucessocadastrousuario":
     case "sucessocadastroimovel":
@@ -97,6 +98,11 @@ switch ($item) {
                     ?>
                     <h2 class=text-center>A sua conta de usuário foi criada com sucesso!</h2>
                     <p class=text-center>Digite seu login e sua senha para logar no site. </p>
+                    <?php
+                    break;
+                case "sucessotrocarimagem":
+                    ?>
+                    <h2 class=text-center>A sua <?php echo ($_SESSION["tipopessoa"] == "pf"?"Imagem":"Logomarca"); ?> foi alterada com sucesso!</h2>
                     <?php
                     break;
                 case "sucessoalterarsenha":

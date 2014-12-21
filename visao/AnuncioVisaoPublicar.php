@@ -114,7 +114,7 @@
                                     </select>
                                 </div>
                                 <div class="col-lg-4">
-                                    <a href="index.php?entidade=Plano&acao=listar"> <img src="http://www.prospeccao-de-clientes.com/images/gudrum-pagseguro.gif" width="100%"/> </a>
+                                    <a href="index.php?entidade=Plano&acao=listar"> Comprar planos! </a>
                                 </div>
                             </div>
                         </div>
@@ -654,17 +654,20 @@
             $('input[type="radio"]').on('switch-change', function() {
                 $('input[type="radio"]').bootstrapSwitch('toggleRadioState');
             });
+            console.log(data);
         })
 
         // Load existing files:
         $('#fileupload').addClass('fileupload-processing');
         $.ajax({
-            url: $('#fileupload').fileupload('option', 'url'),
+            url: "index.php",
             dataType: 'json',
-            context: $('#fileupload')[0]
+            context: $('#fileupload')[0],
+            data: { "anuncio": <?php echo ($item["anuncio"]->getId()!="" ? $item["anuncio"]->getId(): "0" ); ?>, "entidade" : "Anuncio", "acao" : "reativarAnuncioImagem" }
         }).always(function() {
             $(this).removeClass('fileupload-processing');
         }).done(function(result) {
+            console.log(result);
             $(this).fileupload('option', 'done').call(this, $.Event('done'), {result: result});
         });
 
