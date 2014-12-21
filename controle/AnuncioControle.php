@@ -193,7 +193,8 @@ class AnuncioControle {
         $listarAnuncio = $consultasAdHoc->ConsultarAnunciosPublicos($parametros['selecoes']);
         $visao = new Template();
         $visao->setItem($listarAnuncio);
-        $visao->exibir('AnuncioVisaoComparar.php');
+//        $visao->exibir('AnuncioVisaoComparar.php');
+        $visao->exibir('AnuncioVisaoCompararNovo.php');
 //        Tratamento de exceção para nenhum anuncio selecionado.
 //        print_r($listarAnuncio[0]->condicao);
 //        die();
@@ -315,8 +316,9 @@ class AnuncioControle {
         $genericoDAO->iniciarTransacao();
         $dadosEmail['destino'] = $parametros['email'];
         $dadosEmail['contato'] = "PIP-Online";
-        $dadosEmail['assunto'] = "Fulano de tal selecionou este(s) immóvel(is) para você!";
-        $dadosEmail['msg'] .= '<table class="body" style="border-spacing: 0; border-collapse: collapse; vertical-align: top; text-align: left; height: 100%; width: 100%; color: #222222; font-family: "Helvetica","Arial",sans-serif; font-weight: normal; line-height: 19px; font-size: 14px; margin: 0; padding: 0;"><tr style="vertical-align: top; text-align: left; padding: 0;" align="left"><td class="center" align="center" valign="top" style="word-break: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto; border-collapse: collapse !important; vertical-align: top; text-align: center; color: #222222; font-family: "Helvetica","Arial",sans-serif; font-weight: normal; line-height: 19px; font-size: 14px; margin: 0; padding: 0;">
+        $dadosEmail['assunto'] = "PIP-Online - Selecionou imóvel(is) para você";
+        $dadosEmail['msg'] .= 'Veja o(s) imóvel(is) que ' . $parametros['nome'] . ' indicou para você!<br><br>
+            <table class="body" style="border-spacing: 0; border-collapse: collapse; vertical-align: top; text-align: left; height: 100%; width: 100%; color: #222222; font-family: "Helvetica","Arial",sans-serif; font-weight: normal; line-height: 19px; font-size: 14px; margin: 0; padding: 0;"><tr style="vertical-align: top; text-align: left; padding: 0;" align="left"><td class="center" align="center" valign="top" style="word-break: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto; border-collapse: collapse !important; vertical-align: top; text-align: center; color: #222222; font-family: "Helvetica","Arial",sans-serif; font-weight: normal; line-height: 19px; font-size: 14px; margin: 0; padding: 0;">
     <center style="width: 100%; min-width: 580px;">
     <table class="row header" style="border-spacing: 0; border-collapse: collapse; vertical-align: top; text-align: left; width: 100%; position: relative; background: #999999; padding: 0px;" bgcolor="#999999"><tr style="vertical-align: top; text-align: left; padding: 0;" align="left"><td class="center" align="center" style="word-break: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto; border-collapse: collapse !important; vertical-align: top; text-align: center; color: #222222; font-family: "Helvetica","Arial",sans-serif; font-weight: normal; line-height: 19px; font-size: 14px; margin: 0; padding: 0;" valign="top">
     <center style="width: 100%; min-width: 580px;">
@@ -504,6 +506,7 @@ class AnuncioControle {
         } else {
             $item["usuario"] = $genericoDAO->consultar(new Usuario(), false, array("id" => $selecionarAnuncioUsuario[0]->getId()));
             $statusUsuario = $item["usuario"] = $genericoDAO->consultar(new Usuario(), false, array("id" => $selecionarAnuncioUsuario[0]->getId()));
+            $verificarStatus = $selecionarAnuncioUsuario[0]->getStatus();
             $verificarStatus = $statusUsuario[0]->getStatus();
             $id = $statusUsuario[0]->getId();
 
@@ -511,7 +514,8 @@ class AnuncioControle {
                 //trazer todos os anuncios cadastrados para o usuário
                 $adHoc = new ConsultasAdHoc();
                 $itensAnuncio = $adHoc->ConsultarAnunciosPorUsuario($id, null, 'cadastrado');
-                // echo count($itensAnuncio); die();
+               
+                if(!empty($itensAnuncio)){ //verificar se o usuário possui anuncios
                 foreach ($itensAnuncio as $anuncio) {
                     $imovel = $genericoDAO->consultar(new Imovel(), false, array("id" => $anuncio->getIdImovel()));
                     $anuncio->setImovel($imovel[0]);
@@ -519,11 +523,25 @@ class AnuncioControle {
                     $anuncio->getImovel()->setEndereco($endereco[0]);
                     $imagens = $genericoDAO->consultar(new Imagem(), false, array("id" => $anuncio->getIdImovel()));
                     $anuncio->setImagem($imagens[0]);
-                    //$anuncio->getImovel()->setImagens($imagens);
+                    /*$user = $genericoDAO->consultar(new Usuario(), false, array("id" => $anuncio->getImovel()->getIdUsuario()));
+                    $anuncio->getImovel()->setUsuario($user[0]);
+                    $enderecoUsuario = $genericoDAO->consultar(new Endereco(), false, array("id" => c);
+                    $anuncio->getImovel()->getUsuario()->setEndereco($enderecoUsuario[0]);
+                    $telefoneUsuario = $genericoDAO->consultar(new Telefone(), false, array("idusuario" => $anuncio->getImovel()->getIdUsuario()));
+                    $anuncio->getImovel()->getUsuario()->setTelefone($telefoneUsuario);
+                    $cidadeUsuario = $genericoDAO->consultar(new Cidade(), false, array("id" => $anuncio->getImovel()->getUsuario()->getEndereco()->getIdCidade()));
+                    $anuncio->getImovel()->getUsuario()->getEndereco()->setCidade($cidadeUsuario[0]);
+                    $estadoUsuario = $genericoDAO->consultar(new Estado(), false, array("id" => $anuncio->getImovel()->getUsuario()->getEndereco()->getIdEstado()));
+                    $anuncio->getImovel()->getUsuario()->getEndereco()->setEstado($estadoUsuario[0]);*/
                     $itensAnuncios[] = $anuncio;
+                    }
+                $item["anuncio"] = $itensAnuncios;
                 }
-                $visao = new Template();
-                $visao->setItem($itensAnuncios);
+                $visao = new Template();         
+                $item["usuario"] = $genericoDAO->consultar(new Usuario(), true, array("id" => $selecionarAnuncioUsuario[0]->getId()));
+                $item["cidadeEstado"] = $genericoDAO->consultar(new Endereco(), true, array("id" => $selecionarAnuncioUsuario[0]->getIdEndereco()));
+                
+                $visao->setItem($item);
                 $visao->exibir('AnuncioVisaoUsuario.php');
             }
         }
@@ -578,5 +596,7 @@ class AnuncioControle {
          * 
          */
     }
+    
+    
 
 }

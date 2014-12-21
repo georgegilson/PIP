@@ -14,8 +14,7 @@
             <option value="CA">California</option>
         </optgroup>
     </select>-->
-    &nbsp;&nbsp<button type="button" class="btn btn-default btn-sm" id="btnArquivar">Arquivar</button>
-    <br><br>
+<!--    <br><br>-->
     <div class="panel-group col-lg-11" id="accordion">
         <?php
         $params = array(
@@ -23,7 +22,12 @@
             'perPage' => 5,
             'dela' => 2,
             'itemData' => $this->getItem());
-
+        
+        print_r($this->getItem());
+        die();
+        if(count($this->getItem()) == 0){
+            print("<h2 class=text-center>Você não possui nenhuma mensagem.</h2>");
+        }
         $pager = & Pager::factory($params);
         $data = $pager->getPageData();
         Sessao::gerarToken();
@@ -84,10 +88,11 @@
                             <?php
                         }
                         ?>                        
-                        <br>               
-                        <button type="button" value=" <?php echo $mensagem->getId(); ?>" id="btnResponder<?php echo $mensagem->getAnuncio()->getImovel()->Referencia(); ?>" class="btn btn-default btn-sm">
-                            Responder
-                        </button>  
+                        <br> 
+                        <?php if(count($listRespostas) == 0){ 
+                            print '<button type="button" value=' . $mensagem->getId() . ' id=btnResponder' . $mensagem->getAnuncio()->getImovel()->Referencia() . ' class="btn btn-default btn-sm">Responder</button>';
+                        }
+                         ?>
                         <button type="button" id="btnAnuncioModal<?php echo $mensagem->getAnuncio()->getImovel()->Referencia(); ?>" class="btn btn-default btn-sm" data-toggle="modal" data-target="#divAnuncioModal" data-modal="<?php echo $mensagem->getAnuncio()->getId(); ?>" data-title="<?php echo $mensagem->getAnuncio()->getTituloAnuncio(); ?>">
                             Visualizar Anúncio
                         </button>   
@@ -98,12 +103,15 @@
         }
         ?>             
     </div>
+    
     <?php
     $links = $pager->getLinks();
     echo ($links['all'] != "" ? "&nbsp;&nbsp;&nbsp;&nbsp;Página: " . $links['all'] : "");
     ?>
 
 </div>
+   &nbsp&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbsp
+    <button type="button" class="btn btn-default btn-sm" id="btnArquivar">Excluir</button>
 </div>
 
 <!-- Modal -->
@@ -124,6 +132,7 @@
         $("#e1").select2();      
         $('[id^=txtMensagem]').hide();
         $('[id^=btnEnviar]').hide();
+        $('[id^=btnArquivar]').hide();
         
         $('[id^=btnAnuncioModal]').click(function() {
             $("#lblAnuncioModal").html("<span class='glyphicon glyphicon-bullhorn'></span> " + $(this).attr('data-title'));
@@ -155,6 +164,14 @@
 
         $("#btnArquivar").click(function() {
             arquivarMensagem();
+        });
+        
+        $('[id^=selecoes]').click(function() {
+            if(($('[id^=selecoes]:checked').serializeArray()).length > 0){
+                $('[id^=btnArquivar]').show("slow");
+            }else{
+                $('[id^=btnArquivar]').hide("slow");
+            }            
         });
 
         function lerMensagem(elemento)
