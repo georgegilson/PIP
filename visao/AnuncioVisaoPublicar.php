@@ -173,7 +173,15 @@
                                     <div class="form-group">
                                         <label class="col-lg-offset-1 col-lg-9" for="sltCamposVisiveis">Escolha quais informações do imóvel deseja exibir:</label>
                                     </div>
-                                    <?php $arrayValoresVisiveis = json_decode($item["anuncio"]->getValorVisivel()); ?>
+                                    <?php 
+                                    
+                                    if($item["anuncio"]->getId()!=""){
+                                        $arrayValoresVisiveis = json_decode($item["anuncio"]->getValorVisivel()); 
+                                    } else {
+                                        $arrayValoresVisiveis = array("quarto","banheiro","garagem","academia","areaservico","dependenciaempregada","elevador","piscina","quadra","area","suite","andar","condominio","cobertura","sacada"); 
+                                    }
+                                                                            
+                                    ?>
                                     <div class="form-group">
                                         <div class="col-sm-offset-1 col-sm-4">
                                             <div class="panel panel-default">
@@ -243,6 +251,10 @@
                                                 <div class="panel-heading">Apartamento</div>
                                                 <div class="panel-body">
                                                     <?php if ($tipoImovel == "apartamento") { ?>
+                                                    <?php if ($imovel->getAndar() == "" && $imovel->getCondominio() == "" && $imovel->getCobertura() == "NAO" && $imovel->getSacada() == "NAO") {
+                                                        echo "Não informado no cadastro do imóvel.";
+                                                        
+                                                    } else { ?>                                                   
                                                         <?php if ($imovel->getAndar() != "") { ?>
                                                             <label class="checkbox">
                                                                 <input type="checkbox" name="sltCamposVisiveis[]" value="andar" <?php echo (in_array("andar",$arrayValoresVisiveis)) ? "checked=\"checked\"" : "" ?> > Andar - <?php echo $imovel->getAndar(); ?>
@@ -264,6 +276,7 @@
                                                             </label>
                                                         <?php } ?> 
                                                         <?php
+                                                        }
                                                     } else {
                                                         echo "Não se aplica.";
                                                     }
