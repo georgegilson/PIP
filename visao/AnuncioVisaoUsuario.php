@@ -104,6 +104,84 @@ $(document).ready(function(){
         })
     });         
 </script>
+
+<script>
+                $(document).ready(function() {
+                    var NumeroMaximo = 10;
+                    $("input[id^='selecoes_']").click(function() {
+                        if ($("input[id^='selecoes_']").filter(':checked').size() > NumeroMaximo) {
+                            alert('Selecione no máximo ' + NumeroMaximo + ' imóveis para a comparação');
+                            return false;
+                        } else {
+                            if ($(this).filter(':checked').size() > 0) {
+                                $(this).parent().parent().parent().css('border', '3px dotted orange');
+                            } else {
+                                $(this).parent().parent().parent().css('border', '0px');
+                            }
+                        }
+                    });
+                    $("#btnEnviarEmailAnuncio").click(function() {
+                        $("#formEmail").valid();
+                    });
+                    $('#formEmail').validate({
+                        rules: {
+                            txtEmail: {
+                                required: true,
+                                email: true,
+                            },
+                        },
+                        highlight: function(element) {
+                            $(element).closest('.form-group').addClass('has-error');
+                        },
+                        unhighlight: function(element) {
+                            $(element).closest('.form-group').removeClass('has-error');
+                        },
+                        errorElement: 'span',
+                        errorClass: 'help-block',
+                        errorPlacement: function(error, element) {
+                            if (element.parent('.input-group').length) {
+                                error.insertAfter(element.parent());
+                            } else {
+                                error.insertAfter(element);
+                            }
+                        },
+                        submitHandler: function() {
+                            $.ajax({
+                                url: "index.php",
+                                dataType: "json",
+                                type: "POST",
+                                data: {
+                                    hdnEntidade: "Anuncio",
+                                    hdnAcao: "enviarEmail",
+                                    selecoes: $("input[id^='selecoes_']").serializeArray(),
+                                    email: $("#txtEmail").val(),
+                                    nome: $("#txtNome").val(),
+                                    mensagem: $("#txtMensagem").val()
+                                },
+                                beforeSend: function() {
+                                $('.alert').html(" ");
+                                $('.alert').html("...processando...").attr('class', 'alert alert-warning');
+                                $('#btnEnviarEmailAnuncio').attr('disabled', 'disabled');
+                                },
+                                success: function(resposta) {
+                                $('#btnEnviarEmailAnuncio').removeAttr('disabled');
+                                if (resposta.resultado == 1) {
+                                    $('.alert').html(
+                                            "Email enviado com sucesso!").attr('class', 'alert alert-success');
+                                    $('#txtNome').val(" ");
+                                    $('#txtEmail').val(" ");
+                                    $('#txtMensagem').val(" ");                                    
+                                } else {
+                                    $('.alert').html("Erro ao enviar e-mail. Tente novamente em alguns minutos.").attr('class', 'alert alert-danger');
+                                }
+                                }
+                            });
+//                        return false;
+                        }
+                    });
+                });
+            </script>
+   
     
    <div class="container divBusca"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) -->         
     <!-- Example row of columns -->
@@ -525,8 +603,30 @@ $(document).ready(function(){
         </div>
    </div>      
 
-<form class="grid-form" id="form">  
 <div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
+
+    <form class="grid-form" id="form" action="index.php" method="post">
+    <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Anuncio"  />
+    <input type="hidden" id="hdnAcao" name="hdnAcao" value="comparar" />
+    <style type="text/css">
+        <!-- div#btncomparar {position:fixed;top:370px;right:80px} →</style>
+    <style type="text/css">
+        <!-- div#btnEnviarEmail {position:fixed;top:330px;right:80px} →</style>
+
+    <div id="btncomparar">
+        <button type="submit" class="btn" id="btncomparar" value="Comparar">Comparar</button>
+    </div>
+    <br>
+
+
+    <div id="btnEnviarEmail">
+        <button type="button" id="btnEnviarEmail" class="btn btn-default btn-sm" style="margin-left: 60px" 
+                data-toggle="modal" data-target="#divEmailModal" data-modal="<?php echo $anuncio->id; ?>" 
+                data-title="<?php echo $anuncio->tituloanuncio; ?>">
+            <span class="glyphicon glyphicon-plus-sign"></span> Enviar Email
+        </button>
+    </div>
+    
     <?php 
     
     //$itensAnuncio = $this->getItem();
@@ -539,57 +639,110 @@ $(document).ready(function(){
     $cidadeEstado = $item["cidadeEstado"][0];
     $anuncios = $item["anuncio"];
     
+   //var_dump($usuario->getTelefone()); die(); 
+   
+   /*for ($x=0 ; $x <= count($usuario->getTelefone()-1) ; $x++){
+       echo $usuario->getTelefone()->getNumero()[$x];
+   }*/
+    
             ?>
-    <div class="row">
-        <div class="col-lg-8" id="divFotoImagem">
-            <div id="forms" class="panel panel-default">
-                <?php if ($usuario->getFoto() != "") { ?>
-                                    <img src="<?php echo PIPURL ?>/fotos/usuarios/<?php echo $usuario->getFoto() ?>" class="img-circle" width="120" height="120">
+    <br />
+    
+    <span class="glyphicon glyphicon-user" aria-hidden="true"></span><h4>Perfil <?php if($usuario->getTipoUsuario() == "pf"){echo "do Vendedor";} else echo "da Empresa";?></h4>
+    
+     <table class="table table-hover">
+            <thead>
 
-                                <?php } else { ?>
-                                    <img src="<?php echo PIPURL . "/assets/imagens/foto_padrao.png" ?>" class="img-circle" width="120" height="120">
-                                <?php } ?>
+            </thead>
+            <tbody>
 
-            </div>
-        </div>
+            <br/>
+                
+            
+        <link rel="stylesheet" type="text/css" href="assets/css/gridforms.css">            
         
-        <div data-row-span="7">
-				<div data-field-span="3">
-                                    <label style="text-align: left">Nome</label>
+        <div class="panel panel-warning col-md-10">
+
+        <div class="panel-body">
+        
+        <fieldset class="col-md-8">
+                        
+                        <div data-row-span="1">
+                         <!--<input type="checkbox" id="selecoes_<?php //echo $anuncio->getId(); ?>" class="option" name="selecoes[]" value=<?php //echo $anuncio->getId(); ?>> Selecionar Imóvel -->        
+                        </div>
+            
+                        <div data-row-span="8">
+				<div data-field-span="4">
+                                    <label style="text-align: center">Nome</label>
 					<?php echo "<span class='label label-info'>" . strtoupper($usuario->getNome()) . "</span>"; ?>
 				</div>
                             
                                 <div data-field-span="3">
 					<label style="text-align: center">Endereço</label>
-					<?php echo "<span class='label label-warning'>" . strtoupper($usuario->getEndereco()->getLogradouro()) . ", Nº " . strtoupper($usuario->getEndereco()->getNumero()) ."</span>"; ?>
+					<?php echo "<span class='label label-warning'>" . strtoupper($usuario->getEndereco()->getLogradouro()) . ", Nº " . strtoupper($usuario->getEndereco()->getNumero()) ." </span>" . strtoupper($usuario->getEndereco()->getComplemento()) ."</span>"; ?>
 				</div>
-                            
-				<div data-field-span="1">
+                        </div> 
+                        
+                        <div data-row-span="8">
+            
+				<div data-field-span="2">
 					<label style="text-align: center">CEP</label>
 					<?php echo "<span class='label label-primary'>" . strtoupper($usuario->getEndereco()->getCep()) . "</span>"; ?>
 				</div>
                                 <div data-field-span="2">
-					<label style="text-align: center">E-Mail</label>
-					<?php echo "<span class='label label-primary'>" . $usuario->getEmail() . "</span>"; ?>
+					<label style="text-align: center">Tipo Pessoa</label>
+                                        <?php if($usuario->getTipoUsuario() == "pf"){ echo "<span class='label label-primary'>PESSOA FÍSICA</span>";} else echo "<span class='label label-primary'>PESSOA JURÍDICA</span>"; ?>
 				</div>
-                                <div data-field-span="1">
-                                    <label style="text-align: center">Tipo Pessoa</label>
-					<?php echo "<span class='label label-primary'>" . strtoupper($usuario->getTipoUsuario()) . "</span>"; ?>
-				</div>
-                                <div data-field-span="1">
-					<label style="text-align: center">Cidade</label>
-					<?php echo "<span class='label label-primary'>" . strtoupper($cidadeEstado->getCidade()->getNome()) . "</span>"; ?>
-				</div>
-                                <div data-field-span="1">
-					<label style="text-align: center">Estado</label>
-					<?php echo "<span class='label label-primary'>" . strtoupper($cidadeEstado->getEstado()->getUf()) . "</span>"; ?>
-				</div>
-			</div>
-        
-    </div>
 
-     <script src="assets/js/gridforms.js"></script>
-    <!-- Example row of columns -->
+                                <div data-field-span="2">
+                                    <label style="text-align: center">Cidade - Estado</label>
+					<?php echo "<span class='label label-primary'>" . strtoupper($cidadeEstado->getCidade()->getNome()) . ", ". strtoupper($cidadeEstado->getEstado()->getUf()) ."</span>"; ?>
+				</div>
+                                <div data-field-span="2">
+                                    <label style="text-align: center">Contatos</label>
+                                    
+                                <?php
+                                
+                                if(is_array($usuario->getTelefone())){ //verifica se existe mais de um número de telefone cadastrado para o usuário 
+                                
+                                foreach ($usuario->getTelefone() as $anuncioTelefone) {  
+                                 
+                                ?>  
+					<?php echo "<span class='label label-primary'>" . strtoupper($anuncioTelefone->getOperadora()) . " - ". strtoupper($anuncioTelefone->getNumero()) ."</span>"; ?>
+				
+                                <?php } ?>
+                                <?php } else echo "<span class='label label-primary'>" . strtoupper($usuario->getTelefone()->getOperadora()) . " - ". strtoupper($usuario->getTelefone()->getNumero()) ."</span>"; ?>
+                                </div>
+                                
+			</div>
+            
+        </fieldset>		
+
+        <fieldset class="col-md-2">
+    
+       
+                <?php if ($usuario->getFoto() != "") { ?>
+                                    <img src="<?php echo PIPURL ?>/fotos/usuarios/<?php echo $usuario->getFoto() ?>" class="img-thumbnail" width="120" height="120" style="margin-left: 60px">
+
+                                <?php } else { ?>
+                                    <img src="<?php echo PIPURL . "/assets/imagens/foto_padrao.png" ?>" class="img-circle" width="120" height="120" style="margin-left: 60px">
+                                <?php } ?>
+
+            
+        </fieldset>
+            
+        </div>    
+        
+        </div>    
+           
+        <br/><br/><br/><br/><br/><br/>
+              
+            </tbody>
+            
+        </table>
+    
+    
+        <span class="glyphicon glyphicon-home" aria-hidden="true"></span><h4>Imóveis <?php if($usuario->getTipoUsuario() == "pf"){echo "do Vendedor";} else echo "da Empresa";?></h4>
     
         <table class="table table-hover">
             <thead>
@@ -605,10 +758,7 @@ $(document).ready(function(){
                 foreach ($anuncios as $anuncio) {   
         ?>
             <?php //echo "Finalidade: ". $anuncio->getFinalidade();?>
-                
-            
-        <link rel="stylesheet" type="text/css" href="assets/css/gridforms.css">            
-        
+
         <div class="panel panel-warning col-md-11"  id="<?php echo $anuncio->getId();?>" >
 
         <div class="panel-body">
@@ -616,7 +766,7 @@ $(document).ready(function(){
         <fieldset class="col-md-9">
                         
                         <div data-row-span="1">
-                         <!--<input type="checkbox" id="selecoes_<?php //echo $anuncio->getId(); ?>" class="option" name="selecoes[]" value=<?php //echo $anuncio->getId(); ?>> Selecionar Imóvel -->        
+                        <input type="checkbox" id="selecoes_<?php echo $anuncio->getId(); ?>" class="option" name="selecoes[]" value=<?php echo $anuncio->getId(); ?>> Selecionar Imóvel   
                         </div>
             
                         <div data-row-span="7">
@@ -722,14 +872,53 @@ $(document).ready(function(){
             
         <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
               
-        <?php } }?>
+        <?php } } else echo "<span class='text-info'><strong>Nenhum anuncio cadastrado</strong></span>";?>
 
             </tbody>
             
         </table>
      
 </div>
-    
+</form>
+
+
+<!-- Modal Para Abrir a Div do Enviar Anuncios por Email -->
+<div class="modal fade" id="divEmailModal" tabindex="-1" role="dialog" aria-labelledby="lblAnuncioModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <form role="form" id="formEmail">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="exampleModalLabel">Enviar Anúncio</h4>
+      </div>
+      <div class="modal-body">
+          <div id="alert" role="alert" class="alert alert-warning">
+                      Preencha os dados abaixo para realizar o envio, por e-mail, dos anúncios selecionados. 
+                    </div>
+                <br>
+<!--        <form role="form" id="formEmail">-->
+           <div class="form-group">
+            <label for="recipient-name" class="control-label">Nome:</label>
+            <input type="text" class="form-control" id="txtNome">
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="control-label">E-mail:</label>
+            <input type="text" class="form-control" id="txtEmail" name="txtEmail">
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="control-label">Mensagem:</label>
+            <textarea maxlength="200" class="form-control" id="txtMensagem"></textarea>
+          </div>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+        <button type="submit" id="btnEnviarEmailAnuncio" class="btn btn-primary">Enviar</button>
+      </div>
+            </form>
+    </div>
+  </div>
+</div>
 
 
 <div class="modal fade" id="divAnuncioModal" tabindex="-1" role="dialog" aria-labelledby="lblAnuncioModal" data-modal="" aria-hidden="true">
@@ -748,5 +937,32 @@ $(document).ready(function(){
             $("#modal-body").html('<img src="assets/imagens/loading.gif" /><h2>Aguarde... Carregando...</h2>');
             $("#modal-body").load("index.php", {hdnEntidade:'Anuncio', hdnAcao:'modal', hdnToken:'<?php //Sessao::gerarToken(); echo $_SESSION["token"]; ?>', hdnModal:$(this).attr('data-modal')});
         })
+        
+     var NumeroMaximo = 10;
+        $("input[id^='selecoes_']").click(function() {
+            if ($("input[id^='selecoes_']").filter(':checked').size() > NumeroMaximo) {
+                alert('Selecione no máximo ' + NumeroMaximo + ' imóveis para a comparação');
+                return false;
+            }
+        })
+
+        $("#btncomparar").click(function() {
+            //alert('teste');
+            if ($("input[id^='selecoes_']").filter(':checked').size() <= 1)
+            {
+                alert('Selecione no mínimo 2 imóveis para a comparação');
+                return false;
+            }
+        })
+        
+        $("#btnEnviarEmail").click(function() {
+            //alert('teste');
+            if ($("input[id^='selecoes_']").filter(':checked').size() <= 0)
+            {
+                alert('Selecione no mínimo 1 imóvel para envio');
+                return false;
+            }
+        })
+     
      });
 </script>

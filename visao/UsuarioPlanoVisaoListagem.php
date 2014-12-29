@@ -86,13 +86,15 @@
                 <form id="form" class="form-horizontal" method="POST" action="index.php">
                     <table class="table table-bordered table-condensed table-hover table-responsive">
                         <colgroup>
-                            <col class="col-xs-7">
+                            <col class="col-xs-3">
+                            <col class="col-xs-4">
                             <col class="col-xs-2">
                             <col class="col-xs-2">
                         </colgroup>
                         <thead>
                             <tr>
                                 <th>Plano</th>
+                                <th>Descrição</th>
                                 <th>Quantidade</th>
                                 <th>Preço (R$)</th>
                             </tr>
@@ -111,6 +113,7 @@
                                 foreach ($item["plano"] as $plano) {
                                     echo "<tr>";
                                     echo "<td>" . $plano->getTitulo() . "</td>";
+                                    echo "<td>" . $plano->getDescricao() . "</td>";
                                     echo "<td><input id='spnPlano[" . $plano->getId() . "]' type='text' value='0' name='spnPlano[" . $plano->getId() . "]'></td>";
                                     echo "<td><input readonly class='form-control' id='Plano[" . $plano->getId() . "]' type='text' value='" . $plano->getPreco() . "' name='txtPreco[" . $plano->getId() . "]'></td>";
                                     echo "</tr>";

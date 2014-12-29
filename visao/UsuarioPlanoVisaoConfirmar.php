@@ -14,13 +14,15 @@ Sessao::gerarToken();
             <div id="forms" class="panel panel-default">
                  <table class="table table-bordered table-condensed table-hover table-responsive">
                         <colgroup>
-                            <col class="col-xs-7">
+                            <col class="col-xs-3">
+                            <col class="col-xs-4">
                             <col class="col-xs-2">
                             <col class="col-xs-2">
                         </colgroup>
                         <thead>
                             <tr>
                                 <th>Plano</th>
+                                <th>Descrição</th>
                                 <th>Quantidade</th>
                                 <th>Preço (R$)</th>
                             </tr>
@@ -38,6 +40,7 @@ Sessao::gerarToken();
                                 foreach ($item["planosSelecionados"] as $plano) {
                                     echo "<tr>";
                                     echo "<td>" . $plano["titulo"] . "</td>";
+                                echo "<td>" . $plano["descricao"] . "</td>";
                                     echo "<td>". $item["confirmacao"]["planos"][$plano["id"]] ."</td>";
                                     echo "<td> R$ ". $plano["preco"] ."</td>";
                                     echo "</tr>";

@@ -1,5 +1,6 @@
 <?php
 
+include_once 'modelo/Usuario.php';
 include_once 'modelo/Imovel.php';
 include_once 'modelo/Endereco.php';
 include_once 'modelo/Anuncio.php';
@@ -111,7 +112,6 @@ class ImovelControle {
             $imovel = new Imovel();
             $genericoDAO = new GenericoDAO();
             $listaImoveis = $genericoDAO->consultar($imovel, true, array("idusuario" => $_SESSION['idusuario']));
-
             #verificar a melhor forma de tratar o blindado recursivo
             foreach ($listaImoveis as $selecionarImovel) {
                 $selecionarEndereco = $genericoDAO->consultar(new Endereco(), true, array("id" => $selecionarImovel->getIdEndereco()));

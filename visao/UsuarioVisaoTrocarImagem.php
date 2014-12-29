@@ -1,62 +1,74 @@
+<script src="assets/js/additional-methods.min.js"></script>
+
 <?php
 Sessao::gerarToken();
 $tipoImagem = ($_SESSION["tipopessoa"] == "pf" ? "Imagem" : "Logomarca");
 $nomeUsuario = $this->getItem()->getNome();
 $enderecoImagem = PIPURL . "/fotos/usuarios/" . $this->getItem()->getFoto();
 ?>
+
 <script>
 
-    $(document).ready(function() {
-    $("#btnCancelar").click(function() {
-    if (confirm("Deseja cancelar a alteração da senha?")) {
-    location.href = "index.php?entidade=Usuario&acao=meuPIP";
-    }
-    });
+    $(document).ready(function () {
+        $("#btnCancelar").click(function () {
+            if (confirm("Deseja cancelar a alteração da imagem?")) {
+                location.href = "index.php?entidade=Usuario&acao=meuPIP";
+            }
+        });
 
-    $("#btnAlterar").click(function() {
-    if ($("#form").valid()) {
-    $("#form").submit();
-    }
-    });
+        $("#btnAlterar").click(function () {
+            if ($("#form").valid()) {
+                $("#form").submit();
+            }
+        });
 
-    $("#btnExcluir").click(function() {
-    if (confirm("Deseja realmente excluir?")) {
-    $("#hdnExcluir").val(1);
-    $("#arquivo").rules("remove");
-    $("#form").submit();
-    }
-    });
-
-    $('#form').validate({
-    rules: {
-    arquivo: {
-    required: true
-    }
-    },
-    messages: {
-    arquivo: {
-    required: "Campo obrigatório"
-    }
-    },
-    highlight: function(element) {
-    $(element).closest('.form-group').addClass('has-error');
-    },
-    unhighlight: function(element) {
-    $(element).closest('.form-group').removeClass('has-error');
-    },
-    errorElement: 'span',
-    errorClass: 'help-block',
-    errorPlacement: function(error, element) {
-    if (element.parent('.input-group').length) {
-    error.insertAfter(element.parent());
-    } else {
-    error.insertAfter(element);
-    }
-    },
-    submitHandler: function() {
-    form.submit();
-    }
-    });
+        $("#btnExcluir").click(function () {
+            if (confirm("Deseja realmente excluir?")) {
+                $("#hdnExcluir").val(1);
+                $("#arquivo").rules("remove");
+                $("#form").submit();
+            }
+        });
+        $.validator.addMethod('filesize', function (value, element, param) {
+            // param = size (en bytes) 
+            // element = element to validate (<input>)
+            // value = value of the element (file name)
+            return this.optional(element) || (element.files[0].size <= param)
+        });
+        $('#form').validate({
+            rules: {
+                arquivo: {
+                    required: true,
+                    filesize: 2097152,
+                    accept: "jpeg|png|gif"
+                }
+            },
+            messages: {
+                arquivo: {
+                    required: "Campo obrigatório",
+                    filesize: "A imagem deve ser menor que 2MB",
+                    accept: "Extensão de Arquivo Inválida"
+                }
+            },
+            highlight: function (element) {
+                $(element).closest('.form-group').addClass('has-error');
+            },
+            unhighlight: function (element) {
+                $(element).closest('.form-group').removeClass('has-error');
+            },
+            errorElement: 'span',
+            errorClass: 'help-block',
+            errorPlacement: function (error, element) {
+                if (element.parent('.input-group').length) {
+                    error.insertAfter(element.parent());
+                } else {
+                    error.insertAfter(element);
+                }
+            },
+            submitHandler: function () {
+                form.submit();
+            }
+        });
     });
 </script>
 
