@@ -125,7 +125,45 @@ class AnuncioControle {
         }
     }
 
-    function listar() {
+    function listarAtivo() {
+        if (Sessao::verificarSessaoUsuario()) {
+            $anuncio = new Anuncio();
+            $genericoDAO = new GenericoDAO();
+            $consultasAdHoc = new ConsultasAdHoc();
+            $listaAnuncio = $consultasAdHoc->ConsultarAnunciosPorUsuario($_SESSION['idusuario']);
+            foreach ($listaAnuncio as $anuncio) {
+                $imovel = $genericoDAO->consultar(new Imovel(), false, array("id" => $anuncio->getIdImovel()));
+                $anuncio->setImovel($imovel[0]);
+                $historicoAluguelVenda = $genericoDAO->consultar(new HistoricoAluguelVenda(), false, array("idAnuncio" => $anuncio->getId()));
+                $anuncio->setHistoricoAluguelVenda($historicoAluguelVenda[0]);
+                $listarAnuncio[] = $anuncio;
+            }
+            //visao
+            $visao = new Template();
+            $visao->setItem($listarAnuncio);
+            $visao->exibir('AnuncioVisaoListagem.php');
+        }
+    }
+    function listarFinalizado() {
+        if (Sessao::verificarSessaoUsuario()) {
+            $anuncio = new Anuncio();
+            $genericoDAO = new GenericoDAO();
+            $consultasAdHoc = new ConsultasAdHoc();
+            $listaAnuncio = $consultasAdHoc->ConsultarAnunciosPorUsuario($_SESSION['idusuario']);
+            foreach ($listaAnuncio as $anuncio) {
+                $imovel = $genericoDAO->consultar(new Imovel(), false, array("id" => $anuncio->getIdImovel()));
+                $anuncio->setImovel($imovel[0]);
+                $historicoAluguelVenda = $genericoDAO->consultar(new HistoricoAluguelVenda(), false, array("idAnuncio" => $anuncio->getId()));
+                $anuncio->setHistoricoAluguelVenda($historicoAluguelVenda[0]);
+                $listarAnuncio[] = $anuncio;
+            }
+            //visao
+            $visao = new Template();
+            $visao->setItem($listarAnuncio);
+            $visao->exibir('AnuncioVisaoListagem.php');
+        }
+    }
+    function listarReativar() {
         if (Sessao::verificarSessaoUsuario()) {
             $anuncio = new Anuncio();
             $genericoDAO = new GenericoDAO();
@@ -470,7 +508,7 @@ class AnuncioControle {
         $genericoDAO = new GenericoDAO();
         $selecionaremailanuncio = $genericoDAO->consultar($emailanuncio, false, array("hash" => $parametros["id"]));
         //echo "<pre>";var_dump($selecionaremailanuncio); echo "</pre>"; die();
-        $anuncio->buscarDestaqueImagem($parametros);
+        //$anuncio->buscarDestaqueImagem($parametros);
         if ($selecionaremailanuncio) {
             $item["anuncio"] = $genericoDAO->consultar(new Anuncio(), false, array("id" => $selecionaremailanuncio[0]->getIdanuncio()));
             $item["imagem"] = $genericoDAO->consultar(new Imagem(), false, array("idanuncio" => $item["anuncio"][0]->getId(), "destaque" => "SIM"));

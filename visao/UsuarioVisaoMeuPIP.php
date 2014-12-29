@@ -25,7 +25,7 @@ $item = $this->getItem();
                 <a href="index.php?entidade=Usuario&acao=form&tipo=trocarimagem"> 
                     <button type="button" class="btn btn-primary">
                         <span class="glyphicon glyphicon-user"></span> 
-                        <span class="glyphicon glyphicon-picture"></span> Alterar <?php echo ($_SESSION["tipopessoa"] == "pf"?"Imagem":"Logomarca"); ?>
+                        <span class="glyphicon glyphicon-picture"></span> Alterar <?php echo ($_SESSION["tipopessoa"] == "pf" ? "Imagem" : "Logomarca"); ?>
                     </button></a>    
             </div>
         </div>
@@ -39,7 +39,8 @@ $item = $this->getItem();
                         <span class="glyphicon glyphicon-home"></span>
                         <span class="glyphicon glyphicon-plus"></span> Cadastrar Imóvel
                     </button></a>
-                <?php if ($item) {
+                <?php
+                if ($item) {
                     if ($item['imovel']) {
                         ?>
                         <a href="index.php?entidade=Imovel&acao=listarEditar">
@@ -53,7 +54,8 @@ $item = $this->getItem();
                                 <span class="glyphicon glyphicon-list-alt"></span> Visualizar Meus Imóveis
                             </button></a>
                     <?php }
-                } ?>                
+                }
+                ?>                
                 <!--
                 <button type="button" class="btn btn-success">
                     <span class="glyphicon glyphicon-home"></span> 
@@ -67,7 +69,8 @@ $item = $this->getItem();
                 <h3 class="panel-title">Meus Anúncios</h3>
             </div>
             <div class="panel-body">
-                <?php if ($item) {
+                <?php
+                if ($item) {
                     if ($item['imovel']) {
                         ?>
 
@@ -76,23 +79,34 @@ $item = $this->getItem();
                                 <span class="glyphicon glyphicon-bullhorn"></span> 
                                 <span class="glyphicon glyphicon-plus"></span> Cadastrar Anúncio
                             </button></a>
-                        <!--                <button type="button" class="btn btn-info">
-                                            <span class="glyphicon glyphicon-bullhorn"></span> 
-                                            <span class="glyphicon glyphicon-pencil"></span> Editar Anúncio
-                                        </button>-->
+                        <!-- <button type="button" class="btn btn-info">
+                             <span class="glyphicon glyphicon-bullhorn"></span> 
+                             <span class="glyphicon glyphicon-pencil"></span> Editar Anúncio
+                             </button> -->
         <?php if ($item['anuncio']) { ?>
-                            <a href="index.php?entidade=Anuncio&acao=listar">
+                            <a href="index.php?entidade=Anuncio&acao=listarAtivo">
                                 <button type="button" class="btn btn-info">
                                     <span class="glyphicon glyphicon-bullhorn"></span> 
-                                    <span class="glyphicon glyphicon-list-alt"></span> Visualizar Meus Anúncios
+                                    <span class="glyphicon glyphicon-list-alt"></span> Visualizar Anúncios Ativos
+                                </button></a>
+                            <a href="index.php?entidade=Anuncio&acao=listarFinalizado">
+                                <button type="button" class="btn btn-info">
+                                    <span class="glyphicon glyphicon-bullhorn"></span> 
+                                    <span class="glyphicon glyphicon-thumbs-up"></span> Visualizar Anúncios Finalizados
+                                </button></a>
+                            <a href="index.php?entidade=Anuncio&acao=listarReativar">
+                                <button type="button" class="btn btn-info">
+                                    <span class="glyphicon glyphicon-bullhorn"></span> 
+                                    <span class="glyphicon glyphicon-refresh"></span> Reativar Anúncios (aluguel)
                                 </button></a>
                             <a href="index.php?entidade=Usuario&acao=listarMensagem">
                                 <button type="button" class="btn btn-info">
                                     <span class="glyphicon glyphicon-bullhorn"></span> 
                                     <span class="glyphicon glyphicon-envelope"></span> Visualizar Mensagens
                                 </button></a>
+
                         <?php } ?>
-                    <?php
+                        <?php
                     } else {
                         echo '<span class="text-info"><strong>Cadastre primeiro um imóvel.</strong></span>';
                     }
@@ -110,10 +124,10 @@ $item = $this->getItem();
                         <span class="glyphicon glyphicon-shopping-cart"></span> Comprar
                     </button></a>
             </div>
-<?php
-if ($item) {
-    if (!$item["usuarioPlano"]) {
-        ?>
+            <?php
+            if ($item) {
+                if (!$item["usuarioPlano"]) {
+                    ?>
                     <span class="text-danger"><strong>Poxa, infelizmente você ainda não tem plano. Não perca tempo e Compre Agora! </strong> 
                         <br/> <img src="http://www.prospeccao-de-clientes.com/images/gudrum-pagseguro.gif" width="100%"/> 
                     </span>
@@ -142,10 +156,10 @@ if ($item) {
                             ?>
                         </tbody>
                     </table>
-        <?php
-    }
-}
-?>
+                    <?php
+                }
+            }
+            ?>
 
 
         </div>

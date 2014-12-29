@@ -43,8 +43,7 @@ class CEP {
                 $tabela = $tabela[0];
                 //echo "<pre>";            print_r($tabela);            echo "</pre>";
                 if (is_array($tabela) && !empty($tabela)) {
-                    $trata_endereco = explode("-",strip_tags($tabela[0]));
-                    $resultado['logradouro'] = $trata_endereco[0];
+                    $resultado['logradouro'] = $this->retirarTracoLogradouro(strip_tags($tabela[0]));
                     $resultado['bairro'] = strip_tags($tabela[1]);
                     $resultado['cidade'] = strip_tags($tabela[2]);
                     $resultado['uf'] = strip_tags($tabela[3]);
@@ -90,8 +89,6 @@ class CEP {
             return false;
         }
 
-
-
         /*
           $resultado = @file_get_contents($this->urlRepublica . $this->cep); //webservice que retorna os dados do endereco
           foreach ($xml->webservicecep as $resultado) {
@@ -116,6 +113,15 @@ class CEP {
           return false;
           } */
     }
+    
+    private function retirarTracoLogradouro($logradouro) {
+
+            $trata_endereco = explode("-", strip_tags($logradouro));
+            if ($trata_endereco[0] != "Travessa WE") {
+                $logradouro = $trata_endereco[0];
+            }
+            return $logradouro;
+        }
 
     public function getErro() {
         return $this->erro;
