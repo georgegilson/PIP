@@ -198,75 +198,160 @@ if ($item == null) {
             <!-- FIM DO MAPA --> 
         <?php } ?>
 
+        <!--        <div class="tab-pane fade" id="contato">
+        
+                    <div class="row">
+                        <div class="col-xs-10">
+        
+                            <div id="alert" class="col-xs-10"></div>
+        
+                            <form id="formContato" class="form-horizontal">
+                                <input type="hidden" id="hdnIdAnuncio" name="hdnIdAnuncio" value= "<?php echo $anuncio->getId() ?> "/>
+                                <input type="hidden" id="hdnIdUsuario" name="hdnIdUsuario" value= "<?php echo $usuario->getId() ?>" />
+                                <div id="forms" class="panel panel-default">
+                                    <br>
+                                    <div class="form-group">
+                                        <label class="col-xs-3 control-label" for="txtNome">Nome</label>
+                                        <div class="col-xs-7">
+                                            <input id="txtNome" name="txtNome" class="form-control" placeholder="Informe seu nome" >
+                                        </div>
+                                    </div>
+        
+                                    <div class="form-group">
+                                        <label class="col-lg-3 control-label" for="txtEmail">Email</label>
+                                        <div class="col-lg-5">
+                                            <input id="txtEmail" name="txtEmail" class="form-control" placeholder="Informe seu email">
+                                        </div>
+                                    </div>
+        
+                                    <div class="form-group">
+                                        <label class="col-lg-3 control-label" for="txtTelefone">Telefone</label>
+                                        <div class="col-lg-3">
+                                            <input id="txtTelefone" name="txtTelefone" class="form-control" placeholder="Informe seu telefone">
+                                        </div>
+                                    </div>
+        
+                                    <div class="form-group">
+                                        <label class="col-lg-3 control-label" for="txtMensagem">Mensagem</label>
+                                        <div class="col-lg-5">
+                                            <textarea maxlength="200" id="txtMensagem" name="txtMensagem" class="form-control" placeholder="Informe a mensagem" rows="7"> </textarea><br />            </div>
+                                    </div>
+                                </div>
+        
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <div class="col-lg-offset-2 col-lg-10">
+                                                <button type="submit" id="btnEnviarContato" class="btn btn-primary">Enviar</button>
+                                            </div>
+                                        </div>                
+                                    </div>
+                                </div>
+        
+        
+                            </form>
+                        </div>
+        
+                    </div>
+                </div>-->
+        <!--<div class="tab-pane fade" id="contato" tabindex="-1" role="dialog" aria-labelledby="lblAnuncioModal" aria-hidden="true">-->
         <div class="tab-pane fade" id="contato">
 
-            <div class="row">
-                <div class="col-xs-10">
+            <!--  <div class="modal-dialog">-->
+            <!--    <div class="modal-content col-sm-8">-->
+            <form role="form" id="formContato">
+                <input type="hidden" id="hdnIdAnuncio" name="hdnIdAnuncio" value= "<?php echo $anuncio->getId() ?> "/>
+                <input type="hidden" id="hdnIdUsuario" name="hdnIdUsuario" value= "<?php echo $usuario->getId() ?>" />
+                <!--      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="exampleModalLabel">Enviar Anúncio</h4>
+                      </div>-->
+                <div class="modal-body text-left col-xs-7">
+                    <!--      <div class="modal-body">-->
+                    <!--          <div id="alert" role="alert" class="alert alert-warning">
+                                          Preencha os dados abaixo para realizar o envio, por e-mail, dos anúncios selecionados. 
+                                        </div>-->
+                    <!--        <form role="form" id="formEmail">-->
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">Nome:</label>            
+                        <input type="text" class="form-control" id="txtNome">
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">E-mail:</label>
+                        <input type="text" class="form-control" id="txtEmail" name="txtEmail">
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">Telefone:</label>
+                        <input type="text" class="form-control" id="txtTelefone" name="txtTelefone">
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="control-label">Mensagem:</label>
+                        <textarea maxlength="200" class="form-control" id="txtMensagem"></textarea>
+                    </div>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>    
+                    <button type="submit" id="btnEnviarEmailAnuncio" class="btn btn-primary">Enviar</button>
 
-                    <div id="alert" class="col-xs-10"></div>
-
-                    <form id="formContato" class="form-horizontal">
-                        <input type="hidden" id="hdnIdAnuncio" name="hdnIdAnuncio" value= "<?php echo $anuncio->getId() ?> "/>
-                        <input type="hidden" id="hdnIdUsuario" name="hdnIdUsuario" value= "<?php echo $usuario->getId() ?>" />
-                        <div id="forms" class="panel panel-default">
-                            <br>
-                            <div class="form-group">
-                                <label class="col-xs-3 control-label" for="txtNome">Nome</label>
-                                <div class="col-xs-7">
-                                    <input id="txtNome" name="txtNome" class="form-control" placeholder="Informe seu nome" >
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="col-lg-3 control-label" for="txtEmail">Email</label>
-                                <div class="col-lg-5">
-                                    <input id="txtEmail" name="txtEmail" class="form-control" placeholder="Informe seu email">
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="col-lg-3 control-label" for="txtTelefone">Telefone</label>
-                                <div class="col-lg-3">
-                                    <input id="txtTelefone" name="txtTelefone" class="form-control" placeholder="Informe seu telefone">
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="col-lg-3 control-label" for="txtMensagem">Mensagem</label>
-                                <div class="col-lg-5">
-                                    <textarea maxlength="200" id="txtMensagem" name="txtMensagem" class="form-control" placeholder="Informe a mensagem" rows="7"> </textarea><br />            </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="form-group">
-                                    <div class="col-lg-offset-2 col-lg-10">
-                                        <button type="submit" id="btnEnviarContato" class="btn btn-primary">Enviar</button>
-                                    </div>
-                                </div>                
-                            </div>
-                        </div>
-
-
-                    </form>
                 </div>
+                <div class="modal-body text-right col-xs-4">
+                    <div data-row-span="7">
+                        <div data-field-span="3">
+                            <label style="text-align: left">Nome:</label>
+                            <?php echo "<span class='label label-info'>" . strtoupper($usuario->getNome()) . "</span>"; ?>
+                        </div>
+                        <div data-field-span="2">
+                            <label style="text-align: center">Contatos:</label>
+                            <?php
+                            if (is_array($usuario->getTelefone())) { //verifica se existe mais de um número de telefone cadastrado para o usuário 
+                                foreach ($usuario->getTelefone() as $anuncioTelefone) {
+                                    ?> 
+                                    <?php
+                                    echo "<span class='label label-primary'>" . strtoupper($anuncioTelefone->getOperadora()) . " - " . strtoupper($anuncioTelefone->getNumero()) . "</span>";
+                                }
+                                ?>
+                        <?php } else echo "<span class='label label-primary'>" . strtoupper($usuario->getTelefone()->getOperadora()) . " - " . strtoupper($usuario->getTelefone()->getNumero()) . "</span>"; ?>
+                        </div>
+                        <?php
+                        if ($usuario->getTipousuario() == "pj") {
+                            echo '<div class = "col-lg-8" id = "divFotoImagem"> <br>';
+//                            echo '<div id = "forms" class = "panel panel-default">';
+                            if ($usuario->getFoto() != "") {
+                                echo '<img src="'. PIPURL . '/fotos/usuarios/'. $usuario->getFoto() . '"  width="120" height="120" style="margin-left: 100px">';                             
+                            } else { 
+                                echo '<img src="' .PIPURL . '/assets/imagens/foto_padrao.png"  width="120" height="120" style="margin-left: 100px">';
+                        } 
 
+//                       echo '</div>';
+                    echo '</div>';
+                    }
+                    ?>
             </div>
         </div>
+
+        <div class="modal-footer">
+            <!--        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" id="btnEnviarEmailAnuncio" class="btn btn-primary">Enviar</button>-->
+        </div>
+
+        </form>
+        <!--    </div>
+          </div>-->
+
+        </div>
+
+
         <div class="tab-pane fade" id="diferenciais">
             <div class="row">
 
                 <div class="col-xs-5">
                     <table class="table">
-    <!--      <thead>
+        <!--      <thead>
          <tr>
            <th>#</th>
            <th>Column heading</th>
            <th>Column heading</th>
            <th>Column heading</th>
          </tr>
-       </thead>-->
+        </thead>-->
                         <br>
                         <tbody>
                             <tr  <?php
@@ -371,117 +456,117 @@ if ($item == null) {
                 </div>
             </div> 
         </div>
-    </div>
+        </div>
 
-    <script>
-        $(document).ready(function() {
-            $('.alert').hide();
-            $('#divalert').hide();
-            $('#txtMensagem').maxlength({
-                alwaysShow: true,
-                threshold: 100,
-                warningClass: "label label-success",
-                limitReachedClass: "label label-danger",
-                separator: ' de ',
-                preText: 'Voc&ecirc; digitou ',
-                postText: ' caracteres permitidos.',
-                validate: true
-            });
-            $("#txtTelefone").mask("(99)9999-9999");
-            $("#spanValor").priceFormat({
-                prefix: 'R$ ',
-                centsSeparator: ',',
-                centsLimit: 0,
-                limit: 8,
-                thousandsSeparator: '.'
-            })
-            $("#formContato").validate({
-                rules: {
-                    txtNome: {
-                        required: true
-                    },
+        <script>
+                    $(document).ready(function() {
+                    $('.alert').hide();
+                $('#divalert').hide();
+                $('#txtMensagem').maxlength({
+                    alwaysShow: true,
+                        threshold: 100,
+                        warningClass: "label label-success",
+                            limitReachedClass: "label label-danger",
+                            separator: ' de ',
+                        preText: 'Voc&ecirc; digitou ',
+                            postText: ' caracteres permitidos.',
+                        validate: true
+                });
+                        $("#txtTelefone").mask("(99)9999-9999");
+                            $("#spanValor").priceFormat({
+                    prefix: 'R$ ',
+                        centsSeparator: ',',
+                            centsLimit: 0,
+                    limit: 8,
+                            thousandsSeparator: '.'
+                })
+                        $("#formContato").validate({
+                        rules: {
+                            txtNome: {
+                            required: true
+                        },
                     txtEmail: {
                         email: true,
-                        required: true
-                    },
+                            required: true
+                        },
                     txtMensagem: {
-                        required: true
-                    }
-                },
-                messages: {
-                    txtNome: {
-                        required: "Campo obrigatório"
+                            required: true
+                        }
                     },
+                    messages: {
+                    txtNome: {
+                    required: "Campo obrigatório"
+                        },
                     txtEmail: {
                         required: "Campo obrigatório",
-                        email: "Informe um email válido"
+                            email: "Informe um email válido"
+                        },
+                        txtMensagem: {
+                            required: "Campo obrigatório"
+                        },
                     },
-                    txtMensagem: {
-                        required: "Campo obrigatório"
-                    },
-                },
                 highlight: function(element) {
                     $(element).closest('.form-group').addClass('has-error');
-                },
-                unhighlight: function(element) {
-                    $(element).closest('.form-group').removeClass('has-error');
-                },
-                errorElement: 'span',
-                errorClass: 'help-block',
-                errorPlacement: function(error, element) {
-                    if (element.parent('.input-group').length) {
-                        error.insertAfter(element.parent());
-                    } else {
-                        error.insertAfter(element);
-                    }
-                }
-            });
-            $("#formContato").submit(function(e) {
-                e.preventDefault();
-                if($("#formContato").valid())
-                    {
-                //$form = $(this);
-                //           $post(document.location.url, $(this).serialize(), function(data){
-                $.ajax({
-                    url: document.location.url,
-                    dataType: "json",
-                    type: "POST",
-                    data: {
-                        hdnEntidade: "Anuncio",
-                        hdnAcao: "enviarContato",
-                        nome: $('#txtNome').val(),
-                        email: $('#txtEmail').val(),
-                        telefone: $('#txtTelefone').val(),
-                        mensagem: $('#txtMensagem').val(),
-                        idusuario: $('#hdnIdUsuario').val(),
-                        idanuncio: $('#hdnIdAnuncio').val()
                     },
-                    beforeSend: function() {
+                        unhighlight: function(element) {
+                        $(element).closest('.form-group').removeClass('has-error');
+                    },
+                        errorElement: 'span',
+                            errorClass: 'help-block',
+                            errorPlacement: function(error, element) {
+                            if (element.parent('.input-group').length) {
+                                error.insertAfter(element.parent());
+                                } else {
+                                error.insertAfter(element);
+                        }
+                    }
+                                });
+                                $("#formContato").submit(function(e) {
+                    e.preventDefault();
+                                if ($("#formContato").valid())
+                    {
+                                //$form = $(this);
+                                //           $post(document.location.url, $(this).serialize(), function(data){
+                            $.ajax({
+                            url: document.location.url,
+                                dataType: "json",
+                                type: "POST",
+                            data: {
+                                hdnEntidade: "Anuncio",
+                                hdnAcao: "enviarContato",
+                            nome: $('#txtNome').val(),
+                                email: $('#txtEmail').val(),
+                                telefone: $('#txtTelefone').val(),
+                                mensagem: $('#txtMensagem').val(),
+                                idusuario: $('#hdnIdUsuario').val(),
+                                    idanuncio: $('#hdnIdAnuncio').val()
+                            },
+                                            beforeSend: function() {
                                 $("#alert").html(" ");
-                                $("#alert").html("...processando...").attr('class', 'alert alert-warning');
+                                    $("#alert").html("...processando...").attr('class', 'alert alert-warning');
                                 $('#btnEnviarContato').attr('disabled', 'disabled');
                                 },
-                    success: function(resposta) {
-                        $('#btnEnviarContato').removeAttr('disabled');
-//                        $("#msg").remove();
-//                        var msg = $("<div>", {id: "msg"});
-                        if (resposta.resultado == 0) {
-                            $("#alert").html(
-                                            "Email enviado com sucesso!").attr('class', 'alert alert-success');
-//                            msg.attr('class', 'alert alert-success').html("Mensagem enviada com sucesso").append('<button data-dismiss="alert" class="close" type="button">×</button>');
-                        } else {
-//                            msg.attr('class', 'alert alert-danger').html("Falha no envio da mensagem, por favor tente mais tarde").append('<button data-dismiss="alert" class="close" type="button">×</button>');
-                                            $('.alert').html("Erro ao enviar e-mail. Tente novamente em alguns minutos.").attr('class', 'alert alert-danger');                
-                        }
-//                        $("#alert").append(msg);
-                        $('#txtNome').val('');
-                        $('#txtEmail').val('');
-                        $('#txtTelefone').val('');
-                        $('#txtMensagem').val('');
+                                    success: function(resposta) {
+                                $('#btnEnviarContato').removeAttr('disabled');
+        //                        $("#msg").remove();
+        //                        var msg = $("<div>", {id: "msg"});
+                                    if (resposta.resultado == 0) {
+                                    $("#alert").html(
+                                "Email enviado com sucesso!").attr('class', 'alert alert-success');
+                                //                            msg.attr('class', 'alert alert-success').html("Mensagem enviada com sucesso").append('<button data-dismiss="alert" class="close" type="button">×</button>');
+                                } else {
+            //                            msg.attr('class', 'alert alert-danger').html("Falha no envio da mensagem, por favor tente mais tarde").append('<button data-dismiss="alert" class="close" type="button">×</button>');
+                                    $('.alert').html("Erro ao enviar e-mail. Tente novamente em alguns minutos.").attr('class', 'alert alert-danger');
+                                }
+        //                        $("#alert").append(msg);
+                                $('#txtNome').val('');
+                                $('#txtEmail').val('');
+                                $('#txtTelefone').val('');
+                                $('#txtMensagem').val('');
+                            }
+                        });
                     }
                 });
-            }
             });
-        });
-    </script>
-<?php } ?>
+        </script>
+    <?php } ?>

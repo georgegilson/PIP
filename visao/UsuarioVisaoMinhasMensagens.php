@@ -23,11 +23,16 @@
             'dela' => 2,
             'itemData' => $this->getItem());
         
-        print_r($this->getItem());
-        die();
-        if(count($this->getItem()) == 0){
-            print("<h2 class=text-center>Você não possui nenhuma mensagem.</h2>");
+        $mensagens = $this->getItem();
+        foreach ($this->getItem() as $mensagens){
+            if($mensagens->getStatus() != "EXCLUIDA"){
+                $entrada = TRUE;
+                break;
+            }else {
+                $entrada = FALSE;
+            }
         }
+        if(!$entrada) echo '<span class="text-info"><strong>Você não possui nenhuma mensagem.</strong></span>';        
         $pager = & Pager::factory($params);
         $data = $pager->getPageData();
         Sessao::gerarToken();
