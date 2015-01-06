@@ -123,6 +123,7 @@ function chamarDiferencialEdicao(){
         else if($("#sltTipo").val() == "terreno"){
             $('#sltDiferencialCasa').attr("disabled",true);
             $('#sltDiferencialApartamento').attr("disabled",true);
+            $("#divDiferencialCasa").hide();
             $("#divDiferencial").hide();
             $("#divDiferencialApartamento").hide();
             

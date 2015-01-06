@@ -112,30 +112,38 @@
 
         function carregaDadosModal($div) {
             $div.html("");
-            $div.append("Tipo: " + $("#sltTipo").val() + "<br />");
-            $div.append("Condição: " + $("#sltCondicao").val() + "<br />");
-            $div.append("Descrição: " + $("#txtDescricao").val() + "<br />");
-            $div.append("Quartos: " + $("#sltQuarto").val() + "<br />");
-            $div.append("Garagen(s): " + $("#sltGaragem").val() + "<br />");
-            $div.append("Banheiro(s): " + $("#sltBanheiro").val() + "<br />");
-            $div.append("Área: " + $("#txtArea").val() + "m<sup>2</sup><br />");
-            $div.append("Suite(s): " + $("#sltSuite").val() + "<br />");
+            
+            if($("#sltTipo").val() != "terreno"){
+            
+                    $div.append("Tipo: " + $("#sltTipo").val() + "<br />");
+                    $div.append("Condição: " + $("#sltCondicao").val() + "<br />");
+                    $div.append("Descrição: " + $("#txtDescricao").val() + "<br />");
+                    $div.append("Quartos: " + $("#sltQuarto").val() + "<br />");
+                    $div.append("Garagen(s): " + $("#sltGaragem").val() + "<br />");
+                    $div.append("Banheiro(s): " + $("#sltBanheiro").val() + "<br />");
+                    $div.append("Área: " + $("#txtArea").val() + "m<sup>2</sup><br />");
+                    $div.append("Suite(s): " + $("#sltSuite").val() + "<br />");
 
-            var varCampos = new Array();
-            $('#sltDiferencial :selected').each(function() {
-                if ($(this).val() != "multiselect-all")
-                    varCampos.push($(this).text());
-            })
-            if (varCampos.length > 0)
-                $div.append("Diferenciais: " + varCampos.join(", ") + "<br />");
+                    var varCampos = new Array();
+                    $('#sltDiferencial :selected').each(function() {
+                        if ($(this).val() != "multiselect-all")
+                            varCampos.push($(this).text());
+                    })
+                    if (varCampos.length > 0)
+                        $div.append("Diferenciais: " + varCampos.join(", ") + "<br />");
 
-            if ($("#sltTipo").val() == "apartamento") {
-                $div.append("Sacada: " + (typeof($("#chkSacada:checked").val()) === "undefined" ? "Não" : "Sim") + "<br />");
-                $div.append("Cobertura: " + (typeof($("#chkCobertura:checked").val()) === "undefined" ? "Não" : "Sim") + "<br />");
-                $div.append("Condomínio: " + $("#txtCondominio").val() + "<br />");
-                $div.append("Andar: " + $("#sltAndar").val() + "<br />");
-            }
-        }
+                    if ($("#sltTipo").val() == "apartamento") {
+                        $div.append("Sacada: " + (typeof($("#chkSacada:checked").val()) === "undefined" ? "Não" : "Sim") + "<br />");
+                        $div.append("Cobertura: " + (typeof($("#chkCobertura:checked").val()) === "undefined" ? "Não" : "Sim") + "<br />");
+                        $div.append("Condomínio: " + $("#txtCondominio").val() + "<br />");
+                        $div.append("Andar: " + $("#sltAndar").val() + "<br />");
+                    }
+                  }else{//caso seja um terreno                     
+                     $div.append("Tipo: " + $("#sltTipo").val() + "<br />");
+                     $div.append("Área: " + $("#txtArea").val() + "m<sup>2</sup><br />");
+                     $div.append("Descrição: " + $("#txtDescricao").val() + "<br />"); 
+                  }
+                }
 
         function buscarCep() {
             var validator = $("#form").validate();

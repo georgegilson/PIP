@@ -250,31 +250,35 @@
 
 
 <div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
+    
+    <?php  
+    
+    #TOKEN
+    Sessao::gerarToken();
+    
+    $item = $this->getItem(); 
+    
+    if ($item) {
+            foreach ($item as $imovel) {
+                $endereco = $imovel->getEndereco()->enderecoMapa();
+    
+    ?>
+    
 <ol class="breadcrumb">
         <li><a href="index.php">Início</a></li>
         <li><a href="index.php?entidade=Usuario&acao=meuPIP">Meu PIP</a></li>
         <li><a href="index.php?entidade=Imovel&acao=listarEditar">Imóvel(is) para Alterar</a></li>
-        <li class="active">Alterar Imóvel</li>
+        <li class="active">Alterar Imóvel <?php echo "<span class='label label-info'>" . substr($imovel->getdatahoracadastro(), 6, -9) . substr($imovel->getdatahoracadastro(), 3, -14) . str_pad($imovel->getId(), 5, "0", STR_PAD_LEFT) . "</span>"; ?></li>
 </ol>
-        <?php
-        #TOKEN
-        Sessao::gerarToken();
-
-        $item = $this->getItem();
-        
-        if ($item) {
-            foreach ($item as $imovel) {
-                $endereco = $imovel->getEndereco()->enderecoMapa();
-                ?>
 
                 <script>
                     $(document).ready(function() {
         <?php if ($imovel->getTipo() == "apartamento") echo '$("#divApartamento").show();'; ?>
         <?php
         if ($imovel->getTipo() == "construcao") {
-            echo '$("#divAndar").fadeOut("slow");$("#divCondominio").fadeOut("slow");$("#divCobertura").fadeOut("slow");';
+            echo '$("#divAndar").hide();$("#divCondominio").hide();$("#divCobertura").hide();';
         } else {
-            echo '$("#divAndar").fadeIn("slow");$("#divCondominio").fadeIn("slow);$("#divCobertura").fadeIn("slow);';
+            echo '$("#divAndar").show();$("#divCondominio").show();$("#divCobertura").show();';
         }
         ?>
                         var endereco = "<?php echo $endereco; ?>";
