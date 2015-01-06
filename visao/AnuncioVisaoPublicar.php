@@ -35,7 +35,7 @@
             <li><a href="index.php">Início</a></li>
             <li><a href="index.php?entidade=Usuario&acao=meuPIP">Meu PIP</a></li>
             <?php if ($item["anuncio"]->getId() != "") { ?>
-                <li><a href="index.php?entidade=Anuncio&acao=listarReativar">Reativar Anúncio</a></li>
+                <li><a href="index.php?entidade=Anuncio&acao=listarReativar">Reativar Anúncios</a></li>
             <?php } else { ?>
                 <li><a href="index.php?entidade=Anuncio&acao=listarCadastrar">Publicar Anúncio</a></li>
             <?php } ?>
@@ -442,7 +442,11 @@
 
         $("#btnCancelar").click(function() {
             if (confirm("Deseja cancelar o cadastro do anúncio?")) {
-                location.href = "index.php?entidade=Anuncio&acao=listarCadastrar";
+<?php if ($item["anuncio"]->getId() != "") { ?>
+                    location.href = "index.php?entidade=Anuncio&acao=listarReativar";
+<?php } else { ?>
+                    location.href = "index.php?entidade=Anuncio&acao=listarCadastrar";
+<?php } ?>
             }
         });
 

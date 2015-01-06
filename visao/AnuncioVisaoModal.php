@@ -9,7 +9,7 @@ if ($item == null) {
     <script src="assets/js/fotorama.js"></script> 
     <!-- fotorama.css & fotorama.js. -->
     <script src="assets/js/bootstrap-maxlength.js"></script>
-    <script src="assets/js/jquery.maskedinput.min.js"></script>
+    <script src="assets/js/jquery.mask.min.js"></script>
     <script src="assets/js/util.validate.js"></script>
     <script src="assets/js/jquery.price_format.min.js"></script>
     <?php
@@ -483,7 +483,8 @@ if ($item == null) {
                 postText: ' caracteres permitidos.',
                 validate: true
             });
-            $("#txtTelefone").mask("(99)9999-9999");
+            //$("#txtTelefone").mask("(99)9999-9999");
+            $("#txtTel").mask("(00) 0000-00009");
             $("#spanValor").priceFormat({
                 prefix: 'R$ ',
                 centsSeparator: ',',
