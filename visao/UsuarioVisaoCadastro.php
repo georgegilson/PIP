@@ -414,12 +414,12 @@ Sessao::gerarToken();
 ?>
 
 <div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
-    <div class="page-header">
-        <h1>Cadastro de Usuário</h1>
-    </div>
+    
     <!-- Alertas -->
-    <div class="alert">Preencha os campos abaixo</div>
-    <div class="row text-success" id="divmsg" hidden="true"></div>
+      <ol class="breadcrumb">
+        <li><a href="index.php">Início</a></li>
+        <li class="active">Cadastro Usuário</li>
+</ol>
     <!-- form -->
     <form id="form" class="form-horizontal" action="index.php" method="post" enctype="multipart/form-data">
         <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Usuario"  />

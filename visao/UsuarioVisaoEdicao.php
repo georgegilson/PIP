@@ -14,19 +14,19 @@
         $("#txtCEP").blur(function() {
             buscarCep()
         });
-        
+
         $("#btnCancelar").click(function() {
             if (confirm("Deseja cancelar o cadastro do usuário?")) {
                 location.href = "index.php?entidade=Usuario&acao=meuPIP";
             }
         });
-        
+
         $("#btnAlterar").click(function() {
             if ($("#form").valid()) {
-                if (typeof($("input[name^=hdnTipoTelefone]").val()) == "undefined") {
-                        alert("Você deve cadastrar pelo menos um telefone para contato.");
-                }else
-                if ($("#hdnCEP").val() != "") {                     
+                if (typeof ($("input[name^=hdnTipoTelefone]").val()) == "undefined") {
+                    alert("Você deve cadastrar pelo menos um telefone para contato.");
+                } else
+                if ($("#hdnCEP").val() != "") {
                     $("#form").submit();
                 } else {
                     $("#msgCEP").remove();
@@ -303,7 +303,7 @@
             },
             submitHandler: function() {
                 form.submit();
-                
+
             }
         });
     })
@@ -311,26 +311,28 @@
 </script> 
 
 <?php
-    Sessao::gerarToken();  
+Sessao::gerarToken();
 ?>
 
 <div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
-    <div class="page-header">
-        <h1>Cadastro de Usuário</h1>
-    </div>
+
     <?php
     $item = $this->getItem();
     if ($item) {
         foreach ($item as $usuario) {
             ?>
             <!-- Alertas -->
-            <div class="alert">Preencha os campos abaixo</div>
+            <ol class="breadcrumb">
+                <li><a href="index.php">Início</a></li>
+                <li><a href="index.php?entidade=Usuario&acao=meuPIP">Meu PIP</a></li>
+                <li class="active">Atualizar Cadastro</li>
+            </ol>
 
             <!-- form -->
             <form id="form" class="form-horizontal" action="index.php" method="post">
                 <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Usuario"  />
                 <input type="hidden" id="hdnAcao" name="hdnAcao" value="alterar" />
-                <input type="hidden" id="hdnCEP" name="hdnCEP" value="<?php echo $usuario->getEndereco()->getCep()?>"/>
+                <input type="hidden" id="hdnCEP" name="hdnCEP" value="<?php echo $usuario->getEndereco()->getCep() ?>"/>
                 <input type="hidden" id="hdnToken" name="hdnToken" value="<?php echo $_SESSION['token']; ?>" />
                 <!-- Primeira Linha -->    
                 <div class="row" id="divlinha1">
@@ -340,24 +342,24 @@
                         <div id="forms" class="panel panel-default">
                             <div class="panel-heading">Informações Básicas </div>
                             <br>
-<!--                            <div class="form-group">
-                                <label class="col-lg-3 control-label" for="sltTipoUsuario">Tipo de Pessoa</label>
-                                <div class="col-lg-8">
-                                    <select class="form-control" id="sltTipoUsuario" name="sltTipoUsuario">
-                                        <option value="">Informe o Tipo de Pessoa</option>
-                                        <option <?php
-                                        if ($usuario->getTipousuario() == "pf") {
-                                            print "selected='true'";
-                                        }
-                                        ?> value="fisica">Física</option>
-                                        <option <?php
-                                        if ($usuario->getTipousuario() == "pj") {
-                                            print "selected='true'";
-                                        }
-                                        ?> value="juridica">Jurídica</option>
-                                    </select>
-                                </div>
-                            </div>-->
+                            <!--                            <div class="form-group">
+                                                            <label class="col-lg-3 control-label" for="sltTipoUsuario">Tipo de Pessoa</label>
+                                                            <div class="col-lg-8">
+                                                                <select class="form-control" id="sltTipoUsuario" name="sltTipoUsuario">
+                                                                    <option value="">Informe o Tipo de Pessoa</option>
+                                                                    <option <?php
+                            if ($usuario->getTipousuario() == "pf") {
+                                print "selected='true'";
+                            }
+                            ?> value="fisica">Física</option>
+                                                                    <option <?php
+                            if ($usuario->getTipousuario() == "pj") {
+                                print "selected='true'";
+                            }
+                            ?> value="juridica">Jurídica</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>-->
                             <div class="form-group" id="divnome" <?php
                             if ($usuario->getTipousuario() == "pj") {
                                 print "hidden";
@@ -555,7 +557,7 @@
                             <!--                </div>-->
                             <!--          </div>-->
                             <div class="form-group">
-                                <div class="col-lg-12">
+                                <div class="col-lg-8">
 
                                     <table class="table table-hover table-condensed">
                     <!--                    <thead>
@@ -566,11 +568,11 @@
                                             </tr>
                                         </thead>-->
                                         <tbody id="dadosTelefone">
-                                            <?php 
+                                            <?php
                                             $quantidade = count($usuario->getTelefone());
-                                            if($quantidade == 1){
+                                            if ($quantidade == 1) {
                                                 $array = array($usuario->getTelefone());
-                                            }else{
+                                            } else {
                                                 $array = $usuario->getTelefone();
                                             }
                                             foreach ($array as $telefone) {

@@ -119,7 +119,7 @@
                     $div.append("Condição: " + $("#sltCondicao").val() + "<br />");
                     $div.append("Descrição: " + $("#txtDescricao").val() + "<br />");
                     $div.append("Quartos: " + $("#sltQuarto").val() + "<br />");
-                    $div.append("Garagen(s): " + $("#sltGaragem").val() + "<br />");
+                    $div.append("Garagem(ns): " + $("#sltGaragem").val() + "<br />");
                     $div.append("Banheiro(s): " + $("#sltBanheiro").val() + "<br />");
                     $div.append("Área: " + $("#txtArea").val() + "m<sup>2</sup><br />");
                     $div.append("Suite(s): " + $("#sltSuite").val() + "<br />");

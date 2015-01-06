@@ -73,17 +73,12 @@ $enderecoImagem = PIPURL . "/fotos/usuarios/" . $this->getItem()->getFoto();
 </script>
 
 <div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
-    <div class="page-header">
-        <h1>Alterar Imagem</h1>
-    </div>
-    <div id="divalert">
-        <div class="col-lg-2">
-            <div class="text-right" id="divimg">
-            </div>
-        </div>
-        <div class="col-lg-8" id="divmsg">
-        </div>
-    </div>
+    
+    <ol class="breadcrumb">
+        <li><a href="index.php">Início</a></li>
+        <li><a href="index.php?entidade=Usuario&acao=meuPIP">Meu PIP</a></li>
+        <li class="active">Alterar Imagem</li>
+</ol>
     <form id="form" class="form-horizontal" action="index.php" method="post" enctype="multipart/form-data">
         <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Usuario"  />
         <input type="hidden" id="hdnAcao" name="hdnAcao" value="trocarimagem" />

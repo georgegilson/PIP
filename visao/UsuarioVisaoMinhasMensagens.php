@@ -1,20 +1,13 @@
 <div class="container">    
-    <div class="page-header">
-        <h1>Mensagens</h1>
-    </div>
+    <ol class="breadcrumb">
+        <li><a href="index.php">Início</a></li>
+        <li><a href="index.php?entidade=Usuario&acao=meuPIP">Meu PIP</a></li>
+        <li class="active">Caixa de Mensagens</li>
+</ol>
     <div id="alert" class="col-xs-10" role="alert">
          
     </div>
     <br>   
-<!--    <select style="width:300px" id="e1">
-        <optgroup label="Alaskan/Hawaiian Time Zone">
-            <option value="AK">Alaska</option>
-        </optgroup>
-        <optgroup label="Pacific Time Zone">
-            <option value="CA">California</option>
-        </optgroup>
-    </select>-->
-<!--    <br><br>-->
     <div class="panel-group col-lg-11" id="accordion">
         <?php
         $params = array(

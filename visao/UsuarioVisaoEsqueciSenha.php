@@ -58,20 +58,11 @@ Sessao::gerarToken();
 </script>
 
 <div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
-    <div class="page-header">
-        <h1>Identificação de Usuário</h1>
-    </div>
-
-    <div id="divalert">
-        <div class="col-lg-2">
-            <div class="text-right" id="divimg">
-            </div>
-        </div>
-        <div class="col-lg-8" id="divmsg">           
-        </div>
-    </div>
-
-    <div class="alert"></div>
+    <!-- Alertas -->
+      <ol class="breadcrumb">
+        <li><a href="index.php">Início</a></li>
+        <li class="active">Lembrar Senha</li>
+</ol>
     <form id="form" class="form-horizontal" action="index.php" method="post">
         <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Usuario"  />
         <input type="hidden" id="hdnAcao" name="hdnAcao" value="esquecersenha" />

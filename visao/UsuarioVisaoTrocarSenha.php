@@ -87,18 +87,13 @@ Sessao::gerarToken();
 </script>
 
 <div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
-    <div class="page-header">
-        <h1>Alterar Senha</h1>
-    </div>
-    <div id="divalert">
-        <div class="col-lg-2">
-            <div class="text-right" id="divimg">
-            </div>
-        </div>
-        <div class="col-lg-8" id="divmsg">
-        </div>
-    </div>
-    <div class="alert"></div>
+    <ol class="breadcrumb">
+        <li><a href="index.php">Início</a></li>
+        <li><a href="index.php?entidade=Usuario&acao=meuPIP">Meu PIP</a></li>
+        <li class="active">Alterar Senha</li>
+</ol>
+
+    <div class="alert">Alterar a Senha</div>
     <form id="form" class="form-horizontal" action="index.php" method="post">
         <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Usuario"  />
         <input type="hidden" id="hdnAcao" name="hdnAcao" value="trocarsenha" />
@@ -106,21 +101,21 @@ Sessao::gerarToken();
         
         <div class="form-group" id="divlinha1">
             <label class="col-lg-3 control-label" for="txtSenhaAtual">Senha Atual</label>
-            <div class="col-lg-9">
+            <div class="col-lg-3">
                 <input type="password" id="txtSenhaAtual" name="txtSenhaAtual" class="form-control" placeholder="Informe a nova senha">
             </div>
         </div>
 
         <div class="form-group" id="divlinha1">
             <label class="col-lg-3 control-label" for="txtSenha">Nova Senha</label>
-            <div class="col-lg-9">
+            <div class="col-lg-3">
                 <input type="password" id="txtSenha" name="txtSenhaNova" class="form-control" placeholder="Informe a nova senha">
             </div>
         </div>
 
         <div class="form-group" id="divlinha2">
             <label class="col-lg-3 control-label" for="txtSenhaConfirmacao">Repita a Nova Senha</label>
-            <div class="col-lg-9">
+            <div class="col-lg-3">
                 <input type="password" id="txtSenha" name="txtSenhaConfirmacao" class="form-control" placeholder="Informe a nova senha">
             </div>
         </div>
