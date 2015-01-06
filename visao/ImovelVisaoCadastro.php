@@ -6,21 +6,25 @@
 <script src="assets/js/bootstrap-multiselect.js"></script>
 <script src="assets/js/bootstrap-maxlength.js"></script>
 <script src="assets/js/jquery.price_format.min.js"></script>
+<script src="assets/js/diferencial.js"></script>
+
 <script>
     $(document).ready(function() {
-
+        
+        chamarDiferencialCadastro(); //chama a função javascript diferencial.js, para chamar o diferencial de cada Tipo de Imóvel
+        
         $("#divApartamento").hide(); //oculta campos exclusivos do apartamento 
         $("#txtArea").attr("maxlength", 0);
         $("#sltTipo").change(function() {
             $("#txtArea").val("");
             if ($(this).val() == "casa") {
-                $("#divApartamento").fadeOut('slow'); //oculta campos exclusivos do apartamento 
+                $("#divApartamento").hide(); //oculta campos exclusivos do apartamento 
                 $("#txtArea").attr("maxlength", 4);
             } else if ($(this).val() == "terreno") {
-                $("#divApartamento").fadeOut('slow'); //oculta campos exclusivos do apartamento 
+                $("#divApartamento").hide(); //oculta campos exclusivos do apartamento 
                 $("#txtArea").attr("maxlength", 5);
             } else {
-                $("#divApartamento").fadeIn('slow'); //mostra campos exclusivos do apartamento
+                $("#divApartamento").show(); //mostra campos exclusivos do apartamento
                 $("#txtArea").attr("maxlength", 3);
                 condicaoEmConstrucao();
             }
@@ -28,16 +32,40 @@
         $("#sltCondicao").change(function() {
             condicaoEmConstrucao();
         })
-
+        
+        if($("#sltTipo").val() == "terreno"){
+            $("#divCondicao").hide(); //oculta campos exclusivos do terreno 
+                $("#divQuarto").hide();
+                $("#divGaragem").hide();
+                $("#divBanheiro").hide();
+                $("#divSuite").hide();
+        }
+        
+        $("#sltTipo").change(function() {
+            if ($(this).val() == "terreno") {
+                $("#divCondicao").hide(); //oculta campos exclusivos do apartamento 
+                $("#divQuarto").hide();
+                $("#divGaragem").hide();
+                $("#divBanheiro").hide();
+                $("#divSuite").hide();
+            } else {
+                $("#divCondicao").show(); //oculta campos exclusivos do apartamento 
+                $("#divQuarto").show();
+                $("#divGaragem").show();
+                $("#divBanheiro").show();
+                $("#divSuite").show();
+            }
+        });
+        
         function condicaoEmConstrucao() {
             if ($("#sltCondicao").val() == "construcao") {
-                $("#divAndar").fadeOut('slow'); //oculta campo andar
-                $("#divCondominio").fadeOut('slow'); //oculta campo condominio
-                $("#divCobertura").fadeOut('slow'); //oculta campo cobertura
+                $("#divAndar").hide(); //oculta campo andar
+                $("#divCondominio").hide(); //oculta campo condominio
+                $("#divCobertura").hide(); //oculta campo cobertura
             } else {
-                $("#divAndar").fadeIn('slow'); //mostra campo andar
-                $("#divCondominio").fadeIn('slow'); //mostra campo condominio
-                $("#divCobertura").fadeIn('slow'); //mostra campo cobertura
+                $("#divAndar").show(); //mostra campo andar
+                $("#divCondominio").show(); //mostra campo condominio
+                $("#divCobertura").show(); //mostra campo cobertura
             }
         }
 
@@ -253,11 +281,14 @@ Sessao::gerarToken();
 ?>
 
 <div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
-    <div class="page-header">
-        <h1>Cadastrar Im&oacute;veis</h1>
-    </div>
+    
+    <ol class="breadcrumb">
+        <li><a href="index.php">Início</a></li>
+        <li><a href="index.php?entidade=Usuario&acao=meuPIP">Meu PIP</a></li>
+        <li class="active">Cadastro Imóvel</li>
+    </ol>
     <!-- Alertas -->
-    <div class="alert">Preencha os campos abaixo</div>
+    <div class="alert">Preencha os Campos Abaixo</div>
     <!-- form -->
     <form id="form" class="form-horizontal" action="index.php" method="post">
         <input type="hidden" id="hdnId" name="hdnId" />
@@ -281,7 +312,7 @@ Sessao::gerarToken();
                             </select></div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" id="divCondicao">
                         <label  class="col-lg-3 control-label" for="sltCondicao">Condição do Imóvel</label>
                         <div class="col-lg-8">
                             <select class="form-control" id="sltCondicao" name="sltCondicao">
@@ -292,7 +323,7 @@ Sessao::gerarToken();
                             </select></div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" id="divQuarto">
                         <label  class="col-lg-3 control-label" for="sltQuarto">Quarto</label>
                         <div class="col-lg-8">
                             <select class="form-control" id="sltQuarto" name="sltQuarto">
@@ -306,7 +337,7 @@ Sessao::gerarToken();
                             </select></div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" id="divGaragem">
                         <label  class="col-lg-3 control-label" for="sltGaragem">Garagem</label>
                         <div class="col-lg-8">
                             <select class="form-control" id="sltGaragem" name="sltGaragem">
@@ -321,7 +352,7 @@ Sessao::gerarToken();
                             </select></div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" id="divBanheiro">
                         <label  class="col-lg-3 control-label" for="sltBanheiro">Banheiro</label>
                         <div class="col-lg-8">
                             <select class="form-control" id="sltBanheiro" name="sltBanheiro">
@@ -341,19 +372,43 @@ Sessao::gerarToken();
             <div class="col-lg-6">
                 <div id="forms" class="panel panel-default">
                     <div class="panel-heading">Informações Adicionais </div>
-                    <div class="form-group">
+                    
+                    <div class="form-group" id="divDiferencial">
                         <label  class="col-lg-3 control-label" for="sltDiferencial">Diferencial</label>
                         <div class="col-lg-8">
-                            <select id="sltDiferencial" multiple="multiple" name="sltDiferencial[]">
-                                <option value="Academia">Academia</option>
-                                <option value="AreaServico">Área de Serviço</option>
-                                <option value="DependenciaEmpregada">Dependência de Empregada</option>
-                                <option value="Elevador">Elevador</option>
-                                <option value="Piscina">Piscina</option>
-                                <option value="Quadra">Quadra</option>
+                             Escolha o Tipo de Imóvel
+                        </div>
+                    </div>     
+                    
+                    <div  class="form-group" id="divDiferencialApartamento">
+                        <label  class="col-lg-3 control-label" for="sltDiferencial">Diferencial</label>
+                        <div  class="col-lg-8">
+                            <select  id= "sltDiferencialApartamento" multiple="multiple"  name="sltDiferencial[]">
+                                <option class="optionApartamento" value="academia">Academia</option>
+                                <option class="optionApartamento" value="areaservico">Área de Serviço</option>
+                                <option class="optionApartamento" value="dependenciaempregada">Dependência de Empregada</option>
+                                <option class="optionApartamento" value="elevador">Elevador</option>
+                                <option class="optionApartamento" value="piscina">Piscina</option>
+                                <option class="optionApartamento" value="quadra">Quadra</option>
                             </select>
                         </div>
-                    </div>                      
+
+                    </div>
+                    
+                    <div  class="form-group" id="divDiferencialCasa">
+                        <label class="col-lg-3 control-label"  for="sltDiferencialCasa">Diferencial</label>
+                        <div  class="col-lg-8">
+                            <select  id= "sltDiferencialCasa" multiple="multiple"  name="sltDiferencial[]">
+                                <option class="optionCasa" value="academia">Academia</option>
+                                <option class="optionCasa" value="areaservico">Área de Serviço</option>
+                                <option class="optionCasa" value="dependenciaempregada">Dependência de Empregada</option>
+                                <option class="optionCasa" value="piscina">Piscina</option>
+                                <option class="optionCasa" value="quadra">Quadra</option>
+                            </select>
+                        </div>
+
+                    </div>
+                    
                     <div class="form-group">
                         <label class="col-lg-3 control-label" for="txtArea">Área (M<sup>2</sup>)</label>
                         <div class="col-lg-8">
@@ -361,7 +416,7 @@ Sessao::gerarToken();
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" id="divSuite">
                         <label  class="col-lg-3 control-label" for="sltSuite">Suite</label>
                         <div class="col-lg-8">
                             <select class="form-control" id="sltSuite" name="sltSuite">
@@ -462,7 +517,7 @@ Sessao::gerarToken();
                             <div class="form-group">
                                 <label class="col-lg-3 control-label" for="txtCEP">CEP</label>
                                 <div class="col-lg-8">
-                                    <input type="text" class="form-control" id="txtCEP" name="txtCEP" placeholder="Informe o CEP do Imóvel">
+                                    <input type="text" class="form-control" id="txtCEP" name="txtCEP" placeholder="Informe o CEP">
                                 </div>
                             </div>
 

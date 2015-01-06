@@ -244,7 +244,36 @@ class Imovel {
     function cadastrar($parametros, $idendereco) {
 
         $imovel = new Imovel();
-
+        
+        if($parametros['sltTipo'] == "terreno"){ //se for um terreno, cadastrar apenas os campos abaixo       
+            
+            $imovel->setArea($parametros['txtArea']);
+            $imovel->setDescricao($parametros['txtDescricao']);
+            $imovel->setIdusuario($_SESSION["idusuario"]);
+            $imovel->setTipo($parametros['sltTipo']);
+            $imovel->setQuarto("");
+            $imovel->setGaragem("");
+            $imovel->setBanheiro("");
+            $imovel->setCondicao("");         
+            $imovel->setSuite("");
+            $imovel->setAndar(""); //não se aplica, pois é uma casa ou terreno
+            $imovel->setCobertura(""); //não se aplica, pois é uma casa ou terreno
+            $imovel->setSacada(""); //não se aplica, pois é uma casa ou terreno
+            $imovel->setCondominio(""); //não se aplica, pois é uma casa ou terreno
+            $imovel->setAcademia("NAO");
+            $imovel->setAreaServico("NAO");
+            $imovel->setDependenciaEmpregada("NAO");
+            $imovel->setElevador("NAO");
+            $imovel->setPiscina("NAO");
+            $imovel->setQuadra("NAO");
+            $imovel->setDatahoracadastro(date('d/m/Y H:i:s'));
+            $imovel->setDatahoraalteracao("");
+            $imovel->setIdendereco($idendereco);
+            
+        }
+        
+     else {//caso não seja um terreno
+        
         $imovel->setIdendereco($idendereco);
         $imovel->setCondicao($parametros['sltCondicao']);
         $imovel->setTipo($parametros['sltTipo']);
@@ -256,12 +285,15 @@ class Imovel {
         $imovel->setCondicao("novo");
 
         if (isset($parametros['sltDiferencial'])) {
-            $imovel->setAcademia((in_array("Academia", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
-            $imovel->setAreaServico((in_array("AreaServico", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
-            $imovel->setDependenciaEmpregada((in_array("DependenciaEmpregada", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
-            $imovel->setElevador((in_array("Elevador", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
-            $imovel->setPiscina((in_array("Piscina", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
-            $imovel->setQuadra((in_array("Quadra", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
+            
+            //var_dump($parametros['sltDiferencial']); die();
+            
+            $imovel->setAcademia((in_array("academia", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
+            $imovel->setAreaServico((in_array("areaservico", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
+            $imovel->setDependenciaEmpregada((in_array("dependenciaempregada", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
+            $imovel->setElevador((in_array("elevador", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
+            $imovel->setPiscina((in_array("piscina", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
+            $imovel->setQuadra((in_array("quadra", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
         } else {
             $imovel->setAcademia("NAO");
             $imovel->setAreaServico("NAO");
@@ -308,12 +340,45 @@ class Imovel {
             }
         }
 
+        
+    } //fim do else, caso não seja um terreno
         return $imovel;
     }
 
     function editar($parametros) {
 
         $imovel = new Imovel();
+        
+        if($parametros['sltTipo'] == "terreno"){ //se for um terreno, cadastrar apenas os campos abaixo       
+            
+            $imovel->setIdendereco($_SESSION["imovel"]["idendereco"]);
+            $imovel->setId($_SESSION["imovel"]["id"]);
+            $imovel->setArea($parametros['txtArea']);
+            $imovel->setDescricao($parametros['txtDescricao']);
+            $imovel->setIdusuario($_SESSION["idusuario"]);
+            $imovel->setTipo($parametros['sltTipo']);
+            $imovel->setQuarto("");
+            $imovel->setGaragem("");
+            $imovel->setBanheiro("");
+            $imovel->setCondicao("");         
+            $imovel->setSuite("");
+            $imovel->setAndar(""); //não se aplica, pois é uma casa ou terreno
+            $imovel->setCobertura(""); //não se aplica, pois é uma casa ou terreno
+            $imovel->setSacada(""); //não se aplica, pois é uma casa ou terreno
+            $imovel->setCondominio(""); //não se aplica, pois é uma casa ou terreno
+            $imovel->setAcademia("NAO");
+            $imovel->setAreaServico("NAO");
+            $imovel->setDependenciaEmpregada("NAO");
+            $imovel->setElevador("NAO");
+            $imovel->setPiscina("NAO");
+            $imovel->setQuadra("NAO");
+            $imovel->setDatahoracadastro(date('d/m/Y H:i:s'));
+            $imovel->setDatahoraalteracao("");
+
+        }
+        
+     else {
+        
         $imovel->setIdendereco($_SESSION["imovel"]["idendereco"]);
         $imovel->setId($_SESSION["imovel"]["id"]);
         $imovel->setCondicao($parametros['sltCondicao']);
@@ -324,12 +389,15 @@ class Imovel {
         $imovel->setDatahoraalteracao(date('d/m/Y H:i:s'));
 
         if (isset($parametros['sltDiferencial'])) {
-            $imovel->setAcademia((in_array("Academia", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
-            $imovel->setAreaServico((in_array("AreaServico", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
-            $imovel->setDependenciaEmpregada((in_array("DependenciaEmpregada", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
-            $imovel->setElevador((in_array("Elevador", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
-            $imovel->setPiscina((in_array("Piscina", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
-            $imovel->setQuadra((in_array("Quadra", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
+            
+           // var_dump($parametros['sltDiferencial']); die();
+            
+            $imovel->setAcademia((in_array("academia", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
+            $imovel->setAreaServico((in_array("areaservico", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
+            $imovel->setDependenciaEmpregada((in_array("dependenciaempregada", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
+            $imovel->setElevador((in_array("elevador", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
+            $imovel->setPiscina((in_array("piscina", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
+            $imovel->setQuadra((in_array("quadra", $parametros['sltDiferencial']) ? "SIM" : "NAO"));
         } else {
             $imovel->setAcademia("NAO");
             $imovel->setAreaServico("NAO");
@@ -375,6 +443,8 @@ class Imovel {
                 $imovel->setCondominio("NAO"); /* usuário não informou o valor do condominio */
             }
         }
+        
+        } //fim do else, caso não seja um terreno
         return $imovel;
     }
 

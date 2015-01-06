@@ -46,7 +46,7 @@ $item = $this->getItem();
                         <a href="index.php?entidade=Imovel&acao=listarEditar">
                             <button type="button" class="btn btn-success">
                                 <span class="glyphicon glyphicon-home"></span>
-                                <span class="glyphicon glyphicon-pencil"></span> Editar Imóvel
+                                <span class="glyphicon glyphicon-pencil"></span> Alterar Imóvel
                             </button></a>
                         <a href="index.php?entidade=Imovel&acao=listar">
                             <button type="button" class="btn btn-success">

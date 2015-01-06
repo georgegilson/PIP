@@ -6,20 +6,25 @@
 <script src="assets/js/bootstrap-multiselect.js"></script>
 <script src="assets/js/bootstrap-maxlength.js"></script>
 <script src="assets/js/jquery.price_format.min.js"></script>
+<script src="assets/js/diferencial.js"></script>
 <script>
     $(document).ready(function() {
-
+        
+        chamarDiferencialEdicao(); //chama a função javascript diferencial.js, para chamar o diferencial de cada Tipo de Imóvel
+        
+        $("#divDiferencial").hide();
+        
         $("#divApartamento").hide(); //oculta campos exclusivos do apartamento 
         $("#sltTipo").change(function() {
             $("#txtArea").val("");
             if ($(this).val() == "casa") {
-                $("#divApartamento").fadeOut('slow'); //oculta campos exclusivos do apartamento 
+                $("#divApartamento").hide(); //oculta campos exclusivos do apartamento 
                 $("#txtArea").attr("maxlength", 4);
             } else if ($(this).val() == "terreno") {
-                $("#divApartamento").fadeOut('slow'); //oculta campos exclusivos do apartamento 
+                $("#divApartamento").hide(); //oculta campos exclusivos do apartamento 
                 $("#txtArea").attr("maxlength", 5);
             } else {
-                $("#divApartamento").fadeIn('slow'); //mostra campos exclusivos do apartamento
+                $("#divApartamento").show(); //mostra campos exclusivos do apartamento
                 $("#txtArea").attr("maxlength", 3);
                 condicaoEmConstrucao();
             }
@@ -27,16 +32,40 @@
         $("#sltCondicao").change(function() {
             condicaoEmConstrucao();
         })
+        
+        if($("#sltTipo").val() == "terreno"){
+            $("#divCondicao").hide(); //oculta campos exclusivos do terreno 
+                $("#divQuarto").hide();
+                $("#divGaragem").hide();
+                $("#divBanheiro").hide();
+                $("#divSuite").hide();
+        }
+        
+        $("#sltTipo").change(function() {
+            if ($(this).val() == "terreno") {
+                $("#divCondicao").hide(); //oculta campos exclusivos do apartamento 
+                $("#divQuarto").hide();
+                $("#divGaragem").hide();
+                $("#divBanheiro").hide();
+                $("#divSuite").hide();
+            } else {
+                $("#divCondicao").show(); //oculta campos exclusivos do apartamento 
+                $("#divQuarto").show();
+                $("#divGaragem").show();
+                $("#divBanheiro").show();
+                $("#divSuite").show();
+            }
+        });
 
         function condicaoEmConstrucao() {
             if ($("#sltCondicao").val() == "construcao") {
-                $("#divAndar").fadeOut('slow'); //oculta campo andar
-                $("#divCondominio").fadeOut('slow'); //oculta campo condominio
-                $("#divCobertura").fadeOut('slow'); //oculta campo cobertura
+                $("#divAndar").hide(); //oculta campo andar
+                $("#divCondominio").hide(); //oculta campo condominio
+                $("#divCobertura").hide(); //oculta campo cobertura
             } else {
-                $("#divAndar").fadeIn('slow'); //mostra campo andar
-                $("#divCondominio").fadeIn('slow'); //mostra campo condominio
-                $("#divCobertura").fadeIn('slow'); //mostra campo cobertura
+                $("#divAndar").show(); //mostra campo andar
+                $("#divCondominio").show(); //mostra campo condominio
+                $("#divCobertura").show(); //mostra campo cobertura
             }
         }
 
@@ -221,14 +250,18 @@
 
 
 <div class="container"> <!-- CLASSE QUE DEFINE O CONTAINER COMO FLUIDO (100%) --> 
-    <div class="page-header">
-        <h1>Editar Im&oacute;veis</h1>
-
+<ol class="breadcrumb">
+        <li><a href="index.php">Início</a></li>
+        <li><a href="index.php?entidade=Usuario&acao=meuPIP">Meu PIP</a></li>
+        <li><a href="index.php?entidade=Imovel&acao=listarEditar">Imóvel(is) para Alterar</a></li>
+        <li class="active">Alterar Imóvel</li>
+</ol>
         <?php
         #TOKEN
         Sessao::gerarToken();
 
         $item = $this->getItem();
+        
         if ($item) {
             foreach ($item as $imovel) {
                 $endereco = $imovel->getEndereco()->enderecoMapa();
@@ -269,9 +302,8 @@
 
                 </script>
 
-            </div>
             <!-- Alertas -->
-            <div class="alert">Edite os campos abaixo</div>
+            <div class="alert">Alterar os Campos do Imóvel</div>
             <!-- form -->
             <form id="form" class="form-horizontal" action="index.php" method="post">
                 <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Imovel"  />
@@ -306,7 +338,7 @@
                                     </select></div>
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group" id="divCondicao">
                                 <label  class="col-lg-3 control-label" for="sltCondicao">Condição do Imóvel</label>
                                 <div class="col-lg-8">
                                     <select class="form-control" id="sltCondicao" name="sltCondicao">
@@ -329,7 +361,7 @@
                                     </select></div>
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group" id="divQuarto">
                                 <label  class="col-lg-3 control-label" for="sltQuarto">Quarto</label>
                                 <div class="col-lg-8">
                                     <select class="form-control" id="sltQuarto" name="sltQuarto">
@@ -367,7 +399,7 @@
                                     </select></div>
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group" id="divGaragem">
                                 <label  class="col-lg-3 control-label" for="sltGaragem">Garagem</label>
                                 <div class="col-lg-8">
                                     <select class="form-control" id="sltGaragem" name="sltGaragem">
@@ -410,7 +442,7 @@
                                     </select></div>
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group" id="divBanheiro">
                                 <label  class="col-lg-3 control-label" for="sltBanheiro">Banheiro</label>
                                 <div class="col-lg-8">
                                     <select class="form-control" id="sltBanheiro" name="sltBanheiro">
@@ -454,53 +486,99 @@
                     <div class="col-lg-6">
                         <div id="forms" class="panel panel-default">
                             <div class="panel-heading">Informações Adicionais </div>
-                            <div class="form-group">
-                                <label  class="col-lg-3 control-label" for="sltDiferencial">Diferencial</label>
-                                <div class="col-lg-8">
-                                    <select id="sltDiferencial" multiple="multiple" name="sltDiferencial[]">
-                                        <option <?php
+                        
+                        <div class="form-group" id="divDiferencial">
+                        <label  class="col-lg-3 control-label" for="sltDiferencial">Diferencial</label>
+                        <div class="col-lg-8">
+                             Escolha o Tipo de Imóvel
+                        </div>
+                        </div>   
+                    
+                        <div  class="form-group" id="divDiferencialApartamento">
+                        <label  class="col-lg-3 control-label" for="sltDiferencial">Diferencial</label>
+                        <div  class="col-lg-8">
+                            <select  id= "sltDiferencialApartamento" multiple="multiple"  name="sltDiferencial[]">
+                                <option <?php
                                         if ($imovel->getAcademia() == "SIM") {
                                             print "selected='true'";
-                                        }
-                                        ?> value="Academia">Academia</option>
-                                        <option <?php
+                                        } 
+                                            ?> value="academia">Academia</option>
+                                <option <?php
                                         if ($imovel->getAreaServico() == "SIM") {
                                             print "selected='true'";
-                                        }
-                                        ?> value="AreaServico" >Área de Serviço</option>
-                                        <option <?php
+                                        } else
+                                        ?> value="areaservico">Área de Serviço</option>
+                                <option <?php
                                         if ($imovel->getDependenciaEmpregada() == "SIM") {
                                             print "selected='true'";
-                                        }
-                                        ?> value="DependenciaEmpregada">Dependência de Empregada</option>
-                                        <option <?php
+                                        } 
+                                        ?> value="dependenciaempregada">Dependência de Empregada</option>
+                                <option <?php
                                         if ($imovel->getElevador() == "SIM") {
                                             print "selected='true'";
-                                        }
-                                        ?>value="Elevador">Elevador</option>
-                                        <option <?php
+                                        } 
+                                        ?> value="elevador">Elevador</option>
+                                <option <?php
                                         if ($imovel->getPiscina() == "SIM") {
                                             print "selected='true'";
-                                        }
-                                        ?> value="Piscina">Piscina</option>
-                                        <option <?php
+                                        } 
+                                        ?> value="piscina">Piscina</option>
+                                <option <?php
                                         if ($imovel->getQuadra() == "SIM") {
                                             print "selected='true'";
                                         }
-                                        ?> value="Quadra">Quadra</option>
-                                    </select>
-                                </div>
-                            </div>                      
+                                        ?>value="quadra">Quadra</option>
+                            </select>
+                        </div>
+
+                    </div>
+                    
+                    <div  class="form-group" id="divDiferencialCasa">
+                        <label class="col-lg-3 control-label"  for="sltDiferencialCasa">Diferencial</label>
+                        <div  class="col-lg-8">
+                            <select  id= "sltDiferencialCasa" multiple="multiple"  name="sltDiferencial[]">
+                                <option <?php
+                                        if ($imovel->getAcademia() == "SIM") {
+                                            print "selected='true'";
+                                        }
+                                        ?>value="academia">Academia</option>
+                                <option <?php
+                                        if ($imovel->getAreaServico() == "SIM") {
+                                            print "selected='true'";
+                                        }
+                                        ?>value="areaservico">Área de Serviço</option>
+                                <option <?php
+                                        if ($imovel->getDependenciaEmpregada() == "SIM") {
+                                            print "selected='true'";
+                                        }
+                                        ?>value="dependenciaempregada">Dependência de Empregada</option>
+                                
+                                <option <?php
+                                        if ($imovel->getPiscina() == "SIM") {
+                                            print "selected='true'";
+                                        }
+                                        ?>value="piscina">Piscina</option>
+                                <option <?php
+                                        if ($imovel->getQuadra() == "SIM") {
+                                            print "selected='true'";
+                                        }
+                                        ?> value="quadra">Quadra</option>
+                            </select>
+                        </div>
+
+                    </div>
+                            
+                            
                             <div class="form-group">
                                 <label class="col-lg-3 control-label" for="txtArea">Área (M<sup>2</sup>)</label>
                                 <div class="col-lg-8">
                                     <input type="text" id="txtArea" name="txtArea" class="form-control" placeholder="Informe a Área"
                                            maxlength="<?php echo ($imovel->getTipo() == "apartamento") ? "3" : (($imovel->getTipo() == "casa") ? "4" : "5" ) ?>"
-                                           value="<?php print $imovel->getArea() ?>">
+                                           value="<?php print $imovel->getArea(); ?>">
                                 </div>
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group" id="divSuite">
                                 <label  class="col-lg-3 control-label" for="sltSuite">Suite</label>
                                 <div class="col-lg-8">
                                     <select class="form-control" id="sltSuite" name="sltSuite">

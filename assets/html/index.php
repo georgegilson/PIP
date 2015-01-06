@@ -2,13 +2,14 @@
        <script src="assets/js/gmaps.js"></script>
        <script src="assets/js/bootstrap-multiselect.js"></script>
        <script src="assets/js/jquery.price_format.min.js"></script>
+       <script src="assets/js/diferencial.js"></script>
+       
 <script>
-     
+
+chamarDiferencial(); //chama a função javascript diferencial.js, para chamar o diferencial de cada Tipo de Imóvel
+
 $(document).ready(function(){
-           $('#sltDiferencial').multiselect({
-            buttonClass: 'btn btn-default btn-sm',
-            includeSelectAllOption: true
-        });
+    
     $("select[name=sltCidade]").change(function(){
     $('select[name=sltBairro]').html('<option value="">Procurando...</option>');
             $.post('index.php?hdnEntidade=Bairro&hdnAcao=selecionarBairro&idcidade='+$('#sltCidade').val(),
@@ -368,7 +369,7 @@ $(document).ready(function(){
                     
                     <div class="col-lg-2">
                         <label  for="sltTipo">Tipo de Imóvel</label>
-                        <select class="form-control" id="sltTipo" name="sltTipo">
+                        <select class="form-control" id="sltTipoAvancado" name="sltTipo">
                             <option value="">Informe o Tipo</option>
                             <option value="apartamento">Apartamento</option>
                             <option value="casa">Casa</option>
@@ -490,10 +491,19 @@ $(document).ready(function(){
                          <input type="text" id="txtReferencia" name="txtReferencia" class="form-control" placeholder="Ex: 20130000001">
                     </div>
                     
-                    <div class="col-lg-3">
+                    <div  class="col-lg-3" id="divDiferencial">
                         <label  for="sltDiferencial">Diferencial</label>
                         <div class="form-group">
-                            <select id="sltDiferencial" multiple="multiple"  name="sltDiferencial[]">
+                            &nbsp;&nbsp;&nbsp;&nbsp;Escolha o Tipo de Imóvel
+                        </div>
+
+                    </div>
+                    
+                    
+                    <div  class="col-lg-3" id="divDiferencialApartamento">
+                        <label  for="sltDiferencial">Diferencial</label>
+                        <div  class="form-group">
+                            <select  id= "sltDiferencialApartamento" multiple="multiple"  name="sltDiferencial[]">
                                 <option value="academia">Academia</option>
                                 <option value="areaservico">Área de Serviço</option>
                                 <option value="dependenciaempregada">Dependência de Empregada</option>
@@ -502,7 +512,21 @@ $(document).ready(function(){
                                 <option value="quadra">Quadra</option>
                             </select>
                         </div>
+
+                    </div>
                     
+                    <div  class="col-lg-3" id="divDiferencialCasa">
+                        <label  for="sltDiferencialCasa">Diferencial</label>
+                        <div  class="form-group">
+                            <select  id= "sltDiferencialCasa" multiple="multiple"  name="sltDiferencial[]">
+                                <option value="academia">Academia</option>
+                                <option value="areaservico">Área de Serviço</option>
+                                <option value="dependenciaempregada">Dependência de Empregada</option>
+                                <option value="piscina">Piscina</option>
+                                <option value="quadra">Quadra</option>
+                            </select>
+                        </div>
+
                     </div>
                     
                     <br />

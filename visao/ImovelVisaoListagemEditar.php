@@ -1,7 +1,12 @@
-<div class="container">    
-    <div class="page-header">
-        <h1>Imóveis</h1>
-    </div>
+<div class="container">  
+    
+    <ol class="breadcrumb">
+        <li><a href="index.php">Início</a></li>
+        <li><a href="index.php?entidade=Usuario&acao=meuPIP">Meu PIP</a></li>
+        <li class="active">Imóvel(is) para Alterar</li>
+    </ol>
+    
+    <div class="alert">Escolha um Imóvel para Alterar</div>
     <form>   
         <table class="table table-hover">
             <thead>
@@ -34,12 +39,13 @@
         echo "<td>" . $imovel->getEndereco()->getLogradouro() . "</td>";
         echo "<td>" . $imovel->getEndereco()->getBairro()->getNome() . "</td>";
         echo "<td>" . $imovel->getDatahoracadastro() . "</td>";
-        echo "<td><a href='#' id='popover".$imovel->getId()."'class='btn btn-success'><span class='glyphicon glyphicon-home'></span> Detalhes do Imóvel</a></td>";
+        echo "<td><a href='#' id='popover".$imovel->getId()."'class='btn btn-success'><span class='glyphicon glyphicon-home'></span> Detalhes </a></td>";
        // echo "<td><a href='index.php?entidade=Imovel&acao=selecionar&id=".$imovel->getId()."&token=".$_SESSION['token']."' class='btn btn-warning'><span class='glyphicon glyphicon-pencil'></span> Editar</a> <br /></td>";
         if(count($imovel->getAnuncio())>0){echo"<td><span class='text-primary'><span class='glyphicon glyphicon-bullhorn'></span> Este Imóvel já possui um anúncio publicado</span></td>";}
           else {
-             echo "<td><a href='index.php?entidade=Imovel&acao=selecionar&id=".$imovel->getId()."&token=".$_SESSION['token']."' class='btn btn-warning'><span class='glyphicon glyphicon-pencil'></span> Editar</a> <br /></td>";}   
-    }
+             echo "<td><a href='index.php?entidade=Imovel&acao=selecionar&id=".$imovel->getId()."&token=".$_SESSION['token']."' class='btn btn-warning'><span class='glyphicon glyphicon-pencil'></span> Editar</a> <br /></td>";    
+             echo "<td><a href='#' id='popover".$imovel->getId()."'class='btn btn-danger'><span class='glyphicon glyphicon-remove'></span> Excluir </a></td>";}
+          }
     ?>             
         </tr>         
             </tbody>
@@ -64,6 +70,7 @@
                 <div id="popover<?php echo $imovel->getId(); ?>-content" class="hide">
                     <?php
                     	 
+                    echo "Tipo: " . $imovel->getTipo() . "<br />";
                     echo "Condição: " . $imovel->getCondicao() . "<br />";
                     echo "Quartos: " . $imovel->getQuarto() . "<br />";
                     echo "Garagen(s): " . $imovel->getGaragem() . "<br />";
@@ -77,6 +84,7 @@
                     echo "Dependencia: " . (($imovel->getDependenciaEmpregada() == "SIM") ? '<span class="text-primary">' . $imovel->getDependenciaEmpregada() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
 
                     if ($imovel->getTipo() == "apartamento") {
+                        echo "Elevador: " . (($imovel->getElevador() == "SIM") ? '<span class="text-primary">' . $imovel->getElevador() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
                         echo "Sacada: " . (($imovel->getSacada() == "SIM") ? '<span class="text-primary">' . $imovel->getSacada() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
                         echo "Cobertura: " . (($imovel->getCobertura() == "SIM") ? '<span class="text-primary">' . $imovel->getCobertura() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
                         echo "Condomínio: " . (($imovel->getCondominio() != "") ? '<span class="text-primary">' . $imovel->getCondominio() . '</span>' : '<span class="text-danger">Não Informado</span>') . '<br />';
