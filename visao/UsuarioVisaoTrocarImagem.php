@@ -79,6 +79,8 @@ $enderecoImagem = PIPURL . "/fotos/usuarios/" . $this->getItem()->getFoto();
         <li><a href="index.php?entidade=Usuario&acao=meuPIP">Meu PIP</a></li>
         <li class="active">Alterar Imagem</li>
 </ol>
+    <!-- Alertas -->
+    <div class="alert">Altere a Imagem Abaixo</div>
     <form id="form" class="form-horizontal" action="index.php" method="post" enctype="multipart/form-data">
         <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Usuario"  />
         <input type="hidden" id="hdnAcao" name="hdnAcao" value="trocarimagem" />
@@ -90,18 +92,18 @@ $enderecoImagem = PIPURL . "/fotos/usuarios/" . $this->getItem()->getFoto();
                 <table class="table table-striped table-condensed table-bordered">
                     <thead>
                         <tr>
-                            <th><?php echo $tipoImagem; ?> Atual</th>
-                            <th><?php echo $tipoImagem; ?> Nova</th>
+                            <th style="text-align: center"><?php echo $tipoImagem; ?> Atual</th>
+                            <th style="text-align: center"><?php echo $tipoImagem; ?> Nova</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>
+                            <td style="text-align: center">
                                 <?php if ($this->getItem()->getFoto() != "") { ?>
-                                    <img src="<?php echo $enderecoImagem; ?>" alt="<?php echo $nomeUsuario; ?>" class="img-circle" width="300" height="300">
+                                    <img src="<?php echo $enderecoImagem; ?>" alt="<?php echo $nomeUsuario; ?>" width="160" height="160">
 
                                 <?php } else { ?>
-                                    <img src="<?php echo PIPURL . "/assets/imagens/foto_padrao.png" ?>" alt="<?php echo $nomeUsuario; ?>" class="img-circle" width="300" height="300">
+                                    <img src="<?php echo PIPURL . "/assets/imagens/foto_padrao.png" ?>" alt="<?php echo $nomeUsuario; ?>" width="160" height="160">
                                 <?php } ?>
                             </td>
                             <td>
@@ -111,7 +113,7 @@ $enderecoImagem = PIPURL . "/fotos/usuarios/" . $this->getItem()->getFoto();
                                         <input  id="arquivo" name="arquivo" type="file"/> <br />
                                     </div>             
                                 </div>
-                                <br /><br /><br /><br /><br /><br /><br />
+                                <br /><br />
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <div class="form-group">

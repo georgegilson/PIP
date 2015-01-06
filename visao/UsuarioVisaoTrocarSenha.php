@@ -6,11 +6,11 @@ Sessao::gerarToken();
 <script>
 
     $(document).ready(function() {
-        $('.alert').hide();
-        $("#txtSenhaAtual").focusin(function() {
-            $('.alert').fadeOut();
-        });
-        $('#divalert').hide();
+//        $('.alert').hide();
+//        $("#txtSenhaAtual").focusin(function() {
+//            $('.alert').fadeOut();
+//        });
+//        $('#divalert').hide();
         $("#btnCancelar").click(function() {
             if (confirm("Deseja cancelar a alteração da senha?")) {
                 location.href = "index.php?entidade=Usuario&acao=meuPIP";
@@ -93,7 +93,9 @@ Sessao::gerarToken();
         <li class="active">Alterar Senha</li>
 </ol>
 
-    <div class="alert">Alterar a Senha</div>
+<!--    <div class="alert">Alterar a Senha</div>-->
+        <div class="alert">Preencha os Campos Abaixo</div>
+
     <form id="form" class="form-horizontal" action="index.php" method="post">
         <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Usuario"  />
         <input type="hidden" id="hdnAcao" name="hdnAcao" value="trocarsenha" />

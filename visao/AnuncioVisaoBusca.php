@@ -12,9 +12,9 @@ $imovel = new Imovel();
 <script>
 
     $(document).ready(function() {
-        
-    chamarDiferencial(); //chama a função javascript diferencial.js, para chamar o diferencial de cada Tipo de Imóvel
- 
+
+        chamarDiferencial(); //chama a função javascript diferencial.js, para chamar o diferencial de cada Tipo de Imóvel
+
         $("select[name=sltCidade]").change(function() {
             $('select[name=sltBairro]').html('<option value="">Procurando...</option>');
             $.post('index.php?hdnEntidade=Bairro&hdnAcao=selecionarBairro&idcidade=' + $('#sltCidade').val(),
@@ -498,8 +498,8 @@ $imovel = new Imovel();
                         </div>
 
                     </div>
-                    
-                    
+
+
                     <div  class="col-lg-3" id="divDiferencialApartamento">
                         <label  for="sltDiferencial">Diferencial</label>
                         <div  class="form-group">
@@ -514,7 +514,7 @@ $imovel = new Imovel();
                         </div>
 
                     </div>
-                    
+
                     <div  class="col-lg-3" id="divDiferencialCasa">
                         <label  for="sltDiferencialCasa">Diferencial</label>
                         <div  class="form-group">
@@ -637,21 +637,21 @@ $imovel = new Imovel();
                                     mensagem: $("#txtMensagem").val()
                                 },
                                 beforeSend: function() {
-                                $('.alert').html(" ");
-                                $('.alert').html("...processando...").attr('class', 'alert alert-warning');
-                                $('#btnEnviarEmailAnuncio').attr('disabled', 'disabled');
+                                    $('.alert').html(" ");
+                                    $('.alert').html("...processando...").attr('class', 'alert alert-warning');
+                                    $('#btnEnviarEmailAnuncio').attr('disabled', 'disabled');
                                 },
                                 success: function(resposta) {
-                                $('#btnEnviarEmailAnuncio').removeAttr('disabled');
-                                if (resposta.resultado == 1) {
-                                    $('.alert').html(
-                                            "Email enviado com sucesso!").attr('class', 'alert alert-success');
-                                    $('#txtNome').val(" ");
-                                    $('#txtEmail').val(" ");
-                                    $('#txtMensagem').val(" ");                                    
-                                } else {
-                                    $('.alert').html("Erro ao enviar e-mail. Tente novamente em alguns minutos.").attr('class', 'alert alert-danger');
-                                }
+                                    $('#btnEnviarEmailAnuncio').removeAttr('disabled');
+                                    if (resposta.resultado == 1) {
+                                        $('.alert').html(
+                                                "Email enviado com sucesso!").attr('class', 'alert alert-success');
+                                        $('#txtNome').val(" ");
+                                        $('#txtEmail').val(" ");
+                                        $('#txtMensagem').val(" ");
+                                    } else {
+                                        $('.alert').html("Erro ao enviar e-mail. Tente novamente em alguns minutos.").attr('class', 'alert alert-danger');
+                                    }
                                 }
                             });
 //                        return false;
@@ -668,23 +668,34 @@ $imovel = new Imovel();
                     ?>
 
 
-                    <div class="panel panel-warning col-md-11"  id="<?php echo $anuncio->id; ?>" >
+                    <div class="panel panel-warning col-md-10"  id="<?php echo $anuncio->id; ?>" >
 
                         <div class="panel-body">
+                            <div data-row-span="1">
+                                <input type="checkbox" id="selecoes_<?php echo $anuncio->id; ?>" class="option" name="selecoes[]" value=<?php echo $anuncio->id; ?>> Selecionar Imóvel         
+                                <br />
+                                Título:
+                                <?php echo "<span class='label label-info'>" . strtoupper($anuncio->tituloanuncio) . "</span>"; ?> -
+                                Referência:
+                                <?php echo "<span class='label label-info'>" . substr($anuncio->datahoracadastro, 6, -9) . substr($anuncio->datahoracadastro, 3, -14) . str_pad($anuncio->idimovel, 5, "0", STR_PAD_LEFT) . "</span>"; ?>
+                                
+                            </div>
+                            <fieldset class="col-md-9">   
+                                <div data-row-span="7" style="text-align: center">
+                                    <!--                                    <div data-field-span="2">
+                                                                            <label style="text-align: center">Título</label>
+                                    <?php echo "<span class='label label-info'>" . strtoupper($anuncio->tituloanuncio) . "</span>"; ?>
 
-                            <fieldset class="col-md-9">
-
-                                <div data-row-span="1">
-                                    <input type="checkbox" id="selecoes_<?php echo $anuncio->id; ?>" class="option" name="selecoes[]" value=<?php echo $anuncio->id; ?>> Selecionar Imóvel         
-                                </div>
-
-                                <div data-row-span="7">
-                                    <div data-field-span="2">
-                                        <label style="text-align: center">Título</label>
-                                        <?php echo "<span class='label label-info'>" . strtoupper($anuncio->tituloanuncio) . "</span>"; ?>
-                                    </div>
-
+                                                                        </div>-->
                                     <div data-field-span="1">
+                                        <label style="text-align: center">Cidade</label>
+                                        <?php echo $anuncio->cidade; ?>
+                                    </div>
+                                    <div data-field-span="1,5">
+                                        <label style="text-align: center">Bairro</label>
+                                        <?php echo $anuncio->bairro; ?>
+                                    </div>
+                                    <div data-field-span="1,5">
                                         <label style="text-align: center">Tipo</label>
                                         <?php echo "<span class='label label-warning'>" . strtoupper($anuncio->tipo) . "</span>"; ?>
                                     </div>
@@ -693,74 +704,80 @@ $imovel = new Imovel();
                                         <label style="text-align: center">Finalidade</label>
                                         <?php echo "<span class='label label-primary'>" . strtoupper($anuncio->finalidade) . "</span>"; ?>
                                     </div>
-                                    <div data-field-span="1">
+                                    <div data-field-span="0">
                                         <label style="text-align: center">Quarto(s)</label>
                                         <?php echo $anuncio->quarto; ?>
                                     </div>
-                                    <div data-field-span="1">
-                                        <label style="text-align: center">Área (em m<sup>2</sup>)</label>
-                                        <?php echo $anuncio->area; ?>
-                                    </div>
-                                    <div data-field-span="1">
-                                        <label style="text-align: center">Condição</label>
-                                        <?php echo $anuncio->condicao; ?>
-                                    </div>
-                                </div>
-
-                                <div data-row-span="7">
-                                    <div data-field-span="3">
-                                        <label style="text-align: center">Descrição</label>
-                                        <?php echo $anuncio->descricao; ?>
-                                    </div>
-                                    <div data-field-span="1">
-                                        <label style="text-align: center">Valor</label>
-                                        <span id="spanValor<?php echo $anuncio->id; ?>"> <?php echo $anuncio->valor; ?> </span>
-                                    </div>
-                                    <div data-field-span="1">
-                                        <label style="text-align: center">Banheiro(s)</label>
-                                        <?php echo $anuncio->banheiro; ?>
-                                    </div>
-                                    <div data-field-span="1">
-                                        <label style="text-align: center">Garagem(ns)</label>
-                                        <?php echo $anuncio->garagem; ?>
-                                    </div>
-                                    <div data-field-span="1">
-                                        <label style="text-align: center">Referência</label>
-                                        <?php echo "<span class='label label-info'>" . substr($anuncio->datahoracadastro, 6, -9) . substr($anuncio->datahoracadastro, 3, -14) . str_pad($anuncio->idimovel, 5, "0", STR_PAD_LEFT) . "</span>"; ?>
-                                    </div>
-                                </div>
-
-                                <div data-row-span="7">
-                                    <div data-field-span="3" style="background-color: #e4fcff">
-                                        <label style="text-align: center;">Endereço</label>
-                                        <?php echo $anuncio->logradouro . ", Nº " . $anuncio->numero; ?>
-                                    </div>
-                                    <div data-field-span="1">
-                                        <label style="text-align: center">Cidade</label>
-                                        <?php echo $anuncio->cidade; ?>
-                                    </div>
-                                    <div data-field-span="1">
-                                        <label style="text-align: center">Bairro</label>
-                                        <?php echo $anuncio->bairro; ?>
-                                    </div>
-                                    <div data-field-span="1">
+                                    <div data-field-span="0">
                                         <label style="text-align: center">Suite(s)</label>
                                         <?php echo $anuncio->suite; ?>
                                     </div>
-                                    <div data-field-span="1">
-                                        <label style="text-align: center">Condição</label>
-                                        <?php echo $anuncio->condicao; ?>
+                                    <div data-field-span="0">
+                                        <label style="text-align: center">Área (m<sup>2</sup>)</label>
+                                        <?php echo $anuncio->area; ?>
                                     </div>
 
                                 </div>
 
+                                <div data-row-span="7" style="text-align: center">
+                                    <div data-field-span="3">
+                                        <label style="text-align: center;">Endereço</label>
+                                        <?php echo $anuncio->logradouro . ", Nº " . $anuncio->numero; ?>
+                                    </div>
+                                    <!--                                    <div data-row-span="7">
+                                                                        <div data-field-span="3" style="background-color: #e4fcff">
+                                                                            
+                                                                        </div>
+                                                                         </div>-->
+                                    <div data-field-span="1" style="text-align: center">
+                                        <label style="text-align: center">Valor</label>
+                                        <span id="spanValor<?php echo $anuncio->id; ?>"> <?php echo $anuncio->valor; ?> </span>
+                                    </div>
+                                    <div data-field-span="0">
+                                        <label style="text-align: center">Banheiro(s)</label>
+                                        <?php echo $anuncio->banheiro; ?>
+                                    </div>
+                                    <div data-field-span="0">
+                                        <label style="text-align: center">Garagem</label>
+                                        <?php
+                                        if ($anuncio->garagem == "nenhuma") {
+                                            print('<span class="glyphicon glyphicon glyphicon-remove"></span>');
+                                        } else {
+                                            print('<span class="glyphicon glyphicon-thumbs-up"></span> ' . $anuncio->garagem);
+                                        }
+                                        ?>
+                                    </div>
+                                    <!--                                    <div data-field-span="1">
+                                                                            <label style="text-align: center">Referência</label>
+                                    <?php echo "<span class='label label-info'>" . substr($anuncio->datahoracadastro, 6, -9) . substr($anuncio->datahoracadastro, 3, -14) . str_pad($anuncio->idimovel, 5, "0", STR_PAD_LEFT) . "</span>"; ?>
+                                                                        </div>-->
+                                    <div data-field-span="0">
+                                        <label style="text-align: center">Condição</label>
+                                        <?php echo $anuncio->condicao; ?>
+                                    </div>
+                                </div>
+                                <br/>   
+                                <p>Descrição:</p>
+                                <div class="well well-sm">  
+                                    <?php echo $anuncio->descricao; ?>
+                                </div>
+
+                                <!--                                <fieldset>
+                                                                    <legend style="color: #0087bb">Descrição</legend>
+                                                                    <p><?php echo $anuncio->descricao; ?><p>
+                                                                </fieldset>    -->
+
                             </fieldset>
+
                             <br/>
                             <fieldset class="col-md-2">
 
                                 <div>
 
-                                    <img src="<?php echo $anuncio->diretorio ?>" height="160" width="160" class="img-thumbnail" style="margin-left: 60px">
+                                    <img src="<?php echo $anuncio->diretorio ?>" height="160" width="160" class="img-thumbnail" style="
+                                         width: 180px;
+                                         height: 180px; 
+                                         margin-left: 60px">
 
                                 </div>
 
@@ -775,21 +792,6 @@ $imovel = new Imovel();
                                 </div>
 
                             </fieldset>
-
-
-                            <!-- Modal Para Abrir a Div do Veja Mais Detalhes -->
-                            <div class="modal fade" id="divAnuncioModal" tabindex="-1" role="dialog" aria-labelledby="lblAnuncioModal" aria-hidden="true">
-                                <div class="modal-dialog modal-lg">
-                                    <div class="modal-content">
-                                        <div id="modal-body" class="modal-body text-center">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-
-
-
                         </div>
 
                     </div>    
@@ -805,42 +807,52 @@ $imovel = new Imovel();
     </div>
 </form>
 
+ <!-- Modal Para Abrir a Div do Veja Mais Detalhes -->
+                            <div class="modal fade" id="divAnuncioModal" tabindex="-1" role="dialog" aria-labelledby="lblAnuncioModal" aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div id="modal-body" class="modal-body text-center">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
 <!-- Modal Para Abrir a Div do Enviar Anuncios por Email -->
 <div class="modal fade" id="divEmailModal" tabindex="-1" role="dialog" aria-labelledby="lblAnuncioModal" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-        <form role="form" id="formEmail">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="exampleModalLabel">Enviar Anúncio</h4>
-      </div>
-      <div class="modal-body">
-          <div id="alert" role="alert" class="alert alert-warning">
-                      Preencha os dados abaixo para realizar o envio, por e-mail, dos anúncios selecionados. 
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form role="form" id="formEmail">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="exampleModalLabel">Enviar Anúncio</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="alert" role="alert" class="alert alert-warning">
+                        Preencha os dados abaixo para realizar o envio, por e-mail, dos anúncios selecionados. 
                     </div>
-                <br>
-<!--        <form role="form" id="formEmail">-->
-           <div class="form-group">
-            <label for="recipient-name" class="control-label">Nome:</label>
-            <input type="text" class="form-control" id="txtNome">
-          </div>
-          <div class="form-group">
-            <label for="recipient-name" class="control-label">E-mail:</label>
-            <input type="text" class="form-control" id="txtEmail" name="txtEmail">
-          </div>
-          <div class="form-group">
-            <label for="message-text" class="control-label">Mensagem:</label>
-            <textarea maxlength="200" class="form-control" id="txtMensagem"></textarea>
-          </div>
-        
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-        <button type="submit" id="btnEnviarEmailAnuncio" class="btn btn-primary">Enviar</button>
-      </div>
+                    <br>
+                    <!--        <form role="form" id="formEmail">-->
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">Nome:</label>
+                        <input type="text" class="form-control" id="txtNome">
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">E-mail:</label>
+                        <input type="text" class="form-control" id="txtEmail" name="txtEmail">
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="control-label">Mensagem:</label>
+                        <textarea maxlength="200" class="form-control" id="txtMensagem"></textarea>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" id="btnEnviarEmailAnuncio" class="btn btn-primary">Enviar</button>
+                </div>
             </form>
+        </div>
     </div>
-  </div>
 </div>
 
 
@@ -852,7 +864,7 @@ $imovel = new Imovel();
         $('[id^=btnAnuncioModal]').click(function() {
             $("#lblAnuncioModal").html("<span class='glyphicon glyphicon-bullhorn'></span> " + $(this).attr('data-title'));
             $("#modal-body").html('<img src="assets/imagens/loading.gif" /><h2>Aguarde... Carregando...</h2>');
-            $("#modal-body").load("index.php", {hdnEntidade: 'Anuncio', hdnAcao: 'modal', hdnToken: '<?php //Sessao::gerarToken(); echo $_SESSION["token"];         ?>', hdnModal: $(this).attr('data-modal')});
+            $("#modal-body").load("index.php", {hdnEntidade: 'Anuncio', hdnAcao: 'modal', hdnToken: '<?php //Sessao::gerarToken(); echo $_SESSION["token"];             ?>', hdnModal: $(this).attr('data-modal')});
         })
 
         var NumeroMaximo = 10;
@@ -871,7 +883,7 @@ $imovel = new Imovel();
                 return false;
             }
         })
-        
+
         $("#btnEnviarEmail").click(function() {
             //alert('teste');
             if ($("input[id^='selecoes_']").filter(':checked').size() <= 0)
@@ -880,7 +892,7 @@ $imovel = new Imovel();
                 return false;
             }
         })
-        
+
         $("span[id^='spanValor']").priceFormat({
             prefix: 'R$ ',
             centsSeparator: ',',

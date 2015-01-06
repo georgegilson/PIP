@@ -1,4 +1,4 @@
-<script src="assets/js/jquery.maskedinput.min.js"></script>
+<script src="assets/js/jquery.mask.min.js"></script>
 <script src="assets/js/util.validate.js"></script>
 <script src="assets/js/pwstrength.js"></script>
 <script src="assets/js/additional-methods.min.js"></script>
@@ -229,11 +229,11 @@
             $("#txtTel").rules("remove");
             $("#sltOperadora").rules("remove");
             $("#sltTipotelefone").rules("remove");
-//            $("#txtTel").val("");
-//            $("#sltOperadora").val("");
-//            $("#sltTipotelefone").val("");
+            $("#txtTel").val("");
+            $("#sltOperadora").val("");
+            $("#sltTipotelefone").val("");
         });
-        $("#txtTel").mask("(99)9999-9999");
+        $("#txtTel").mask("(00) 0000-00009");
 //        Fim do Telefone
 
         //######### VALIDACAO DO FORMULARIO ########
@@ -596,7 +596,7 @@ Sessao::gerarToken();
                         </div>
                         <label class="col-lg-1 control-label" for="txtTel">Numero</label>
                         <div class="col-lg-2">
-                            <input type="text" class="form-control" id="txtTel" name="txtTel" placeholder="Informe o Telefone">
+                            <input type="text" class="form-control" id="txtTel" name="txtTel" placeholder="Informe o Telefone" pattern="\([0-9]{2}\)[\s][0-9]{4}-[0-9]{4,5}" />
                         </div>
                         <div class="col-lg-2">
                             <button id="btnTelefone" type="button" class="btn btn-info">Adicionar</button>
