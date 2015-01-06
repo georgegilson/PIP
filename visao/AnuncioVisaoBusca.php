@@ -704,14 +704,16 @@ $imovel = new Imovel();
                                         <label style="text-align: center">Finalidade</label>
                                         <?php echo "<span class='label label-primary'>" . strtoupper($anuncio->finalidade) . "</span>"; ?>
                                     </div>
+                                    <?php if($anuncio->tipo != "terreno") print('
                                     <div data-field-span="0">
                                         <label style="text-align: center">Quarto(s)</label>
-                                        <?php echo $anuncio->quarto; ?>
+                                        ' . $anuncio->quarto . '
                                     </div>
                                     <div data-field-span="0">
                                         <label style="text-align: center">Suite(s)</label>
-                                        <?php echo $anuncio->suite; ?>
+                                        ' . $anuncio->suite . '
                                     </div>
+                                    '); ?>
                                     <div data-field-span="0">
                                         <label style="text-align: center">Área (m<sup>2</sup>)</label>
                                         <?php echo $anuncio->area; ?>
@@ -733,39 +735,36 @@ $imovel = new Imovel();
                                         <label style="text-align: center">Valor</label>
                                         <span id="spanValor<?php echo $anuncio->id; ?>"> <?php echo $anuncio->valor; ?> </span>
                                     </div>
+                                    <?php if($anuncio->tipo != "terreno") print('
                                     <div data-field-span="0">
                                         <label style="text-align: center">Banheiro(s)</label>
-                                        <?php echo $anuncio->banheiro; ?>
-                                    </div>
+                                        ' . $anuncio->banheiro . '
+                                    </div>');?>
+                                    
+                                    <?php if($anuncio->tipo != "terreno"){ print('
                                     <div data-field-span="0">
                                         <label style="text-align: center">Garagem</label>
-                                        <?php
+                                        '); 
                                         if ($anuncio->garagem == "nenhuma") {
-                                            print('<span class="glyphicon glyphicon glyphicon-remove"></span>');
+                                            print('<span class="glyphicon glyphicon glyphicon-remove"></span>)');
                                         } else {
-                                            print('<span class="glyphicon glyphicon-thumbs-up"></span> ' . $anuncio->garagem);
+                                            print('<span class="glyphicon glyphicon-thumbs-up"></span>'  . $anuncio->garagem);
                                         }
+                                        print('</div>');
+                                    }
                                         ?>
-                                    </div>
-                                    <!--                                    <div data-field-span="1">
-                                                                            <label style="text-align: center">Referência</label>
-                                    <?php echo "<span class='label label-info'>" . substr($anuncio->datahoracadastro, 6, -9) . substr($anuncio->datahoracadastro, 3, -14) . str_pad($anuncio->idimovel, 5, "0", STR_PAD_LEFT) . "</span>"; ?>
-                                                                        </div>-->
+                                    
+                                    <?php if($anuncio->tipo != "terreno") print('
                                     <div data-field-span="0">
                                         <label style="text-align: center">Condição</label>
-                                        <?php echo $anuncio->condicao; ?>
-                                    </div>
+                                        ' . $anuncio->condicao . '
+                                    </div>');?>
                                 </div>
                                 <br/>   
                                 <p>Descrição:</p>
                                 <div class="well well-sm">  
-                                    <?php echo $anuncio->descricao; ?>
+                                    <?php echo $anuncio->descricaoanuncio; ?>
                                 </div>
-
-                                <!--                                <fieldset>
-                                                                    <legend style="color: #0087bb">Descrição</legend>
-                                                                    <p><?php echo $anuncio->descricao; ?><p>
-                                                                </fieldset>    -->
 
                             </fieldset>
 

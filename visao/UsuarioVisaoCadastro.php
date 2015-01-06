@@ -596,7 +596,7 @@ Sessao::gerarToken();
                         </div>
                         <label class="col-lg-1 control-label" for="txtTel">Numero</label>
                         <div class="col-lg-2">
-                            <input type="text" class="form-control" id="txtTel" name="txtTel" placeholder="Informe o Telefone" pattern="\([0-9]{2}\)[\s][0-9]{4}-[0-9]{4,5}" />
+                            <input type="tel" class="form-control" id="txtTel" name="txtTel" placeholder="Informe o Telefone" pattern="\([0-9]{2}\)[\s][0-9]{4}-[0-9]{4,5}" />
                         </div>
                         <div class="col-lg-2">
                             <button id="btnTelefone" type="button" class="btn btn-info">Adicionar</button>
