@@ -2,7 +2,7 @@
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
 <script src="assets/js/gmaps.js"></script>
 <!-- FIM DO MAPA --> 
-<script src="assets/js/jquery.maskedinput.min.js"></script>
+<script src="assets/js/jquery.mask.min.js"></script>
 <script src="assets/js/bootstrap-multiselect.js"></script>
 <script src="assets/js/bootstrap-maxlength.js"></script>
 <script src="assets/js/jquery.price_format.min.js"></script>
