@@ -126,6 +126,7 @@ class ImovelControle {
     }
 
     function selecionar($parametro) {
+        
         if (Sessao::verificarSessaoUsuario() & Sessao::verificarToken(array("hdnToken" => $parametro["token"]))) {
             $imovel = new Imovel();
 
@@ -168,6 +169,31 @@ class ImovelControle {
         $visao = new Template();
         $visao->setItem($selecionarImovel);
         $visao->exibir('AnuncioVisaoPublicar.php');
+    }
+    
+    function excluir($parametro) {
+        
+        var_dump($parametro['hdnImovel']); die();
+        
+        $imovel = new Imovel();
+        $genericoDAO = new GenericoDAO();
+        $genericoDAO->iniciarTransacao();
+        $selecionarImovel = $genericoDAO->consultar($imovel, false, array ("id" => $parametro['hdnImovel']));
+        
+        var_dump($selecionarImovel); die();
+        
+        $excluirImovel = $genericoDAO->excluir($imovel, $selecionarImovel[0]->getId());
+        
+        if($excluirImovel){
+             $genericoDAO->commit();
+             $genericoDAO->fecharConexao();
+             echo json_encode(array("resultado" => 1));
+             
+        }else {
+             $genericoDAO->rollback();
+             $genericoDAO->fecharConexao();
+             echo json_encode(array("resultado" => 0));
+        }
     }
 
     function editar($parametros) {

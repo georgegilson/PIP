@@ -12,7 +12,7 @@
             <thead>
                 <tr>  
                     <th>Referência</th>
-                    <th>Descrição</th>
+                    <th>Imóvel</th>
                     <th>Logradouro</th> 
                     <th>Bairro</th>
                     <th>Data Cadastro</th>
@@ -35,7 +35,9 @@
         <tr>        
         <?php
         echo "<td><span class=\"label label-info\">" . $imovel->Referencia() . "</span></td>";
-        echo "<td>" . $imovel->getDescricao() . "</td>";
+        if(trim($imovel->getDescricao()) !=""){
+            echo "<td>" . $imovel->getDescricao() . "</td>";
+        }else echo "<td class='text-danger'>Nenhuma Identificação</td>";
         echo "<td>" . $imovel->getEndereco()->getLogradouro() . "</td>";
         echo "<td>" . $imovel->getEndereco()->getBairro()->getNome() . "</td>";
         echo "<td>" . $imovel->getDatahoracadastro() . "</td>";

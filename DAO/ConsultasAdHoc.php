@@ -129,7 +129,7 @@ class ConsultasAdHoc extends GenericoDAO {
         if (isset($parametro["chkGaragem"])) {
             $sqlGaragem = " AND i.garagem in ('01', '02', '03', '04', '05', '06')";
         } else {
-            $sqlGaragem = " AND i.garagem = 'nenhuma'";
+            $sqlGaragem = " AND (i.garagem = 'nenhuma' OR i.garagem ='') ";
         }
 
         $sql = $sql . $sqlGaragem;
@@ -367,7 +367,7 @@ class ConsultasAdHoc extends GenericoDAO {
             $statement->bindParam(':bairro', $parametro["sltBairro"]);
             $statement->bindParam(':valor', $parametro["sltValor"]);
         }
-
+        
         $statement->execute();
         $resultado = $statement->fetchAll(PDO::FETCH_OBJ);
         return $resultado;
@@ -1717,6 +1717,8 @@ class ConsultasAdHoc extends GenericoDAO {
                 $statement->bindParam(':condicao', $parametro["sltCondicao"]);
             }
         }
+        
+        
         $statement->execute();
         $resultado = $statement->fetchAll(PDO::FETCH_OBJ);
         return $resultado;

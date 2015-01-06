@@ -222,8 +222,9 @@
                     required: true
                 },
                 txtNumero: {
-                    required: true
-                }
+                   maxlength: 5,
+                   required: true
+               }
             },
             highlight: function(element) {
                 $(element).closest('.form-group').addClass('has-error');
@@ -626,9 +627,9 @@
                             </div>                      
 
                             <div class="form-group">
-                                <label class="col-lg-3 control-label" for="txtDescricao"> Descrição </label>
+                                <label class="col-lg-3 control-label" for="txtDescricao"> Identificar este Imóvel como: </label>
                                 <div class="col-lg-8">
-                                    <textarea maxlength="100" id="txtDescricao" name="txtDescricao" class="form-control" placeholder="Informe uma Descrição do Imóvel"><?php print $imovel->getDescricao(); ?> </textarea><br />
+                                    <textarea maxlength="40" id="txtDescricao" name="txtDescricao" class="form-control"><?php print $imovel->getDescricao(); ?> </textarea><br />
                                 </div>
 
                                 <div id="divApartamento">
@@ -891,7 +892,7 @@
                                         <div class="form-group">
                                             <label class="col-lg-3 control-label" for="txtNumero">N&uacute;mero</label>
                                             <div class="col-lg-8">
-                                                <input type="text" class="form-control" id="txtNumero" name="txtNumero" placeholder="Informe o n&ordm;" value="<?php print $imovel->getEndereco()->getNumero(); ?>"> 
+                                                <input type="text" class="form-control" id="txtNumero" name="txtNumero" placeholder="Informe o n&ordm;" maxlength="5" value="<?php print $imovel->getEndereco()->getNumero(); ?>"> 
                                             </div>
                                         </div>
                                         <div class="form-group">

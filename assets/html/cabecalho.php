@@ -38,15 +38,15 @@
                         <table>
                             <tbody>
                                 <tr>
-                                    <td colspan="3"><h4 id="divTitulo"> Acesse o Meu PIP! </h4></td>
+                                    <td colspan="3"><h5 id="divTitulo" style="text-align: left"> Acesse o Meu PIP </h5></td>
                                 </tr>
                                 <tr>
-                                    <td width="151"><input name="txtLoginIndex" type="text" class="form-control" id="txtLoginIndex" style="width:145px" placeholder="Informe o Usuário"></td>
-                                    <td width="75"><input name="txtSenhaIndex" type="password" class="form-control" id="txtSenhaIndex" style="width:70px" placeholder="Senha"></td>
-                                    <td><button type="button" id="btnAcessar" class="btn btn-sm btn-primary">Acessar</button></td>
+                                    <td width="130"><input name="txtLoginIndex" type="text" class="form-control" id="txtLoginIndex" style="width:120px" placeholder="Login"></td>
+                                    <td width="75"><input name="txtSenhaIndex" type="password" class="form-control" id="txtSenhaIndex" style="width:120px" placeholder="Senha"></td>
+                                    <td width="130"><button type="button" id="btnAcessar" class="btn btn-sm btn-primary">Acessar</button></td>
                                 </tr>
                                 <tr>
-                                    <td height="30" colspan="3">
+                                    <td height="30" colspan="3" style="text-align: left">
                                         <a href="<?php echo PIPURL; ?>/index.php?entidade=Usuario&acao=form&tipo=cadastro" class="text text-success">Ainda não é cadastrado?</a>
                                         <a href="<?php echo PIPURL; ?>/index.php?entidade=Usuario&acao=form&tipo=esquecisenha" class="text text-danger">Não lembra a senha?</a>
                                     </td>

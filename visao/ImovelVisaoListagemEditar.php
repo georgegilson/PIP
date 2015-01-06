@@ -1,3 +1,55 @@
+<script type="text/javascript">
+        $(document).ready(function() {
+            $("span[data-toggle='tooltip']").tooltip();
+
+            $('[id^=btnAnuncioModal]').click(function() {
+                $("#lblAnuncioModal").html("<span class='glyphicon glyphicon-bullhorn'></span> " + $(this).attr('data-title'));
+                $("#modal-body").html('<img src="assets/imagens/loading.gif" /><h2>Aguarde... Carregando...</h2>');
+                $("#modal-body").load("index.php", {hdnEntidade: 'Imovel', hdnAcao: 'modal', hdnToken: '', hdnModal: $(this).attr('data-modal')});
+            })
+            $('[id^=btnExcluir]').click(function() {
+                $("#lblNegocioModal").html("<span class='glyphicon glyphicon-bullhorn'></span> " + $(this).attr('data-title'));
+                $("#hdnImovel").val($(this).attr('data-modal'));
+            })
+
+            $('#form').validate({
+                submitHandler: function() {
+                    $.ajax({
+                        url: "index.php",
+                        dataType: "json",
+                        type: "POST",
+                        data: $('#form').serialize(),
+                        beforeSend: function() {
+                            $('.alert').show();
+                            $('#btnConfirmar').attr('disabled', 'disabled');
+                            $('#btnCancelar').attr('disabled', 'disabled');
+                        },
+                        success: function(resposta) {
+                            $(".alert").hide();
+                            if (resposta.resultado == 1) {
+                                $("#modal-body-negociacao").html('<div class="row text-success">\n\
+                                                                <p class="text-center">Imóvel Excluido com Sucesso</p>\n\
+                                                                </div>');
+                                $('#btnConfirmar').remove();
+                                $('#btnCancelar').remove();
+                            } else {
+                                $("#modal-body-negociacao").html('<div class="row text-danger">\n\
+                                                                <h2 class="text-center">Tente novamente mais tarde!</h2>\n\
+                                                                <p class="text-center">Houve um erro no processamento. </p>\n\
+                                                                </div>');
+                                $('#btnConfirmar').removeAttr("disable");
+                            }
+                        }
+                    })
+                    return false;
+                }
+            })
+            $('#divNegocioModal').on('hidden.bs.modal', function(e) {
+                window.location.reload();
+            })
+        });
+    </script>
+
 <div class="container">  
     
     <ol class="breadcrumb">
@@ -12,7 +64,7 @@
             <thead>
                 <tr>  
                     <th>Referência</th>
-                    <th>Descrição</th>
+                    <th>Imóvel</th>
                     <th>Logradouro</th> 
                     <th>Bairro</th>
                     <th>Data Cadastro</th>
@@ -21,7 +73,7 @@
             <tbody>
 
     <?php
-                
+              
     $params = array(
     'mode'       => 'Sliding',
     'perPage'    => 5,
@@ -30,21 +82,29 @@
     
     $pager = & Pager::factory($params);
     $data  = $pager->getPageData();
-    Sessao::gerarToken();
+
+    Sessao::gerarToken(); 
+    
     foreach($data as $imovel){?>
         <tr>        
         <?php
         echo "<td><span class=\"label label-info\">" . $imovel->Referencia() . "</span></td>";
-        echo "<td>" . $imovel->getDescricao() . "</td>";
+        if(trim($imovel->getDescricao()) !=""){
+            echo "<td>" . $imovel->getDescricao() . "</td>";
+        }else echo "<td class='text-danger'>Nenhuma Identificação</td>";
         echo "<td>" . $imovel->getEndereco()->getLogradouro() . "</td>";
         echo "<td>" . $imovel->getEndereco()->getBairro()->getNome() . "</td>";
         echo "<td>" . $imovel->getDatahoracadastro() . "</td>";
         echo "<td><a href='#' id='popover".$imovel->getId()."'class='btn btn-success'><span class='glyphicon glyphicon-home'></span> Detalhes </a></td>";
        // echo "<td><a href='index.php?entidade=Imovel&acao=selecionar&id=".$imovel->getId()."&token=".$_SESSION['token']."' class='btn btn-warning'><span class='glyphicon glyphicon-pencil'></span> Editar</a> <br /></td>";
-        if(count($imovel->getAnuncio())>0){echo"<td><span class='text-primary'><span class='glyphicon glyphicon-bullhorn'></span> Este Imóvel já possui um anúncio publicado</span></td>";}
+        if(count($imovel->getAnuncio())>0 && verificaAnuncioAtivo($imovel->getAnuncio())){echo"<td colspan='2'><span class='text-primary'><span class='glyphicon glyphicon-bullhorn'></span> Imóvel com anúncio ativo</span></td>";}
           else {
-             echo "<td><a href='index.php?entidade=Imovel&acao=selecionar&id=".$imovel->getId()."&token=".$_SESSION['token']."' class='btn btn-warning'><span class='glyphicon glyphicon-pencil'></span> Editar</a> <br /></td>";    
-             echo "<td><a href='#' id='popover".$imovel->getId()."'class='btn btn-danger'><span class='glyphicon glyphicon-remove'></span> Excluir </a></td>";}
+             echo "<td class='col-lg-1'><a href='index.php?entidade=Imovel&acao=selecionar&id=".$imovel->getId()."&token=".$_SESSION['token']."' class='btn btn-warning'><span class='glyphicon glyphicon-pencil'></span> Alterar</a> <br /></td>";    
+             
+             if(count($imovel->getAnuncio())>0){echo"<td><span class='text-primary'><span class='glyphicon glyphicon-bullhorn'></span> Imóvel possui anúncio. Não é possível excluir</span></td>";}
+             else{
+             echo "<td class='col-lg-2'><button type='button' id='btnExcluir".$imovel->getId()."' class='btn btn-danger' data-toggle='modal' data-target='#divNegocioModal'  data-modal='".$imovel->getId()."' data-title='".$imovel->Referencia()."'><span class='glyphicon glyphicon-remove'></span> Excluir </button></td>";}
+             }
           }
     ?>             
         </tr>         
@@ -62,7 +122,8 @@
        
     </form>
 </div>
-<?php
+<?php   
+        
         $item = $this->getItem();
         if ($item) {
             foreach ($item as $imovel) {
@@ -102,6 +163,31 @@
         }
         ?>
 
+<form id="form" class="form-horizontal" action="index.php" method="post">
+        <div class="modal fade" id="divNegocioModal" tabindex="-1" role="dialog" aria-labelledby="lblNegocioModal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h2 class="modal-title" id="lblNegocioModal"></h2>
+                    </div>
+                    <div id="modal-body-negociacao" class="modal-body text-center">
+                        <div class="alert alert-warning" style="display:none">Aguarde Processando...</div>
+                        <strong>Confirmar a Exclusão do Imóvel?</strong>
+                        <input type="hidden" id="hdnEntidade" name="hdnEntidade" value="Imovel"  />
+                        <input type="hidden" id="hdnAcao" name="hdnAcao" value="excluir" />
+                        <input type="hidden" id="hdnImovel" name="hdnImovel"/>
+                        <input type="hidden" id="hdnToken" name="hdnToken" value="<?php echo $_SESSION["token"]; ?>" />                      
+                    </div>
+                    <div class="modal-footer text-right">
+                        <button type="submit" name="btnCancelar" id="btnCancelar" class="btn btn-warning" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" name="btnConfirmar" id="btnConfirmar" class="btn btn-danger">Excluir</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
 <script type="text/javascript">
             $(document).ready(function() {
                 // Associa o evento do popover ao clicar no link.
@@ -120,3 +206,19 @@
                 });
             });
         </script>
+        
+<?php
+function verificaAnuncioAtivo($listaAnuncios) {
+   $temAnuncioAtivo = false;
+   if (count($listaAnuncios) > 1) {
+       foreach ($listaAnuncios as $anuncio) {
+           if ($anuncio->getStatus() == "cadastrado")
+               $temAnuncioAtivo = true;
+       }
+   } else {
+       if ($listaAnuncios->getStatus() == "cadastrado")
+           $temAnuncioAtivo = true;
+   }
+   return $temAnuncioAtivo;
+}
+?>
