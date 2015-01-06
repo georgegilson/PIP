@@ -31,6 +31,16 @@
             }
         }
         ?>
+        <ol class="breadcrumb">
+            <li><a href="index.php">Início</a></li>
+            <li><a href="index.php?entidade=Usuario&acao=meuPIP">Meu PIP</a></li>
+            <?php if ($item["anuncio"]->getId() != "") { ?>
+                <li><a href="index.php?entidade=Anuncio&acao=listarReativar">Reativar Anúncio</a></li>
+            <?php } else { ?>
+                <li><a href="index.php?entidade=Anuncio&acao=listarCadastrar">Publicar Anúncio</a></li>
+            <?php } ?>
+            <li class="active">Seu anúncio</li>
+        </ol>
         <!-- Modal -->
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -41,25 +51,30 @@
                     </div>
                     <div class="modal-body">
                         <?php
-                        echo "Tipo: " . $imovel->getTipo() . "<br />";
-                        echo "Condição: " . $imovel->getCondicao() . "<br />";
-                        echo "Descrição: " . $imovel->getDescricao() . "<br />";
-                        echo "Quartos: " . $imovel->getQuarto() . "<br />";
-                        echo "Garagen(s): " . $imovel->getGaragem() . "<br />";
-                        echo "Banheiro(s): " . $imovel->getBanheiro() . "<br />";
-                        echo "Área: " . $imovel->getArea() . " m<sup>2</sup><br />";
-                        echo "Suite(s): " . (($imovel->getSuite() != "nenhuma") ? '<span class="text-primary">' . $imovel->getSuite() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
-                        echo "Academia: " . (($imovel->getAcademia() == "SIM") ? '<span class="text-primary">' . $imovel->getAcademia() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
-                        echo "Área Serviço: " . (($imovel->getAreaServico() == "SIM") ? '<span class="text-primary">' . $imovel->getAreaServico() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
-                        echo "Dependencia de Empregada: " . (($imovel->getDependenciaEmpregada() == "SIM") ? '<span class="text-primary">' . $imovel->getDependenciaEmpregada() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
-                        echo "Elevador: " . (($imovel->getElevador() == "SIM") ? '<span class="text-primary">' . $imovel->getElevador() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
-                        echo "Piscina: " . (($imovel->getPiscina() == "SIM") ? '<span class="text-primary">' . $imovel->getPiscina() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
-                        echo "Quadra: " . (($imovel->getQuadra() == "SIM") ? '<span class="text-primary">' . $imovel->getQuadra() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
-                        if ($tipoImovel == "apartamento") {
-                            echo "Sacada: " . (($imovel->getSacada() == "SIM") ? '<span class="text-primary">' . $imovel->getSacada() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
-                            echo "Cobertura: " . (($imovel->getCobertura() == "SIM") ? '<span class="text-primary">' . $imovel->getCobertura() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
-                            echo "Condomínio: " . (($imovel->getCondominio() != "") ? '<span class="text-primary">' . $imovel->getCondominio() . '</span>' : '<span class="text-danger">Não Informado</span>') . '<br />';
-                            echo "Andar: " . (($imovel->getAndar() != "") ? '<span class="text-primary">' . $imovel->getAndar() . '</span>' : '<span class="text-danger">Não Informado</span>') . '<br />';
+                        if ($imovel->getTipo() != "terreno") {
+                            echo "Tipo: " . $imovel->getTipo() . "<br />";
+                            echo "Condição: " . $imovel->getCondicao() . "<br />";
+                            echo "Descrição: " . $imovel->getDescricao() . "<br />";
+                            echo "Quartos: " . $imovel->getQuarto() . "<br />";
+                            echo "Garagen(s): " . $imovel->getGaragem() . "<br />";
+                            echo "Banheiro(s): " . $imovel->getBanheiro() . "<br />";
+                            echo "Área: " . $imovel->getArea() . " m<sup>2</sup><br />";
+                            echo "Suite(s): " . (($imovel->getSuite() != "nenhuma") ? '<span class="text-primary">' . $imovel->getSuite() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
+                            echo "Academia: " . (($imovel->getAcademia() == "SIM") ? '<span class="text-primary">' . $imovel->getAcademia() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
+                            echo "Área Serviço: " . (($imovel->getAreaServico() == "SIM") ? '<span class="text-primary">' . $imovel->getAreaServico() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
+                            echo "Dependencia de Empregada: " . (($imovel->getDependenciaEmpregada() == "SIM") ? '<span class="text-primary">' . $imovel->getDependenciaEmpregada() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
+                            echo "Piscina: " . (($imovel->getPiscina() == "SIM") ? '<span class="text-primary">' . $imovel->getPiscina() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
+                            echo "Quadra: " . (($imovel->getQuadra() == "SIM") ? '<span class="text-primary">' . $imovel->getQuadra() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
+                            if ($tipoImovel == "apartamento") {
+                                echo "Elevador: " . (($imovel->getElevador() == "SIM") ? '<span class="text-primary">' . $imovel->getElevador() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
+                                echo "Sacada: " . (($imovel->getSacada() == "SIM") ? '<span class="text-primary">' . $imovel->getSacada() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
+                                echo "Cobertura: " . (($imovel->getCobertura() == "SIM") ? '<span class="text-primary">' . $imovel->getCobertura() . '</span>' : '<span class="text-danger">NÃO</span>') . '<br />';
+                                echo "Condomínio: " . (($imovel->getCondominio() != "") ? '<span class="text-primary">' . $imovel->getCondominio() . '</span>' : '<span class="text-danger">Não Informado</span>') . '<br />';
+                                echo "Andar: " . (($imovel->getAndar() != "") ? '<span class="text-primary">' . $imovel->getAndar() . '</span>' : '<span class="text-danger">Não Informado</span>') . '<br />';
+                            }
+                        } else {
+                            echo "Tipo: " . $imovel->getTipo() . "<br />";
+                            echo "Área: " . $imovel->getArea() . " m<sup>2</sup><br />";
                         }
                         ?>
 
@@ -141,19 +156,19 @@
                                     <div class="form-group">
                                         <label class="col-lg-3 control-label" for="txtTitulo">Título</label>
                                         <div class="col-lg-8">
-                                            <input type="text" class="form-control" id="txtTitulo" name="txtTitulo" placeholder="Informe o Título" maxlength="50" value="<?php echo $item["anuncio"]->getTituloAnuncio();?>" >
+                                            <input type="text" class="form-control" id="txtTitulo" name="txtTitulo" placeholder="Informe o Título" maxlength="50" value="<?php echo $item["anuncio"]->getTituloAnuncio(); ?>" >
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-lg-3 control-label" for="txtDescricao"> Descrição </label>
                                         <div class="col-lg-8">
-                                            <textarea maxlength="150" id="txtDescricao" name="txtDescricao" class="form-control" placeholder="Informe uma Descrição do Imóvel"> <?php echo $item["anuncio"]->getDescricaoAnuncio();?></textarea>
+                                            <textarea maxlength="150" id="txtDescricao" name="txtDescricao" class="form-control" placeholder="Informe uma Descrição do Imóvel"> <?php echo $item["anuncio"]->getDescricaoAnuncio(); ?></textarea>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-lg-3 control-label" for="txtValor">Valor</label>
                                         <div class="col-lg-4">
-                                            <input type="text" class="form-control" id="txtValor" name="txtValor" placeholder="Valor do Imóvel"  value="<?php echo $item["anuncio"]->getValor();?>"> 
+                                            <input type="text" class="form-control" id="txtValor" name="txtValor" placeholder="Valor do Imóvel"  value="<?php echo $item["anuncio"]->getValor(); ?>"> 
                                         </div>
                                         <span class="col-lg-4 ">(Não informar os centavos)</span>
                                     </div>
@@ -173,74 +188,79 @@
                                     <div class="form-group">
                                         <label class="col-lg-offset-1 col-lg-9" for="sltCamposVisiveis">Escolha quais informações do imóvel deseja exibir:</label>
                                     </div>
-                                    <?php 
-                                    
-                                    if($item["anuncio"]->getId()!=""){
-                                        $arrayValoresVisiveis = json_decode($item["anuncio"]->getValorVisivel()); 
+                                    <?php
+                                    if ($item["anuncio"]->getId() != "") {
+                                        $arrayValoresVisiveis = json_decode($item["anuncio"]->getValorVisivel());
                                     } else {
-                                        $arrayValoresVisiveis = array("quarto","banheiro","garagem","academia","areaservico","dependenciaempregada","elevador","piscina","quadra","area","suite","andar","condominio","cobertura","sacada"); 
+                                        $arrayValoresVisiveis = array("quarto", "banheiro", "garagem", "academia", "areaservico", "dependenciaempregada", "elevador", "piscina", "quadra", "area", "suite", "andar", "condominio", "cobertura", "sacada");
                                     }
-                                                                            
                                     ?>
                                     <div class="form-group">
                                         <div class="col-sm-offset-1 col-sm-4">
                                             <div class="panel panel-default">
                                                 <div class="panel-heading">Básicas</div>
                                                 <div class="panel-body">
-                                                    <label class="checkbox">
-                                                        <input type="checkbox" name="sltCamposVisiveis[]" value="quarto" <?php echo (in_array("quarto",$arrayValoresVisiveis)) ? "checked=\"checked\"" : "" ?> > Quarto - <?php echo $imovel->getQuarto(); ?>
-                                                    </label>
-                                                    <label class="checkbox">
-                                                        <input type="checkbox" name="sltCamposVisiveis[]" value="banheiro" <?php echo (in_array("banheiro",$arrayValoresVisiveis)) ? "checked=\"checked\"" : "" ?> > Banheiro - <?php echo $imovel->getBanheiro(); ?>
-                                                    </label>
-                                                    <label class="checkbox">
-                                                        <input type="checkbox" name="sltCamposVisiveis[]" value="garagem" <?php echo (in_array("garagem",$arrayValoresVisiveis)) ? "checked=\"checked\"" : "" ?> > Garagem - <?php echo $imovel->getGaragem(); ?>
-                                                    </label>
+                                                    <?php if ($imovel->getTipo() != "terreno") { ?>
+                                                        <label class="checkbox">
+                                                            <input type="checkbox" name="sltCamposVisiveis[]" value="quarto" <?php echo (in_array("quarto", $arrayValoresVisiveis)) ? "checked=\"checked\"" : "" ?> > Quarto - <?php echo $imovel->getQuarto(); ?>
+                                                        </label>
+                                                        <label class="checkbox">
+                                                            <input type="checkbox" name="sltCamposVisiveis[]" value="banheiro" <?php echo (in_array("banheiro", $arrayValoresVisiveis)) ? "checked=\"checked\"" : "" ?> > Banheiro - <?php echo $imovel->getBanheiro(); ?>
+                                                        </label>
+                                                        <label class="checkbox">
+                                                            <input type="checkbox" name="sltCamposVisiveis[]" value="garagem" <?php echo (in_array("garagem", $arrayValoresVisiveis)) ? "checked=\"checked\"" : "" ?> > Garagem - <?php echo $imovel->getGaragem(); ?>
+                                                        </label>
+                                                        <?php
+                                                    } else {
+                                                        echo "Não se aplica";
+                                                    }
+                                                    ?>
                                                 </div>
                                             </div>
                                         </div>
+
                                         <div class="col-sm-4">
                                             <div class="panel panel-default">
                                                 <div class="panel-heading">Adicionais</div>
                                                 <div class="panel-body">
                                                     <?php if ($imovel->getAcademia() == "SIM") { ?>
                                                         <label class="checkbox">
-                                                            <input type="checkbox" name="sltCamposVisiveis[]" value="academia" <?php echo (in_array("academia",$arrayValoresVisiveis)) ? "checked=\"checked\"" : "" ?> > Academia
+                                                            <input type="checkbox" name="sltCamposVisiveis[]" value="academia" <?php echo (in_array("academia", $arrayValoresVisiveis)) ? "checked=\"checked\"" : "" ?> > Academia
                                                         </label>
                                                     <?php } ?>
                                                     <?php if ($imovel->getAreaServico() == "SIM") { ?>
                                                         <label class="checkbox">
-                                                            <input type="checkbox" name="sltCamposVisiveis[]" value="areaservico" <?php echo (in_array("areaservico",$arrayValoresVisiveis)) ? "checked=\"checked\"" : "" ?> > Área de Serviço
+                                                            <input type="checkbox" name="sltCamposVisiveis[]" value="areaservico" <?php echo (in_array("areaservico", $arrayValoresVisiveis)) ? "checked=\"checked\"" : "" ?> > Área de Serviço
                                                         </label>
                                                     <?php } ?>
                                                     <?php if ($imovel->getDependenciaEmpregada() == "SIM") { ?>
                                                         <label class="checkbox">
-                                                            <input type="checkbox" name="sltCamposVisiveis[]" value="dependenciaempregada" <?php echo (in_array("dependenciaempregada",$arrayValoresVisiveis)) ? "checked=\"checked\"" : "" ?> > Dependência de Empregada
+                                                            <input type="checkbox" name="sltCamposVisiveis[]" value="dependenciaempregada" <?php echo (in_array("dependenciaempregada", $arrayValoresVisiveis)) ? "checked=\"checked\"" : "" ?> > Dependência de Empregada
                                                         </label>
                                                     <?php } ?>
                                                     <?php if ($imovel->getElevador() == "SIM") { ?>
                                                         <label class="checkbox">
-                                                            <input type="checkbox" name="sltCamposVisiveis[]" value="elevador" <?php echo (in_array("elevador",$arrayValoresVisiveis)) ? "checked=\"checked\"" : "" ?> > Elevador
+                                                            <input type="checkbox" name="sltCamposVisiveis[]" value="elevador" <?php echo (in_array("elevador", $arrayValoresVisiveis)) ? "checked=\"checked\"" : "" ?> > Elevador
                                                         </label>
                                                     <?php } ?>
                                                     <?php if ($imovel->getPiscina() == "SIM") { ?>
                                                         <label class="checkbox">
-                                                            <input type="checkbox" name="sltCamposVisiveis[]" value="piscina" <?php echo (in_array("piscina",$arrayValoresVisiveis)) ? "checked=\"checked\"" : "" ?> > Piscina
+                                                            <input type="checkbox" name="sltCamposVisiveis[]" value="piscina" <?php echo (in_array("piscina", $arrayValoresVisiveis)) ? "checked=\"checked\"" : "" ?> > Piscina
                                                         </label>
                                                     <?php } ?>
                                                     <?php if ($imovel->getQuadra() == "SIM") { ?>
                                                         <label class="checkbox">
-                                                            <input type="checkbox" name="sltCamposVisiveis[]" value="quadra" <?php echo (in_array("quadra",$arrayValoresVisiveis)) ? "checked=\"checked\"" : "" ?> > Quadra
+                                                            <input type="checkbox" name="sltCamposVisiveis[]" value="quadra" <?php echo (in_array("quadra", $arrayValoresVisiveis)) ? "checked=\"checked\"" : "" ?> > Quadra
                                                         </label>
                                                     <?php } ?>
                                                     <?php if ($imovel->getArea() != "") { ?>
                                                         <label class="checkbox">
-                                                            <input type="checkbox" name="sltCamposVisiveis[]" value="area" <?php echo (in_array("area",$arrayValoresVisiveis)) ? "checked=\"checked\"" : "" ?> > Área m<sup>2</sup> - <?php echo $imovel->getArea(); ?>
+                                                            <input type="checkbox" name="sltCamposVisiveis[]" value="area" <?php echo (in_array("area", $arrayValoresVisiveis)) ? "checked=\"checked\"" : "" ?> > Área m<sup>2</sup> - <?php echo $imovel->getArea(); ?>
                                                         </label>
                                                     <?php } ?>
                                                     <?php if ($imovel->getSuite() != "") { ?>
                                                         <label class="checkbox">
-                                                            <input type="checkbox" name="sltCamposVisiveis[]" value="suite" <?php echo (in_array("suite",$arrayValoresVisiveis)) ? "checked=\"checked\"" : "" ?> > Suíte - <?php echo $imovel->getSuite(); ?>
+                                                            <input type="checkbox" name="sltCamposVisiveis[]" value="suite" <?php echo (in_array("suite", $arrayValoresVisiveis)) ? "checked=\"checked\"" : "" ?> > Suíte - <?php echo $imovel->getSuite(); ?>
                                                         </label>
                                                     <?php } ?>
                                                 </div>
@@ -251,31 +271,32 @@
                                                 <div class="panel-heading">Apartamento</div>
                                                 <div class="panel-body">
                                                     <?php if ($tipoImovel == "apartamento") { ?>
-                                                    <?php if ($imovel->getAndar() == "" && $imovel->getCondominio() == "" && $imovel->getCobertura() == "NAO" && $imovel->getSacada() == "NAO") {
-                                                        echo "Não informado no cadastro do imóvel.";
-                                                        
-                                                    } else { ?>                                                   
-                                                        <?php if ($imovel->getAndar() != "") { ?>
-                                                            <label class="checkbox">
-                                                                <input type="checkbox" name="sltCamposVisiveis[]" value="andar" <?php echo (in_array("andar",$arrayValoresVisiveis)) ? "checked=\"checked\"" : "" ?> > Andar - <?php echo $imovel->getAndar(); ?>
-                                                            </label>
-                                                        <?php } ?>                                                
-                                                        <?php if ($imovel->getCondominio() != "") { ?>
-                                                            <label class="checkbox">
-                                                                <input type="checkbox" name="sltCamposVisiveis[]" value=condominio <?php echo (in_array("condominio",$arrayValoresVisiveis)) ? "checked=\"checked\"" : "" ?> > Condomínio - <?php echo $imovel->getCondominio(); ?>
-                                                            </label>
-                                                        <?php } ?>                                                                                                    
-                                                        <?php if ($imovel->getCobertura() == "SIM") { ?>
-                                                            <label class="checkbox">
-                                                                <input type="checkbox" name="sltCamposVisiveis[]" value="cobertura" <?php echo (in_array("cobertura",$arrayValoresVisiveis)) ? "checked=\"checked\"" : "" ?> > Cobertura
-                                                            </label>
-                                                        <?php } ?>                                                
-                                                        <?php if ($imovel->getSacada() == "SIM") { ?>
-                                                            <label class="checkbox">
-                                                                <input type="checkbox" name="sltCamposVisiveis[]" value="sacada" <?php echo (in_array("sacada",$arrayValoresVisiveis)) ? "checked=\"checked\"" : "" ?> > Sacada
-                                                            </label>
-                                                        <?php } ?> 
                                                         <?php
+                                                        if ($imovel->getAndar() == "" && $imovel->getCondominio() == "" && $imovel->getCobertura() == "NAO" && $imovel->getSacada() == "NAO") {
+                                                            echo "Não informado no cadastro do imóvel.";
+                                                        } else {
+                                                            ?>                                                   
+                                                            <?php if ($imovel->getAndar() != "") { ?>
+                                                                <label class="checkbox">
+                                                                    <input type="checkbox" name="sltCamposVisiveis[]" value="andar" <?php echo (in_array("andar", $arrayValoresVisiveis)) ? "checked=\"checked\"" : "" ?> > Andar - <?php echo $imovel->getAndar(); ?>
+                                                                </label>
+                                                            <?php } ?>                                                
+                                                            <?php if ($imovel->getCondominio() != "") { ?>
+                                                                <label class="checkbox">
+                                                                    <input type="checkbox" name="sltCamposVisiveis[]" value=condominio <?php echo (in_array("condominio", $arrayValoresVisiveis)) ? "checked=\"checked\"" : "" ?> > Condomínio - <?php echo $imovel->getCondominio(); ?>
+                                                                </label>
+                                                            <?php } ?>                                                                                                    
+                                                            <?php if ($imovel->getCobertura() == "SIM") { ?>
+                                                                <label class="checkbox">
+                                                                    <input type="checkbox" name="sltCamposVisiveis[]" value="cobertura" <?php echo (in_array("cobertura", $arrayValoresVisiveis)) ? "checked=\"checked\"" : "" ?> > Cobertura
+                                                                </label>
+                                                            <?php } ?>                                                
+                                                            <?php if ($imovel->getSacada() == "SIM") { ?>
+                                                                <label class="checkbox">
+                                                                    <input type="checkbox" name="sltCamposVisiveis[]" value="sacada" <?php echo (in_array("sacada", $arrayValoresVisiveis)) ? "checked=\"checked\"" : "" ?> > Sacada
+                                                                </label>
+                                                            <?php } ?> 
+                                                            <?php
                                                         }
                                                     } else {
                                                         echo "Não se aplica.";
@@ -456,13 +477,13 @@
         });
         $('#MyWizard').on('changed', function(e, data) {
             var item = $('#MyWizard').wizard('selectedItem');
-            
+
             if (item.step === 1) {
                 $('#btnWizardPrev').hide();
-            }else{
+            } else {
                 $('#btnWizardPrev').show();
             }
-            
+
             if (item.step === 2) {
                 var endereco = "<?php echo $endereco; ?>";
                 //######### INICIO DO CEP ########
@@ -490,7 +511,7 @@
                 $("#colReferencia").click(function() {
                     $('#myModal').modal('show');
                 })
-                $("#colImovelFinalidade").html('<span class="label label-primary">' + $("#sltFinalidade :selected").text() + '</span>' );
+                $("#colImovelFinalidade").html('<span class="label label-primary">' + $("#sltFinalidade :selected").text() + '</span>');
                 $("#colPlano").html($("#sltPlano :selected").text());
                 $("#colTitulo").html($("#txtTitulo").val());
                 $("#colDescricao").html($("#txtDescricao").val());
@@ -676,7 +697,7 @@
             url: "index.php",
             dataType: 'json',
             context: $('#fileupload')[0],
-            data: { "anuncio": <?php echo ($item["anuncio"]->getId()!="" ? $item["anuncio"]->getId(): "0" ); ?>, "entidade" : "Anuncio", "acao" : "reativarAnuncioImagem" }
+            data: {"anuncio": <?php echo ($item["anuncio"]->getId() != "" ? $item["anuncio"]->getId() : "0" ); ?>, "entidade": "Anuncio", "acao": "reativarAnuncioImagem"}
         }).always(function() {
             $(this).removeClass('fileupload-processing');
         }).done(function(result) {

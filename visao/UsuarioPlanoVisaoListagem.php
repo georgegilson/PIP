@@ -32,9 +32,11 @@
 
 </script>
 <div class="container">
-    <div class="page-header">
-        <h1>Comprar Planos</h1>
-    </div>
+    <ol class="breadcrumb">
+        <li><a href="index.php">Início</a></li>
+        <li><a href="index.php?entidade=Usuario&acao=meuPIP">Meu PIP</a></li>
+        <li class="active">Comprar Planos</li>
+    </ol>
     <!-- Primeira Linha -->        
     <div class="row">
         <div class="col-lg-6">

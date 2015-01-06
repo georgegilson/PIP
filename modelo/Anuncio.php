@@ -174,20 +174,16 @@ class Anuncio {
 
     function buscarDestaqueImagemMiniatura() {
         $imagens = $this->getImagem();
-//        var_dump($imagens);
-        if (count($imagens) > 0) {
+        if (is_array($imagens)) {
             foreach ($imagens as $imagem) {
-                /*$objeto = new Imagem();var_dump($imagem);
-                foreach ($imagem as $key => $value) {
-                    $objeto->$key = $value;
-                }*/
                 if($imagem->getDestaque() == "SIM"){
-                    
-                    return $imagem->miniatura ();
+                    $miniatura = $imagem->miniatura();
                 }
             }
+        } else {
+            $miniatura = $imagens->miniatura();
         }
-        return null;
+        return $miniatura;
     }
 
 }

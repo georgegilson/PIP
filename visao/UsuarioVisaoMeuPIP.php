@@ -2,9 +2,10 @@
 $item = $this->getItem();
 ?>
 <div class="container">
-    <div class="page-header">
-        <h1>Meu PIP!</h1>
-    </div>
+    <ol class="breadcrumb">
+        <li><a href="index.php">Início</a></li>
+        <li class="active">Meu PIP</li>
+    </ol>
     <div class="row">
 
         <div class="panel panel-primary">
@@ -77,7 +78,7 @@ $item = $this->getItem();
                         <a href="index.php?entidade=Anuncio&acao=listarCadastrar">
                             <button type="button" class="btn btn-info">
                                 <span class="glyphicon glyphicon-bullhorn"></span> 
-                                <span class="glyphicon glyphicon-plus"></span> Cadastrar Anúncio
+                                <span class="glyphicon glyphicon-plus"></span> Publicar Anúncio
                             </button></a>
                         <!-- <button type="button" class="btn btn-info">
                              <span class="glyphicon glyphicon-bullhorn"></span> 

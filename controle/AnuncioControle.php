@@ -35,8 +35,16 @@ class AnuncioControle {
             if ($selecionarImovel) {
                 //verificar se o anuncio ja foi publicado e redirecionar para a tela de consulta
                 $anuncios = $selecionarImovel[0]->getAnuncio();
-                if (count($anuncios) > 0) {
-                    if ($anuncios->getStatus() == "cadastrar") {
+                if (is_array($anuncios)) {
+                    foreach ($anuncios as $anuncio) {
+                        if ($anuncio->getStatus() == "cadastrado") {
+                            $redirecionamento = $this;
+                            $redirecionamento->listarCadastrar();
+                            return;
+                        }
+                    }
+                } else {
+                    if ($anuncios->getStatus() == "cadastrado") {
                         $redirecionamento = $this;
                         $redirecionamento->listarCadastrar();
                         return;
@@ -130,55 +138,75 @@ class AnuncioControle {
             $anuncio = new Anuncio();
             $genericoDAO = new GenericoDAO();
             $consultasAdHoc = new ConsultasAdHoc();
-            $listaAnuncio = $consultasAdHoc->ConsultarAnunciosPorUsuario($_SESSION['idusuario']);
+            $listaAnuncio = $consultasAdHoc->ConsultarAnunciosPorUsuario($_SESSION['idusuario'], null, 'cadastrado');
             foreach ($listaAnuncio as $anuncio) {
                 $imovel = $genericoDAO->consultar(new Imovel(), false, array("id" => $anuncio->getIdImovel()));
                 $anuncio->setImovel($imovel[0]);
                 $historicoAluguelVenda = $genericoDAO->consultar(new HistoricoAluguelVenda(), false, array("idAnuncio" => $anuncio->getId()));
                 $anuncio->setHistoricoAluguelVenda($historicoAluguelVenda[0]);
-                $listarAnuncio[] = $anuncio;
+                $listarAnuncios[] = $anuncio;
             }
             //visao
             $visao = new Template();
-            $visao->setItem($listarAnuncio);
+            $item["listaAnuncio"] = $listarAnuncios;
+            $item["tipoListagemAnuncio"] = "ativo";
+            $visao->setItem($item);
             $visao->exibir('AnuncioVisaoListagem.php');
         }
     }
+
     function listarFinalizado() {
         if (Sessao::verificarSessaoUsuario()) {
             $anuncio = new Anuncio();
             $genericoDAO = new GenericoDAO();
             $consultasAdHoc = new ConsultasAdHoc();
-            $listaAnuncio = $consultasAdHoc->ConsultarAnunciosPorUsuario($_SESSION['idusuario']);
+            $listaAnuncio = $consultasAdHoc->ConsultarAnunciosPorUsuario($_SESSION['idusuario'], null, 'finalizado');
             foreach ($listaAnuncio as $anuncio) {
                 $imovel = $genericoDAO->consultar(new Imovel(), false, array("id" => $anuncio->getIdImovel()));
                 $anuncio->setImovel($imovel[0]);
                 $historicoAluguelVenda = $genericoDAO->consultar(new HistoricoAluguelVenda(), false, array("idAnuncio" => $anuncio->getId()));
                 $anuncio->setHistoricoAluguelVenda($historicoAluguelVenda[0]);
-                $listarAnuncio[] = $anuncio;
+                $listarAnuncios[] = $anuncio;
             }
             //visao
             $visao = new Template();
-            $visao->setItem($listarAnuncio);
+            $item["listaAnuncio"] = $listarAnuncios;
+            $item["tipoListagemAnuncio"] = "finalizado";
+            $visao->setItem($item);
             $visao->exibir('AnuncioVisaoListagem.php');
         }
     }
+
     function listarReativar() {
         if (Sessao::verificarSessaoUsuario()) {
             $anuncio = new Anuncio();
             $genericoDAO = new GenericoDAO();
             $consultasAdHoc = new ConsultasAdHoc();
-            $listaAnuncio = $consultasAdHoc->ConsultarAnunciosPorUsuario($_SESSION['idusuario']);
-            foreach ($listaAnuncio as $anuncio) {
-                $imovel = $genericoDAO->consultar(new Imovel(), false, array("id" => $anuncio->getIdImovel()));
-                $anuncio->setImovel($imovel[0]);
-                $historicoAluguelVenda = $genericoDAO->consultar(new HistoricoAluguelVenda(), false, array("idAnuncio" => $anuncio->getId()));
-                $anuncio->setHistoricoAluguelVenda($historicoAluguelVenda[0]);
-                $listarAnuncio[] = $anuncio;
+            $listarAnuncios = array();
+            $listaAnuncio = $consultasAdHoc->ConsultarAnunciosPorUsuario($_SESSION['idusuario'], null, 'finalizado');
+            if (is_array($listaAnuncio)) {
+                foreach ($listaAnuncio as $anuncio) {
+                    if ($anuncio->getFinalidade() == "aluguel") {
+                        $imovel = $genericoDAO->consultar(new Imovel(), false, array("id" => $anuncio->getIdImovel()));
+                        $anuncio->setImovel($imovel[0]);
+                        $historicoAluguelVenda = $genericoDAO->consultar(new HistoricoAluguelVenda(), false, array("idAnuncio" => $anuncio->getId()));
+                        $anuncio->setHistoricoAluguelVenda($historicoAluguelVenda[0]);
+                        $listarAnuncios[] = $anuncio;
+                    }
+                }
+                if (is_array($listarAnuncios)) {
+                    $listaImoveis = array();
+                    foreach ($consultasAdHoc->ConsultarAnunciosPorUsuario($_SESSION['idusuario'], null, 'cadastrado') as $anuncio) {
+                        $listaImoveis[] = $anuncio->getIdimovel();
+                    }
+                }
             }
             //visao
             $visao = new Template();
-            $visao->setItem($listarAnuncio);
+            $item["listaAnuncio"] = $listarAnuncios;
+            $item["listaImoveisAnunciosPublicados"] = $listaImoveis;
+            $item["tipoListagemAnuncio"] = "reativar";
+            $visao->setItem($item);
             $visao->exibir('AnuncioVisaoListagem.php');
         }
     }
@@ -187,14 +215,12 @@ class AnuncioControle {
         if (Sessao::verificarSessaoUsuario()) {
             $consultasAdHoc = new ConsultasAdHoc();
             $listaImoveis = $consultasAdHoc->ConsultarImoveisNaoAnunciadosPorUsuario($_SESSION['idusuario']);
-
             #verificar a melhor forma de tratar o blindado recursivo
             foreach ($listaImoveis as $selecionarImovel) {
                 $selecionarEndereco = $consultasAdHoc->consultar(new Endereco(), true, array("id" => $selecionarImovel->getIdEndereco()));
                 $selecionarImovel->setEndereco($selecionarEndereco[0]);
                 $listarImovel[] = $selecionarImovel;
             }
-
             //visao
             $visao = new Template();
             $visao->setItem($listarImovel);
@@ -212,11 +238,9 @@ class AnuncioControle {
                 $entidadeAnuncio->setStatus('finalizado');
                 $entidadeAnuncio->setDatahoraalteracao(date('d/m/Y H:i:s'));
                 $genericoDAO->editar($entidadeAnuncio);
-
                 $historicoAluguelVenda = new HistoricoAluguelVenda();
                 $entidadeHistoricoAluguelVenda = $historicoAluguelVenda->cadastrar($parametros);
                 $resultadoFinalizarNegocio = $genericoDAO->cadastrar($entidadeHistoricoAluguelVenda);
-
                 if ($resultadoFinalizarNegocio) {
                     echo json_encode(array("resultado" => 1));
                 } else {
@@ -552,33 +576,33 @@ class AnuncioControle {
                 //trazer todos os anuncios cadastrados para o usuário
                 $adHoc = new ConsultasAdHoc();
                 $itensAnuncio = $adHoc->ConsultarAnunciosPorUsuario($id, null, 'cadastrado');
-               
-                if(!empty($itensAnuncio)){ //verificar se o usuário possui anuncios
-                foreach ($itensAnuncio as $anuncio) {
-                    $imovel = $genericoDAO->consultar(new Imovel(), false, array("id" => $anuncio->getIdImovel()));
-                    $anuncio->setImovel($imovel[0]);
-                    $endereco = $genericoDAO->consultar(new Endereco(), true, array("id" => $anuncio->getImovel()->getIdEndereco()));
-                    $anuncio->getImovel()->setEndereco($endereco[0]);
-                    $imagens = $genericoDAO->consultar(new Imagem(), false, array("id" => $anuncio->getIdImovel()));
-                    $anuncio->setImagem($imagens[0]);
-                    /*$user = $genericoDAO->consultar(new Usuario(), false, array("id" => $anuncio->getImovel()->getIdUsuario()));
-                    $anuncio->getImovel()->setUsuario($user[0]);
-                    $enderecoUsuario = $genericoDAO->consultar(new Endereco(), false, array("id" => c);
-                    $anuncio->getImovel()->getUsuario()->setEndereco($enderecoUsuario[0]);
-                    $telefoneUsuario = $genericoDAO->consultar(new Telefone(), false, array("idusuario" => $anuncio->getImovel()->getIdUsuario()));
-                    $anuncio->getImovel()->getUsuario()->setTelefone($telefoneUsuario);
-                    $cidadeUsuario = $genericoDAO->consultar(new Cidade(), false, array("id" => $anuncio->getImovel()->getUsuario()->getEndereco()->getIdCidade()));
-                    $anuncio->getImovel()->getUsuario()->getEndereco()->setCidade($cidadeUsuario[0]);
-                    $estadoUsuario = $genericoDAO->consultar(new Estado(), false, array("id" => $anuncio->getImovel()->getUsuario()->getEndereco()->getIdEstado()));
-                    $anuncio->getImovel()->getUsuario()->getEndereco()->setEstado($estadoUsuario[0]);*/
-                    $itensAnuncios[] = $anuncio;
+
+                if (!empty($itensAnuncio)) { //verificar se o usuário possui anuncios
+                    foreach ($itensAnuncio as $anuncio) {
+                        $imovel = $genericoDAO->consultar(new Imovel(), false, array("id" => $anuncio->getIdImovel()));
+                        $anuncio->setImovel($imovel[0]);
+                        $endereco = $genericoDAO->consultar(new Endereco(), true, array("id" => $anuncio->getImovel()->getIdEndereco()));
+                        $anuncio->getImovel()->setEndereco($endereco[0]);
+                        $imagens = $genericoDAO->consultar(new Imagem(), false, array("id" => $anuncio->getIdImovel()));
+                        $anuncio->setImagem($imagens[0]);
+                        /* $user = $genericoDAO->consultar(new Usuario(), false, array("id" => $anuncio->getImovel()->getIdUsuario()));
+                          $anuncio->getImovel()->setUsuario($user[0]);
+                          $enderecoUsuario = $genericoDAO->consultar(new Endereco(), false, array("id" => c);
+                          $anuncio->getImovel()->getUsuario()->setEndereco($enderecoUsuario[0]);
+                          $telefoneUsuario = $genericoDAO->consultar(new Telefone(), false, array("idusuario" => $anuncio->getImovel()->getIdUsuario()));
+                          $anuncio->getImovel()->getUsuario()->setTelefone($telefoneUsuario);
+                          $cidadeUsuario = $genericoDAO->consultar(new Cidade(), false, array("id" => $anuncio->getImovel()->getUsuario()->getEndereco()->getIdCidade()));
+                          $anuncio->getImovel()->getUsuario()->getEndereco()->setCidade($cidadeUsuario[0]);
+                          $estadoUsuario = $genericoDAO->consultar(new Estado(), false, array("id" => $anuncio->getImovel()->getUsuario()->getEndereco()->getIdEstado()));
+                          $anuncio->getImovel()->getUsuario()->getEndereco()->setEstado($estadoUsuario[0]); */
+                        $itensAnuncios[] = $anuncio;
                     }
-                $item["anuncio"] = $itensAnuncios;
+                    $item["anuncio"] = $itensAnuncios;
                 }
-                $visao = new Template();         
+                $visao = new Template();
                 $item["usuario"] = $genericoDAO->consultar(new Usuario(), true, array("id" => $selecionarAnuncioUsuario[0]->getId()));
                 $item["cidadeEstado"] = $genericoDAO->consultar(new Endereco(), true, array("id" => $selecionarAnuncioUsuario[0]->getIdEndereco()));
-                
+
                 $visao->setItem($item);
                 $visao->exibir('AnuncioVisaoUsuario.php');
             }
@@ -592,18 +616,18 @@ class AnuncioControle {
         if (count($imagens) > 0) {
             foreach ($imagens as $imagem) {
                 var_dump($imagens);
-/*
+                /*
 
-                ["diretorio":"Imagem":private] =>
-                string(53) "http://localhost:8000\/assets/imagens/foto_padrao.png"
-                ["legenda":"Imagem":private] =>
-                NULL
-                ["destaque":"Imagem":private] =>
-                string(3) "SIM"
+                  ["diretorio":"Imagem":private] =>
+                  string(53) "http://localhost:8000\/assets/imagens/foto_padrao.png"
+                  ["legenda":"Imagem":private] =>
+                  NULL
+                  ["destaque":"Imagem":private] =>
+                  string(3) "SIM"
 
 
 
-  */              $imgUpload = new stdClass();
+                 */ $imgUpload = new stdClass();
                 $imgUpload->name = "Desert.jpg";
                 $imgUpload->size = "845941";
                 $imgUpload->type = "image\/jpeg";
@@ -634,7 +658,5 @@ class AnuncioControle {
          * 
          */
     }
-    
-    
 
 }

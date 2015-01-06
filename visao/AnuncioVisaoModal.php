@@ -64,40 +64,45 @@ if ($item == null) {
                         </div>
                         <div data-row-span="2">
                             <div data-field-span="1">
-                                <label>Condição</label>
-                                <?php echo $imovel->getCondicao(); ?>
+                                <?php if ($imovel->getTipo() != "terreno") { ?>
+                                    <label>Condição</label>
+                                    <?php echo $imovel->getCondicao(); ?>
+                                <?php } else { ?>
+                                    <label>Área</label>
+                                    <?php echo $imovel->getArea(); ?> m<sup>2</sup>
+                                <?php } ?>
                             </div>
-
                             <div data-field-span="1">
                                 <label>Valor</label>
                                 <span id="spanValor"><?php echo $anuncio->getValor(); ?></span>
                             </div>
                         </div>                    
-
-                        <div data-row-span="2">
-                            <div data-field-span="1">
-                                <label>Quartos</label>
-                                <?php echo $imovel->getQuarto(); ?>
-                            </div>
-                            <div data-field-span="1">
-                                <label>Banheiros</label>
-                                <?php echo $imovel->getBanheiro(); ?>
-                            </div>
-                        </div> 
-                        <div data-row-span="3">
-                            <div data-field-span="1">
-                                <label>Área</label>
-                                <?php echo $imovel->getArea(); ?> m<sup>2</sup>
-                            </div>
-                            <div data-field-span="1">
-                                <label>Suítes</label>
-                                <?php echo $imovel->getSuite(); ?>
-                            </div>
-                            <div data-field-span="1">
-                                <label>Garagem</label>
-                                <?php echo $imovel->getGaragem(); ?>
-                            </div>
-                        </div> 
+                        <?php if ($imovel->getTipo() != "terreno") { ?>
+                            <div data-row-span="2">
+                                <div data-field-span="1">
+                                    <label>Quartos</label>
+                                    <?php echo $imovel->getQuarto(); ?>
+                                </div>
+                                <div data-field-span="1">
+                                    <label>Banheiros</label>
+                                    <?php echo $imovel->getBanheiro(); ?>
+                                </div>
+                            </div> 
+                            <div data-row-span="3">
+                                <div data-field-span="1">
+                                    <label>Área</label>
+                                    <?php echo $imovel->getArea(); ?> m<sup>2</sup>
+                                </div>
+                                <div data-field-span="1">
+                                    <label>Suítes</label>
+                                    <?php echo $imovel->getSuite(); ?>
+                                </div>
+                                <div data-field-span="1">
+                                    <label>Garagem</label>
+                                    <?php echo $imovel->getGaragem(); ?>
+                                </div>
+                            </div> 
+                        <?php } ?>
                         <div data-row-span="1">
                             <div data-field-span="1">
                                 <label>Localizado em <?php echo $endereco->getCidade()->getNome(); ?>
@@ -308,33 +313,37 @@ if ($item == null) {
                                     echo "<span class='label label-primary'>" . strtoupper($anuncioTelefone->getOperadora()) . " - " . strtoupper($anuncioTelefone->getNumero()) . "</span>";
                                 }
                                 ?>
-                        <?php } else echo "<span class='label label-primary'>" . strtoupper($usuario->getTelefone()->getOperadora()) . " - " . strtoupper($usuario->getTelefone()->getNumero()) . "</span>"; ?>
+                            <?php
+                            }
+                            else
+                                echo "<span class='label label-primary'>" . strtoupper($usuario->getTelefone()->getOperadora()) . " - " . strtoupper($usuario->getTelefone()->getNumero()) . "</span>";
+                            ?>
                         </div>
                         <?php
                         if ($usuario->getTipousuario() == "pj") {
                             echo '<div class = "col-lg-8" id = "divFotoImagem"> <br>';
 //                            echo '<div id = "forms" class = "panel panel-default">';
                             if ($usuario->getFoto() != "") {
-                                echo '<img src="'. PIPURL . '/fotos/usuarios/'. $usuario->getFoto() . '"  width="120" height="120" style="margin-left: 100px">';                             
-                            } else { 
-                                echo '<img src="' .PIPURL . '/assets/imagens/foto_padrao.png"  width="120" height="120" style="margin-left: 100px">';
-                        } 
+                                echo '<img src="' . PIPURL . '/fotos/usuarios/' . $usuario->getFoto() . '"  width="120" height="120" style="margin-left: 100px">';
+                            } else {
+                                echo '<img src="' . PIPURL . '/assets/imagens/foto_padrao.png"  width="120" height="120" style="margin-left: 100px">';
+                            }
 
 //                       echo '</div>';
-                    echo '</div>';
-                    }
-                    ?>
-            </div>
-        </div>
+                            echo '</div>';
+                        }
+                        ?>
+                    </div>
+                </div>
 
-        <div class="modal-footer">
-            <!--        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                    <button type="submit" id="btnEnviarEmailAnuncio" class="btn btn-primary">Enviar</button>-->
-        </div>
+                <div class="modal-footer">
+                    <!--        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                            <button type="submit" id="btnEnviarEmailAnuncio" class="btn btn-primary">Enviar</button>-->
+                </div>
 
-        </form>
-        <!--    </div>
-          </div>-->
+            </form>
+            <!--    </div>
+              </div>-->
 
         </div>
 
@@ -402,22 +411,24 @@ if ($item == null) {
                                     }
                                     ?></td>
                             </tr>
-                            <tr <?php
-                            if ($imovel->getElevador() == "SIM") {
-                                print "class=success";
-                            } else {
-                                print "class=danger";
-                            }
-                            ?>>
-                                <td>Elevador</td>
-                                <td><?php
-                                    if ($imovel->getElevador() == "SIM") {
-                                        print '<span class="glyphicon glyphicon-ok"></span>';
-                                    } else {
-                                        print '<span class="glyphicon glyphicon-remove"></span>';
-                                    }
-                                    ?></td>
-                            </tr>
+                            <?php if ($imovel->getTipo() == "apartamento") { ?>
+                                <tr <?php
+                                if ($imovel->getElevador() == "SIM") {
+                                    print "class=success";
+                                } else {
+                                    print "class=danger";
+                                }
+                                ?>>
+                                    <td>Elevador</td>
+                                    <td><?php
+                                        if ($imovel->getElevador() == "SIM") {
+                                            print '<span class="glyphicon glyphicon-ok"></span>';
+                                        } else {
+                                            print '<span class="glyphicon glyphicon-remove"></span>';
+                                        }
+                                        ?></td>
+                                </tr>
+                            <?php } ?>
                             <tr <?php
                             if ($imovel->getPiscina() == "SIM") {
                                 print "class=success";
@@ -456,117 +467,117 @@ if ($item == null) {
                 </div>
             </div> 
         </div>
-        </div>
+    </div>
 
-        <script>
-                    $(document).ready(function() {
-                    $('.alert').hide();
-                $('#divalert').hide();
-                $('#txtMensagem').maxlength({
-                    alwaysShow: true,
-                        threshold: 100,
-                        warningClass: "label label-success",
-                            limitReachedClass: "label label-danger",
-                            separator: ' de ',
-                        preText: 'Voc&ecirc; digitou ',
-                            postText: ' caracteres permitidos.',
-                        validate: true
-                });
-                        $("#txtTelefone").mask("(99)9999-9999");
-                            $("#spanValor").priceFormat({
-                    prefix: 'R$ ',
-                        centsSeparator: ',',
-                            centsLimit: 0,
-                    limit: 8,
-                            thousandsSeparator: '.'
-                })
-                        $("#formContato").validate({
-                        rules: {
-                            txtNome: {
-                            required: true
-                        },
+    <script>
+        $(document).ready(function() {
+            $('.alert').hide();
+            $('#divalert').hide();
+            $('#txtMensagem').maxlength({
+                alwaysShow: true,
+                threshold: 100,
+                warningClass: "label label-success",
+                limitReachedClass: "label label-danger",
+                separator: ' de ',
+                preText: 'Voc&ecirc; digitou ',
+                postText: ' caracteres permitidos.',
+                validate: true
+            });
+            $("#txtTelefone").mask("(99)9999-9999");
+            $("#spanValor").priceFormat({
+                prefix: 'R$ ',
+                centsSeparator: ',',
+                centsLimit: 0,
+                limit: 8,
+                thousandsSeparator: '.'
+            })
+            $("#formContato").validate({
+                rules: {
+                    txtNome: {
+                        required: true
+                    },
                     txtEmail: {
                         email: true,
-                            required: true
-                        },
-                    txtMensagem: {
-                            required: true
-                        }
+                        required: true
                     },
-                    messages: {
+                    txtMensagem: {
+                        required: true
+                    }
+                },
+                messages: {
                     txtNome: {
-                    required: "Campo obrigatório"
-                        },
+                        required: "Campo obrigatório"
+                    },
                     txtEmail: {
                         required: "Campo obrigatório",
-                            email: "Informe um email válido"
-                        },
-                        txtMensagem: {
-                            required: "Campo obrigatório"
-                        },
+                        email: "Informe um email válido"
                     },
+                    txtMensagem: {
+                        required: "Campo obrigatório"
+                    },
+                },
                 highlight: function(element) {
                     $(element).closest('.form-group').addClass('has-error');
-                    },
-                        unhighlight: function(element) {
-                        $(element).closest('.form-group').removeClass('has-error');
-                    },
-                        errorElement: 'span',
-                            errorClass: 'help-block',
-                            errorPlacement: function(error, element) {
-                            if (element.parent('.input-group').length) {
-                                error.insertAfter(element.parent());
-                                } else {
-                                error.insertAfter(element);
-                        }
+                },
+                unhighlight: function(element) {
+                    $(element).closest('.form-group').removeClass('has-error');
+                },
+                errorElement: 'span',
+                errorClass: 'help-block',
+                errorPlacement: function(error, element) {
+                    if (element.parent('.input-group').length) {
+                        error.insertAfter(element.parent());
+                    } else {
+                        error.insertAfter(element);
                     }
-                                });
-                                $("#formContato").submit(function(e) {
-                    e.preventDefault();
-                                if ($("#formContato").valid())
-                    {
-                                //$form = $(this);
-                                //           $post(document.location.url, $(this).serialize(), function(data){
-                            $.ajax({
-                            url: document.location.url,
-                                dataType: "json",
-                                type: "POST",
-                            data: {
-                                hdnEntidade: "Anuncio",
-                                hdnAcao: "enviarContato",
-                            nome: $('#txtNome').val(),
-                                email: $('#txtEmail').val(),
-                                telefone: $('#txtTelefone').val(),
-                                mensagem: $('#txtMensagem').val(),
-                                idusuario: $('#hdnIdUsuario').val(),
-                                    idanuncio: $('#hdnIdAnuncio').val()
-                            },
-                                            beforeSend: function() {
-                                $("#alert").html(" ");
-                                    $("#alert").html("...processando...").attr('class', 'alert alert-warning');
-                                $('#btnEnviarContato').attr('disabled', 'disabled');
-                                },
-                                    success: function(resposta) {
-                                $('#btnEnviarContato').removeAttr('disabled');
-        //                        $("#msg").remove();
-        //                        var msg = $("<div>", {id: "msg"});
-                                    if (resposta.resultado == 0) {
-                                    $("#alert").html(
-                                "Email enviado com sucesso!").attr('class', 'alert alert-success');
-                                //                            msg.attr('class', 'alert alert-success').html("Mensagem enviada com sucesso").append('<button data-dismiss="alert" class="close" type="button">×</button>');
-                                } else {
-            //                            msg.attr('class', 'alert alert-danger').html("Falha no envio da mensagem, por favor tente mais tarde").append('<button data-dismiss="alert" class="close" type="button">×</button>');
-                                    $('.alert').html("Erro ao enviar e-mail. Tente novamente em alguns minutos.").attr('class', 'alert alert-danger');
-                                }
-        //                        $("#alert").append(msg);
-                                $('#txtNome').val('');
-                                $('#txtEmail').val('');
-                                $('#txtTelefone').val('');
-                                $('#txtMensagem').val('');
-                            }
-                        });
-                    }
-                });
+                }
             });
-        </script>
-    <?php } ?>
+            $("#formContato").submit(function(e) {
+                e.preventDefault();
+                if ($("#formContato").valid())
+                {
+                    //$form = $(this);
+                    //           $post(document.location.url, $(this).serialize(), function(data){
+                    $.ajax({
+                        url: document.location.url,
+                        dataType: "json",
+                        type: "POST",
+                        data: {
+                            hdnEntidade: "Anuncio",
+                            hdnAcao: "enviarContato",
+                            nome: $('#txtNome').val(),
+                            email: $('#txtEmail').val(),
+                            telefone: $('#txtTelefone').val(),
+                            mensagem: $('#txtMensagem').val(),
+                            idusuario: $('#hdnIdUsuario').val(),
+                            idanuncio: $('#hdnIdAnuncio').val()
+                        },
+                        beforeSend: function() {
+                            $("#alert").html(" ");
+                            $("#alert").html("...processando...").attr('class', 'alert alert-warning');
+                            $('#btnEnviarContato').attr('disabled', 'disabled');
+                        },
+                        success: function(resposta) {
+                            $('#btnEnviarContato').removeAttr('disabled');
+    //                        $("#msg").remove();
+    //                        var msg = $("<div>", {id: "msg"});
+                            if (resposta.resultado == 0) {
+                                $("#alert").html(
+                                        "Email enviado com sucesso!").attr('class', 'alert alert-success');
+                                //                            msg.attr('class', 'alert alert-success').html("Mensagem enviada com sucesso").append('<button data-dismiss="alert" class="close" type="button">×</button>');
+                            } else {
+                                //                            msg.attr('class', 'alert alert-danger').html("Falha no envio da mensagem, por favor tente mais tarde").append('<button data-dismiss="alert" class="close" type="button">×</button>');
+                                $('.alert').html("Erro ao enviar e-mail. Tente novamente em alguns minutos.").attr('class', 'alert alert-danger');
+                            }
+    //                        $("#alert").append(msg);
+                            $('#txtNome').val('');
+                            $('#txtEmail').val('');
+                            $('#txtTelefone').val('');
+                            $('#txtMensagem').val('');
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+<?php } ?>

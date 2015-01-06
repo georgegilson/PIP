@@ -5,8 +5,14 @@ Sessao::gerarToken();
 //echo "<pre>";print_r($item["confirmacao"]); die();
 ?>
 <div class="container">
+    <ol class="breadcrumb">
+        <li><a href="index.php">Início</a></li>
+        <li><a href="index.php?entidade=Usuario&acao=meuPIP">Meu PIP</a></li>
+        <li><a href="index.php?entidade=UsuarioPlano&acao=listar">Comprar Planos</a></li>
+        <li class="active">Confirmação de Compra</li>
+    </ol>
     <div class="page-header">
-        <h1>Você está Comprando: </h1>
+        <h5>Você está Comprando: </h5>
     </div>
 
     <div class="row">
